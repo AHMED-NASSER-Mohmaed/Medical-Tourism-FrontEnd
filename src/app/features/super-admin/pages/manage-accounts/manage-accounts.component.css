@@ -1,0 +1,120 @@
+.manage-accounts-card {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.search-group .form-control {
+  border-radius: 0.7rem 0 0 0.7rem;
+  box-shadow: none;
+  border-right: 0;
+}
+
+.search-group .btn {
+  border-radius: 0 0.7rem 0.7rem 0;
+  border-left: 0;
+}
+
+.btn-group .btn.active,
+.btn-group .btn:active {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  color: #fff;
+  border: none;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+}
+
+.table {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: transparent;
+}
+
+.table thead th {
+  border-top: none;
+  font-weight: 700;
+  color: #22223b;
+  background: #f8fafc;
+}
+
+.table-hover tbody tr:hover {
+  background: rgba(59,130,246,0.07);
+  transition: background 0.2s;
+}
+
+.avatar-ring {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+
+.avatar-ring img {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.10);
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px 1px #0001;
+}
+
+.bg-soft-primary {
+  background: rgba(59, 130, 246, 0.12) !important;
+}
+
+.bg-soft-success {
+  background: rgba(16, 185, 129, 0.12) !important;
+}
+
+.bg-soft-warning {
+  background: rgba(251, 191, 36, 0.12) !important;
+}
+
+.bg-soft-danger {
+  background: rgba(239, 68, 68, 0.12) !important;
+}
+
+.bg-soft-secondary {
+  background: rgba(100, 116, 139, 0.12) !important;
+}
+
+.pagination .page-link {
+  border-radius: 0.5rem !important;
+  margin: 0 2px;
+  color: #3b82f6;
+  border: none;
+  background: #f1f5f9;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .manage-accounts-card {
+    border-radius: 1rem;
+  }
+  .card-header {
+    padding: 1rem 1rem 1rem 1rem;
+  }
+  .table th, .table td {
+    font-size: 0.95rem;
+  }
+}

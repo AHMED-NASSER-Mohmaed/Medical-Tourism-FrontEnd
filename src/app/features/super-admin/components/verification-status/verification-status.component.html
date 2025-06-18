@@ -1,0 +1,29 @@
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-white">
+    <h6 class="mb-0">Verification Status</h6>
+  </div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label">Status</label>
+        <select class="form-select" [(ngModel)]="selectedStatus">
+          <option *ngFor="let option of statusOptions" [value]="option.value">
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+      
+      <div class="col-md-12">
+        <label class="form-label">Notes</label>
+        <textarea class="form-control" [(ngModel)]="notes" rows="3" 
+                  placeholder="Add any verification notes..."></textarea>
+      </div>
+      
+      <div class="col-12">
+        <button type="button" class="btn btn-primary" (click)="updateStatus()">
+          Update Status
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

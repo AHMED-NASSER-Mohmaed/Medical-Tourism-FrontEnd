@@ -1,0 +1,5 @@
+<span class="badge rounded-pill status-badge align-middle shadow-sm px-3 py-2 fw-semibold"
+      [ngClass]="'bg-' + statusClass">
+  <fa-icon *ngIf="statusIcon" [icon]="statusIcon" class="me-1"></fa-icon>
+  {{ status | titlecase }}
+</span>

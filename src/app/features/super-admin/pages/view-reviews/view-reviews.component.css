@@ -1,0 +1,13 @@
+/* features/super-admin/pages/view-reviews/view-reviews.component.scss */
+.review-item {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.rating {
+  font-size: 1.25rem;
+}

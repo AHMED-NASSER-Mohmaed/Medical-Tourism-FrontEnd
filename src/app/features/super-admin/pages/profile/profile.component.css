@@ -1,0 +1,82 @@
+.profile-card {
+  border-radius: 1.5rem;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  padding: 2.5rem 1.5rem 2rem 1.5rem;
+}
+
+.profile-info-card {
+  border-radius: 1.5rem;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+}
+
+.profile-avatar {
+  border: 3px solid #3b82f6;
+  box-shadow: 0 0 0 6px rgba(59,130,246,0.10);
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.avatar-ring {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  display: inline-block;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 8px 2px #0001;
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.badge {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+@media (max-width: 991.98px) {
+  .profile-card, .profile-info-card {
+    border-radius: 1rem;
+    padding: 1.5rem 1rem;
+  }
+  .profile-avatar, .avatar-ring {
+    width: 80px;
+    height: 80px;
+  }
+  .status-dot {
+    width: 12px;
+    height: 12px;
+    bottom: 5px;
+    right: 5px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .profile-card, .profile-info-card {
+    border-radius: 0.7rem;
+    padding: 1rem 0.5rem;
+  }
+  .profile-avatar, .avatar-ring {
+    width: 56px;
+    height: 56px;
+  }
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    bottom: 2px;
+    right: 2px;
+  }
+}

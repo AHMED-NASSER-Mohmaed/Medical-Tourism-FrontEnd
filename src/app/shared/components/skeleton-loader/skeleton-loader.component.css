@@ -1,0 +1,20 @@
+.skeleton-loader {
+  display: inline-block;
+  background: linear-gradient(90deg, #f1f1f1 25%, #e1e1e1 50%, #f1f1f1 75%);
+  background-size: 400% 100%;
+  animation: loading 1.5s infinite linear;
+  border-radius: 0.375rem;
+}
+
+.skeleton-loader.circle {
+  border-radius: 50%;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

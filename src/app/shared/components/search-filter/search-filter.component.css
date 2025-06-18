@@ -1,0 +1,48 @@
+.search-filter-group {
+  border-radius: 0.9rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 2px 8px rgba(31, 38, 135, 0.07);
+  margin-bottom: 0.5rem;
+}
+
+.input-group-text {
+  background: rgba(248,250,252,0.7);
+  border: 1px solid #e0e7ef;
+  font-size: 1.1rem;
+}
+
+.form-control {
+  background: rgba(248,250,252,0.7);
+  border: 1px solid #e0e7ef;
+  font-weight: 500;
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.12rem rgba(59,130,246,0.13);
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  border: none;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+}
+
+.btn-primary:disabled {
+  background: #a5b4fc;
+  border: none;
+}
+
+@media (max-width: 575.98px) {
+  .search-filter-group {
+    border-radius: 0.7rem;
+  }
+  .btn-primary {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}

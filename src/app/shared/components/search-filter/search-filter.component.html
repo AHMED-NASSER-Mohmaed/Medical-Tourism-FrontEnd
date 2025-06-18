@@ -1,0 +1,14 @@
+<div class="input-group search-filter-group shadow-sm">
+  <span class="input-group-text bg-white border-end-0 rounded-start-3 px-3">
+    <fa-icon icon="search" class="text-primary"></fa-icon>
+  </span>
+  <input type="text"
+         class="form-control border-start-0 border-end-0 rounded-0"
+         [(ngModel)]="searchTerm"
+         placeholder="Search..."
+         (keyup.enter)="onSearch()"
+         style="min-width: 180px;">
+  <button class="btn btn-primary rounded-end-3 px-4" (click)="onSearch()">
+    Search
+  </button>
+</div>

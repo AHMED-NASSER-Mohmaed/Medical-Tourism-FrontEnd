@@ -1,0 +1,38 @@
+.status-badge {
+  font-size: 1rem;
+  padding: 0.45em 1.1em;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  box-shadow: 0 2px 8px rgba(31, 38, 135, 0.08);
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.bg-success {
+  background: linear-gradient(90deg, #16c784 0%, #26c6da 100%) !important;
+  color: #fff !important;
+}
+
+.bg-warning {
+  background: linear-gradient(90deg, #fbbf24 0%, #ffa726 100%) !important;
+  color: #fff !important;
+}
+
+.bg-danger {
+  background: linear-gradient(90deg, #ef4444 0%, #ef5350 100%) !important;
+  color: #fff !important;
+}
+
+.bg-secondary {
+  background: linear-gradient(90deg, #64748b 0%, #6c757d 100%) !important;
+  color: #fff !important;
+}
+
+@media (max-width: 575.98px) {
+  .status-badge {
+    font-size: 0.92rem;
+    padding: 0.35em 0.8em;
+  }
+}

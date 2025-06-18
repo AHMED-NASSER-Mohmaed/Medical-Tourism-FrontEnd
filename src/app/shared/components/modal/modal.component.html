@@ -1,0 +1,28 @@
+<div class="modal-backdrop fade show" *ngIf="isOpen" (click)="close()"></div>
+
+<div class="modal d-block fade show"
+     tabindex="-1"
+     [ngClass]="{
+       'modal-sm': size === 'sm',
+       'modal-lg': size === 'lg',
+     }"
+     *ngIf="isOpen"
+     style="background: none;">
+  <div class="modal-dialog modal-dialog-centered" [ngClass]="{
+        'modal-sm': size === 'sm',
+        'modal-lg': size === 'lg',
+      }">
+    <div class="modal-content glassy-modal border-0 shadow-lg rounded-4">
+      <div class="modal-header border-0 pb-2">
+        <h5 class="modal-title fw-bold text-dark">{{ title }}</h5>
+        <button type="button" class="btn-close" aria-label="Close" (click)="close()"></button>
+      </div>
+      <div class="modal-body py-3">
+        <ng-content></ng-content>
+      </div>
+      <div class="modal-footer border-0 pt-2">
+        <ng-content select="[footer]"></ng-content>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,198 @@
+<div class="row g-4 mb-4">
+  <div class="col-md-6 col-lg-3">
+    <app-dashboard-card
+      title="Total Providers"
+      [value]="pagination.totalItems"
+      [icon]="icons.list"
+      color="primary">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <app-dashboard-card
+      title="Approved"
+      [value]="approvedCount"
+      [icon]="icons.approve"
+      color="success">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <app-dashboard-card
+      title="Pending Review"
+      [value]="pendingCount"
+      [icon]="icons.search"
+      color="warning">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-6 col-lg-3">
+    <app-dashboard-card
+      title="Under Review"
+      [value]="underReviewCount"
+      [icon]="icons.search"
+      color="danger">
+    </app-dashboard-card>
+  </div>
+</div>
+
+<div class="card border-0 shadow-lg rounded-4 manage-providers-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+      <div>
+        <h5 class="mb-1 fw-bold text-dark">Provider Management</h5>
+        <p class="text-muted mb-0">Manage all service providers in the system</p>
+      </div>
+      <div class="d-flex flex-wrap align-items-center gap-2">
+        <div class="input-group search-group">
+          <input type="text" class="form-control rounded-start-3" placeholder="Search providers..."
+                 [(ngModel)]="searchTerm" (keyup.enter)="loadProviders()">
+          <button class="btn btn-primary rounded-end-3" (click)="loadProviders()">
+            <fa-icon [icon]="icons.search"></fa-icon>
+          </button>
+        </div>
+        <div class="btn-group ms-2" role="group">
+          <button type="button"
+                  class="btn btn-outline-primary"
+                  [class.active]="currentView === 'hospitals'"
+                  (click)="changeView('hospitals')">
+            <fa-icon [icon]="icons.hospital" class="me-1"></fa-icon> Hospitals
+          </button>
+          <button type="button"
+                  class="btn btn-outline-primary"
+                  [class.active]="currentView === 'hotels'"
+                  (click)="changeView('hotels')">
+            <fa-icon [icon]="icons.hotel" class="me-1"></fa-icon> Hotels
+          </button>
+          <button type="button"
+                  class="btn btn-outline-primary"
+                  [class.active]="currentView === 'car-rentals'"
+                  (click)="changeView('car-rentals')">
+            <fa-icon [icon]="icons.car" class="me-1"></fa-icon> Car Rentals
+          </button>
+        </div>
+        <button class="btn btn-success ms-md-2"
+                [routerLink]="getAddProviderRoute()">
+          <fa-icon [icon]="icons.add"></fa-icon> Add New
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Provider</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Registered</th>
+            <th>Contact</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let provider of providers; trackBy: trackByProviderId">
+            <td>
+              <div class="d-flex align-items-center">
+                <div class="avatar-ring me-2 position-relative">
+                  <img [src]="provider.imageURL || 'assets/default-provider.png'"
+                       alt="Provider Logo" class="rounded-circle" width="40" height="40">
+                  <span class="status-dot"
+                        [ngClass]="{
+                          'bg-success': provider.verificationStatus === AssetStatus.APPROVED,
+                          'bg-warning': provider.verificationStatus === AssetStatus.PENDING,
+                          'bg-secondary': provider.verificationStatus === AssetStatus.UNDER_REVIEW
+                        }"></span>
+                </div>
+                <div>
+                  <div class="fw-semibold text-dark">{{ provider.assetName }}</div>
+                  <small class="text-muted">{{ provider.userName }}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <span class="badge bg-soft-primary text-primary fw-semibold px-3 py-2 rounded-pill">
+                {{ getProviderType(provider) }}
+              </span>
+            </td>
+            <td>
+              <app-status-badge
+                [status]="getStatusText(provider.verificationStatus)"
+                [statusIcon]="getStatusIcon(provider.verificationStatus)">
+              </app-status-badge>
+            </td>
+            <td>
+              <span class="text-nowrap">
+                {{ provider.acquisitionDate | date:'mediumDate' }}
+              </span>
+            </td>
+            <td>
+              <span class="d-block">{{ provider.assetEmail }}</span>
+              <span class="d-block">{{ provider.phoneNumber }}</span>
+            </td>
+            <td class="text-end">
+              <div class="btn-group btn-group-sm" role="group">
+                <button class="btn btn-outline-primary"
+                        [routerLink]="['/super-admin/providers', currentView, provider.id]"
+                        title="View Details">
+                  <fa-icon [icon]="icons.view"></fa-icon>
+                </button>
+                <button class="btn btn-outline-success"
+                        *ngIf="provider.verificationStatus !== AssetStatus.APPROVED"
+                        (click)="approveProvider(provider.id)"
+                        title="Approve"
+                        [disabled]="isLoading">
+                  <fa-icon [icon]="icons.approve"></fa-icon>
+                </button>
+                <button class="btn btn-outline-danger"
+                        *ngIf="provider.verificationStatus !== AssetStatus.PENDING"
+                        (click)="rejectProvider(provider.id)"
+                        title="Reject"
+                        [disabled]="isLoading">
+                  <fa-icon [icon]="icons.reject"></fa-icon>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="isLoading">
+            <td colspan="6" class="text-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="!isLoading && providers.length === 0">
+            <td colspan="6" class="text-center py-4 text-muted">
+              No providers found
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 p-3" *ngIf="pagination.totalPages > 1">
+      <div class="text-muted small">
+        {{ showingRange }}
+      </div>
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="pagination.page === 1">
+            <a class="page-link" (click)="onPageChange(pagination.page - 1)" aria-label="Previous">
+              &laquo;
+            </a>
+          </li>
+          <li class="page-item" *ngFor="let page of getPageNumbers()"
+              [class.active]="page === pagination.page"
+              [class.disabled]="page === -1">
+            <a *ngIf="page !== -1" class="page-link" (click)="onPageChange(page)">{{ page }}</a>
+            <span *ngIf="page === -1" class="page-link disabled">...</span>
+          </li>
+          <li class="page-item" [class.disabled]="pagination.page === pagination.totalPages">
+            <a class="page-link" (click)="onPageChange(pagination.page + 1)" aria-label="Next">
+              &raquo;
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>

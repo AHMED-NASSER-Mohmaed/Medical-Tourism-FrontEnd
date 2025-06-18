@@ -1,0 +1,156 @@
+<div class="card border-0 shadow-lg rounded-4 add-car-rental-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <fa-icon [icon]="faCar" class="me-2 text-primary"></fa-icon>
+      Register New Car Rental Provider
+    </h5>
+    <p class="text-muted mb-0">Fill in the details to register a new car rental service</p>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="carRentalForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row g-4">
+        <!-- Basic Information -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Company Name">
+            <label for="assetName"><i class="fas fa-building me-2 text-primary"></i>Company Name</label>
+          </div>
+          <div *ngIf="carRentalForm.get('assetName')?.invalid && carRentalForm.get('assetName')?.touched" class="form-text text-danger ms-1">
+            Company name is required
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <textarea class="form-control" id="description" formControlName="description" placeholder="Brief description" style="height: 90px"></textarea>
+            <label for="description"><i class="fas fa-align-left me-2 text-primary"></i>Description</label>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="contact@example.com">
+            <label for="assetEmail"><i class="fas fa-envelope me-2 text-primary"></i>Email</label>
+          </div>
+          <div *ngIf="carRentalForm.get('assetEmail')?.hasError('required') && carRentalForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
+            Email is required
+          </div>
+          <div *ngIf="carRentalForm.get('assetEmail')?.hasError('email') && carRentalForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
+            Please enter a valid email
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="+1234567890">
+            <label for="phoneNumber"><i class="fas fa-phone me-2 text-primary"></i>Phone Number</label>
+          </div>
+          <div *ngIf="carRentalForm.get('phoneNumber')?.invalid && carRentalForm.get('phoneNumber')?.touched" class="form-text text-danger ms-1">
+            Phone number is required
+          </div>
+        </div>
+
+        <!-- Vehicle Options -->
+        <div class="col-md-4">
+          <label class="form-label fw-semibold text-primary">Vehicle Types</label>
+          <div class="form-check" *ngFor="let type of vehicleTypes">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   [value]="type" 
+                   [checked]="carRentalForm.value.vehicleType?.includes(type)"
+                   (change)="updateCheckboxArray('vehicleType', type, $event)"
+                   id="vehicleType-{{type}}">
+            <label class="form-check-label" [for]="'vehicleType-' + type">{{ type }}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold text-primary">Transmission Types</label>
+          <div class="form-check" *ngFor="let trans of transmissions">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   [value]="trans" 
+                   [checked]="carRentalForm.value.transmission?.includes(trans)"
+                   (change)="updateCheckboxArray('transmission', trans, $event)"
+                   id="transmission-{{trans}}">
+            <label class="form-check-label" [for]="'transmission-' + trans">{{ trans }}</label>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label fw-semibold text-primary">Fuel Types</label>
+          <div class="form-check" *ngFor="let fuel of fuelTypes">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   [value]="fuel" 
+                   [checked]="carRentalForm.value.fuelType?.includes(fuel)"
+                   (change)="updateCheckboxArray('fuelType', fuel, $event)"
+                   id="fuelType-{{fuel}}">
+            <label class="form-check-label" [for]="'fuelType-' + fuel">{{ fuel }}</label>
+          </div>
+        </div>
+
+        <!-- Additional Features -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold text-primary">Additional Features</label>
+          <div class="form-check" *ngFor="let feature of features">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   [value]="feature" 
+                   [checked]="carRentalForm.value.carFeatures?.includes(feature)"
+                   (change)="updateCheckboxArray('carFeatures', feature, $event)"
+                   id="feature-{{feature}}">
+            <label class="form-check-label" [for]="'feature-' + feature">{{ feature }}</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold text-primary">Rental Policies</label>
+          <div class="form-check" *ngFor="let policy of ['Insurance', 'Deposit', 'Mileage Limit']">
+            <input class="form-check-input" 
+                   type="checkbox" 
+                   [value]="policy" 
+                   [checked]="carRentalForm.value.rentalPolicies?.includes(policy)"
+                   (change)="updateCheckboxArray('rentalPolicies', policy, $event)"
+                   id="policy-{{policy}}">
+            <label class="form-check-label" [for]="'policy-' + policy">{{ policy }}</label>
+          </div>
+        </div>
+
+        <!-- Location Information -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="operationalAreas" formControlName="operationalAreas" placeholder="Cities/regions where you operate">
+            <label for="operationalAreas"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Operational Areas</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
+            <label for="latitude"><i class="fas fa-globe me-2 text-primary"></i>Latitude</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
+            <label for="longitude"><i class="fas fa-globe me-2 text-primary"></i>Longitude</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Physical address or landmark">
+            <label for="locationDescription"><i class="fas fa-location-arrow me-2 text-primary"></i>Location Description</label>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 mt-4">
+          <div class="d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="carRentalForm.invalid">
+              <fa-icon [icon]="faCar" class="me-2"></fa-icon>Register Provider
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="goBack()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

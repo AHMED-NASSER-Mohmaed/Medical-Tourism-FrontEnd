@@ -1,0 +1,98 @@
+<div class="card border-0 shadow-lg rounded-4 add-patient-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <i class="fas fa-user-plus me-2 text-primary"></i>
+      Add New Patient
+    </h5>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+            <label for="firstName"><i class="fas fa-user me-2 text-primary"></i>First Name</label>
+          </div>
+          <div *ngIf="patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched" class="form-text text-danger ms-1">
+            First name is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+            <label for="lastName"><i class="fas fa-user me-2 text-primary"></i>Last Name</label>
+          </div>
+          <div *ngIf="patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched" class="form-text text-danger ms-1">
+            Last name is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email">
+            <label for="email"><i class="fas fa-envelope me-2 text-primary"></i>Email</label>
+          </div>
+          <div *ngIf="patientForm.get('email')?.errors?.['required'] && patientForm.get('email')?.touched" class="form-text text-danger ms-1">
+            Email is required
+          </div>
+          <div *ngIf="patientForm.get('email')?.errors?.['email'] && patientForm.get('email')?.touched" class="form-text text-danger ms-1">
+            Please enter a valid email
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="Phone Number">
+            <label for="phoneNumber"><i class="fas fa-phone me-2 text-primary"></i>Phone Number</label>
+          </div>
+          <div *ngIf="patientForm.get('phoneNumber')?.invalid && patientForm.get('phoneNumber')?.touched" class="form-text text-danger ms-1">
+            Phone number is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date of Birth">
+            <label for="dateOfBirth"><i class="fas fa-calendar-alt me-2 text-primary"></i>Date of Birth</label>
+          </div>
+          <div *ngIf="patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched" class="form-text text-danger ms-1">
+            Date of birth is required
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <select class="form-select" id="bloodGroup" formControlName="bloodGroup" aria-label="Blood Group">
+              <option value="" selected>Select blood group</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            <label for="bloodGroup"><i class="fas fa-tint me-2 text-primary"></i>Blood Group</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="height" formControlName="height" placeholder="Height (cm)">
+            <label for="height"><i class="fas fa-ruler-vertical me-2 text-primary"></i>Height (cm)</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="weight" formControlName="weight" placeholder="Weight (kg)">
+            <label for="weight"><i class="fas fa-weight me-2 text-primary"></i>Weight (kg)</label>
+          </div>
+        </div>
+        <div class="col-12 mt-4">
+          <button type="submit" class="btn btn-primary btn-lg me-2 px-4" [disabled]="patientForm.invalid">
+            <i class="fas fa-user-plus me-2"></i>Create Patient
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-lg px-4" routerLink="/super-admin/patients">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-lg-4 mb-4 mb-lg-0">
+    <div class="card profile-card border-0 shadow-lg rounded-4 text-center p-4">
+      <div class="avatar-ring mx-auto mb-3 position-relative">
+        <img [src]="profile.imageURL || 'assets/default-avatar.png'" 
+             class="rounded-circle profile-avatar" width="120" height="120" alt="Profile Photo">
+        <span class="status-dot"
+              [ngClass]="{
+                'bg-success': profile.status === 1,
+                'bg-warning': profile.status === 2,
+                'bg-danger': profile.status === 3,
+                'bg-secondary': !profile.status
+              }"></span>
+      </div>
+      <h5 class="mb-1 fw-bold text-dark">{{ profile.firstName }} {{ profile.lastName }}</h5>
+      <p class="text-muted mb-3">Super Administrator</p>
+      <div class="d-flex justify-content-center mb-2 gap-2">
+        <button class="btn btn-outline-primary btn-sm px-3 fw-semibold">
+          <i class="fas fa-edit me-1"></i> Edit Profile
+        </button>
+        <button class="btn btn-outline-secondary btn-sm px-3 fw-semibold">
+          <i class="fas fa-camera me-1"></i> Change Photo
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-lg rounded-4 profile-info-card">
+      <div class="card-header bg-white rounded-top-4 border-0 py-3 px-4">
+        <h5 class="mb-0 fw-bold text-dark">
+          <i class="fas fa-user-circle me-2 text-primary"></i>
+          Profile Information
+        </h5>
+      </div>
+      <div class="card-body px-4 py-4">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <label class="form-label text-muted mb-1">First Name</label>
+            <div class="fw-semibold text-dark">{{ profile.firstName }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted mb-1">Last Name</label>
+            <div class="fw-semibold text-dark">{{ profile.lastName }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted mb-1">Email</label>
+            <div class="fw-semibold text-dark">{{ profile.email }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted mb-1">Phone Number</label>
+            <div class="fw-semibold text-dark">{{ profile.phoneNumber || 'Not provided' }}</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted mb-1">User Status</label>
+            <span class="badge px-3 py-2 rounded-pill fw-semibold"
+                  [ngClass]="{
+                    'bg-success': profile.status === 1,
+                    'bg-warning': profile.status === 2,
+                    'bg-danger': profile.status === 3,
+                    'bg-secondary': !profile.status
+                  }">
+              {{ getUserStatusText(profile.status) }}
+            </span>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label text-muted mb-1">Last Login</label>
+            <div class="fw-semibold text-dark">{{ lastLogin | date:'medium' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

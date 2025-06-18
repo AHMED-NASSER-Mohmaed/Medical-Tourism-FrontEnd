@@ -1,0 +1,63 @@
+.data-table-card {
+  border-radius: 1.5rem;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  overflow: hidden;
+}
+
+.table-responsive {
+  margin-bottom: 0;
+}
+
+.table {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: transparent;
+}
+
+.table thead th {
+  border-top: none;
+  font-weight: 700;
+  color: #22223b;
+  background: #f8fafc;
+}
+
+.table-hover tbody tr:hover {
+  background: rgba(59,130,246,0.07);
+  transition: background 0.2s;
+}
+
+.action-buttons .btn {
+  margin-right: 0.25rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+  border-radius: 0.5rem;
+}
+
+.action-buttons .btn:last-child {
+  margin-right: 0;
+}
+
+.pagination .page-link {
+  border-radius: 0.5rem !important;
+  margin: 0 2px;
+  color: #3b82f6;
+  border: none;
+  background: #f1f5f9;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  color: #fff;
+}
+
+@media (max-width: 991.98px) {
+  .data-table-card {
+    border-radius: 1rem;
+  }
+  .table th, .table td {
+    font-size: 0.95rem;
+  }
+}

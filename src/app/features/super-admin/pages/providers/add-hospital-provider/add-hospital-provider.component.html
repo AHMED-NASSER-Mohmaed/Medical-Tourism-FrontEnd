@@ -1,0 +1,106 @@
+<div class="card border-0 shadow-lg rounded-4 add-hospital-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <fa-icon [icon]="faHospital" class="me-2 text-primary"></fa-icon>
+      Register New Hospital Provider
+    </h5>
+    <p class="text-muted mb-0">Fill in the details to register a new healthcare facility</p>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="hospitalForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row g-4">
+        <!-- Basic Information -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hospital Name">
+            <label for="assetName"><i class="fas fa-hospital me-2 text-primary"></i>Hospital Name</label>
+          </div>
+          <div *ngIf="hospitalForm.get('assetName')?.invalid && hospitalForm.get('assetName')?.touched" class="form-text text-danger ms-1">
+            Hospital name is required
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <textarea class="form-control" id="description" formControlName="description" placeholder="Specialties and services offered" style="height: 90px"></textarea>
+            <label for="description"><i class="fas fa-align-left me-2 text-primary"></i>Description</label>
+          </div>
+        </div>
+
+        <!-- Medical Information -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="numberOfDepartments" formControlName="numberOfDepartments" min="1" placeholder="Number of Departments">
+            <label for="numberOfDepartments"><i class="fas fa-network-wired me-2 text-primary"></i>Number of Departments</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold text-primary mb-2">Facility Type</label>
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" formControlName="hasEmergencyRoom" id="hasEmergencyRoom">
+            <label class="form-check-label" for="hasEmergencyRoom">Has Emergency Room</label>
+          </div>
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" formControlName="isTeachingHospital" id="isTeachingHospital">
+            <label class="form-check-label" for="isTeachingHospital">Teaching Hospital</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="emergencyServices" id="emergencyServices">
+            <label class="form-check-label" for="emergencyServices">24/7 Emergency Services</label>
+          </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="contact@hospital.com">
+            <label for="assetEmail"><i class="fas fa-envelope me-2 text-primary"></i>Email</label>
+          </div>
+          <div *ngIf="hospitalForm.get('assetEmail')?.errors?.['required'] && hospitalForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
+            Email is required
+          </div>
+          <div *ngIf="hospitalForm.get('assetEmail')?.errors?.['email'] && hospitalForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
+            Please enter a valid email
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="Emergency contact">
+            <label for="phoneNumber"><i class="fas fa-phone me-2 text-primary"></i>Phone Number</label>
+          </div>
+        </div>
+
+        <!-- Location Information -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
+            <label for="latitude"><i class="fas fa-globe me-2 text-primary"></i>Latitude</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
+            <label for="longitude"><i class="fas fa-globe me-2 text-primary"></i>Longitude</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Full physical address">
+            <label for="locationDescription"><i class="fas fa-location-arrow me-2 text-primary"></i>Location Description</label>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 mt-4">
+          <div class="d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="hospitalForm.invalid">
+              <fa-icon [icon]="faHospital" class="me-2"></fa-icon>Register Hospital
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="goBack()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
