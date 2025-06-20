@@ -1,0 +1,176 @@
+<nav class="navbar">
+    <div class="navbar-logo">
+        <img src="assets/logo.png" alt="MediTour Logo" style="height:32px;vertical-align:middle;margin-right:8px;">
+        <span class="navbar-title">MediTour</span>
+    </div>
+    <ul class="navbar-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Hospitals</a></li>
+        <li><a href="#" class="active">Hotels</a></li>
+        <li><a href="#">Car Rentals</a></li>
+        <li><a href="#">Packages</a></li>
+    </ul>
+</nav>
+
+
+
+
+<div class="hospital-doctors-container" style="display: flex; gap: 32px; margin-top: 32px;">
+    <!-- Filter Clinics Sidebar -->
+    <div class="filter-clinics" style="background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #e9e9e9; padding: 32px 24px; min-width: 320px;">
+        <h2 style="font-size: 2rem; font-weight: 700; color: #183b56; border-bottom: 2px solid #2bb7da; padding-bottom: 8px;">Filter Clinics</h2>
+        <div style="margin-top: 24px;">
+            <label for="searchClinic" style="font-weight: 500;">Search Clinic</label>
+            <input id="searchClinic" type="text" placeholder="Search by clinic name..." style="width: 100%; margin-top: 8px; padding: 8px 12px; border: 1px solid #e0e0e0; border-radius: 6px;">
+        </div>
+        <div style="margin-top: 24px;">
+            <div style="font-weight: 500;">Specialist:</div>
+            <div style="margin-top: 8px;">
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox"> Cardiology
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox"> Oncology
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox"> Orthopedics
+                </label>
+                <label style="display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox"> Pediatrics
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Doctors List -->
+    <div style="background: #fff; border-radius: 16px; box-shadow: 0 2px 8px #e9e9e9; padding: 32px 24px;">
+        <button style="background: linear-gradient(90deg, #2bb7da 0%, #183b56 100%); border: none; color: #fff; border-radius: 10px; padding: 10px 28px; font-weight: 600; margin-bottom: 28px; display: flex; align-items: center; gap: 10px; font-size: 1.08rem; box-shadow: 0 4px 16px rgba(43,183,218,0.10); transition: background 0.3s, transform 0.2s; cursor: pointer;"
+            onmouseover="this.style.transform='translateY(-2px)'; this.style.background='linear-gradient(90deg, #183b56 0%, #2bb7da 100%)';"
+            onmouseout="this.style.transform='none'; this.style.background='linear-gradient(90deg, #2bb7da 0%, #183b56 100%)';">
+            <span style="font-size: 1.3rem; display: flex; align-items: center;">&#8592;</span>
+            <span style="letter-spacing: 0.5px;">Back to All Clinics</span>
+        </button>
+        <h2 style="font-size: 2rem; font-weight: 700; color: #183b56; border-bottom: 2px solid #2bb7da; padding-bottom: 8px; margin-bottom: 32px;">
+            Doctors in Cardiology Clinic
+        </h2>
+        <div style="display: flex; gap: 32px; flex-wrap: wrap;">
+            <div *ngFor="let doctor of Doctors" style="background: #f8fafc; border-radius: 12px; padding: 24px 20px; flex: 1 1 320px; display: flex; align-items: center; gap: 20px; min-width: 320px; max-width: 400px;">
+                <div *ngIf="doctor.image; else initials" style="width: 80px; height: 80px; border-radius: 50%; overflow: hidden; border: 3px solid #2bb7da;">
+                    <img [src]="doctor.image" [alt]="doctor.name" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+                <ng-template #initials>
+                    <div style="width: 80px; height: 80px; border-radius: 50%; background: #183b56; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 600; border: 3px solid #2bb7da;">
+                        <!-- {{ doctor.name.split(' ').map(n => n[0]).join('').slice(0,2) }} -->
+                    </div>
+                </ng-template>
+                <div>
+                    <div style="font-weight: 700; color: #183b56;">{{ doctor.name }}</div>
+                    <div style="color: #5a7184; font-size: 0.98rem;">{{ doctor.specialization }}</div>
+                    <!-- You can add more doctor info here if available -->
+                    <button style="background: #fff; border: 1.5px solid #2bb7da; color: #183b56; border-radius: 8px; padding: 6px 18px; font-weight: 500; font-size: 1rem;"
+                        (click)="onShowAvailableDates(doctor)">Available Dates</button>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+<!-- Doctor Schedule Popup Modal -->
+<div *ngIf="showSchedulePopup" class="schedule-popup-overlay">
+    <div class="schedule-popup-modal">
+        <div class="schedule-popup-header">
+            <span>Available Dates for {{selectedDoctor?.name}}</span>
+            <button class="close-btn" (click)="onCloseSchedulePopup()">&times;</button>
+        </div>
+        <div class="schedule-popup-body">
+            <div style="margin-bottom: 18px; font-weight: 500;">Select an available date:</div>
+            <div class="calendar-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th *ngFor="let day of ['Mon','Tue','Wed','Thu','Fri','Sat','Sun']">{{day}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let week of doctorSchedule">
+                            <td *ngFor="let date of week"
+                                    [class.available]="date?.available"
+                                    [class.selected]="date?.selected"
+                                    (click)="date?.available && selectDate(date)">
+                                {{date?.day || ''}}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div style="margin: 18px 0 0 0; text-align: center; color: #888;">
+                <span *ngIf="!selectedDate">Please select a date.</span>
+                <span *ngIf="selectedDate">Selected: {{selectedDate | date:'fullDate'}}</span>
+            </div>
+            <button class="book-btn" [disabled]="!selectedDate">Book Online Consultation</button>
+            <button class="book-onsite-btn" [disabled]="!selectedDate">Book Onsite Appointment</button>
+        </div>
+    </div>
+</div>
+
+<style>
+   body {
+    background: #f8f9fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: #fff;
+    border-bottom: 1px solid #e3e8ee;
+}
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+.navbar-title {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #2563b6;
+    letter-spacing: 1px;
+}
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+}
+.navbar-links li a {
+    text-decoration: none;
+    color: #1a2a3a;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 6px 16px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.navbar-links li a.active,
+.navbar-links li a:hover {
+    background: #e3e8ee;
+    color: #2563b6;
+}
+.banner {
+    background: #305cae;
+    color: #fff;
+    text-align: center;
+    padding: 48px 0 32px 0;
+}
+.banner h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.banner p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+}
+    </style>

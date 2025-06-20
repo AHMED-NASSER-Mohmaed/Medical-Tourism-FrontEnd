@@ -1,0 +1,120 @@
+<nav class="navbar">
+    <div class="navbar-logo">
+        <img src="assets/logo.png" alt="MediTour Logo" style="height:32px;vertical-align:middle;margin-right:8px;">
+        <span class="navbar-title">MediTour</span>
+    </div>
+    <ul class="navbar-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Hospitals</a></li>
+        <li><a href="#" class="active">Hotels</a></li>
+        <li><a href="#">Car Rentals</a></li>
+        <li><a href="#">Packages</a></li>
+    </ul>
+</nav>
+
+<div class="hospital-clinics-container" style="padding: 32px; background: #f8fafc; min-height: 100vh;">
+    <div style="display: flex; gap: 32px;">
+        <!-- Filter Clinics Sidebar -->
+        <div style="background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px; min-width: 300px;">
+            <h2 style="font-size: 2rem; font-weight: 600; color: #1a365d; margin-bottom: 16px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px;">Filter Clinics</h2>
+            <div style="margin-bottom: 24px;">
+                <label for="searchClinic" style="font-size: 1.1rem; color: #2d3748;">Search Clinic</label>
+                <input id="searchClinic" type="text" placeholder="Search by clinic name..." style="width: 100%; margin-top: 8px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 1rem;" [(ngModel)]="searchTerm" (input)="filterClinics()">
+            </div>
+            <div>
+                <div style="font-size: 1.1rem; color: #2d3748; margin-bottom: 8px;">Specialist:</div>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <label><input type="checkbox"> Cardiology</label>
+                    <label><input type="checkbox"> Oncology</label>
+                    <label><input type="checkbox"> Orthopedics</label>
+                    <label><input type="checkbox"> Pediatrics</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Available Clinics -->
+        <div style="flex: 1; background: #fff; border-radius: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); padding: 32px 24px;">
+            <h2 style="font-size: 2rem; font-weight: 600; color: #1a365d; margin-bottom: 16px; border-bottom: 2px solid #38bdf8; padding-bottom: 8px;">Available Clinics</h2>
+            <div style="display: flex; flex-wrap: wrap; gap: 24px;">
+                <ng-container *ngFor="let clinic of clinics">
+                    <div style="flex: 1 1 260px; min-width: 260px; max-width: 300px; background: #38bdf8; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; margin-bottom: 16px;">
+                        <div style="padding: 32px 16px 16px 16px; color: #fff; font-size: 2rem; font-weight: 700; text-align: center;">
+                            {{ clinic.name }}
+                        </div>
+                        <div style="background: #fff; border-radius: 0 0 12px 12px; padding: 16px;">
+                            <div style="font-size: 1.1rem; font-weight: 500; color: #2563eb;">{{ clinic.name }}</div>
+                            <div style="color: #64748b; font-size: 1rem; margin-bottom: 16px;">
+                                {{ clinic.doctors?.length || 0 }} Doctors
+                            </div>
+                            <button (click)="ViewClinicDetails(clinic.id)" style="width: 100%; padding: 10px; border: 1.5px solid #2563eb; border-radius: 8px; background: #fff; color: #2563eb; font-weight: 600; font-size: 1rem; cursor: pointer;">
+                                Available Appointments
+                            </button>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+   body {
+    background: #f8f9fb;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+}
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 40px;
+    background: #fff;
+    border-bottom: 1px solid #e3e8ee;
+}
+.navbar-logo {
+    display: flex;
+    align-items: center;
+}
+.navbar-title {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #2563b6;
+    letter-spacing: 1px;
+}
+.navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+}
+.navbar-links li a {
+    text-decoration: none;
+    color: #1a2a3a;
+    font-weight: 500;
+    font-size: 1.1rem;
+    padding: 6px 16px;
+    border-radius: 6px;
+    transition: background 0.2s;
+}
+.navbar-links li a.active,
+.navbar-links li a:hover {
+    background: #e3e8ee;
+    color: #2563b6;
+}
+.banner {
+    background: #305cae;
+    color: #fff;
+    text-align: center;
+    padding: 48px 0 32px 0;
+}
+.banner h1 {
+    font-size: 2.8rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.banner p {
+    font-size: 1.2rem;
+    opacity: 0.95;
+}
+    </style>
