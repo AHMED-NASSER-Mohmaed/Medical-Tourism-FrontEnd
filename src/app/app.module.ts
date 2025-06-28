@@ -10,7 +10,14 @@ import { DisplayAllHospitalsComponent } from './features/patient/pages/Hospitals
 import { HospitalClinicsComponent } from './features/patient/pages/Hospitals/hospital-clinics/hospital-clinics.component';
 import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hospital-doctors/hospital-doctors.component';
 
-
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDividerModule } from '@angular/material/divider';
 
 
 
@@ -27,7 +34,15 @@ import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hos
     AppRoutingModule,
     CoreModule,
      HttpClientModule ,
-    FormsModule
+    FormsModule,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatDividerModule
 
 
   ],

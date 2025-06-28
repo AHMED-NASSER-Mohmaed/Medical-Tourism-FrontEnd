@@ -5,7 +5,7 @@ import { HospitalClinicsComponent } from './features/patient/pages/Hospitals/hos
 import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hospital-doctors/hospital-doctors.component';
 
 const routes: Routes = [
-  { path: 'my-path', component: DisplayAllHospitalsComponent }
+  { path: 'hospitals', component: DisplayAllHospitalsComponent }
  ,{ path : 'Clinics', component : HospitalClinicsComponent }
  ,{ path : 'Doctors', component : HospitalDoctorsComponent}
 ];
