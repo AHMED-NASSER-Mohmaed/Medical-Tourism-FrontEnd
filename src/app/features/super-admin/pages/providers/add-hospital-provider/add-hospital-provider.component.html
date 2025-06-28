@@ -9,28 +9,130 @@
   <div class="card-body">
     <form [formGroup]="hospitalForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="row g-4">
-        <!-- Basic Information -->
-        <div class="col-md-12">
+
+        <!-- User Info -->
+        <div class="col-md-6">
           <div class="form-floating">
-            <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hospital Name">
-            <label for="assetName"><i class="fas fa-hospital me-2 text-primary"></i>Hospital Name</label>
-          </div>
-          <div *ngIf="hospitalForm.get('assetName')?.invalid && hospitalForm.get('assetName')?.touched" class="form-text text-danger ms-1">
-            Hospital name is required
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+            <label for="firstName">First Name</label>
           </div>
         </div>
-        <div class="col-md-12">
+        <div class="col-md-6">
           <div class="form-floating">
-            <textarea class="form-control" id="description" formControlName="description" placeholder="Specialties and services offered" style="height: 90px"></textarea>
-            <label for="description"><i class="fas fa-align-left me-2 text-primary"></i>Description</label>
+            <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+            <label for="lastName">Last Name</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
+            <label for="phone">Phone</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="User Email">
+            <label for="email">User Email</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
+            <label for="confirmPassword">Confirm Password</label>
           </div>
         </div>
 
-        <!-- Medical Information -->
+        <!-- Gender -->
+        <div class="col-md-6">
+          <label class="form-label">Gender</label>
+          <select class="form-select" formControlName="gender">
+            <option [value]="0">Male</option>
+            <option [value]="1">Female</option>
+          </select>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="col-md-6">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-control" formControlName="dateOfBirth">
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
+            <label for="address">Address</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
+            <label for="city">City</label>
+          </div>
+        </div>
+
+        <!-- Country -->
+        <div class="col-md-6">
+          <label class="form-label">Country</label>
+          <select class="form-select" formControlName="countryId">
+            <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+          </select>
+        </div>
+
+        <!-- Governorate -->
+        <div class="col-md-6">
+          <label class="form-label">Governorate</label>
+          <select class="form-select" formControlName="governorateId">
+            <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
+          </select>
+        </div>
+
+        <!-- Hospital Asset Info -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hospital Name">
+            <label for="assetName">Hospital Name</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 90px"></textarea>
+            <label for="assetDescription">Description</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="contact@hospital.com">
+            <label for="assetEmail">Asset Email</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Full physical address">
+            <label for="locationDescription">Location Description</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
+            <label for="latitude">Latitude</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
+            <label for="longitude">Longitude</label>
+          </div>
+        </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="number" class="form-control" id="numberOfDepartments" formControlName="numberOfDepartments" min="1" placeholder="Number of Departments">
-            <label for="numberOfDepartments"><i class="fas fa-network-wired me-2 text-primary"></i>Number of Departments</label>
+            <label for="numberOfDepartments">Number of Departments</label>
           </div>
         </div>
         <div class="col-md-6">
@@ -49,43 +151,54 @@
           </div>
         </div>
 
-        <!-- Contact Information -->
-        <div class="col-md-6">
-          <div class="form-floating">
-            <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="contact@hospital.com">
-            <label for="assetEmail"><i class="fas fa-envelope me-2 text-primary"></i>Email</label>
+        <!-- Facilities (dynamic) -->
+        <div class="col-md-12" formArrayName="facilities">
+          <label class="form-label fw-semibold text-primary mb-2">Facilities</label>
+          <div *ngFor="let facility of facilities.controls; let i = index" class="input-group mb-2">
+            <input class="form-control" [formControlName]="i" placeholder="Facility name">
+            <button type="button" class="btn btn-outline-danger" (click)="removeFacility(i)" [disabled]="facilities.length === 1">Remove</button>
           </div>
-          <div *ngIf="hospitalForm.get('assetEmail')?.errors?.['required'] && hospitalForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
-            Email is required
-          </div>
-          <div *ngIf="hospitalForm.get('assetEmail')?.errors?.['email'] && hospitalForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
-            Please enter a valid email
-          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addFacility()">Add Facility</button>
         </div>
-        <div class="col-md-6">
-          <div class="form-floating">
-            <input type="tel" class="form-control" id="phoneNumber" formControlName="phoneNumber" placeholder="Emergency contact">
-            <label for="phoneNumber"><i class="fas fa-phone me-2 text-primary"></i>Phone Number</label>
+
+        <!-- Languages Supported (checkboxes) -->
+        <div class="col-md-12">
+          <label class="form-label fw-semibold text-primary mb-2">Languages Supported</label>
+          <div class="form-check form-check-inline" *ngFor="let lang of availableLanguages">
+            <input class="form-check-input" type="checkbox" [id]="'lang-' + lang.id" (change)="onLanguageChange($event, lang.id)">
+            <label class="form-check-label" [for]="'lang-' + lang.id">{{ lang.name }}</label>
           </div>
         </div>
 
-        <!-- Location Information -->
-        <div class="col-md-6">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
-            <label for="latitude"><i class="fas fa-globe me-2 text-primary"></i>Latitude</label>
+        <!-- Opening and Closing Time -->
+<div class="col-md-6" formGroupName="openingTime">
+          <label class="form-label fw-semibold text-primary mb-2">Opening Time</label>
+          <div class="row g-2">
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="Hour">
+            </div>
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="Minute">
+            </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
-            <label for="longitude"><i class="fas fa-globe me-2 text-primary"></i>Longitude</label>
+<div class="col-md-6" formGroupName="closingTime">
+          <label class="form-label fw-semibold text-primary mb-2">Closing Time</label>
+          <div class="row g-2">
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="Hour">
+            </div>
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="Minute">
+            </div>
           </div>
         </div>
+
+        <!-- Verification Notes -->
         <div class="col-md-12">
           <div class="form-floating">
-            <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Full physical address">
-            <label for="locationDescription"><i class="fas fa-location-arrow me-2 text-primary"></i>Location Description</label>
+            <textarea class="form-control" id="verificationNotes" formControlName="verificationNotes" placeholder="Verification Notes" style="height: 60px"></textarea>
+            <label for="verificationNotes">Verification Notes</label>
           </div>
         </div>
 

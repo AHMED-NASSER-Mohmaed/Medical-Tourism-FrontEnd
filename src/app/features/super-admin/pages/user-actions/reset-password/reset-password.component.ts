@@ -6,31 +6,36 @@ import { ActivatedRoute, Router } from '@angular/router';
   selector: 'app-reset-password',
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css'],
-    standalone: false
-
+  standalone: false
 })
 export class ResetPasswordComponent {
   userId: string;
+  isSubmitting = false;
 
   constructor(
     private superAdminService: SuperAdminService,
     private route: ActivatedRoute,
-            private router: Router // Add Router
-    
+    private router: Router
   ) {
     this.userId = this.route.snapshot.params['id'];
   }
- goBack() {
+
+  goBack() {
     this.router.navigate(['/super-admin/manage-accounts']);
-    // Or navigate to previous page: this.location.back();
   }
+
   resetPassword() {
+    if (!this.userId || this.isSubmitting) return;
+    this.isSubmitting = true;
     this.superAdminService.resetUserPassword(this.userId).subscribe({
       next: () => {
-        console.log('Password reset initiated');
+        this.isSubmitting = false;
         this.goBack();
       },
-      error: (err) => console.error('Error resetting password:', err)
+      error: () => {
+        this.isSubmitting = false;
+        // Error toast is handled by the service
+      }
     });
   }
 }

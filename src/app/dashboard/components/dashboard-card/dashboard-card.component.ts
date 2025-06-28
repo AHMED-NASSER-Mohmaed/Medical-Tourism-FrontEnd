@@ -7,11 +7,14 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./dashboard-card.component.css'],
   standalone:false
 })
+
 export class DashboardCardComponent {
+  
   @Input() title!: string;
   @Input() value!: number | string;
   @Input() icon = faUser;
-  @Input() color: 'primary' | 'success' | 'warning' | 'danger' = 'primary';
+  @Input() color: CardColor = 'primary';
   @Input() trendValue?: number;
   @Input() trendUp = true;
 }
+export type CardColor = 'primary' | 'success' | 'warning' | 'danger';

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeactivateUserComponent } from './deactivate-user.component';
+import { DashboardShellComponent } from './dashboard-shell.component';
 
-describe('DeactivateUserComponent', () => {
-  let component: DeactivateUserComponent;
-  let fixture: ComponentFixture<DeactivateUserComponent>;
+describe('DashboardShellComponent', () => {
+  let component: DashboardShellComponent;
+  let fixture: ComponentFixture<DashboardShellComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DeactivateUserComponent]
+      declarations: [DashboardShellComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DeactivateUserComponent);
+    fixture = TestBed.createComponent(DashboardShellComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

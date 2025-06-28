@@ -8,20 +8,20 @@ import { NavigationService } from '../../../../../core/services/navigation.servi
   selector: 'app-change-email',
   templateUrl: './change-email.component.html',
   styleUrls: ['./change-email.component.css'],
-    standalone: false
-
+  standalone: false
 })
 export class ChangeEmailComponent {
   userId: string;
   emailForm: ReturnType<FormBuilder['group']>;
 
+  isSubmitting = false;
+
   constructor(
     private fb: FormBuilder,
     private superAdminService: SuperAdminService,
     private route: ActivatedRoute,
-        private router: Router ,
-        private navigation: NavigationService// Add Router
-
+    private router: Router,
+    private navigation: NavigationService
   ) {
     this.userId = this.route.snapshot.params['id'];
     this.emailForm = this.fb.group({
@@ -29,23 +29,26 @@ export class ChangeEmailComponent {
     });
   }
 
-   onCancel() {
-    this.navigation.navigateToUserList();
-  }
-   goBack() {
+  goBack() {
     this.router.navigate(['/super-admin/manage-accounts']);
-    // Or navigate to previous page: this.location.back();
   }
+
   onSubmit() {
-    if (this.emailForm.valid) {
+    if (this.emailForm.valid && this.userId) {
+      this.isSubmitting = true;
       const newEmail = this.emailForm.get('newEmail')?.value || '';
       this.superAdminService.changeUserEmail(this.userId, newEmail).subscribe({
         next: () => {
-          console.log('Email changed successfully');
-           this.navigation.navigateToUserList(); 
+          this.isSubmitting = false;
+          this.navigation.navigateToUserList();
         },
-        error: (err) => console.error('Error changing email:', err)
+        error: () => {
+          this.isSubmitting = false;
+          // Error toast is handled by the service
+        }
       });
+    } else {
+      this.emailForm.markAllAsTouched();
     }
   }
 }

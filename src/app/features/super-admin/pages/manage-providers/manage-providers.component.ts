@@ -1,4 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { 
+  faEye, 
+  faCheck, 
+  faTimes, 
+  faSearch, 
+  faHospital, 
+  faHotel, 
+  faCar, 
+  faListAlt,
+  faPlus
+} from '@fortawesome/free-solid-svg-icons';
 import { SuperAdminService } from '../../services/super-admin.service';
 import { 
   AssetStatus, 
@@ -7,44 +22,54 @@ import {
   HotelProvider,
   CarRentalProvider
 } from '../../models/super-admin.model';
-import { 
-  faEye, faCheck, faTimes, faSearch, 
-  faHospital, faHotel, faCar, faListAlt, 
-  faPlus
-} from '@fortawesome/free-solid-svg-icons';
-import { Observable } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 import { NavigationService } from '../../../../core/services/navigation.service';
+import { Observable } from 'rxjs';
+import { CardColor } from '../../../../dashboard/components/dashboard-card/dashboard-card.component';
 
 type ProviderType = HospitalProvider | HotelProvider | CarRentalProvider;
+
+interface ProviderViewConfig {
+  type: 'hospitals' | 'hotels' | 'car-rentals';
+  label: string;
+  icon: any;
+  color: CardColor;
+}
 
 @Component({
   selector: 'app-manage-providers',
   templateUrl: './manage-providers.component.html',
   styleUrls: ['./manage-providers.component.css'],
-  standalone: false
+  standalone: false,
 })
 export class ManageProvidersComponent implements OnInit {
   providers: ProviderType[] = [];
-  pagination = { page: 1, limit: 10, totalItems: 0, totalPages: 0 };
+  pagination = { page: 1, pageSize: 10, totalCount: 0, totalPages: 0 };
   isLoading = false;
   searchTerm = '';
   currentView: 'hospitals' | 'hotels' | 'car-rentals' = 'hospitals';
+  errorMessage = '';
   AssetStatus = AssetStatus;
-  
+
+  viewConfigs: ProviderViewConfig[] = [
+    { type: 'hospitals', label: 'Hospitals', icon: faHospital, color: 'danger' },
+    { type: 'hotels', label: 'Hotels', icon: faHotel, color: 'warning' },
+    { type: 'car-rentals', label: 'Car Rentals', icon: faCar, color: 'primary' }
+  ];
+
   icons = {
     view: faEye,
     approve: faCheck,
     reject: faTimes,
     search: faSearch,
-    hospital: faHospital,
-    hotel: faHotel,
-    car: faCar,
     list: faListAlt,
-  add: faPlus
-
+    add: faPlus
   };
 
-  constructor(private superAdminService: SuperAdminService,private navigation: NavigationService) {}
+  constructor(
+    private superAdminService: SuperAdminService,
+    private navigation: NavigationService
+  ) {}
 
   ngOnInit(): void {
     this.loadProviders();
@@ -54,73 +79,61 @@ export class ManageProvidersComponent implements OnInit {
   get approvedCount(): number {
     return this.providers.filter(p => p.verificationStatus === AssetStatus.APPROVED).length;
   }
-
   get pendingCount(): number {
     return this.providers.filter(p => p.verificationStatus === AssetStatus.PENDING).length;
   }
-
   get underReviewCount(): number {
     return this.providers.filter(p => p.verificationStatus === AssetStatus.UNDER_REVIEW).length;
   }
-
-  get providerType(): string {
-    switch(this.currentView) {
-      case 'hospitals': return 'Hospital';
-      case 'hotels': return 'Hotel';
-      case 'car-rentals': return 'Car Rental';
-      default: return '';
-    }
-  }
-
   get showingRange(): string {
-    const start = (this.pagination.page - 1) * this.pagination.limit + 1;
-    const end = Math.min(this.pagination.page * this.pagination.limit, this.pagination.totalItems);
-    return `Showing ${start} to ${end} of ${this.pagination.totalItems} entries`;
+    const start = (this.pagination.page - 1) * this.pagination.pageSize + 1;
+    const end = Math.min(this.pagination.page * this.pagination.pageSize, this.pagination.totalCount);
+    return `Showing ${start} to ${end} of ${this.pagination.totalCount}`;
   }
 
   loadProviders(): void {
     this.isLoading = true;
-    
-    this.getRequestObservable().subscribe({
-      next: (response: PaginatedResponse<ProviderType>) => {
-        this.providers = response.items;
-        this.pagination = {
-          page: response.page,
-          limit: response.limit,
-          totalItems: response.totalItems,
-          totalPages: response.totalPages
-        };
-        this.isLoading = false;
-      },
-      error: (error) => {
-        console.error('Error loading providers:', error);
-        this.isLoading = false;
-      }
+    this.errorMessage = '';
+
+    this.getRequestObservable().pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (response) => this.handleSuccessResponse(response),
+      error: (err) => this.handleErrorResponse(err)
     });
   }
 
+  private handleSuccessResponse(response: PaginatedResponse<ProviderType>): void {
+    this.providers = response.items;
+    this.pagination = {
+      page: response.pageNumber,
+      pageSize: response.pageSize,
+      totalCount: response.totalCount,
+      totalPages: response.totalPages
+    };
+  }
+
+  private handleErrorResponse(error: any): void {
+    this.errorMessage = error.userMessage || 'Failed to load providers';
+    console.error('Provider loading error:', error.technicalMessage || error);
+  }
+
   private getRequestObservable(): Observable<PaginatedResponse<ProviderType>> {
-    const { page, limit } = this.pagination;
+    const { page, pageSize } = this.pagination;
+    const filters = { searchTerm: this.searchTerm };
+
     switch(this.currentView) {
-      case 'hotels': 
-        return this.superAdminService.getHotelProviders(page, limit, this.searchTerm);
-      case 'car-rentals': 
-        return this.superAdminService.getCarRentalProviders(page, limit, this.searchTerm);
+      case 'hotels':
+        return this.superAdminService.getHotelProviders(page, pageSize, filters);
+      case 'car-rentals':
+        // --- FIX: Use the correct endpoint as per your API ---
+        return this.superAdminService.getCarRentalProviders(page, pageSize, filters);
       default:
-        return this.superAdminService.getHospitalProviders(page, limit, this.searchTerm);
+        return this.superAdminService.getHospitalProviders(page, pageSize, filters);
     }
   }
 
-  getStatusText(status: number): string {
-    switch(status) {
-      case AssetStatus.APPROVED: return 'Approved';
-      case AssetStatus.PENDING: return 'Pending';
-      case AssetStatus.UNDER_REVIEW: return 'Under Review';
-      default: return 'Unknown';
-    }
-  }
-
-  getStatusIcon(status: number): any {
+  getStatusIcon(status: AssetStatus): any {
     switch(status) {
       case AssetStatus.APPROVED: return this.icons.approve;
       case AssetStatus.PENDING: return this.icons.search;
@@ -129,26 +142,40 @@ export class ManageProvidersComponent implements OnInit {
     }
   }
 
-  approveProvider(providerId: string): void {
-    this.superAdminService.approveProvider(providerId).subscribe({
-      next: () => this.updateLocalProviderStatus(providerId, AssetStatus.APPROVED),
-      error: (error) => console.error('Error approving provider:', error)
-    });
-  }
+  changeProviderStatus(providerId: string, approve: boolean): void {
+    this.isLoading = true;
+    const action = approve ? 'approve' : 'reject';
+    const notes = approve ? '' : 'Rejected by admin';
 
-  rejectProvider(providerId: string): void {
-    const notes = 'Rejected by admin';
-    this.superAdminService.rejectProvider(providerId, notes).subscribe({
-      next: () => this.updateLocalProviderStatus(providerId, AssetStatus.PENDING),
-      error: (error) => console.error('Error rejecting provider:', error)
+    this.superAdminService.changeUserState(
+      providerId,
+      action,
+      notes
+    ).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.updateLocalProviderStatus(
+          providerId,
+          approve ? AssetStatus.APPROVED : AssetStatus.PENDING
+        );
+      },
+      error: (err) => {
+        this.errorMessage = err.userMessage || `Failed to ${action} provider`;
+      }
     });
   }
 
   private updateLocalProviderStatus(providerId: string, status: AssetStatus): void {
     const provider = this.providers.find(p => p.id === providerId);
-    if (provider) {
-      provider.verificationStatus = status;
-    }
+    if (provider) provider.verificationStatus = status;
+  }
+
+  getProviderType(provider: ProviderType): string {
+    if ('numberOfDepartments' in provider) return 'Hospital';
+    if ('starRating' in provider) return 'Hotel';
+    if ('assetName' in provider && 'assetEmail' in provider) return 'Car Rental';
+    return 'Provider';
   }
 
   onPageChange(page: number): void {
@@ -161,52 +188,44 @@ export class ManageProvidersComponent implements OnInit {
   changeView(viewType: 'hospitals' | 'hotels' | 'car-rentals'): void {
     this.currentView = viewType;
     this.pagination.page = 1;
+    this.searchTerm = '';
     this.loadProviders();
   }
 
   getPageNumbers(): number[] {
-    const totalPages = this.pagination.totalPages;
-    const currentPage = this.pagination.page;
+    const { page, totalPages } = this.pagination;
     const pageNumbers = [1];
+    const range = 2;
 
-    const startPage = Math.max(2, currentPage - 1);
-    const endPage = Math.min(totalPages - 1, currentPage + 1);
-    
-    if (startPage > 2) pageNumbers.push(-1);
-    for (let i = startPage; i <= endPage; i++) pageNumbers.push(i);
-    if (endPage < totalPages - 1) pageNumbers.push(-1);
+    let start = Math.max(2, page - range);
+    let end = Math.min(totalPages - 1, page + range);
+
+    if (start > 2) pageNumbers.push(-1);
+    for (let i = start; i <= end; i++) pageNumbers.push(i);
+    if (end < totalPages - 1) pageNumbers.push(-1);
     if (totalPages > 1) pageNumbers.push(totalPages);
-    
+
     return pageNumbers;
   }
 
-  trackByProviderId(index: number, provider: ProviderType): string {
+  trackByProviderId(_: number, provider: ProviderType): string {
     return provider.id;
   }
-  // In manage-providers.component.ts
-getProviderType(provider: ProviderType): string {
-  if ('numberOfDepartments' in provider) return 'Hospital';
-  if ('starRating' in provider) return 'Hotel';
-  if ('vehicleType' in provider) return 'Car Rental';
-  return 'Provider';
-}
-getAddProviderRoute(): string {
-  switch(this.currentView) {
-    case 'hospitals': return '/super-admin/providers/hospitals/add';
-    case 'hotels': return '/super-admin/providers/hotels/add';
-    case 'car-rentals': return '/super-admin/providers/car-rentals/add';
-    default: return '';
+
+  get currentViewConfig(): ProviderViewConfig {
+    return this.viewConfigs.find(c => c.type === this.currentView) || this.viewConfigs[0];
   }
-}
-viewProviderDetails(providerId: string) {
+
+  viewProviderDetails(providerId: string): void {
     this.navigation.navigateToProviderDetails(this.currentView, providerId);
   }
 
-  addNewProvider() {
+  addNewProvider(): void {
     this.navigation.navigateToAddProvider(this.currentView.slice(0, -1) as any);
   }
 
-  changeEmail(userId: string) {
-    this.navigation.navigateToChangeEmail(userId);
+  getSafeColor(color: string): CardColor {
+    const allowedColors: CardColor[] = ['primary', 'success', 'warning', 'danger'];
+    return allowedColors.includes(color as CardColor) ? color as CardColor : 'primary';
   }
 }

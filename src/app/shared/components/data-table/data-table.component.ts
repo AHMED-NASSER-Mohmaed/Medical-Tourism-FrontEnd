@@ -14,17 +14,15 @@ export class DataTableComponent<T> {
   @Input() isLoading = false;
   @Input() rowTemplate?: TemplateRef<any>;
 
-  // Add missing properties
   @Input() searchTerm: string = '';
   @Output() search = new EventEmitter<string>();
   @Output() clearSearch = new EventEmitter<void>();
-
   @Output() pageChange = new EventEmitter<number>();
 
   getPages(): number[] {
     if (!this.pagination || !this.pagination.totalPages) return [];
     const totalPages = this.pagination.totalPages;
-    const currentPage = this.pagination.page;
+    const currentPage = this.pagination.pageNumber;
     const pageNumbers = [];
 
     pageNumbers.push(1);
@@ -52,7 +50,7 @@ export class DataTableComponent<T> {
   }
 
   onPageChange(page: number) {
-    if (page >= 1 && page <= this.pagination.totalPages) {
+    if (page >= 1 && page <= this.pagination.totalPages && page !== this.pagination.pageNumber) {
       this.pageChange.emit(page);
     }
   }
@@ -61,13 +59,11 @@ export class DataTableComponent<T> {
     return key.split('.').reduce((o, i) => o?.[i], item) ?? '';
   }
 
-  // Method to trigger search
   onSearch(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.search.emit(input.value);
   }
 
-  // Method to clear search
   onClearSearch(): void {
     this.searchTerm = '';
     this.clearSearch.emit();

@@ -8,28 +8,44 @@
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
+  border-radius: 9999px;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
 }
 
+/* Status Colors */
 .bg-success {
-  background: linear-gradient(90deg, #16c784 0%, #26c6da 100%) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%) !important;
+  color: white !important;
 }
 
 .bg-warning {
-  background: linear-gradient(90deg, #fbbf24 0%, #ffa726 100%) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%) !important;
+  color: white !important;
 }
 
 .bg-danger {
-  background: linear-gradient(90deg, #ef4444 0%, #ef5350 100%) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, #ef4444 0%, #f43f5e 100%) !important;
+  color: white !important;
 }
 
 .bg-secondary {
-  background: linear-gradient(90deg, #64748b 0%, #6c757d 100%) !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, #64748b 0%, #94a3b8 100%) !important;
+  color: white !important;
 }
 
+.bg-info {
+  background: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%) !important;
+  color: white !important;
+}
+
+/* Hover States */
+.status-badge:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive */
 @media (max-width: 575.98px) {
   .status-badge {
     font-size: 0.92rem;

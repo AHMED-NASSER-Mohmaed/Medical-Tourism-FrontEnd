@@ -1,141 +1,4 @@
-// features/super-admin/models/super-admin.model.ts
-
-// User Base Interface
-export interface UserBase {
-  id: string;
-  email: string;
-  userName: string;
-  firstName: string;
-  lastName: string;
-  phoneNumber: string;
-  nationality: string;
-  nationalId: string;
-  passportId: string;
-  imageId: string;
-  imageURL: string;
-  gender: string;
-  status: number; // 0 = Inactive, 1 = Active, 2 = Pending, 3 = Suspended
-  zipCode: string;
-  streetNumber: string;
-  governorate: string;
-  dateOfBirth: string;
-  userType: number;
-  lockoutEnd: string;
-  emailConfirmed: boolean;
-}
-
-// Patient Interface
-export interface Patient extends UserBase {
-  bloodGroup: string;
-  height: number;
-  weight: number;
-}
-
-// Hotel Provider Interface
-export interface HotelProvider extends UserBase {
-  providerDocsURL: string;
-  assetId: string;
-  assetName: string;
-  description: string;
-  assetDocsURL: string;
-  assetEmail: string;
-  acquisitionDate: string;
-  verificationStatus: number; // 0 = Pending, 1 = Under Review, 2 = Approved
-  verificationNotes: string;
-  verifiedCountryCode: string;
-  assetType: number;
-  latitude: number;
-  longitude: number;
-  locationDescription: string;
-  facilities: string[];
-  openingHours: string;
-  languagesSupported: string[];
-  starRating: number;
-  hasPool: boolean;
-  hasRestaurant: boolean;
-}
-
-// Hospital Provider Interface
-export interface HospitalProvider extends UserBase {
-  providerDocsURL: string;
-  assetId: string;
-  assetName: string;
-  description: string;
-  assetDocsURL: string;
-  assetEmail: string;
-  acquisitionDate: string;
-  verificationStatus: number;
-  verificationNotes: string;
-  verifiedCountryCode: string;
-  assetType: number;
-  latitude: number;
-  longitude: number;
-  locationDescription: string;
-  facilities: string[];
-  openingHours: string;
-  languagesSupported: string[];
-  numberOfDepartments: number;
-  hasEmergencyRoom: boolean;
-  isTeachingHospital: boolean;
-  emergencyServices: boolean;
-}
-
-// Car Rental Provider Interface
-export interface CarRentalProvider extends UserBase {
-  providerDocsURL: string;
-  assetId: string;
-  assetName: string;
-  description: string;
-  assetDocsURL: string;
-  assetEmail: string;
-  acquisitionDate: string;
-  verificationStatus: number;
-  verificationNotes: string;
-  verifiedCountryCode: string;
-  assetType: number;
-  latitude: number;
-  longitude: number;
-  locationDescription: string;
-  facilities: string[];
-  openingHours: string;
-  languagesSupported: string[];
-  operationalAreas: string;
-  vehicleType: string[];
-  transmission: string[];
-  fuelType: string[];
-  rentalPolicies: string[];
-  additionalServices: string[];
-  carFeatures: string[];
-}
-
-// Paginated Response Interface
-export interface PaginatedResponse<T> {
-  items: T[];
-  page: number;
-  limit: number;
-  totalItems: number;
-  totalPages: number;
-}
-
-// Status Change Request
-export interface StatusChangeRequest {
-  notes?: string;
-}
-
-// Email Change Request
-export interface EmailChangeRequest {
-  userId: string;
-  newEmail: string;
-}
-
-// Asset Status Request
-export interface AssetStatusRequest {
-  assetId: string;
-  status: number; // 0, 1, or 2
-  notes: string;
-}
-
-// User Status
+// Enums must match backend values exactly
 export enum UserStatus {
   INACTIVE = 0,
   ACTIVE = 1,
@@ -143,9 +6,138 @@ export enum UserStatus {
   SUSPENDED = 3
 }
 
-// Asset Status
+export enum Gender {
+  UNSPECIFIED = 0,
+  MALE = 1,
+  FEMALE = 2
+}
+
 export enum AssetStatus {
   PENDING = 0,
   UNDER_REVIEW = 1,
-  APPROVED = 2
+  APPROVED = 2,
+  REJECTED = 3
+}
+
+export enum ProviderType {
+  HOTEL = 0,
+  HOSPITAL = 1,
+  CAR_RENTAL = 2
+}
+
+export enum TransmissionType {
+  MANUAL = 0,
+  AUTOMATIC = 1
+}
+
+export enum FuelType {
+  GASOLINE = 0,
+  DIESEL = 1,
+  ELECTRIC = 2,
+  HYBRID = 3
+}
+
+// Core Interfaces
+export interface TimeObject {
+  hour: number;
+  minute: number;
+  second: number;
+  millisecond?: number;
+}
+
+export interface PaginatedResponse<T> {
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: T[];
+}
+
+export interface UserBase {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  imageURL: string | null;
+  gender: Gender;
+  address: string;
+  city: string;
+  governorate: string;
+  country: string;
+  dateOfBirth: string; // ISO date string
+  emailConfirmed: boolean;
+  status: UserStatus;
+  userType: number;
+  docs?: string;
+  acquisitionDate?: string; // optional
+ // Document URLs
+}
+
+export interface Patient extends UserBase {
+  bloodGroup: string;
+  height: number;
+  weight: number;
+}
+
+export interface BaseProvider extends UserBase {
+  assetId: string;
+  assetName: string;
+  assetDescription: string;
+  assetEmail: string;
+  locationDescription: string;
+  latitude: number;
+  longitude: number;
+  facilities: string[];
+  verificationNotes: string;
+  verificationStatus: AssetStatus; // Add this
+  languagesSupported: number[];
+  assetType: ProviderType;
+  openingTime: TimeObject;
+  closingTime: TimeObject;
+  nationalDocsURL?: string;
+  credentialDocURL?: string;
+}
+
+export interface HotelProvider extends BaseProvider {
+  starRating: number;
+  hasPool: boolean;
+  hasRestaurant: boolean;
+}
+
+export interface HospitalProvider extends BaseProvider {
+  numberOfDepartments: number;
+  emergencyServices: boolean;
+}
+
+export interface CarRentalProvider extends BaseProvider {
+  fuelTypes: FuelType[];
+  models: string[];
+  transmission: TransmissionType;
+  rentalPolicies: string[];
+}
+
+// Request Interfaces
+export interface AddPatientRequest {
+  email: string;
+  password: string;
+  confirmPassword: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  gender: Gender;
+  address: string;
+  city: string;
+  governorateId: number;
+  countryId: number;
+  dateOfBirth: string;
+  bloodGroup: string;
+  height: number;
+  weight: number;
+}
+
+export interface StatusChangeRequest {
+  notes?: string;
 }

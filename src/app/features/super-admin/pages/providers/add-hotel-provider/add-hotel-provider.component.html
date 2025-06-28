@@ -9,7 +9,8 @@
   <div class="card-body">
     <form [formGroup]="hotelForm" (ngSubmit)="onSubmit()" autocomplete="off">
       <div class="row g-4">
-        <div class="col-md-12">
+        <!-- Hotel Name -->
+        <div class="col-md-6">
           <div class="form-floating">
             <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hotel Name">
             <label for="assetName"><i class="fas fa-hotel me-2 text-primary"></i>Hotel Name</label>
@@ -18,16 +19,49 @@
             Hotel name is required
           </div>
         </div>
-        <div class="col-md-12">
-          <div class="form-floating">
-            <textarea class="form-control" id="description" formControlName="description" placeholder="Description" style="height: 90px"></textarea>
-            <label for="description"><i class="fas fa-align-left me-2 text-primary"></i>Description</label>
-          </div>
-        </div>
+        <!-- Hotel Description -->
         <div class="col-md-6">
           <div class="form-floating">
+            <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 90px"></textarea>
+            <label for="assetDescription"><i class="fas fa-align-left me-2 text-primary"></i>Description</label>
+          </div>
+        </div>
+        <!-- Email -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="Email">
+            <label for="assetEmail"><i class="fas fa-envelope me-2 text-primary"></i>Email</label>
+          </div>
+          <div *ngIf="hotelForm.get('assetEmail')?.invalid && hotelForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
+            Valid email is required
+          </div>
+        </div>
+        <!-- Location Description -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Location">
+            <label for="locationDescription"><i class="fas fa-map-marker-alt me-2 text-primary"></i>Location Description</label>
+          </div>
+        </div>
+        <!-- Latitude -->
+        <div class="col-md-3">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="latitude" formControlName="latitude" placeholder="Latitude" step="any">
+            <label for="latitude"><i class="fas fa-globe me-2 text-primary"></i>Latitude</label>
+          </div>
+        </div>
+        <!-- Longitude -->
+        <div class="col-md-3">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="longitude" formControlName="longitude" placeholder="Longitude" step="any">
+            <label for="longitude"><i class="fas fa-globe me-2 text-primary"></i>Longitude</label>
+          </div>
+        </div>
+        <!-- Star Rating -->
+        <div class="col-md-3">
+          <div class="form-floating">
             <select class="form-select" id="starRating" formControlName="starRating" aria-label="Star Rating">
-              <option value="" selected>Select rating</option>
+              <option value="" disabled>Select rating</option>
               <option value="1">1 Star</option>
               <option value="2">2 Stars</option>
               <option value="3">3 Stars</option>
@@ -37,6 +71,14 @@
             <label for="starRating"><i class="fas fa-star me-2 text-warning"></i>Star Rating</label>
           </div>
         </div>
+        <!-- Languages Supported -->
+        <div class="col-md-3">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="languagesSupported" formControlName="languagesSupported" placeholder="Languages (IDs comma separated)">
+            <label for="languagesSupported"><i class="fas fa-language me-2 text-primary"></i>Languages Supported (IDs)</label>
+          </div>
+        </div>
+        <!-- Facilities -->
         <div class="col-md-6">
           <label class="form-label fw-semibold text-primary mb-2">Facilities</label>
           <div class="form-check mb-1">
@@ -48,7 +90,46 @@
             <label class="form-check-label" for="hasRestaurant">Has Restaurant</label>
           </div>
         </div>
-        <!-- Add more hotel-specific fields as needed -->
+        <!-- Opening Time -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold text-primary mb-2">Opening Time</label>
+          <div class="d-flex gap-2" formGroupName="openingTime">
+            <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+            <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+            <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+          </div>
+        </div>
+        <!-- Closing Time -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold text-primary mb-2">Closing Time</label>
+          <div class="d-flex gap-2" formGroupName="closingTime">
+            <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+            <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+            <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+          </div>
+        </div>
+        <!-- National Docs URL -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="nationalDocsURL" formControlName="nationalDocsURL" placeholder="National Docs URL">
+            <label for="nationalDocsURL"><i class="fas fa-file-alt me-2 text-primary"></i>National Docs URL</label>
+          </div>
+        </div>
+        <!-- Credential Doc URL -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="credentialDocURL" formControlName="credentialDocURL" placeholder="Credential Doc URL">
+            <label for="credentialDocURL"><i class="fas fa-file-alt me-2 text-primary"></i>Credential Doc URL</label>
+          </div>
+        </div>
+        <!-- Verification Notes -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <textarea class="form-control" id="verificationNotes" formControlName="verificationNotes" placeholder="Verification Notes" style="height: 70px"></textarea>
+            <label for="verificationNotes"><i class="fas fa-sticky-note me-2 text-primary"></i>Verification Notes</label>
+          </div>
+        </div>
+        <!-- Submit/Cancel -->
         <div class="col-12 mt-4">
           <div class="d-flex justify-content-end gap-2">
             <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="hotelForm.invalid">

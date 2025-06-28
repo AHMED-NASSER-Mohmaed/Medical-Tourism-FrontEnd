@@ -1,14 +1,26 @@
-<div class="input-group search-filter-group shadow-sm">
-  <span class="input-group-text bg-white border-end-0 rounded-start-3 px-3">
+<div class="input-group search-filter-group shadow-sm align-items-center">
+  <span class="input-group-text border-end-0">
     <fa-icon icon="search" class="text-primary"></fa-icon>
   </span>
   <input type="text"
-         class="form-control border-start-0 border-end-0 rounded-0"
+         class="form-control border-start-0 border-end-0"
          [(ngModel)]="searchTerm"
          placeholder="Search..."
          (keyup.enter)="onSearch()"
-         style="min-width: 180px;">
-  <button class="btn btn-primary rounded-end-3 px-4" (click)="onSearch()">
+         style="min-width: 180px;"
+         aria-label="Search">
+  <button *ngIf="searchTerm"
+          class="btn btn-outline-secondary border-end-0"
+          type="button"
+          (click)="clearSearch()"
+          aria-label="Clear search">
+    <fa-icon icon="times"></fa-icon>
+  </button>
+  <button class="btn btn-primary"
+          type="button"
+          (click)="onSearch()"
+          [disabled]="!searchTerm.trim()">
+    <fa-icon icon="search" class="me-1"></fa-icon>
     Search
   </button>
 </div>

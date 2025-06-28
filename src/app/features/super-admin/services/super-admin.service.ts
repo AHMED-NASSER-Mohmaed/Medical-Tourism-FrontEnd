@@ -1,15 +1,18 @@
-import { environment } from './../../../../environments/environment';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams, HttpErrorResponse } from '@angular/common/http';
-// import { environment } from 'src/environments/environment';
+import { HttpClient, HttpParams, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
 import { 
-  UserBase, 
-  Patient, 
-  HotelProvider, 
+  UserBase,
+  Patient,
+  HotelProvider,
   HospitalProvider,
   CarRentalProvider,
   PaginatedResponse,
-  StatusChangeRequest
+  AddPatientRequest,
+  StatusChangeRequest,
+  UserStatus,
+  Gender,
+  AssetStatus
 } from '../models/super-admin.model';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -17,326 +20,343 @@ import Swal from 'sweetalert2';
 
 @Injectable({ providedIn: 'root' })
 export class SuperAdminService {
-  private apiUrl = `${environment.apiUrl}/api/SuperAdmin`;
-  private defaultError = 'An unexpected error occurred. Please try again later.';
+  private readonly apiUrl = `${environment.apiUrl}/api/SuperAdmin`;
+  private readonly jsonHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  // ==================== ERROR HANDLER ====================
-  private handleError(error: HttpErrorResponse, customMessage?: string): Observable<never> {
-    console.error('SuperAdmin Service Error:', error);
+  // ==================== CORE UTILITIES ====================
+  private handleError(error: HttpErrorResponse, context: string = ''): Observable<never> {
+    console.error(`[SuperAdminService] Error in ${context || 'operation'}`, error);
     
-    let errorMessage = customMessage || this.defaultError;
-    let details = '';
-    
-    // Handle different error types
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      details = `Client error: ${error.error.message}`;
-    } else if (error.status === 0) {
-      // Network error
-      details = 'Network error: Could not connect to server';
-    } else {
-      // Server-side error
-      details = `Server error: ${error.status} - ${error.statusText}`;
-      
-      // Extract server error message if available
-      if (error.error?.message) {
-        details += ` | ${error.error.message}`;
-      } else if (error.error) {
-        details += ` | ${JSON.stringify(error.error)}`;
-      }
+    let userMessage = 'Operation failed. Please try again.';
+    let technicalMessage = error.message;
+
+    if (error.status === 0) {
+      userMessage = 'Network error: Please check your internet connection';
+    } else if (error.status >= 400 && error.status < 500) {
+      if (error.error?.errors) {
+        technicalMessage = Object.entries(error.error.errors)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('\n');
+      } 
+      userMessage = error.error?.message || userMessage;
     }
-    
-    // Show SweetAlert notification
-    this.showError(errorMessage, details);
-    
-    // Rethrow for component handling if needed
-    return throwError(() => new Error(details));
-  }
 
-  private showError(title: string, text: string): void {
-    Swal.fire({
-      title,
-      text,
+    this.showToast({
+      title: 'Error',
+      text: userMessage,
       icon: 'error',
-      confirmButtonColor: '#3085d6',
-      confirmButtonText: 'OK',
-      customClass: {
-        container: 'sweet-alert-container',
-        popup: 'sweet-alert-popup',
-        title: 'sweet-alert-title',
-        confirmButton: 'sweet-alert-confirm'
-      }
+      timer: 5000
     });
+
+    return throwError(() => ({ 
+      userMessage,
+      technicalMessage,
+      status: error.status 
+    }));
   }
 
-  private showSuccess(title: string): void {
+  private showToast(config: {
+    title: string;
+    text: string;
+    icon: 'success' | 'error' | 'warning' | 'info';
+    timer?: number;
+  }): void {
     Swal.fire({
-      title,
-      icon: 'success',
-      timer: 2000,
-      timerProgressBar: true,
+      position: 'top-end',
+      toast: true,
       showConfirmButton: false,
-      customClass: {
-        container: 'sweet-alert-container',
-        popup: 'sweet-alert-popup',
-        title: 'sweet-alert-title'
-      }
+      ...config,
+      timer: config.timer || (config.icon === 'success' ? 3000 : undefined),
+      timerProgressBar: true,
+      showClass: { popup: 'animate__animated animate__fadeInDown' },
+      hideClass: { popup: 'animate__animated animate__fadeOutUp' }
     });
   }
 
-  // ==================== PROFILE ====================
+  private buildParams(params: Record<string, string | number | boolean>): HttpParams {
+    let httpParams = new HttpParams();
+    Object.entries(params).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        httpParams = httpParams.set(key, value.toString());
+      }
+    });
+    return httpParams;
+  }
+
+  // ==================== PROFILE MANAGEMENT ====================
   getProfile(): Observable<UserBase> {
     return this.http.get<UserBase>(`${this.apiUrl}/profile`).pipe(
-      catchError(error => this.handleError(error, 'Failed to load profile'))
+      catchError(error => this.handleError(error, 'fetching profile'))
     );
   }
 
-  // ==================== USER MANAGEMENT ====================
-  activateUser(userId: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/activate-user/${userId}`, {}).pipe(
-      catchError(error => this.handleError(error, 'Failed to activate user')),
-      tap(() => this.showSuccess('User activated successfully'))
-    );
-  }
-
-  deactivateUser(userId: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/deactivate-user/${userId}`, {}).pipe(
-      catchError(error => this.handleError(error, 'Failed to deactivate user')),
-      tap(() => this.showSuccess('User deactivated successfully'))
-    );
-  }
-
-  changeUserEmail(userId: string, newEmail: string): Observable<void> {
-    const params = new HttpParams().set('userId', userId);
-    return this.http.put<void>(
-      `${this.apiUrl}/change-user-email`, 
-      `"${newEmail}"`, 
-      { params, headers: { 'Content-Type': 'application/json' } }
-    ).pipe(
-      catchError(error => this.handleError(error, 'Failed to change email')),
-      tap(() => this.showSuccess('Email changed successfully'))
-    );
-  }
-
-  resetUserPassword(userId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/reset-user-password/${userId}`, {}).pipe(
-      catchError(error => this.handleError(error, 'Failed to reset password')),
-      tap(() => this.showSuccess('Password reset initiated'))
-    );
-  }
-
-  // ==================== PROVIDER APPROVAL ====================
-  approveProvider(providerId: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/approve-provider/${providerId}`, {}).pipe(
-      catchError(error => this.handleError(error, 'Failed to approve provider')),
-      tap(() => this.showSuccess('Provider approved successfully'))
-    );
-  }
-
-  rejectProvider(providerId: string, notes: string): Observable<void> {
-    return this.http.put<void>(
-      `${this.apiUrl}/reject-provider/${providerId}`, 
-      `"${notes}"`, 
-      { headers: { 'Content-Type': 'application/json' } }
-    ).pipe(
-      catchError(error => this.handleError(error, 'Failed to reject provider')),
-      tap(() => this.showSuccess('Provider rejected successfully'))
-    );
-  }
-
-  setAssetVerificationStatus(
-    assetId: string, 
-    status: number, 
-    notes: string
+  // ==================== USER STATE MANAGEMENT ====================
+  changeUserState(
+    userId: string, 
+    action: 'activate' | 'deactivate' | 'approve' | 'reject',
+    notes?: string
   ): Observable<void> {
-    const params = new HttpParams().set('status', status.toString());
-    return this.http.put<void>(
-      `${this.apiUrl}/set-asset-verification-status/${assetId}`,
-      `"${notes}"`,
-      { params, headers: { 'Content-Type': 'application/json' } }
-    ).pipe(
-      catchError(error => this.handleError(error, 'Failed to update asset status')),
-      tap(() => this.showSuccess('Asset status updated'))
+    const endpointMap = {
+      activate: 'activate-user',
+      deactivate: 'deactivate-user',
+      approve: 'approve-provider',
+      reject: 'reject-provider'
+    };
+
+    const url = `${this.apiUrl}/${endpointMap[action]}/${userId}`;
+    const body = action === 'reject' ? JSON.stringify(notes || '') : null;
+
+    return this.http.put<void>(url, body, {
+      headers: action === 'reject' ? this.jsonHeaders : undefined
+    }).pipe(
+      tap(() => this.showToast({
+        title: 'Success',
+        text: `User ${action}d successfully`,
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, `${action} user`))
     );
   }
 
   // ==================== PATIENT MANAGEMENT ====================
-  addPatient(patientData: any): Observable<Patient> {
+  addPatient(patientData: AddPatientRequest): Observable<Patient> {
     return this.http.post<Patient>(`${this.apiUrl}/add-patient`, patientData).pipe(
-      catchError(error => this.handleError(error, 'Failed to create patient')),
-      tap(() => this.showSuccess('Patient created successfully'))
-    );
-  }
-
-  getPatient(patientId: string): Observable<Patient> {
-    return this.http.get<Patient>(`${this.apiUrl}/patients/${patientId}`).pipe(
-      catchError(error => this.handleError(error, 'Failed to load patient details'))
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Patient created successfully',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'creating patient'))
     );
   }
 
   getPatients(
-    page: number = 1, 
-    limit: number = 10, 
-    searchQuery: string = ''
+    pageNumber: number = 1,
+    pageSize: number = 10,
+    filters: {
+      searchTerm?: string;
+      userStatus?: UserStatus;
+      fromDate?: string;
+      toDate?: string;
+    } = {}
   ): Observable<PaginatedResponse<Patient>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
-
-    if (searchQuery) params = params.set('searchQuery', searchQuery);
+    const params = this.buildParams({
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+      ...filters
+    });
 
     return this.http.get<PaginatedResponse<Patient>>(
-      `${this.apiUrl}/patients`, 
+      `${this.apiUrl}/patients`,
       { params }
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load patients'))
+      catchError(error => this.handleError(error, 'fetching patients'))
     );
   }
 
-  // ==================== HOTEL PROVIDER MANAGEMENT ====================
-  addHotelProvider(providerData: any): Observable<HotelProvider> {
+  // ==================== HOTEL PROVIDERS ====================
+  addHotelProvider(providerData: Omit<HotelProvider, keyof UserBase | 'assetId'>): Observable<HotelProvider> {
     return this.http.post<HotelProvider>(
-      `${this.apiUrl}/add-hotel-provider`, 
+      `${this.apiUrl}/add-hotel-provider`,
       providerData
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to create hotel provider')),
-      tap(() => this.showSuccess('Hotel provider created successfully'))
-    );
-  }
-
-  getHotelProvider(providerId: string): Observable<HotelProvider> {
-    return this.http.get<HotelProvider>(
-      `${this.apiUrl}/hotel-providers/${providerId}`
-    ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load hotel provider'))
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Hotel provider created',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'creating hotel provider'))
     );
   }
 
   getHotelProviders(
-    page: number = 1, 
-    limit: number = 10, 
-    searchQuery: string = '', 
-    userStatus?: number,
-    assetStatus?: number
+    pageNumber: number = 1,
+    pageSize: number = 10,
+    filters: {
+      searchTerm?: string;
+      userStatus?: UserStatus;
+      assetStatus?: AssetStatus;
+    } = {}
   ): Observable<PaginatedResponse<HotelProvider>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
-
-    if (searchQuery) params = params.set('searchQuery', searchQuery);
-    if (userStatus !== undefined) params = params.set('userStatus', userStatus.toString());
-    if (assetStatus !== undefined) params = params.set('assetStatus', assetStatus.toString());
+    const params = this.buildParams({
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+      ...filters
+    });
 
     return this.http.get<PaginatedResponse<HotelProvider>>(
-      `${this.apiUrl}/hotel-providers`, 
+      `${this.apiUrl}/hotel-providers`,
       { params }
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load hotel providers'))
+      catchError(error => this.handleError(error, 'fetching hotel providers'))
     );
   }
 
-  // ==================== HOSPITAL PROVIDER MANAGEMENT ====================
-  addHospitalProvider(providerData: any): Observable<HospitalProvider> {
+  // ==================== HOSPITAL PROVIDERS ====================
+  addHospitalProvider(providerData: Omit<HospitalProvider, keyof UserBase | 'assetId'>): Observable<HospitalProvider> {
     return this.http.post<HospitalProvider>(
-      `${this.apiUrl}/add-hospital-provider`, 
+      `${this.apiUrl}/add-hospital-provider`,
       providerData
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to create hospital provider')),
-      tap(() => this.showSuccess('Hospital provider created successfully'))
-    );
-  }
-
-  getHospitalProvider(providerId: string): Observable<HospitalProvider> {
-    return this.http.get<HospitalProvider>(
-      `${this.apiUrl}/hospital-providers/${providerId}`
-    ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load hospital provider'))
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Hospital provider created',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'creating hospital provider'))
     );
   }
 
   getHospitalProviders(
-    page: number = 1, 
-    limit: number = 10, 
-    searchQuery: string = '', 
-    userStatus?: number,
-    assetStatus?: number
+    pageNumber: number = 1,
+    pageSize: number = 10,
+    filters: {
+      searchTerm?: string;
+      userStatus?: UserStatus;
+      assetStatus?: AssetStatus;
+      hasEmergency?: boolean;
+    } = {}
   ): Observable<PaginatedResponse<HospitalProvider>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
-
-    if (searchQuery) params = params.set('searchQuery', searchQuery);
-    if (userStatus !== undefined) params = params.set('userStatus', userStatus.toString());
-    if (assetStatus !== undefined) params = params.set('assetStatus', assetStatus.toString());
+    const params = this.buildParams({
+      PageNumber: pageNumber,
+      PageSize: pageSize,
+      ...filters
+    });
 
     return this.http.get<PaginatedResponse<HospitalProvider>>(
-      `${this.apiUrl}/hospital-providers`, 
+      `${this.apiUrl}/hospital-providers`,
       { params }
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load hospital providers'))
+      catchError(error => this.handleError(error, 'fetching hospital providers'))
     );
   }
 
-  // ==================== CAR RENTAL PROVIDER MANAGEMENT ====================
-  addCarRentalProvider(providerData: any): Observable<CarRentalProvider> {
+  updateHospitalProvider(
+    providerId: string,
+    updates: Partial<HospitalProvider>
+  ): Observable<HospitalProvider> {
+    return this.http.put<HospitalProvider>(
+      `${this.apiUrl}/hospital-providers/${providerId}`,
+      updates
+    ).pipe(
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Hospital provider updated',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'updating hospital provider'))
+    );
+  }
+
+  // ==================== CAR RENTAL PROVIDERS ====================
+  addCarRentalProvider(providerData: Omit<CarRentalProvider, keyof UserBase | 'assetId'>): Observable<CarRentalProvider> {
     return this.http.post<CarRentalProvider>(
-      `${this.apiUrl}/add-car-rental-provider`, 
+      `${this.apiUrl}/add-car-rental-provider`,
       providerData
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to create car rental provider')),
-      tap(() => this.showSuccess('Car rental provider created successfully'))
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Car rental provider created',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'creating car rental provider'))
     );
   }
 
-  getCarRentalProvider(providerId: string): Observable<CarRentalProvider> {
-    return this.http.get<CarRentalProvider>(
-      `${this.apiUrl}/car-rental-providers/${providerId}`
+getCarRentalProviders(
+  pageNumber: number = 1,
+  pageSize: number = 10,
+  filters: { searchTerm?: string; userStatus?: number } = {}
+): Observable<PaginatedResponse<CarRentalProvider>> {
+  const params: any = {
+    PageNumber: pageNumber,
+    PageSize: pageSize,
+    SearchTerm: filters.searchTerm || '',
+    UserStatus: filters.userStatus
+  };
+  // Remove undefined params
+  Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+
+  return this.http.get<PaginatedResponse<CarRentalProvider>>(
+    `${this.apiUrl}/CarRental-providers`, // <-- Corrected endpoint
+    { params }
+  ).pipe(
+    catchError(error => this.handleError(error, 'fetching car rental providers'))
+  );
+}
+  uploadProviderDocuments(
+    providerId: string,
+    files: { 
+      nationalId?: File; 
+      credentials?: File 
+    }
+  ): Observable<{ nationalDocUrl: string; credentialDocUrl: string }> {
+    const formData = new FormData();
+    if (files.nationalId) formData.append('nationalId', files.nationalId);
+    if (files.credentials) formData.append('credentials', files.credentials);
+
+    return this.http.post<{ nationalDocUrl: string; credentialDocUrl: string }>(
+      `${this.apiUrl}/providers/${providerId}/documents`,
+      formData
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load car rental provider'))
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Documents uploaded successfully',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'uploading documents'))
     );
   }
 
-  getCarRentalProviders(
-    page: number = 1, 
-    limit: number = 10, 
-    searchQuery: string = '', 
-    userStatus?: number,
-    assetStatus?: number
-  ): Observable<PaginatedResponse<CarRentalProvider>> {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
-
-    if (searchQuery) params = params.set('searchQuery', searchQuery);
-    if (userStatus !== undefined) params = params.set('userStatus', userStatus.toString());
-    if (assetStatus !== undefined) params = params.set('assetStatus', assetStatus.toString());
-
-    return this.http.get<PaginatedResponse<CarRentalProvider>>(
-      `${this.apiUrl}/car-rental-providers`, 
-      { params }
+  // ==================== BULK OPERATIONS ====================
+  exportProvidersToExcel(
+    providerType: 'hotel' | 'hospital' | 'car-rental',
+    filters: any = {}
+  ): Observable<Blob> {
+    const params = this.buildParams(filters);
+    
+    return this.http.get(
+      `${this.apiUrl}/${providerType}-providers/export`,
+      { 
+        params,
+        responseType: 'blob' 
+      }
     ).pipe(
-      catchError(error => this.handleError(error, 'Failed to load car rental providers'))
+      tap(() => this.showToast({
+        title: 'Success',
+        text: 'Export started successfully',
+        icon: 'success'
+      })),
+      catchError(error => this.handleError(error, 'exporting data'))
     );
   }
-
-  // ==================== UTILITY METHODS ====================
-  private createPaginationParams(
-    page: number, 
-    limit: number, 
-    searchQuery?: string, 
-    userStatus?: number,
-    assetStatus?: number
-  ): HttpParams {
-    let params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString());
-
-    if (searchQuery) params = params.set('searchQuery', searchQuery);
-    if (userStatus !== undefined) params = params.set('userStatus', userStatus.toString());
-    if (assetStatus !== undefined) params = params.set('assetStatus', assetStatus.toString());
-
-    return params;
-  }
+  changeUserEmail(userId: string, newEmail: string): Observable<void> {
+  return this.http.put<void>(
+    `${this.apiUrl}/change-user-email/${userId}`,
+    JSON.stringify(newEmail),
+    { headers: this.jsonHeaders }
+  ).pipe(
+    tap(() => this.showToast({
+      title: 'Success',
+      text: 'Email updated successfully',
+      icon: 'success'
+    })),
+    catchError(error => this.handleError(error, 'changing user email'))
+  );
+}
+resetUserPassword(userId: string): Observable<void> {
+  return this.http.post<void>(
+    `${this.apiUrl}/reset-user-password-${userId}`,
+    null
+  ).pipe(
+    tap(() => this.showToast({
+      title: 'Success',
+      text: 'Password reset successfully',
+      icon: 'success'
+    })),
+    catchError(error => this.handleError(error, 'resetting user password'))
+  );
+}
 }

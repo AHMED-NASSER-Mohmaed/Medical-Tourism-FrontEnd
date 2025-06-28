@@ -1,39 +1,53 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { SuperAdminService } from '../../services/super-admin.service';
 import { AssetStatus } from '../../models/super-admin.model';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-verification-status',
   templateUrl: './verification-status.component.html',
   styleUrls: ['./verification-status.component.css'],
-  standalone: false
+  standalone: false,
 })
 export class VerificationStatusComponent {
-  @Input() assetId!: string;
-  @Input() currentStatus!: number;
+  @Input({ required: true }) assetId!: string;
+  @Input({ required: true }) currentStatus!: AssetStatus;
   @Output() statusUpdated = new EventEmitter<void>();
   
-  statusOptions = [
+  readonly statusOptions = [
     { value: AssetStatus.PENDING, label: 'Pending' },
     { value: AssetStatus.UNDER_REVIEW, label: 'Under Review' },
-    { value: AssetStatus.APPROVED, label: 'Approved' }
+    { value: AssetStatus.APPROVED, label: 'Approved' },
+    { value: AssetStatus.REJECTED, label: 'Rejected' }
   ];
   
   notes = '';
   selectedStatus = this.currentStatus;
+  isLoading = false;
+  errorMessage = '';
 
   constructor(private superAdminService: SuperAdminService) {}
 
   updateStatus() {
-    this.superAdminService.setAssetVerificationStatus(
+    if (!this.assetId || this.selectedStatus === undefined) return;
+    
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    this.superAdminService.changeUserState(
       this.assetId,
-      this.selectedStatus,
+      this.selectedStatus === AssetStatus.APPROVED ? 'approve' : 'reject',
       this.notes
+    ).pipe(
+      finalize(() => this.isLoading = false)
     ).subscribe({
       next: () => {
         this.statusUpdated.emit();
       },
-      error: (err) => console.error('Error updating status:', err)
+      error: (err) => {
+        this.errorMessage = err.userMessage || 'Failed to update status';
+        console.error('Status update error:', err.technicalMessage || err);
+      }
     });
   }
 }

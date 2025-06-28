@@ -3,24 +3,34 @@
     <h6 class="mb-0">Verification Status</h6>
   </div>
   <div class="card-body">
+    @if (errorMessage) {
+      <div class="alert alert-danger mb-3">
+        {{ errorMessage }}
+      </div>
+    }
+    
     <div class="row g-3">
       <div class="col-md-6">
         <label class="form-label">Status</label>
-        <select class="form-select" [(ngModel)]="selectedStatus">
-          <option *ngFor="let option of statusOptions" [value]="option.value">
-            {{ option.label }}
-          </option>
+        <select class="form-select" [(ngModel)]="selectedStatus" [disabled]="isLoading">
+          @for (option of statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
         </select>
       </div>
       
       <div class="col-md-12">
         <label class="form-label">Notes</label>
-        <textarea class="form-control" [(ngModel)]="notes" rows="3" 
-                  placeholder="Add any verification notes..."></textarea>
+        <textarea class="form-control" [(ngModel)]="notes" rows="3"
+                  placeholder="Add any verification notes..." 
+                  [disabled]="isLoading"></textarea>
       </div>
       
       <div class="col-12">
-        <button type="button" class="btn btn-primary" (click)="updateStatus()">
+        <button type="button" class="btn btn-primary" (click)="updateStatus()" [disabled]="isLoading">
+          @if (isLoading) {
+            <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+          }
           Update Status
         </button>
       </div>

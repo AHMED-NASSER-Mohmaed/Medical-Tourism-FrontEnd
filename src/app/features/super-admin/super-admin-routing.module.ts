@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardShellComponent } from './dashboard-shell/dashboard-shell.component';
 import { ManageAccountsComponent } from './pages/manage-accounts/manage-accounts.component';
 import { ManageProvidersComponent } from './pages/manage-providers/manage-providers.component';
 import { AddHospitalProviderComponent } from './pages/providers/add-hospital-provider/add-hospital-provider.component';
 import { AddCarRentalProviderComponent } from './pages/providers/add-car-rental-provider/add-car-rental-provider.component';
-// import { ViewHospitalProviderComponent } from './pages/providers/view-hospital-provider.component';
-import { ViewCarRentalProviderComponent } from './pages/providers/view-car-rental-provider/view-car-rental-provider.component';
+import { AddHotelProviderComponent } from './pages/providers/add-hotel-provider/add-hotel-provider.component';
 import { ChangeEmailComponent } from './pages/user-actions/change-email/change-email.component';
 import { ResetPasswordComponent } from './pages/user-actions/reset-password/reset-password.component';
 import { SuperAdminProfileComponent } from './pages/profile/profile.component';
 
 const routes: Routes = [
-  { 
-    path: '', 
+  {
+    path: '',
+    component: DashboardShellComponent,
     children: [
-      { 
+      // Account Management
+      {
         path: 'manage-accounts',
         component: ManageAccountsComponent,
         data: { title: 'Manage Accounts' },
@@ -26,7 +28,9 @@ const routes: Routes = [
           { path: '', redirectTo: 'patients', pathMatch: 'full' }
         ]
       },
-      { 
+
+      // Provider Management
+      {
         path: 'manage-providers',
         component: ManageProvidersComponent,
         data: { title: 'Manage Providers' },
@@ -37,41 +41,20 @@ const routes: Routes = [
           { path: '', redirectTo: 'hospitals', pathMatch: 'full' }
         ]
       },
-      { 
-        path: 'providers/hospitals/add',
-        component: AddHospitalProviderComponent,
-        data: { title: 'Add Hospital' }
-      },
-      // { 
-      //   path: 'providers/hospitals/:id',
-      //   component: ViewHospitalProviderComponent,
-      //   data: { title: 'Hospital Details' }
-      // },
-      { 
-        path: 'providers/car-rentals/add',
-        component: AddCarRentalProviderComponent,
-        data: { title: 'Add Car Rental' }
-      },
-      { 
-        path: 'providers/car-rentals/:id',
-        component: ViewCarRentalProviderComponent,
-        data: { title: 'Car Rental Details' }
-      },
-      { 
-        path: 'user/:id/change-email',
-        component: ChangeEmailComponent,
-        data: { title: 'Change Email' }
-      },
-      { 
-        path: 'user/:id/reset-password',
-        component: ResetPasswordComponent,
-        data: { title: 'Reset Password' }
-      },
-      { 
-        path: 'profile',
-        component: SuperAdminProfileComponent,
-        data: { title: 'My Profile' }
-      },
+
+      // Provider Add Pages
+      { path: 'providers/hospitals/add', component: AddHospitalProviderComponent, data: { title: 'Add Hospital' } },
+      { path: 'providers/hotels/add', component: AddHotelProviderComponent, data: { title: 'Add Hotel' } },
+      { path: 'providers/car-rentals/add', component: AddCarRentalProviderComponent, data: { title: 'Add Car Rental' } },
+
+      // User Actions
+      { path: 'user/:id/change-email', component: ChangeEmailComponent, data: { title: 'Change Email' } },
+      { path: 'user/:id/reset-password', component: ResetPasswordComponent, data: { title: 'Reset Password' } },
+
+      // Profile
+      { path: 'profile', component: SuperAdminProfileComponent, data: { title: 'My Profile' } },
+
+      // Default redirect
       { path: '', redirectTo: 'manage-accounts', pathMatch: 'full' }
     ]
   }
