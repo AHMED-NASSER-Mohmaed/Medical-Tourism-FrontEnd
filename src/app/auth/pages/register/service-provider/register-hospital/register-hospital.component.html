@@ -1,0 +1,364 @@
+<!-- register-hospital.component.html -->
+<div class="auth-page"
+     style="background:url('/assets/images/p-1.png') center/cover no-repeat;min-height:100vh">
+  <div class="container-md py-4">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm">
+
+          <!-- ─── Header ─── -->
+          <div class="card-body p-0 auth-header-box">
+            <div class="text-center p-3">
+              <a routerLink="/" class="logo logo-admin">
+                <img src="/assets/images/logoFinal.png" height="70"
+                     alt="logo" class="auth-logo">
+              </a>
+              <h4 class="mt-3 mb-1 fw-semibold text-white">
+                Register Your Hospital Service
+              </h4>
+              <p class="mb-0" style="color:rgba(235,241,243,.7)">
+                Create your business account.
+              </p>
+            </div>
+          </div>
+
+          <!-- ─── Wizard ─── -->
+          <div class="card-body pt-4">
+            <form [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
+              <!-- pills -->
+              <ul class="nav nav-pills nav-justified form-wizard-header mb-3"
+                  #wizardNav>
+                <li class="nav-item">
+                  <a class="nav-link rounded-0 py-2 active"
+                     type="button" data-bs-toggle="tab"
+                     data-bs-target="#step-asset">
+                    <i class="ri-home-8-line me-1"></i>
+                    <span class="d-none d-sm-inline">Asset Info</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link rounded-0 py-2"
+                     type="button" data-bs-toggle="tab"
+                     data-bs-target="#step-business">
+                    <i class="ri-building-4-line me-1"></i>
+                    <span class="d-none d-sm-inline">Business Details</span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link rounded-0 py-2"
+                     type="button" data-bs-toggle="tab"
+                     data-bs-target="#step-account">
+                    <i class="ri-user-settings-line me-1"></i>
+                    <span class="d-none d-sm-inline">Account</span>
+                  </a>
+                </li>
+              </ul>
+
+              <!-- progress -->
+              <div class="progress mb-4" style="height:6px">
+                <div class="progress-bar bg-success"
+                     #progressBar style="width:33%"></div>
+              </div>
+
+              <div class="tab-content">
+
+                <!-- ░░ Step-1 ░░ -->
+                <div class="tab-pane fade show active" id="step-asset">
+                  <div class="row g-3">
+
+                    <div class="col-md-6">
+                      <label class="form-label">Hospital Name</label>
+                      <input class="form-control" formControlName="AssetName">
+                      <small class="text-danger" *ngIf="error('AssetName')">
+                        {{error('AssetName')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Description</label>
+                      <input class="form-control" formControlName="AssetDescription">
+                      <small class="text-danger" *ngIf="error('AssetDescription')">
+                        {{error('AssetDescription')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Hospital Email</label>
+                      <input type="email" class="form-control" formControlName="AssetEmail">
+                      <small class="text-danger" *ngIf="error('AssetEmail')">
+                        {{error('AssetEmail')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Location Description</label>
+                      <textarea rows="2" class="form-control"
+                                formControlName="LocationDescription"></textarea>
+                      <small class="text-danger"
+                             *ngIf="error('LocationDescription')">
+                        {{error('LocationDescription')}}
+                      </small>
+                    </div>
+
+                    <!-- hidden lat/lng -->
+                    <input hidden type="number" formControlName="Latitude">
+                    <input hidden type="number" formControlName="Longitude">
+
+                    <!-- map -->
+                    <div class="col-12">
+                      <label class="form-label d-block">Pick location on map</label>
+                      <div #map class="leaflet-map border rounded" style="height:280px"></div>
+                      <small class="text-muted">Click anywhere – marker is draggable.</small>
+                    </div>
+                    <div *ngIf="showLocationError" class="text-danger mt-2">
+                      Please select a location on the map before continuing.
+                    </div>
+
+                    <!-- departments -->
+                    <div class="col-md-6">
+                      <label class="form-label">Number of Departments</label>
+                      <input type="number" class="form-control"
+                             formControlName="NumberOfDepartments" min="1">
+                      <small class="text-danger"
+                             *ngIf="error('NumberOfDepartments')">
+                        {{error('NumberOfDepartments')}}
+                      </small>
+                    </div>
+
+                    <!-- emergency -->
+                    <div class="col-md-6 d-flex align-items-center gap-2">
+                      <input type="checkbox" id="erChk"
+                             class="form-check-input"
+                             formControlName="EmergencyServices">
+                      <label class="form-check-label" for="erChk">
+                        Provides 24/7 Emergency
+                      </label>
+                    </div>
+
+                    <!-- facilities -->
+                    <div class="col-md-6">
+                      <label class="form-label">Facilities (comma-separated)</label>
+                      <input class="form-control" formControlName="Facilities">
+                    </div>
+
+                  </div>
+
+                  <div class="text-end mt-4">
+                    <button type="button" class="btn btn-info"
+                            (click)="onNextStep()">
+                      Next <i class="ri-arrow-right-line ms-1"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ░░ Step-2 ░░ -->
+                <div class="tab-pane fade" id="step-business">
+                  <div class="row g-3">
+
+                    <!-- languages -->
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label">Languages Supported</label>
+                      <ng-select [items]="languages" bindLabel="name"
+                                 bindValue="id" [multiple]="true"
+                                 class="custom-bootstrap-style"
+                                 formControlName="LanguagesSupported"
+                                 [placeholder]="registerForm.get('LanguagesSupported')?.value?.length ? '' : 'Select languages'">
+                      </ng-select>
+                      <small class="text-danger"
+                             *ngIf="registerForm.get('LanguagesSupported')?.invalid &&
+                                    registerForm.get('LanguagesSupported')?.touched">
+                        Required
+                      </small>
+                    </div>
+
+                    <!-- country -->
+                    <div class="col-md-6">
+                      <label class="form-label">Country</label>
+                      <select class="form-select" formControlName="CountryId"
+                              (change)="onCountryChange($event)">
+                        <option value="null" disabled selected>Select country</option>
+                        <option *ngFor="let c of countryList" [value]="c.id">
+                          {{ c.name }}
+                        </option>
+                      </select>
+                      <small class="text-danger" *ngIf="error('CountryId')">
+                        {{error('CountryId')}}
+                      </small>
+                    </div>
+
+                    <!-- governorate -->
+                    <div class="col-md-6">
+                      <label class="form-label">Governorate</label>
+                      <select class="form-select" formControlName="GovernorateId"
+                              [disabled]="!filteredGovernorates.length">
+                        <option value="null" disabled selected>Select governorate</option>
+                        <option *ngFor="let g of filteredGovernorates"
+                                [value]="g.id">{{ g.name }}</option>
+                      </select>
+                      <small class="text-danger" *ngIf="error('GovernorateId')">
+                        {{error('GovernorateId')}}
+                      </small>
+                    </div>
+
+                    <!-- verification -->
+                    <div class="col-md-6">
+                      <label class="form-label">Verification Notes</label>
+                      <textarea rows="2" class="form-control"
+                                formControlName="VerificationNotes"></textarea>
+                      <small class="text-danger" *ngIf="error('VerificationNotes')">
+                        {{error('VerificationNotes')}}
+                      </small>
+                    </div>
+
+                    <!-- images -->
+                    <div class="col-12">
+                      <label class="form-label">Upload Images (max 2)</label>
+                      <input type="file" accept="image/*" multiple
+                             (change)="onImagesSelected($event)"
+                             class="form-control"
+                             [disabled]="imageFiles.length >= 2">
+                      <small class="text-danger" *ngIf="uploadError">
+                        Max 2 images allowed. Remove one to add another.
+                      </small>
+
+                      <div *ngIf="imagePreviews.length"
+                           class="mt-3 d-flex gap-3 flex-wrap">
+                        <div *ngFor="let img of imagePreviews; let i = index"
+                             class="position-relative" style="width:100px">
+                          <img [src]="img" class="img-thumbnail"
+                               style="width:100px;height:100px;object-fit:cover;cursor:pointer"
+                               title="Click to remove" (click)="removeImage(i)">
+                          <span class="badge bg-danger position-absolute top-0 end-0"
+                                style="cursor:pointer"
+                                (click)="removeImage(i)">×</span>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4">
+                    <button class="btn btn-light" type="button"
+                            (click)="goTo('step-asset')">
+                      <i class="ri-arrow-left-line me-1"></i>Back
+                    </button>
+                    <button class="btn btn-info" type="button"
+                            (click)="goTo('step-account')">
+                      Next <i class="ri-arrow-right-line ms-1"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- ░░ Step-3 ░░ -->
+                <div class="tab-pane fade" id="step-account">
+                  <!-- identical personal-info block -->
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label class="form-label">First Name</label>
+                      <input class="form-control" formControlName="FirstName">
+                      <small class="text-danger" *ngIf="error('FirstName')">
+                        {{error('FirstName')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Last Name</label>
+                      <input class="form-control" formControlName="LastName">
+                      <small class="text-danger" *ngIf="error('LastName')">
+                        {{error('LastName')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Email</label>
+                      <input type="email" class="form-control" formControlName="Email">
+                      <small class="text-danger" *ngIf="error('Email')">
+                        {{error('Email')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Phone</label>
+                      <input class="form-control" formControlName="Phone">
+                      <small class="text-danger" *ngIf="error('Phone')">
+                        {{error('Phone')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Password</label>
+                      <input type="password" class="form-control" formControlName="Password">
+                      <small class="text-danger" *ngIf="error('Password')">
+                        {{error('Password')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Confirm Password</label>
+                      <input type="password" class="form-control" formControlName="ConfirmPassword">
+                      <small class="text-danger"
+                             *ngIf="registerForm.errors?.['mismatch'] && submitted">
+                        Passwords mismatch
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Gender</label>
+                      <select class="form-control" formControlName="Gender">
+                        <option value="" disabled>Select</option>
+                        <option [ngValue]="0">Male</option>
+                        <option [ngValue]="1">Female</option>
+                      </select>
+                      <small class="text-danger" *ngIf="error('Gender')">
+                        {{error('Gender')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Date of Birth</label>
+                      <input type="date" class="form-control" formControlName="DateOfBirth">
+                      <small class="text-danger" *ngIf="error('DateOfBirth')">
+                        {{error('DateOfBirth')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">Address</label>
+                      <textarea rows="2" class="form-control" formControlName="Address"></textarea>
+                      <small class="text-danger" *ngIf="error('Address')">
+                        {{error('Address')}}
+                      </small>
+                    </div>
+
+                    <div class="col-md-6">
+                      <label class="form-label">City</label>
+                      <input class="form-control" formControlName="City">
+                      <small class="text-danger" *ngIf="error('City')">
+                        {{error('City')}}
+                      </small>
+                    </div>
+                  </div>
+
+                  <div class="d-flex justify-content-between mt-4">
+                    <button class="btn btn-light" type="button"
+                            (click)="goTo('step-business')">
+                      <i class="ri-arrow-left-line me-1"></i>Back
+                    </button>
+                    <button class="btn btn-success" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+
+              </div><!-- /tab-content -->
+            </form>
+                        <div class="mt-3 text-center text-muted">
+              Already have an account? <a routerLink="/auth/login" class="text-primary ms-1">Login</a>
+            </div>
+          </div><!-- /card-body -->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

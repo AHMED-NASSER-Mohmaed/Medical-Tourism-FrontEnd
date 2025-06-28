@@ -1,0 +1,80 @@
+
+.auth-page .auth-header-box {
+  background-color: #232a3e;
+}
+.bg-soft-danger {
+  background-color: rgba(239, 77, 86, 0.08) !important;
+  color: #ef4d56 !important;
+}
+.bg-soft-danger:hover {
+  background-color: #ef4d56 !important;
+  color: #ffffff !important;
+}
+.bg-soft-danger.not-hover:hover {
+  background-color: rgba(239, 77, 86, 0.08) !important;
+  color: #ef4d56 !important;
+}
+.bg-soft-info {
+  background-color: rgba(65, 203, 216, 0.08) !important;
+  color: #41cbd8 !important;
+}
+.bg-soft-info:hover {
+  background-color: #41cbd8 !important;
+  color: #ffffff !important;
+}
+.bg-soft-info.not-hover:hover {
+  background-color: rgba(65, 203, 216, 0.08) !important;
+  color: #41cbd8 !important;
+}
+.bg-soft-primary {
+  background-color: rgba(85, 126, 248, 0.08) !important;
+  color: #557ef8 !important;
+}
+.bg-soft-primary:hover {
+  background-color: #557ef8 !important;
+  color: #ffffff !important;
+}
+.bg-soft-primary.not-hover:hover {
+  background-color: rgba(85, 126, 248, 0.08) !important;
+  color: #557ef8 !important;
+}
+.card-bg {
+  background-color: #ffffff;
+}
+.form-switch-success .form-check-input:checked {
+  background-color: #22b783;
+  border-color: #22b783;
+}
+hr {
+  background-color: #eceff5;
+  opacity: 1;
+}
+hr.hr-dashed {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border: 0;
+  border-top: 1px dashed #e8ebf3;
+  box-sizing: content-box;
+  height: 0;
+  background-color: transparent;
+  overflow: visible;
+}
+.thumb-sm {
+  height: 36px !important;
+  width: 36px !important;
+  font-size: 14px;
+  font-weight: 700;
+}
+ h4,h6 {
+  color: #303e67;
+  margin: 10px 0;
+}
+a {
+  font-family: "Roboto", sans-serif;
+  color: #303e67;
+  text-decoration: none;
+}
+a:hover, a:active, a:focus {
+  outline: 0;
+  text-decoration: none;
+}
