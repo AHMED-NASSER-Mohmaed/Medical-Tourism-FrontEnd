@@ -6,11 +6,12 @@ import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hos
 
 const routes: Routes = [
   { path: 'auth', loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule) },
+    { path: 'hospitals', component: DisplayAllHospitalsComponent }
+ ,{ path : 'Clinics', component : HospitalClinicsComponent }
+ ,{ path : 'Doctors', component : HospitalDoctorsComponent},
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   { path: '**', redirectTo: 'auth/login' },
-  { path: 'hospitals', component: DisplayAllHospitalsComponent }
- ,{ path : 'Clinics', component : HospitalClinicsComponent }
- ,{ path : 'Doctors', component : HospitalDoctorsComponent}
+
 ];
 
 @NgModule({

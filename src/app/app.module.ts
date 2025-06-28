@@ -7,23 +7,17 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { CoreModule } from './core/core.module';
-import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { DisplayAllHospitalsComponent } from './features/patient/pages/Hospitals/display-all-hospitals/display-all-hospitals.component';
 import { HospitalClinicsComponent } from './features/patient/pages/Hospitals/hospital-clinics/hospital-clinics.component';
 import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hospital-doctors/hospital-doctors.component';
 
-<<<<<<< HEAD
+
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
-
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-@NgModule({
-  declarations: [AppComponent],
-=======
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -43,15 +37,13 @@ import { MatDividerModule } from '@angular/material/divider';
     HospitalClinicsComponent,
     HospitalDoctorsComponent
   ],
->>>>>>> Ziyad
+
   imports: [
      BrowserModule,
     AppRoutingModule,
-<<<<<<< HEAD
     HttpClientModule,
-    CoreModule,
     BrowserAnimationsModule,
-=======
+
     CoreModule,
      HttpClientModule ,
     FormsModule,
@@ -62,9 +54,9 @@ import { MatDividerModule } from '@angular/material/divider';
     MatDialogModule,
     MatInputModule,
     MatFormFieldModule,
-    MatDividerModule
+    MatDividerModule,
 
->>>>>>> Ziyad
+
 
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
