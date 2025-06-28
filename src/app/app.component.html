@@ -1,3 +1,4 @@
+
 <nav>
   <a routerLink="/auth/login">Login</a> |
   <a routerLink="/auth/register/patient">Register Patient</a> |
@@ -8,4 +9,50 @@
 
 <router-outlet></router-outlet>
 
+
+
+<mat-toolbar color="primary">
+  <span style="font-style: initial; font-weight: bold; color: #2563b6; font-size: 2rem;">MediTour</span>
+
+  <span class="example-spacer"></span>
+
+  <!-- Navigation links -->
+  <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+  <a mat-button routerLink="/hospitals" routerLinkActive="active-link">Hospitals</a>
+  <a mat-button routerLink="/hotels" routerLinkActive="active-link">Hotel</a>
+  <a mat-button routerLink="/car-rental" routerLinkActive="active-link">Car Rental</a>
+
+
+  <!-- User profile section -->
+  <div *ngIf="isLoggedIn; else loginButton">
+    <button mat-button [matMenuTriggerFor]="userMenu">
+      <mat-icon>account_circle</mat-icon>
+      {{ userName }}
+    </button>
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item>
+        <mat-icon>account_box</mat-icon>
+        <span>Profile</span>
+      </button>
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        <span>Settings</span>
+      </button>
+      <mat-divider></mat-divider>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Logout</span>
+      </button>
+    </mat-menu>
+  </div>
+
+  <ng-template #loginButton>
+    <button mat-button >
+      <mat-icon>login</mat-icon>
+      Login
+    </button>
+  </ng-template>
+</mat-toolbar>
+
+<router-outlet></router-outlet>
 

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Component({
   selector: 'app-root',
@@ -8,4 +10,26 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'Medical-Tourism-FrontEnd';
+  isLoggedIn = false; // Track login state
+  userName = ''; // Store user name when logged in
+constructor(public dialog: MatDialog) {}
+
+  // openLoginDialog(): void {
+  //   const dialogRef = this.dialog.open(LoginDialogComponent, {
+  //     width: '350px'
+  //   });
+
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     // Simulate successful login
+  //     if (result) {
+  //       this.isLoggedIn = true;
+  //       this.userName = 'John Doe'; // Replace with actual user data
+  //     }
+  //   });
+  // }
+
+  logout(): void {
+    this.isLoggedIn = false;
+    this.userName = '';
+  }
 }
