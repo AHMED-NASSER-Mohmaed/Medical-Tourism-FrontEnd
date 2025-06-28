@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { PatientRoutingModule } from './patient-routing.module';
-
+import { RouterModule, Routes } from '@angular/router';
 import { DisplayAllHospitalsComponent } from './pages/Hospitals/display-all-hospitals/display-all-hospitals.component';
 import { HospitalClinicsComponent } from './pages/Hospitals/hospital-clinics/hospital-clinics.component';
 import { HospitalDoctorsComponent } from './pages/Hospitals/hospital-doctors/hospital-doctors.component';
 
+const routes: Routes = [
+  { path: 'hospitals', component: DisplayAllHospitalsComponent },
+  { path: 'Clinics', component: HospitalClinicsComponent },
+  { path: 'Doctors', component: HospitalDoctorsComponent },
+
+];
+
 @NgModule({
-  declarations: [
-    DisplayAllHospitalsComponent,
-    HospitalClinicsComponent,
-    HospitalDoctorsComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    PatientRoutingModule
-  ]
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
 })
-export class PatientModule {}
+export class PatientRoutingModule {}

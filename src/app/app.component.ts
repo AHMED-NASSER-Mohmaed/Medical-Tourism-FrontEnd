@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,8 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class AppComponent {
   title = 'Medical-Tourism-FrontEnd';
-  isLoggedIn = false; // Track login state
-  userName = ''; // Store user name when logged in
+  // Store user name when logged in
 constructor(public dialog: MatDialog) {}
 
   // openLoginDialog(): void {
@@ -28,8 +29,5 @@ constructor(public dialog: MatDialog) {}
   //   });
   // }
 
-  logout(): void {
-    this.isLoggedIn = false;
-    this.userName = '';
-  }
+
 }
