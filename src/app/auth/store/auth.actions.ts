@@ -4,8 +4,9 @@ import { LoginRequest, LoginResponse } from '../models/auth.model';
 /* ─── Login ─── */
 export const login = createAction(
   '[Auth] Login',
-  props<{ credentials: LoginRequest }>()
+  props<{ credentials: LoginRequest & { rememberMe: boolean } }>()
 );
+
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',

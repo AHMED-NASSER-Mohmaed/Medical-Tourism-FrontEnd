@@ -17,19 +17,26 @@ export class AuthEffects {
     private router: Router,
     private cookieService: CookieService
   ) {
-    console.log('[AuthEffects] actions$ =', this.actions$);
-
     this.login$ = createEffect(() =>
       this.actions$.pipe(
         ofType(AuthActions.login),
         mergeMap(({ credentials }) =>
           this.authService.login(credentials).pipe(
-            map(res => {
-              // ✅ حفظ التوكن في الكوكيز
-              if (res.token) {
-                this.cookieService.set('auth_token', res.token);
-              }
-              return AuthActions.loginSuccess({ response: res });
+map(res => {
+  if (res.token) {
+    const remember = credentials.rememberMe;
+    if (remember) {
+
+      this.cookieService.set('auth_token', res.token, 30, '/');
+    } else {
+
+      this.cookieService.set('auth_token', res.token, undefined, '/');
+    }
+  }
+
+  this.authService.setLoggedIn(true);
+  this.router.navigate(['/']);
+  return AuthActions.loginSuccess({ response: res });
             }),
             catchError(err => of(AuthActions.loginFailure({ error: err })))
           )
@@ -43,6 +50,7 @@ export class AuthEffects {
           ofType(AuthActions.logout),
           tap(() => {
             this.cookieService.delete('auth_token');
+            this.authService.setLoggedIn(false);
             this.router.navigate(['/auth/login']);
           })
         ),

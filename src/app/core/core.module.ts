@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NavbarComponent } from '../core/layout/navbar/navbar.component';
@@ -16,6 +15,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+
 
 @NgModule({
   declarations: [
@@ -47,6 +47,14 @@ import { RouterModule } from '@angular/router';
     MatDividerModule,
     NavbarComponent
   ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ]
+
 
 })
 export class CoreModule { }

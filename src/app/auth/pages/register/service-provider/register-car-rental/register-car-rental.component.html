@@ -1,4 +1,3 @@
-<!-- register-car-rental.component.html -->
 <div class="auth-page"
      style="background:url('/assets/images/p-1.png') center/cover no-repeat;min-height:100vh">
   <div class="container-md py-4">
@@ -195,12 +194,17 @@
                     <!-- country -->
                     <div class="col-md-6">
                       <label class="form-label">Country</label>
-                      <select class="form-select" formControlName="CountryId"
-                              (change)="onCountryChange($event)">
-                        <option value="null" disabled selected>Select country</option>
-                        <option *ngFor="let c of countryList"
-                                [value]="c.id">{{ c.name }}</option>
-                      </select>
+<ng-select
+  class="custom-bootstrap-style address"
+  [items]="countryList"
+  bindLabel="name"
+  bindValue="id"
+  formControlName="countryId"
+  placeholder="Select Country"
+  [searchable]="false"
+  [clearable]="false"
+  (change)="onCountryChange($event)">
+</ng-select>
                       <small class="text-danger" *ngIf="error('CountryId')">
                         {{error('CountryId')}}
                       </small>
@@ -209,12 +213,16 @@
                     <!-- governorate -->
                     <div class="col-md-6">
                       <label class="form-label">Governorate</label>
-                      <select class="form-select" formControlName="GovernorateId"
-                              [disabled]="!filteredGovernorates.length">
-                        <option value="null" disabled selected>Select governorate</option>
-                        <option *ngFor="let g of filteredGovernorates"
-                                [value]="g.id">{{ g.name }}</option>
-                      </select>
+<ng-select
+  class="custom-bootstrap-style address"
+  [items]="filteredGovernorates"
+  bindLabel="name"
+  bindValue="id"
+  formControlName="governorateId"
+  placeholder="Select Governorate"
+  [searchable]="false"
+  [clearable]="false">
+</ng-select>
                       <small class="text-danger" *ngIf="error('GovernorateId')">
                         {{error('GovernorateId')}}
                       </small>

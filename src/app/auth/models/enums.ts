@@ -7,61 +7,7 @@ export enum AssetType {
   CarRental = 3
 }
 
-export enum Country {
-  Algeria = 1,
-  Bahrain = 2,
-  Comoros = 3,
-  Djibouti = 4,
-  Egypt = 5,
-  Iraq = 6,
-  Jordan = 7,
-  Kuwait = 8,
-  Lebanon = 9,
-  Libya = 10,
-  Mauritania = 11,
-  Morocco = 12,
-  Oman = 13,
-  Palestine = 14,
-  Qatar = 15,
-  SaudiArabia = 16,
-  Somalia = 17,
-  Sudan = 18,
-  Syria = 19,
-  Tunisia = 20,
-  UnitedArabEmirates = 21,
-  Yemen = 22
-}
 
-export enum Governorate {
-
-  Alexandria=1,
-  Aswan,
-  Asyut,
-  Beheira,
-  BeniSuef,
-  Cairo,
-  Dakahlia,
-  Damietta,
-  Faiyum,
-  Gharbia,
-  Giza,
-  Ismailia,
-  KafrElSheikh,
-  Luxor,
-  Matruh,
-  Minya,
-  Monufia,
-  NewValley,
-  NorthSinai,
-  PortSaid,
-  Qalyubia,
-  Qena,
-  RedSea,
-  Sharqia,
-  Sohag,
-  SouthSinai,
-  Suez
-}
 
 export enum Language {
   English = 1,

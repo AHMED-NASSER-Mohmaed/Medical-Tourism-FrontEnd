@@ -15,6 +15,7 @@ export class AppComponent {
   // Store user name when logged in
 constructor(public dialog: MatDialog) {}
 
+
   // openLoginDialog(): void {
   //   const dialogRef = this.dialog.open(LoginDialogComponent, {
   //     width: '350px'

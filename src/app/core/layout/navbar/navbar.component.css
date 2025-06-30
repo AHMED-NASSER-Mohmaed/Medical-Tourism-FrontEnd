@@ -1,115 +1,17 @@
-/* Main toolbar styling */
-mat-toolbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 0 3rem;
-    height: 72px;
+.main-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  transition: top 0.3s;
 }
 
-/* App title/logo */
-mat-toolbar span {
-    font-size: 2.5rem; /* Increased from 1.75rem */
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-right: 2rem;
+
+
+.logo-text {
+  color: #2563b6;
+  font-size: 1.5rem;
+  margin-right: 1.5rem;
 }
 
-/* Spacer to push content to the right */
-.example-spacer {
-    flex: 1 1 auto;
-}
 
-/* Navigation buttons */
-mat-toolbar button.mat-button {
-    font-size: 2rem; /* Increased from 1.15rem */
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin: 0 1rem;
-    padding: 0 2rem;
-    height: 100%;
-    position: relative;
-    transition: all 0.3s ease;
-}
-
-/* Button hover effect */
-mat-toolbar button.mat-button:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Active button indicator */
-mat-toolbar button.mat-button.router-link-active {
-    background-color: rgba(255, 255, 255, 0.2);
-}
-
-mat-toolbar button.mat-button.router-link-active::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background-color: white;
-}
-
-/* User profile section */
-.user-profile-button {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 0 24px;
-}
-
-.user-profile-button mat-icon {
-    font-size: 48px; /* Increased from 36px */
-    width: 48px;
-    height: 48px;
-}
-
-/* Menu items */
-mat-menu {
-    min-width: 240px;
-}
-
-mat-menu button.mat-menu-item {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    font-size: 1.7rem; /* Increased from 1.1rem */
-    padding: 1rem 2rem;
-}
-
-/* Login button specific styling */
-.login-button {
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 6px;
-    padding: 0 24px;
-    transition: all 0.3s ease;
-    font-size: 1.7rem; /* Increased from 1.1rem */
-}
-
-.login-button:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: white;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    mat-toolbar {
-        padding: 0 1.5rem;
-    }
-
-    mat-toolbar button.mat-button {
-        margin: 0 0.5rem;
-        padding: 0 1rem;
-        font-size: 1.5rem; /* Increased from 1rem */
-    }
-
-    .user-profile-button span {
-        display: none;
-    }
-}

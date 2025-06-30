@@ -1,4 +1,3 @@
-// register-patient.component.ts
 import {
   Component, OnInit, ViewChild, ElementRef, AfterViewInit
 } from '@angular/core';
@@ -9,6 +8,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { RegisterPatientRequest } from '../../../../models/auth.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { CountryService } from '../../../../services/country.service';
 
 interface Gov { id: number; name: string; }
 interface CountryInfo { name: string; governorates: Gov[]; }
@@ -25,22 +25,8 @@ export class RegisterPatientComponent implements OnInit, AfterViewInit {
   @ViewChild('progressBar') progressBar!: ElementRef<HTMLDivElement>;
   @ViewChild('wizardNav')  wizardNav!  : ElementRef<HTMLUListElement>;
 
-  /* ── master data (Map) ── */
-  countryMap = new Map<number, CountryInfo>([
-    [5, { name: 'Egypt',   governorates: [
-          { id: 6,  name: 'Cairo'      },
-          { id: 1,  name: 'Alexandria' },
-          { id: 11, name: 'Giza'       },
-        ]}],
-    [1, { name: 'Algeria', governorates: [
-          { id: 101, name: 'Algiers' },
-          { id: 102, name: 'Oran'    },
-        ]}],
-  ]);
-
-  /* flat list for *ngFor */
-  countryList = Array.from(this.countryMap.entries())
-                      .map(([id, info]) => ({ id, name: info.name }));
+  countryMap = new Map<number, CountryInfo>();
+  countryList: { id: number; name: string }[] = [];
 
   bloodGroups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
 
@@ -50,10 +36,21 @@ export class RegisterPatientComponent implements OnInit, AfterViewInit {
   submitted = false;
   loading   = false;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router,private countriesSrv:CountryService) {}
 
   /* ───── life-cycle ───── */
-  ngOnInit(): void { this.buildForm(); }
+  ngOnInit(): void {
+     this.buildForm();
+this.countriesSrv.getCountries().subscribe(
+  (res: {
+     countryMap: Map<number, CountryInfo>;
+     countryList: { id: number; name: string }[];
+   }) => {
+      this.countryMap  = res.countryMap;
+      this.countryList = res.countryList;
+});
+
+  }
   ngAfterViewInit(): void {
     const links = this.wizardNav.nativeElement.querySelectorAll('.nav-link');
     links.forEach(l => l.addEventListener('shown.bs.tab', () => this.updateProgress()));
@@ -85,11 +82,13 @@ export class RegisterPatientComponent implements OnInit, AfterViewInit {
   }
 
   /* ───── dynamic gov list ───── */
-  onCountryChange(val: number|string): void {
-    const id = +val;
-    this.registerForm.patchValue({ countryId: id, governorateId: null });
-    this.filteredGovernorates = this.countryMap.get(id)?.governorates ?? [];
-  }
+onCountryChange(val: any): void {
+
+  const id = typeof val === 'number' ? val : val?.id;
+  this.registerForm.patchValue({ governorateId: null }, { emitEvent: false });
+  this.filteredGovernorates = [...(this.countryMap.get(id)?.governorates ?? [])];
+}
+
 
   /* ───── wizard helpers ───── */
   goTo(tabId: string): void {
@@ -141,9 +140,9 @@ onSubmit(): void {
         text: 'Your account has been created!',
         showConfirmButton: true,
       }).then(() => {
-        this.registerForm.reset();         // 1. reset form
+        this.registerForm.reset();
         this.submitted = false;
-        this.router.navigate(['/auth/login']); // 2. navigate to login
+        this.router.navigate(['/auth/login']);
       });
     },
     error: (err) => {

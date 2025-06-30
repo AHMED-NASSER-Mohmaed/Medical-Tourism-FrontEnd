@@ -1,42 +1,78 @@
-<mat-toolbar color="primary">
-  <span style="font-style: initial; font-weight: bold; color: #2563b6; font-size: 2rem;">MediTour</span>
-
-  <span class="example-spacer"></span>
-
-  <!-- Navigation links -->
-  <a mat-button routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-  <a mat-button routerLink="/hospitals" routerLinkActive="active-link">Hospitals</a>
-  <a mat-button routerLink="/hotels" routerLinkActive="active-link">Hotel</a>
-  <a mat-button routerLink="/car-rental" routerLinkActive="active-link">Car Rental</a>
-
-
-  <!-- User profile section -->
-  <div *ngIf="isLoggedIn; else loginButton">
-    <button mat-button [matMenuTriggerFor]="userMenu">
-      <mat-icon>account_circle</mat-icon>
-      {{ userName }}
-    </button>
-    <mat-menu #userMenu="matMenu">
-      <button mat-menu-item>
-        <mat-icon>account_box</mat-icon>
-        <span>Profile</span>
-      </button>
-      <button mat-menu-item>
-        <mat-icon>settings</mat-icon>
-        <span>Settings</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        <span>Logout</span>
-      </button>
-    </mat-menu>
+<mat-toolbar class="main-toolbar px-3" color="primary">
+  <div class="d-flex align-items-center me-auto">
+    <img src="/assets/images/logoFinal.png" height="40" class="me-2" />
+    <span class="fw-bold logo-text">MediTour</span>
   </div>
 
-  <ng-template #loginButton>
-    <button mat-button >
-      <mat-icon>login</mat-icon>
+
+  <nav class="d-flex align-items-center me-3">
+    <a mat-button routerLink="/"           routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Home</a>
+    <a mat-button routerLink="/hospitals"  routerLinkActive="active-link">Hospitals</a>
+    <a mat-button routerLink="/hotels"     routerLinkActive="active-link">Hotels</a>
+    <a mat-button routerLink="/car-rental" routerLinkActive="active-link">Car&nbsp;Rental</a>
+  </nav>
+
+
+  <ng-container *ngIf="!isLoggedIn; else profileMenu">
+    <!-- Register dropdown -->
+    <button mat-stroked-button [matMenuTriggerFor]="regMenu">
+      <mat-icon class="me-1">person</mat-icon>
+      Register
+      <mat-icon class="ms-1" fontIcon="expand_more"></mat-icon>
+    </button>
+
+    <!-- Login -->
+    <button mat-raised-button color="accent" class="ms-3" (click)="login()">
+      <mat-icon class="me-1">login</mat-icon>
       Login
     </button>
-  </ng-template>
+  </ng-container>
+
+
+<ng-template #profileMenu>
+  <button mat-icon-button [matMenuTriggerFor]="userMenu" class="me-3">
+    <mat-icon>account_circle</mat-icon>
+    <mat-icon fontIcon="expand_more" class="ms-1"></mat-icon>
+  </button>
+</ng-template>
+
 </mat-toolbar>
+
+
+<mat-menu #regMenu="matMenu">
+  <button mat-menu-item routerLink="/auth/register/patient">Patient Registration</button>
+  <button mat-menu-item routerLink="/auth/register/car">Car Rental Registration</button>
+  <button mat-menu-item routerLink="/auth/register/hospital">Hospital Registration</button>
+  <button mat-menu-item routerLink="/auth/register/hotel">Hotel Registration</button>
+</mat-menu>
+
+<!-- Profile menu -->
+<!-- Navbar dropdown for logged-in user -->
+<mat-menu #userMenu="matMenu" class="profile-menu">
+  <!-- User Info Section -->
+  <div class="d-flex align-items-center px-3 py-2" style="min-width: 230px;">
+    <img [src]="userImage" alt="User" class="rounded-circle me-2" width="40" height="40" style="object-fit: cover;" />
+    <div class="fw-semibold text-dark" style="font-size: 15px;">{{ userName }}</div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+<button mat-menu-item (click)="goToDashboard()">
+  <mat-icon class="me-2">dashboard</mat-icon>
+  Dashboard
+</button>
+
+<button mat-menu-item (click)="goToProfileSettings()">
+  <mat-icon class="me-2">settings</mat-icon>
+  Profile Settings
+</button>
+
+
+
+  <mat-divider></mat-divider>
+
+  <button mat-menu-item (click)="logout()">
+    <mat-icon class="me-2">logout</mat-icon>
+    Logout
+  </button>
+</mat-menu>

@@ -2,6 +2,7 @@ import { FuelType, TransmissionType } from '../models/enums';
 export interface LoginRequest {
   email: string;
   password: string;
+  rememberMe?: boolean;
 }
 export interface LoginResponse {
   success: boolean;
@@ -30,6 +31,28 @@ export interface RegisterPatientRequest {
   weight: number;
 }
 
+export interface PatientProfile {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  imageURL: string;
+  gender: number;
+  address: string;
+  city: string;
+  governorateId:number ;
+  governorateName:string;
+  countryId: number;
+  countryName: string;
+  dateOfBirth: string;
+  emailConfirmed: boolean;
+  status: number;
+  userType: number;
+  bloodGroup: string;
+  height: number;
+  weight: number;
+}
 
 export interface RegisterHotelRequest {
 
@@ -44,7 +67,7 @@ export interface RegisterHotelRequest {
   HasPool: boolean;
   HasRestaurant: boolean;
   StarRating: number;
-  Facilities: string[];             // ← already split into array
+  Facilities: string[];
   VerificationNotes: string;
 
   /* ─ Account block ─ */
@@ -54,8 +77,8 @@ export interface RegisterHotelRequest {
   Phone: string;
   Password: string;
   ConfirmPassword: string;
-  Gender: number;                   // 0 / 1
-  DateOfBirth: string;              // “YYYY-MM-DD”
+  Gender: number;
+  DateOfBirth: string;
   Address: string;
   City: string;
 
@@ -64,13 +87,13 @@ export interface RegisterHotelRequest {
   GovernorateId: number;
 
   /* ─ Languages ─ */
-  LanguagesSupported: number[];     // array of ids
+  LanguagesSupported: number[];
 }
 
 /* RegisterHospitalRequest.ts */
 export interface RegisterHospitalRequest {
   /* asset-level info */
-  AssetType: number;                 // 2 = Hospital (set by UI)
+  AssetType: number;                 // 2 = Hospital
   AssetName: string;
   AssetDescription: string;
   AssetEmail: string;
@@ -79,9 +102,9 @@ export interface RegisterHospitalRequest {
   Longitude: number;
   NumberOfDepartments: number;
   EmergencyServices: boolean;
-  Facilities: string[];              // split on “,” in the UI
+  Facilities: string[];
   VerificationNotes: string;
-  LanguagesSupported: number[];      // enum IDs
+  LanguagesSupported: number[];
 
   CountryId: number;
   GovernorateId: number;
@@ -92,9 +115,9 @@ export interface RegisterHospitalRequest {
   Email: string;
   Phone: string;
   Password: string;
-  ConfirmPassword: string;           // used only for server-side check
-  Gender: number;                    // 0 = Male, 1 = Female
-  DateOfBirth: string;               // ISO yyyy-MM-dd
+  ConfirmPassword: string;
+  Gender: number;
+  DateOfBirth: string;
   Address: string;
   City: string;
 }

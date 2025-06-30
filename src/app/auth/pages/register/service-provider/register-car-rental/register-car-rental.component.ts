@@ -21,6 +21,7 @@ import { AuthService } from '../../../../services/auth.service';
 // bootstrap Tab typings
 // @ts-ignore
 import * as bootstrap from 'bootstrap';
+import { CountryService } from '../../../../services/country.service';
 
 // ── tiny helper types
 interface Gov { id: number; name: string; }
@@ -40,34 +41,15 @@ export class RegisterCarRentalComponent
   @ViewChild('progressBar') progressBar!: ElementRef<HTMLDivElement>;
   @ViewChild('wizardNav')   wizardNav!  : ElementRef<HTMLUListElement>;
   @ViewChild('map')         mapDiv!    : ElementRef<HTMLElement>;
-
+  countryMap = new Map<number, CountryInfo>();
+  countryList: { id: number; name: string }[] = [];
+  filteredGovernorates: Gov[] = [];
   private map?: L.Map;
   private marker?: L.Marker;
 
   showLocationError = false;
 
-  /* static countries */
-  private countryMap = new Map<number, CountryInfo>([
-    [5, {
-      name: 'Egypt',
-      governorates: [
-        { id: 6,  name: 'Cairo' },
-        { id: 1,  name: 'Alexandria' },
-        { id: 11, name: 'Giza' }
-      ]
-    }],
-    [1, {
-      name: 'Algeria',
-      governorates: [
-        { id: 101, name: 'Algiers' },
-        { id: 102, name: 'Oran'    }
-      ]
-    }]
-  ]);
 
-  countryList = Array.from(this.countryMap.entries())
-                      .map(([id, info]) => ({ id, name: info.name }));
-  filteredGovernorates: Gov[] = [];
 
   /* enums → selects  */
   languages: { id: number, name: string }[] = [];
@@ -91,12 +73,21 @@ export class RegisterCarRentalComponent
     private fb     : FormBuilder,
     private auth   : AuthService,
     private cd     : ChangeDetectorRef,
-    private router : Router
+    private router : Router,
+    private countriesSrv: CountryService
   ) {}
 
   /* ───── lifecycle ───── */
   ngOnInit(): void {
     this.buildForm();
+    this.countriesSrv.getCountries().subscribe(
+  (res: {
+     countryMap: Map<number, CountryInfo>;
+     countryList: { id: number; name: string }[];
+   }) => {
+      this.countryMap  = res.countryMap;
+      this.countryList = res.countryList;
+});
 
     this.languages = Object.entries(Language)
       .filter(([, v]) => !isNaN(Number(v)))
@@ -155,7 +146,7 @@ goTo(id: string): void {
                  .querySelector(`a[data-bs-target='#${id}']`) as HTMLElement;
   if (el) {
     new bootstrap.Tab(el).show();
-    this.updateProgress();       // ← add this line
+    this.updateProgress();
   }
 }
 
@@ -197,8 +188,8 @@ goTo(id: string): void {
 
       /* business */
       LanguagesSupported  : [[], Validators.required],
-      CountryId      : [null, Validators.required],
-      GovernorateId  : [null, Validators.required],
+      countryId      : [null, Validators.required],
+      governorateId  : [null, Validators.required],
 
       /* account holder */
       FirstName      : ['', Validators.required],
@@ -215,12 +206,12 @@ goTo(id: string): void {
     }, { validators: this.passwordMatch, updateOn: 'blur' });
   }
 
-  onCountryChange(evt: Event): void {
-    const val = +(evt.target as HTMLSelectElement).value;
-    this.registerForm.patchValue({ CountryId: val, GovernorateId: null });
-    this.filteredGovernorates =
-      this.countryMap.get(val)?.governorates || [];
-  }
+onCountryChange(val: any): void {
+
+  const id = typeof val === 'number' ? val : val?.id;
+  this.registerForm.patchValue({ governorateId: null }, { emitEvent: false });
+  this.filteredGovernorates = [...(this.countryMap.get(id)?.governorates ?? [])];
+}
 
   private passwordMatch =
     (g: AbstractControl): ValidationErrors | null =>

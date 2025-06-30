@@ -125,19 +125,35 @@
                     <!-- country / gov -->
                     <div class="col-md-6">
                       <label class="form-label">Country</label>
-                      <select class="form-control" formControlName="countryId"
-                              (change)="onCountryChange(registerForm.get('countryId')?.value)">
-                        <option [ngValue]="null" disabled>Select</option>
-                        <option *ngFor="let c of countryList" [ngValue]="c.id">{{ c.name }}</option>
-                      </select>
+<ng-select
+  class="custom-bootstrap-style"
+  [items]="countryList"
+  bindLabel="name"
+  bindValue="id"
+  formControlName="countryId"
+  placeholder="Select Country"
+  [searchable]="false"
+  [clearable]="false"
+  (change)="onCountryChange($event)">
+</ng-select>
+
+
                       <small class="text-danger" *ngIf="msg('countryId') as m">{{ m }}</small>
                     </div>
                     <div class="col-md-6">
                       <label class="form-label">Governorate</label>
-                      <select class="form-control" formControlName="governorateId">
-                        <option [ngValue]="null" disabled>Select</option>
-                        <option *ngFor="let g of filteredGovernorates" [ngValue]="g.id">{{ g.name }}</option>
-                      </select>
+<ng-select
+  class="custom-bootstrap-style"
+  [items]="filteredGovernorates"
+  bindLabel="name"
+  bindValue="id"
+  formControlName="governorateId"
+  placeholder="Select Governorate"
+  [searchable]="false"
+  [clearable]="false">
+</ng-select>
+
+
                       <small class="text-danger" *ngIf="msg('governorateId') as m">{{ m }}</small>
                     </div>
 

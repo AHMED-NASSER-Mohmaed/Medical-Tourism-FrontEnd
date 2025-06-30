@@ -20,23 +20,30 @@ export class ConfirmEmailComponent implements OnInit, OnDestroy {
     private r    : Router
   ) {}
 
-  ngOnInit() {
-    this.sub = this.ar.queryParams.subscribe(({ userId, token }) => {
-      if (!userId || !token) { this.error('Invalid link'); return; }
+ngOnInit() {
+  this.sub = this.ar.queryParams.subscribe(({ userId, token, newEmail }) => {
+    if (!userId || !token) {
+      this.error('Invalid link');
+      return;
+    }
 
-      this.auth.confirmEmail(userId, token)
-        .pipe(finalize(() => this.pending = false))
-        .subscribe({
-          next : () => this.ok(),
-          error: e  => this.error(e?.error?.message ?? 'Token invalid / expired'),
-        });
+    const obs = newEmail
+      ? this.auth.confirmNewEmail(userId, newEmail, token)
+      : this.auth.confirmEmail(userId, token);
+
+    obs.pipe(finalize(() => this.pending = false)).subscribe({
+      next : () => this.ok(newEmail),
+      error: e => this.error(e?.error?.message ?? 'Token invalid / expired'),
     });
-  }
+  });
+}
 
-  private ok() {
-    Swal.fire({ icon:'success', title:'Email confirmed 🎉', confirmButtonText:'Login' })
-        .then(() => this.r.navigate(['/auth/login']));
-  }
+private ok(isNew = false) {
+  const title = isNew ? 'New Email confirmed 🎉' : 'Email confirmed 🎉';
+  Swal.fire({ icon:'success', title, confirmButtonText:'Login' })
+      .then(() => this.r.navigate(['/auth/login']));
+}
+
 
   private error(msg: string) {
     Swal.fire({ icon:'error', title:'Confirmation failed', text: msg, confirmButtonText:'Back' })

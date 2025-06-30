@@ -18,7 +18,7 @@ import 'leaflet/dist/leaflet.css';
 
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
-
+import { CountryService } from '../../../../services/country.service';
 import { RegisterHospitalRequest } from '../../../../models/auth.model';
 
 interface Gov { id: number; name: string; }
@@ -41,37 +41,17 @@ export class RegisterHospitalComponent
 
   private map?: L.Map;
   private marker?: L.Marker;
-
+  countryMap = new Map<number, CountryInfo>();
+  countryList: { id: number; name: string }[] = [];
   showLocationError = false;
 
-  /* country list */
-  private countryMap = new Map<number, CountryInfo>([
-    [5, {
-      name: 'Egypt',
-      governorates: [
-        { id: 6,  name: 'Cairo'       },
-        { id: 1,  name: 'Alexandria'  },
-        { id: 11, name: 'Giza'        }
-      ]
-    }],
-    [1, {
-      name: 'Algeria',
-      governorates: [
-        { id: 101, name: 'Algiers' },
-        { id: 102, name: 'Oran'    }
-      ]
-    }]
-  ]);
 
-  countryList = Array.from(this.countryMap.entries())
-                      .map(([id, info]) => ({ id, name: info.name }));
-  filteredGovernorates: Gov[] = [];
 
   /* form */
   registerForm!: FormGroup;
   languages: { id: number, name: string }[] = [];
   submitted    = false;
-
+  filteredGovernorates: Gov[] = [];
   /* uploads */
   uploadError   = false;
   imageFiles    : File[]   = [];
@@ -81,7 +61,8 @@ export class RegisterHospitalComponent
     private fb     : FormBuilder,
     private auth   : AuthService,
     private cd     : ChangeDetectorRef,
-    private router : Router
+    private router : Router,
+    private countriesSrv: CountryService
   ) {}
 
   /* ───────── lifecycle ───────── */
@@ -93,6 +74,14 @@ export class RegisterHospitalComponent
         id: Number(v),
         name: k.replace(/([A-Z])/g, ' $1').trim()
       }));
+      this.countriesSrv.getCountries().subscribe(
+  (res: {
+     countryMap: Map<number, CountryInfo>;
+     countryList: { id: number; name: string }[];
+   }) => {
+      this.countryMap  = res.countryMap;
+      this.countryList = res.countryList;
+});
   }
 
   ngAfterViewInit(): void {
@@ -149,7 +138,7 @@ goTo(id: string): void {
                  .querySelector(`a[data-bs-target='#${id}']`) as HTMLElement;
   if (el) {
     new bootstrap.Tab(el).show();
-    this.updateProgress();       // ← add this line
+    this.updateProgress();
   }
 }
 
@@ -189,8 +178,8 @@ goTo(id: string): void {
       LanguagesSupported  : [[],  Validators.required],
 
       /* country / gov */
-      CountryId      : [null, Validators.required],
-      GovernorateId  : [null, Validators.required],
+      countryId      : [null, Validators.required],
+      governorateId  : [null, Validators.required],
 
       /* account */
       FirstName      : ['', Validators.required],
@@ -210,12 +199,12 @@ goTo(id: string): void {
     });
   }
 
-  onCountryChange(evt: Event): void {
-    const val = +(evt.target as HTMLSelectElement).value;
-    this.registerForm.patchValue({ countryId: val, governorateId: null });
-    this.filteredGovernorates =
-      this.countryMap.get(val)?.governorates || [];
-  }
+onCountryChange(val: any): void {
+
+  const id = typeof val === 'number' ? val : val?.id;
+  this.registerForm.patchValue({ governorateId: null }, { emitEvent: false });
+  this.filteredGovernorates = [...(this.countryMap.get(id)?.governorates ?? [])];
+}
 
   private passwordMatch =
     (g: AbstractControl): ValidationErrors | null =>

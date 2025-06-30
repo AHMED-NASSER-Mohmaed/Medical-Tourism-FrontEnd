@@ -41,6 +41,7 @@
 
               "src/styles.css",
               "src/assets/styles/bootstrap.min.css",
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/assets/styles/auth.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "@angular/material/prebuilt-themes/azure-blue.css"
@@ -113,6 +114,7 @@
 
                             "src/styles.css",
               "assets/styles/bootstrap.min.css",
+                "node_modules/bootstrap-icons/font/bootstrap-icons.css",
                "node_modules/@ng-select/ng-select/themes/default.theme.css",
                "node_modules/leaflet/dist/leaflet.css",
               "assets/styles/auth.css",

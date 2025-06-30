@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { login } from '../../../store/auth.actions';
-import { AuthState } from '../../../store/auth.reducer';
+import { login } from '../../store/auth.actions';
+import { AuthState } from '../../store/auth.reducer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,14 +14,20 @@ import { AuthState } from '../../../store/auth.reducer';
 export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
+  currentYear = new Date().getFullYear();
 
-  constructor(private fb: FormBuilder, private store: Store<{ auth: AuthState }>) {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-    });
+
+  constructor(private fb: FormBuilder, private store: Store<{ auth: AuthState }>, private router: Router) {
+  this.loginForm = this.fb.group({
+  email: ['', [Validators.required, Validators.email]],
+  password: ['', Validators.required],
+  rememberMe: [false]
+});
+
   }
-
+goToRecover(): void {
+  this.router.navigate(['/auth/recover']);
+}
   onSubmit(): void {
      console.log('Form submitted');
     this.submitted = true;

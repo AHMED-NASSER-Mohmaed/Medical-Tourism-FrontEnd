@@ -11,6 +11,7 @@ import 'leaflet/dist/leaflet.css';
 import { Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
+import { CountryService } from '../../../../services/country.service';
 
 interface Gov { id: number; name: string; }
 interface CountryInfo { name: string; governorates: Gov[]; }
@@ -28,25 +29,22 @@ export class RegisterHotelComponent implements OnInit, AfterViewInit {
   @ViewChild('wizardNav')   wizardNav!  : ElementRef<HTMLUListElement>;
     private map?: L.Map;            // keep a reference to avoid re-creating
   private marker?: L.Marker;
+    countryMap = new Map<number, CountryInfo>();
+  countryList: { id: number; name: string }[] = [];
 showLocationError = false;
 
-  /* ───────── Static country / governorate map ───────── */
-  private countryMap = new Map<number, CountryInfo>([
-    [5, { name: 'Egypt',   governorates: [ { id: 6,  name: 'Cairo' }, { id: 1,  name: 'Alexandria' }, { id: 11, name: 'Giza' } ] }],
-    [1, { name: 'Algeria', governorates: [ { id: 101, name: 'Algiers' }, { id: 102, name: 'Oran'      } ] }]
-  ]);
-  countryList = Array.from(this.countryMap.entries()).map(([id, info]) => ({ id, name: info.name }));
+
   filteredGovernorates: Gov[] = [];
 
 
 
-  dropdownSettings = {
-    singleSelection   : false,
-    idField           : 'id',
-    textField         : 'name',
-    allowSearchFilter : true,
-    itemsShowLimit    : 5
-  };
+  // dropdownSettings = {
+  //   singleSelection   : false,
+  //   idField           : 'id',
+  //   textField         : 'name',
+  //   allowSearchFilter : true,
+  //   itemsShowLimit    : 5
+  // };
 
   /* ───────── Reactive‑form state ───────── */
 
@@ -56,7 +54,7 @@ showLocationError = false;
   uploadError = false;
 imageFiles: File[] = [];
 imagePreviews: string[] = [];
-  constructor(private fb: FormBuilder, private auth: AuthService, private cd: ChangeDetectorRef, private router: Router ) {}
+  constructor(private fb: FormBuilder, private auth: AuthService, private cd: ChangeDetectorRef, private router: Router,private countriesSrv:CountryService ) {}
 
   /* ═════════════════════════════════ LIFECYCLE ═════════════════════════════ */
   ngOnInit(): void {
@@ -64,6 +62,14 @@ imagePreviews: string[] = [];
     this.languages = Object.entries(Language)
       .filter(([key, value]) => !isNaN(Number(value)))
       .map(([key, value]) => ({ id: Number(value), name: key.replace(/([A-Z])/g, ' $1').trim() }));
+            this.countriesSrv.getCountries().subscribe(
+  (res: {
+     countryMap: Map<number, CountryInfo>;
+     countryList: { id: number; name: string }[];
+   }) => {
+      this.countryMap  = res.countryMap;
+      this.countryList = res.countryList;
+});
 
   }
 @ViewChild('map') mapDiv!: ElementRef<HTMLElement>;
@@ -73,7 +79,7 @@ ngAfterViewInit(): void {
   this.wizardNav.nativeElement
       .addEventListener('shown.bs.tab', () => this.updateProgress());
 
-  this.updateProgress();         // first paint
+  this.updateProgress();
   this.initLeaflet();
 
 
@@ -136,7 +142,7 @@ goTo(id: string): void {
                  .querySelector(`a[data-bs-target='#${id}']`) as HTMLElement;
   if (el) {
     new bootstrap.Tab(el).show();
-    this.updateProgress();       // ← add this line
+    this.updateProgress();
   }
 }
 
@@ -152,12 +158,11 @@ onNextStep(): void {
 
   this.showLocationError = false;
   this.goTo('step-business');
-  // كمل للخطوة اللي بعدها
 }
   /* ═════════════════════════════════ FORM ════════════════════════════════ */
   private buildForm(): void {
     this.registerForm = this.fb.group({
-      /* Asset (حسب الـ Swagger) */
+      /* Asset */
       AssetType           : [1, Validators.required],               // 1 = Hotel
       AssetName           : ['', [Validators.required, Validators.minLength(3)]],
       AssetDescription    : ['', [Validators.required, Validators.minLength(10)]],
@@ -183,8 +188,8 @@ onNextStep(): void {
       DateOfBirth    : ['', Validators.required],
       Address        : ['', Validators.required],
       City           : ['', Validators.required],
-      CountryId      : [null, Validators.required],
-      GovernorateId  : [null, Validators.required],
+      countryId      : [null, Validators.required],
+      governorateId  : [null, Validators.required],
 
 
 
@@ -193,29 +198,24 @@ onNextStep(): void {
   }
 
   /* ═════════════════════════════ HELPERS ════════════════════════════════ */
-  /** تحديث قائمة المحافظات عند اختيار الدولة */
-onCountryChange(event: Event) {
-  const selectElement = event.target as HTMLSelectElement;
-  const selectedCountryId = +selectElement.value;
 
-  this.registerForm.patchValue({
-    countryId: selectedCountryId,
-    governorateId: null
-  });
+onCountryChange(val: any): void {
 
-  this.filteredGovernorates = this.countryMap.get(selectedCountryId)?.governorates || [];
+  const id = typeof val === 'number' ? val : val?.id;
+  this.registerForm.patchValue({ governorateId: null }, { emitEvent: false });
+  this.filteredGovernorates = [...(this.countryMap.get(id)?.governorates ?? [])];
 }
 
 
 
-  /** validator تطابق كلمتى المرور */
+
   private passwordMatch = (g: AbstractControl): ValidationErrors | null =>
     g.get('Password')?.value === g.get('ConfirmPassword')?.value ? null : { mismatch: true };
 
-  /** إظهار رسالة خطأ لحقل ما */
+
   error(ctrl: string): string | null {
     const c = this.registerForm.get(ctrl);
-    if (!c || !(c.touched || this.submitted)) return null;   // ✨ لا تظهر الأخطاء قبل اللمس أو الإرسال
+    if (!c || !(c.touched || this.submitted)) return null;
 
     if (c.errors?.['required'])   return 'Required';
     if (c.errors?.['Email'])      return 'Invalid email';
@@ -232,7 +232,7 @@ onCountryChange(event: Event) {
 
 
 
-  /** تحديث شريط التقدم */
+
   private updateProgress(): void {
     const links   = this.wizardNav.nativeElement.querySelectorAll('.nav-link');
     const activeI = Array.from(links).findIndex(l => l.classList.contains('active'));
@@ -241,48 +241,48 @@ onCountryChange(event: Event) {
   }
 
 
-  /* ---------- files ---------- */
+
 onImagesSelected(event: Event): void {
   const input = event.target as HTMLInputElement;
   if (!input.files?.length) { return; }
 
   const selected = Array.from(input.files);
 
-  /* ➊ تجاوز الحد الأقصى */
+
   if (this.imageFiles.length + selected.length > 2) {
     this.uploadError = true;
-    input.value = '';          // إعادة تهيئة الـ input
-    this.cd.markForCheck();    // 🔔 أخبر أنجولار
+    input.value = '';
+    this.cd.markForCheck();
     return;
   }
 
   this.uploadError = false;
 
-  /* ➋ حفظ الملفات وصُنع معاينة */
+
   selected.forEach(file => {
     const reader = new FileReader();
     reader.onload = () => {
       this.imageFiles.push(file);
       this.imagePreviews.push(reader.result as string);
-      this.cd.markForCheck();          // 🔔 أخبر أنجولار كلما انتهت صورة
+      this.cd.markForCheck();
     };
     reader.readAsDataURL(file);
   });
 
-  input.value = '';                 // يسمح برفع نفس الملف إن حُذف
+  input.value = '';
 }
 
-/** حذف صورة مُختارة */
+
 removeImage(index: number): void {
   this.imageFiles.splice(index, 1);
   this.imagePreviews.splice(index, 1);
 
-  /* لو بقى أقل من 2 ألغِ الخطأ */
+
   if (this.imageFiles.length < 3) {
     this.uploadError = false;
   }
 
-  this.cd.markForCheck();           // 🔔 أخبر أنجولار ليرسم من جديد
+  this.cd.markForCheck();
 }
 
 /** Convert reactive-form raw value ➜ strongly typed payload */
@@ -328,19 +328,19 @@ submit(): void {
   /* 3️⃣  Send … */
 this.auth.RegisterHotelRequest(fd).subscribe({
   next : () => {this.toast('success', 'Registration successful!');
-    this.registerForm.reset();         // 1. reset form
+    this.registerForm.reset();
         this.submitted = false;
           this.router.navigate(['/auth/login']);
   },
 
-  /* ⬇️ مرِّر الخطأ القادم من الخادم إلى الـ Swal */
+
   error: (err) => {
-    /* جرّب استخراج نص مفيد من الـ API */
+
     const serverMsg =
-      err?.error?.message   ||   // ⬅️ الشكل الشائع فى ASP.NET / NestJS
-      err?.error?.title     ||   // ⬅️ بعض الـ APIs ترسل title
-      err?.message          ||   // ⬅️ خطأ شبكة مثلاً
-      'Registration failed';    // ⬅️ fallback افتراضي
+      err?.error?.message   ||
+      err?.error?.title     ||
+      err?.message          ||
+      'Registration failed';
 
     this.toast('error', serverMsg);
   }
