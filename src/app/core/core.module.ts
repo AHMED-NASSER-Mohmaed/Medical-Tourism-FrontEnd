@@ -15,11 +15,16 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDividerModule } from '@angular/material/divider';
 import { RouterModule } from '@angular/router';
+import { FooterComponent } from './layout/footer/footer.component';
+import { HomeComponent } from './layout/home/home.component';
+import {CoreRoutingModule} from './core-routing-module';
 
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent,
+    HomeComponent
   ],
   imports: [
     CommonModule,
@@ -32,7 +37,8 @@ import { RouterModule } from '@angular/router';
     MatInputModule,
     MatFormFieldModule,
     MatDividerModule,
-    RouterModule
+    RouterModule,
+    CoreRoutingModule
 
   ],
   exports: [
@@ -45,7 +51,9 @@ import { RouterModule } from '@angular/router';
     MatInputModule,
     MatFormFieldModule,
     MatDividerModule,
-    NavbarComponent
+    NavbarComponent,
+    FooterComponent,
+    HomeComponent
   ],
   providers: [
     {

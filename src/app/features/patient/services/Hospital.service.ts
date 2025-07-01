@@ -7,7 +7,7 @@ import { Doctor } from '../models/Hospital.model';
     providedIn: 'root'
 })
 export class HospitalService {
-    private baseUrl = 'http://localhost:4200/api'; // Replace with your API endpoint
+    private baseUrl = 'https://api.example.com/hospitals'; // Replace with your API endpoint
     // Dummy data for hospitals, clinics, doctors, and schedules
     private hospitals = [
         {

@@ -40,6 +40,7 @@
             "styles": [
 
               "src/styles.css",
+              "src/assets/styles/home.css",
               "src/assets/styles/bootstrap.min.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/assets/styles/auth.css",
@@ -113,6 +114,7 @@
 
 
                             "src/styles.css",
+                            "src/assets/styles/home.css",
               "assets/styles/bootstrap.min.css",
                 "node_modules/bootstrap-icons/font/bootstrap-icons.css",
                "node_modules/@ng-select/ng-select/themes/default.theme.css",

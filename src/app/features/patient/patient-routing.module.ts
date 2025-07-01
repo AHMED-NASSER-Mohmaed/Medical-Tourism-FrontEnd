@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'Doctors', component: HospitalDoctorsComponent },
   {path: 'profile', component:ProfileComponent},
 
+
 ];
 
 @NgModule({

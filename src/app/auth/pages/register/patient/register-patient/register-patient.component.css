@@ -35,3 +35,10 @@
   border-radius: 0.25rem;
   box-shadow: none;
 }
+
+.nav-link.active.mod {
+    background-color: var(--active-tab-bg-color, rgba(44,90,160,0.2));
+    color: white;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+}
