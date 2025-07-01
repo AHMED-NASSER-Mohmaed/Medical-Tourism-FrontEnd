@@ -12,9 +12,9 @@ import {
   standalone: false
 })
 export class DashboardShellComponent {
-  title = 'MediTour Admin';
+  title = 'Elagy Admin';
   userRole = 'Super Admin';
-  avatar = 'assets/admin-avatar.png';
+  avatar = 'src/assets/images/ww.jpg';
   breadcrumbs = [
     { label: 'Home', link: '/super-admin/dashboard' },
     { label: 'Dashboard' }

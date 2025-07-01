@@ -11,7 +11,7 @@ import { BreadcrumbItem } from '../dashboard.types';
 export class DashboardHeaderComponent {
   @Input() title = '';
   @Input() userRole = '';
-  @Input() avatar = 'assets/default-avatar.png';
+  @Input() avatar = 'src/assets/images/ww.jpg';
   @Input() breadcrumbs: BreadcrumbItem[] = [];
   @Output() menuToggle = new EventEmitter<void>();
 }
