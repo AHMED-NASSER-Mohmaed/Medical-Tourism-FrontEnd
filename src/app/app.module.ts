@@ -8,7 +8,8 @@ import {
   faHotel, faCar, faListAlt, faEdit, faHeadset,
   faChevronLeft, faChevronRight, faEye, faCheck, 
   faTimes, faSearch, faUser, faUserCheck, faUserClock,
-  faArrowUp, faArrowDown
+  faArrowUp, faArrowDown,
+  faUserCircle
 } from '@fortawesome/free-solid-svg-icons';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -55,7 +56,7 @@ export class AppModule {
       faHotel, faCar, faListAlt, faEdit, faHeadset,
       faChevronLeft, faChevronRight, faEye, faCheck,
       faTimes, faSearch, faUser, faUserCheck, faUserClock,
-      faArrowUp, faArrowDown
+      faArrowUp, faArrowDown,faUserCircle
     );
   }
 }

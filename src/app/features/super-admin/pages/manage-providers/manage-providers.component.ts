@@ -1,40 +1,26 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { 
-  faEye, 
-  faCheck, 
-  faTimes, 
-  faSearch, 
-  faHospital, 
-  faHotel, 
-  faCar, 
-  faListAlt,
-  faPlus
-} from '@fortawesome/free-solid-svg-icons';
 import { SuperAdminService } from '../../services/super-admin.service';
-import { 
-  AssetStatus, 
-  PaginatedResponse,
+import {
+  AssetStatus,
+  ProviderType,
+  ProviderStatusChangeResponse,
   HospitalProvider,
   HotelProvider,
-  CarRentalProvider
+  CarRentalProvider,
+  PaginatedResponse,
+  Provider,
+  UserStatus
 } from '../../models/super-admin.model';
 import { finalize } from 'rxjs/operators';
-import { NavigationService } from '../../../../core/services/navigation.service';
+import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
-import { CardColor } from '../../../../dashboard/components/dashboard-card/dashboard-card.component';
+import { faList, faCheck, faTimes, faSearch, faPlus, faEye, faHospital, faHotel, faCar } from '@fortawesome/free-solid-svg-icons';
 
-type ProviderType = HospitalProvider | HotelProvider | CarRentalProvider;
+export type CardColor = 'primary' | 'success' | 'warning' | 'danger';
 
-interface ProviderViewConfig {
-  type: 'hospitals' | 'hotels' | 'car-rentals';
-  label: string;
-  icon: any;
-  color: CardColor;
-}
+type AnyProvider = HotelProvider | HospitalProvider | CarRentalProvider;
+
+type UIProvider = Provider & { isStatusChanging?: boolean };
 
 @Component({
   selector: 'app-manage-providers',
@@ -43,68 +29,82 @@ interface ProviderViewConfig {
   standalone: false,
 })
 export class ManageProvidersComponent implements OnInit {
-  providers: ProviderType[] = [];
+  providers: UIProvider[] = [];
   pagination = { page: 1, pageSize: 10, totalCount: 0, totalPages: 0 };
   isLoading = false;
   searchTerm = '';
-  currentView: 'hospitals' | 'hotels' | 'car-rentals' = 'hospitals';
+  currentView: 'hospital' | 'hotel' | 'car-rental' = 'hospital';
   errorMessage = '';
   AssetStatus = AssetStatus;
-
-  viewConfigs: ProviderViewConfig[] = [
-    { type: 'hospitals', label: 'Hospitals', icon: faHospital, color: 'danger' },
-    { type: 'hotels', label: 'Hotels', icon: faHotel, color: 'warning' },
-    { type: 'car-rentals', label: 'Car Rentals', icon: faCar, color: 'primary' }
-  ];
-
+  ProviderType = ProviderType;
   icons = {
-    view: faEye,
+    list: faList,
     approve: faCheck,
     reject: faTimes,
     search: faSearch,
-    list: faListAlt,
-    add: faPlus
+    add: faPlus,
+    view: faEye
   };
+  viewConfigs = [
+    {
+      type: 'hospital' as const,
+      label: 'Hospitals',
+      icon: faHospital,
+      providerType: ProviderType.HOSPITAL,
+      color: 'primary' as CardColor
+    },
+    {
+      type: 'hotel' as const,
+      label: 'Hotels',
+      icon: faHotel,
+      providerType: ProviderType.HOTEL,
+      color: 'success' as CardColor
+    },
+    {
+      type: 'car-rental' as const,
+      label: 'Car Rentals',
+      icon: faCar,
+      providerType: ProviderType.CAR_RENTAL,
+      color: 'warning' as CardColor
+    }
+  ];
+  selectedProvider: UIProvider | null = null;
+  showProviderModal = false;
 
-  constructor(
-    private superAdminService: SuperAdminService,
-    private navigation: NavigationService
-  ) {}
+  constructor(private superAdminService: SuperAdminService) {}
 
   ngOnInit(): void {
     this.loadProviders();
   }
 
-  // Computed properties
-  get approvedCount(): number {
-    return this.providers.filter(p => p.verificationStatus === AssetStatus.APPROVED).length;
-  }
-  get pendingCount(): number {
-    return this.providers.filter(p => p.verificationStatus === AssetStatus.PENDING).length;
-  }
-  get underReviewCount(): number {
-    return this.providers.filter(p => p.verificationStatus === AssetStatus.UNDER_REVIEW).length;
-  }
-  get showingRange(): string {
-    const start = (this.pagination.page - 1) * this.pagination.pageSize + 1;
-    const end = Math.min(this.pagination.page * this.pagination.pageSize, this.pagination.totalCount);
-    return `Showing ${start} to ${end} of ${this.pagination.totalCount}`;
-  }
-
   loadProviders(): void {
     this.isLoading = true;
     this.errorMessage = '';
-
-    this.getRequestObservable().pipe(
-      finalize(() => this.isLoading = false)
+    let request$: Observable<PaginatedResponse<AnyProvider>>;
+    if (this.currentView === 'hospital') {
+      request$ = this.superAdminService.getHospitalProviders(this.pagination.page, this.pagination.pageSize) as Observable<PaginatedResponse<AnyProvider>>;
+    } else if (this.currentView === 'hotel') {
+      request$ = this.superAdminService.getHotelProviders(this.pagination.page, this.pagination.pageSize) as Observable<PaginatedResponse<AnyProvider>>;
+    } else {
+      request$ = this.superAdminService.getCarRentalProviders(this.pagination.page, this.pagination.pageSize) as Observable<PaginatedResponse<AnyProvider>>;
+    }
+    request$.pipe(
+      finalize(() => {
+        this.isLoading = false;
+      })
     ).subscribe({
       next: (response) => this.handleSuccessResponse(response),
-      error: (err) => this.handleErrorResponse(err)
+      error: (error) => this.handleErrorResponse(error)
     });
   }
 
-  private handleSuccessResponse(response: PaginatedResponse<ProviderType>): void {
-    this.providers = response.items;
+  private handleSuccessResponse(response: PaginatedResponse<AnyProvider>): void {
+    this.providers = response.items.map(item => ({
+      ...item,
+      verificationStatus: item.verificationStatus ?? item.verificationStatus,
+      type: this.currentView,
+      isStatusChanging: false
+    })) as UIProvider[];
     this.pagination = {
       page: response.pageNumber,
       pageSize: response.pageSize,
@@ -113,69 +113,91 @@ export class ManageProvidersComponent implements OnInit {
     };
   }
 
-  private handleErrorResponse(error: any): void {
-    this.errorMessage = error.userMessage || 'Failed to load providers';
-    console.error('Provider loading error:', error.technicalMessage || error);
+  private handleErrorResponse(error: { message?: string }): void {
+    this.errorMessage = error.message || 'Failed to load providers';
+    console.error('Error loading providers:', error);
   }
 
-  private getRequestObservable(): Observable<PaginatedResponse<ProviderType>> {
-    const { page, pageSize } = this.pagination;
-    const filters = { searchTerm: this.searchTerm };
-
-    switch(this.currentView) {
-      case 'hotels':
-        return this.superAdminService.getHotelProviders(page, pageSize, filters);
-      case 'car-rentals':
-        // --- FIX: Use the correct endpoint as per your API ---
-        return this.superAdminService.getCarRentalProviders(page, pageSize, filters);
-      default:
-        return this.superAdminService.getHospitalProviders(page, pageSize, filters);
-    }
-  }
-
-  getStatusIcon(status: AssetStatus): any {
-    switch(status) {
-      case AssetStatus.APPROVED: return this.icons.approve;
-      case AssetStatus.PENDING: return this.icons.search;
-      case AssetStatus.UNDER_REVIEW: return this.icons.search;
-      default: return null;
-    }
-  }
-
-  changeProviderStatus(providerId: string, approve: boolean): void {
-    this.isLoading = true;
-    const action = approve ? 'approve' : 'reject';
-    const notes = approve ? '' : 'Rejected by admin';
-
-    this.superAdminService.changeUserState(
-      providerId,
-      action,
-      notes
+  approveProvider(provider: UIProvider): void {
+    provider.isStatusChanging = true;
+    this.superAdminService.approveProvider(
+      provider.id,
+      provider.assetType
     ).pipe(
-      finalize(() => this.isLoading = false)
+      finalize(() => {
+        provider.isStatusChanging = false;
+      })
     ).subscribe({
-      next: () => {
-        this.updateLocalProviderStatus(
-          providerId,
-          approve ? AssetStatus.APPROVED : AssetStatus.PENDING
-        );
-      },
-      error: (err) => {
-        this.errorMessage = err.userMessage || `Failed to ${action} provider`;
+      next: (response) => this.handleStatusChangeSuccess(response, provider),
+      error: (error) => this.handleStatusChangeError(error, provider)
+    });
+  }
+
+  openRejectDialog(provider: UIProvider): void {
+    Swal.fire({
+      title: 'Reject Provider',
+      input: 'textarea',
+      inputLabel: 'Reason for rejection',
+      inputPlaceholder: 'Enter the reason for rejecting this provider...',
+      showCancelButton: true,
+      confirmButtonText: 'Confirm Rejection',
+      cancelButtonText: 'Cancel',
+      icon: 'warning',
+      preConfirm: (notes) => {
+        if (!notes || notes.trim().length < 10) {
+          Swal.showValidationMessage('Please provide a detailed reason (at least 10 characters)');
+        }
+        return notes;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.rejectProvider(provider, result.value);
       }
     });
   }
 
-  private updateLocalProviderStatus(providerId: string, status: AssetStatus): void {
-    const provider = this.providers.find(p => p.id === providerId);
-    if (provider) provider.verificationStatus = status;
+  private rejectProvider(provider: UIProvider, notes: string): void {
+    provider.isStatusChanging = true;
+    this.superAdminService.rejectProvider(provider.id, provider.assetType, notes).pipe(
+      finalize(() => {
+        provider.isStatusChanging = false;
+      })
+    ).subscribe({
+      next: (response) => this.handleStatusChangeSuccess(response, provider),
+      error: (error) => this.handleStatusChangeError(error, provider)
+    });
   }
 
-  getProviderType(provider: ProviderType): string {
-    if ('numberOfDepartments' in provider) return 'Hospital';
-    if ('starRating' in provider) return 'Hotel';
-    if ('assetName' in provider && 'assetEmail' in provider) return 'Car Rental';
-    return 'Provider';
+  private handleStatusChangeSuccess(response: ProviderStatusChangeResponse, provider: UIProvider): void {
+    provider.status = response.newStatus as unknown as UserStatus;
+    Swal.fire({
+      position: 'top-end',
+      toast: true,
+      title: 'Success',
+      text: response.message || 'Operation completed successfully',
+      icon: 'success',
+      timer: 3000,
+      showConfirmButton: false
+    });
+  }
+
+  private handleStatusChangeError(error: any, provider: UIProvider): void {
+    console.error('Full error:', error);
+    Swal.fire({
+      position: 'top-end',
+      toast: true,
+      title: 'Error',
+      text: error.message || 'Operation failed',
+      icon: 'error',
+      timer: 3000,
+      showConfirmButton: false
+    });
+  }
+
+  changeView(viewType: 'hospital' | 'hotel' | 'car-rental'): void {
+    this.currentView = viewType;
+    this.pagination.page = 1;
+    this.loadProviders();
   }
 
   onPageChange(page: number): void {
@@ -185,47 +207,96 @@ export class ManageProvidersComponent implements OnInit {
     }
   }
 
-  changeView(viewType: 'hospitals' | 'hotels' | 'car-rentals'): void {
-    this.currentView = viewType;
-    this.pagination.page = 1;
-    this.searchTerm = '';
-    this.loadProviders();
+  get currentViewConfig() {
+    return this.viewConfigs.find(c => c.type === this.currentView) || this.viewConfigs[0];
+  }
+
+  getStatusClass(status: AssetStatus): string {
+    switch(status) {
+      case AssetStatus.APPROVED: return 'badge-approved';
+      case AssetStatus.PENDING: return 'badge-pending';
+      case AssetStatus.UNDER_REVIEW: return 'badge-under-review';
+      case AssetStatus.REJECTED: return 'badge-rejected';
+      default: return 'badge-secondary';
+    }
+  }
+
+  trackByProviderId(index: number, provider: UIProvider): string {
+    return provider.id;
+  }
+
+  trackByIndex(index: number, item: any): number {
+    return index;
   }
 
   getPageNumbers(): number[] {
     const { page, totalPages } = this.pagination;
     const pageNumbers = [1];
     const range = 2;
-
     let start = Math.max(2, page - range);
     let end = Math.min(totalPages - 1, page + range);
-
     if (start > 2) pageNumbers.push(-1);
     for (let i = start; i <= end; i++) pageNumbers.push(i);
     if (end < totalPages - 1) pageNumbers.push(-1);
     if (totalPages > 1) pageNumbers.push(totalPages);
-
     return pageNumbers;
   }
 
-  trackByProviderId(_: number, provider: ProviderType): string {
-    return provider.id;
+  get approvedCount(): number {
+    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.APPROVED).length;
   }
 
-  get currentViewConfig(): ProviderViewConfig {
-    return this.viewConfigs.find(c => c.type === this.currentView) || this.viewConfigs[0];
+  get rejectedCount(): number {
+    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.REJECTED).length;
   }
 
-  viewProviderDetails(providerId: string): void {
-    this.navigation.navigateToProviderDetails(this.currentView, providerId);
+  get pendingCount(): number {
+    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.PENDING).length;
   }
 
   addNewProvider(): void {
-    this.navigation.navigateToAddProvider(this.currentView.slice(0, -1) as any);
+    // Implement navigation or modal opening logic here
+    console.log('Add New Provider clicked');
   }
 
-  getSafeColor(color: string): CardColor {
-    const allowedColors: CardColor[] = ['primary', 'success', 'warning', 'danger'];
-    return allowedColors.includes(color as CardColor) ? color as CardColor : 'primary';
+  getProviderType(provider: UIProvider): string {
+    switch (provider.assetType) {
+      case ProviderType.HOSPITAL: return 'Hospital';
+      case ProviderType.HOTEL: return 'Hotel';
+      case ProviderType.CAR_RENTAL: return 'Car Rental';
+      default: return '';
+    }
+  }
+
+  viewProviderDetails(providerId: string): void {
+    const provider = this.providers.find(p => p.id === providerId);
+    if (provider) {
+      this.selectedProvider = provider;
+      this.showProviderModal = true;
+    }
+  }
+
+  closeProviderModal(): void {
+    this.showProviderModal = false;
+    this.selectedProvider = null;
+  }
+
+  get showingRange(): string {
+    const { page, pageSize, totalCount } = this.pagination;
+    if (totalCount === 0) return 'No results';
+    const start = (page - 1) * pageSize + 1;
+    const end = Math.min(page * pageSize, totalCount);
+    return `Showing ${start}–${end} of ${totalCount}`;
+  }
+
+  getAssetStatus(userStatus: number): AssetStatus {
+    // Map UserStatus to AssetStatus as appropriate for your business logic
+    switch (userStatus) {
+      case 1: return AssetStatus.APPROVED;      // ACTIVE
+      case 2: return AssetStatus.PENDING;       // PENDING
+      case 3: return AssetStatus.REJECTED;      // SUSPENDED
+      case 0: return AssetStatus.UNDER_REVIEW;  // INACTIVE
+      default: return AssetStatus.PENDING;
+    }
   }
 }

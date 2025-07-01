@@ -9,7 +9,6 @@ import { DashboardModule } from '../../dashboard/dashboard.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ManageAccountsComponent } from './pages/manage-accounts/manage-accounts.component';
 import { ManageProvidersComponent } from './pages/manage-providers/manage-providers.component';
-import { AddPatientComponent } from './pages/patients/add-patient/add-patient.component';
 import { AddHospitalProviderComponent } from './pages/providers/add-hospital-provider/add-hospital-provider.component';
 import { ChangeEmailComponent } from './pages/user-actions/change-email/change-email.component';
 import { ResetPasswordComponent } from './pages/user-actions/reset-password/reset-password.component';
@@ -20,12 +19,13 @@ import { SuperAdminProfileComponent } from '../../features/super-admin/pages/pro
 import { RouterModule } from '@angular/router';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { DashboardShellComponent } from './dashboard-shell/dashboard-shell.component';
+import { AccountDetailsComponent } from './pages/account-details/account-details.component';
+import { StatusLabelPipe } from '../../shared/pipes/status.pipe';
 
 @NgModule({
   declarations: [
     ManageAccountsComponent,
     ManageProvidersComponent,
-    AddPatientComponent,
     AddHospitalProviderComponent,
     ChangeEmailComponent,
     ResetPasswordComponent,
@@ -34,6 +34,7 @@ import { DashboardShellComponent } from './dashboard-shell/dashboard-shell.compo
     AddHotelProviderComponent,
     SuperAdminProfileComponent,
     DashboardShellComponent,
+    AccountDetailsComponent,
   ],
   imports: [
     CommonModule,

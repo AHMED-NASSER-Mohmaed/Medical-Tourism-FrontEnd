@@ -34,15 +34,15 @@ export class DashboardShellComponent {
       isExpanded: false,
       children: [
         { label: 'All Users', icon: faUser, link: '/super-admin/manage-accounts' },
-        { 
-          label: 'Quick Actions', 
-          icon: faEdit,
-          link: '#',
-          children: [
-            { label: 'Change Email', icon: faEnvelope, link: '/super-admin/user/USER_ID/change-email' },
-      { label: 'Reset Password', icon: faKey, link: '/super-admin/user/USER_ID/reset-password' }
-          ]
-        }
+      //   { 
+      //     label: 'Quick Actions', 
+      //     icon: faEdit,
+      //     link: '#',
+      //     children: [
+      //       { label: 'Change Email', icon: faEnvelope, link: '/super-admin/user/USER_ID/change-email' },
+      // { label: 'Reset Password', icon: faKey, link: '/super-admin/user/USER_ID/reset-password' }
+      //     ]
+      //   }
       ]
     },
     {

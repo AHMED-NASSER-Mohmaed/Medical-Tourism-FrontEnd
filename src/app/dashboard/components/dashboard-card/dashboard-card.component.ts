@@ -16,5 +16,7 @@ export class DashboardCardComponent {
   @Input() color: CardColor = 'primary';
   @Input() trendValue?: number;
   @Input() trendUp = true;
+    @Input() loading: boolean = false;
+
 }
 export type CardColor = 'primary' | 'success' | 'warning' | 'danger';

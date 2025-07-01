@@ -1,3 +1,4 @@
+/* add-hotel-provider.component.css */
 .add-hotel-card {
   border-radius: 1.5rem;
   overflow: hidden;
@@ -28,9 +29,14 @@
   box-shadow: 0 0 0 0.15rem rgba(59,130,246,0.13);
 }
 
-.form-label.fw-semibold.text-primary {
+.form-label.fw-semibold {
   font-size: 1.05rem;
   letter-spacing: 0.2px;
+  color: #334155;
+}
+
+.form-label span.text-danger {
+  font-weight: 700;
 }
 
 .btn-primary {
@@ -39,6 +45,7 @@
   font-weight: 700;
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+  min-width: 200px;
 }
 
 .btn-primary:disabled {
@@ -49,6 +56,28 @@
 .btn-outline-secondary {
   font-weight: 600;
   border-radius: 0.7rem;
+  min-width: 120px;
+}
+
+.checkbox-group {
+  background-color: #f8fafc;
+  border-radius: 0.8rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.form-check {
+  margin-bottom: 0.5rem;
+}
+
+.form-check-input {
+  border-radius: 0.25rem;
+  border: 1px solid #cbd5e1;
+}
+
+.form-check-input:checked {
+  background-color: #3b82f6;
+  border-color: #3b82f6;
 }
 
 @media (max-width: 767.98px) {
@@ -58,4 +87,24 @@
   .card-header {
     padding: 1rem 1rem 1rem 1rem;
   }
+  
+  .btn-primary, .btn-outline-secondary {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.is-invalid {
+  border-color: #ef4444;
+}
+
+.text-danger {
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+.alert-danger {
+  background-color: #fee2e2;
+  border-color: #fecaca;
+  color: #b91c1c;
 }

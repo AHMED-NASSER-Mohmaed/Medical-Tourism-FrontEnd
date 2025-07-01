@@ -9,6 +9,7 @@ import { AddHotelProviderComponent } from './pages/providers/add-hotel-provider/
 import { ChangeEmailComponent } from './pages/user-actions/change-email/change-email.component';
 import { ResetPasswordComponent } from './pages/user-actions/reset-password/reset-password.component';
 import { SuperAdminProfileComponent } from './pages/profile/profile.component';
+import { AccountDetailsComponent } from './pages/account-details/account-details.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,11 @@ const routes: Routes = [
         ]
       },
 
+      // Account Details Page (NEW)
+      // {
+      //   path: 'accounts/:id',
+      //         component: AccountDetailsComponent      },
+
       // Provider Management
       {
         path: 'manage-providers',
@@ -47,9 +53,9 @@ const routes: Routes = [
       { path: 'providers/hotels/add', component: AddHotelProviderComponent, data: { title: 'Add Hotel' } },
       { path: 'providers/car-rentals/add', component: AddCarRentalProviderComponent, data: { title: 'Add Car Rental' } },
 
-      // User Actions
-      { path: 'user/:id/change-email', component: ChangeEmailComponent, data: { title: 'Change Email' } },
-      { path: 'user/:id/reset-password', component: ResetPasswordComponent, data: { title: 'Reset Password' } },
+      // // User Actions
+      // { path: 'user/:id/change-email', component: ChangeEmailComponent, data: { title: 'Change Email' } },
+      // { path: 'user/:id/reset-password', component: ResetPasswordComponent, data: { title: 'Reset Password' } },
 
       // Profile
       { path: 'profile', component: SuperAdminProfileComponent, data: { title: 'My Profile' } },

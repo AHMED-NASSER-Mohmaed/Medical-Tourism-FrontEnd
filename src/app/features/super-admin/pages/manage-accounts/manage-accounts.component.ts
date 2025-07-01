@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { 
   faEye, 
@@ -52,6 +52,9 @@ export class ManageAccountsComponent implements OnInit {
   currentView: AccountViewType = 'patients';
   errorMessage = '';
   UserStatus = UserStatus;
+    selectedAccount: AccountType | null = null;
+  showAccountModal = false;
+statusFilter: 'all' | 'active' | 'inactive' | 'pending' | 'suspended' = 'all';
 
   viewConfigs: AccountViewConfig[] = [
     { type: 'patients', label: 'Patients', icon: faUser, color: 'primary' },
@@ -69,7 +72,8 @@ export class ManageAccountsComponent implements OnInit {
     userClock: faUserClock
   };
 
-  constructor(private superAdminService: SuperAdminService) {}
+  constructor(private superAdminService: SuperAdminService,  private router: Router
+) {}
 
   ngOnInit(): void {
     this.loadAccounts();
@@ -102,21 +106,26 @@ export class ManageAccountsComponent implements OnInit {
     console.error('Account loading error:', error.technicalMessage || error);
   }
 
-  private getRequestObservable(): Observable<PaginatedResponse<AccountType>> {
-    const { page, pageSize } = this.pagination;
-    const filters = { searchTerm: this.searchTerm };
+private getRequestObservable(): Observable<PaginatedResponse<AccountType>> {
+  const { page, pageSize } = this.pagination;
+  const filters: any = { searchTerm: this.searchTerm };
 
-    switch(this.currentView) {
-      case 'hospitals':
-        return this.superAdminService.getHospitalProviders(page, pageSize, filters);
-      case 'hotels':
-        return this.superAdminService.getHotelProviders(page, pageSize, filters);
-      case 'car-rentals':
-        return this.superAdminService.getCarRentalProviders(page, pageSize, filters);
-      default:
-        return this.superAdminService.getPatients(page, pageSize, filters);
-    }
+  // Add status filter if not 'all'
+  if (this.statusFilter !== 'all') {
+    filters.status = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
   }
+
+  switch(this.currentView) {
+    case 'hospitals':
+      return this.superAdminService.getHospitalProviders(page, pageSize, filters);
+    case 'hotels':
+      return this.superAdminService.getHotelProviders(page, pageSize, filters);
+    case 'car-rentals':
+      return this.superAdminService.getCarRentalProviders(page, pageSize, filters);
+    default:
+      return this.superAdminService.getPatients(page, pageSize, filters);
+  }
+}
 
   getStatusBadgeClass(status: UserStatus): string {
     switch(status) {
@@ -159,6 +168,15 @@ export class ManageAccountsComponent implements OnInit {
     if ('numberOfDepartments' in user) return 'Hospital';
     if ('transmission' in user) return 'Car Rental';
     return 'User';
+  }
+  openAccountModal(account: AccountType): void {
+    this.selectedAccount = account;
+    this.showAccountModal = true;
+  }
+
+  closeAccountModal(): void {
+    this.showAccountModal = false;
+    this.selectedAccount = null;
   }
 
   onPageChange(page: number): void {
@@ -234,5 +252,14 @@ export class ManageAccountsComponent implements OnInit {
   }
   getToEntry(): number {
   return Math.min(this.pagination.page * this.pagination.pageSize, this.pagination.totalCount);
+}
+viewAccount(account: AccountType): void {
+  this.selectedAccount = account;
+  this.showAccountModal = true;
+}
+changeStatusFilter(status: 'all' | 'active' | 'inactive' | 'pending' | 'suspended'): void {
+  this.statusFilter = status;
+  this.pagination.page = 1; // Reset to first page
+  this.loadAccounts();
 }
 }

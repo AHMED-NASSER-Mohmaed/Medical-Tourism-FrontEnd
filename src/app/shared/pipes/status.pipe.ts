@@ -1,28 +1,15 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { AssetStatus } from '../../features/super-admin/models/super-admin.model';
 
-@Pipe({
-  name: 'statusClass',
-  standalone: true
-})
-export class StatusClassPipe implements PipeTransform {
-  transform(status: string): string {
-    const normalizedStatus = status.toLowerCase();
-    
-    switch(normalizedStatus) {
-      case 'active':
-      case 'approved':
-        return 'success';
-      case 'pending':
-        return 'warning';
-      case 'suspended':
-      case 'rejected':
-        return 'danger';
-      case 'inactive':
-        return 'secondary';
-      case 'under review':
-        return 'info';
-      default:
-        return 'secondary';
+@Pipe({ name: 'statusLabel' })
+export class StatusLabelPipe implements PipeTransform {
+  transform(status: AssetStatus): string {
+    switch (status) {
+      case AssetStatus.APPROVED: return 'Approved';
+      case AssetStatus.REJECTED: return 'Rejected';
+      case AssetStatus.PENDING: return 'Pending';
+      case AssetStatus.UNDER_REVIEW: return 'Under Review';
+      default: return '';
     }
   }
 }

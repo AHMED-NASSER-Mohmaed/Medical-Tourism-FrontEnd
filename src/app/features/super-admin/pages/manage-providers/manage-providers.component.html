@@ -1,78 +1,83 @@
-<div class="dashboard-container">
-  <!-- Stats Cards -->
-<div class="row g-4 mb-4">
-  @for (stat of [
-    { 
-      title: 'Total Providers', 
-      value: pagination.totalCount, 
-      icon: icons.list, 
-      color: currentViewConfig.color 
-    },
-    { 
-      title: 'Approved', 
-      value: approvedCount, 
-      icon: icons.approve, 
-      color: 'success' 
-    },
-    { 
-      title: 'Pending', 
-      value: pendingCount, 
-      icon: icons.search, 
-      color: 'warning' 
-    },
-    { 
-      title: 'Under Review', 
-      value: underReviewCount, 
-      icon: icons.search, 
-      color: 'primary' 
-    }
-  ]; track $index) {
-    <div class="col-md-6 col-lg-3">
-      <app-dashboard-card
-        [title]="stat.title"
-        [value]="stat.value"
-        [icon]="stat.icon"
-        [color]="getSafeColor(stat.color)">
-      </app-dashboard-card>
+<div class="providers-management-container">
+  <!-- Stats Overview Section -->
+  <div class="stats-overview">
+    <div class="row g-4 mb-4">
+      <div class="col-md-6 col-lg-3">
+        <app-dashboard-card
+          [title]="'Total Providers'"
+          [value]="pagination.totalCount"
+          [icon]="icons.list"
+          [color]="currentViewConfig.color">
+        </app-dashboard-card>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <app-dashboard-card
+          [title]="'Approved'"
+          [value]="approvedCount"
+          [icon]="icons.approve"
+          [color]="'success'">
+        </app-dashboard-card>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <app-dashboard-card
+          [title]="'Pending'"
+          [value]="pendingCount"
+          [icon]="icons.search"
+          [color]="'warning'">
+        </app-dashboard-card>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <app-dashboard-card
+          [title]="'Rejected'"
+          [value]="rejectedCount"
+          [icon]="icons.reject"
+          [color]="'danger'">
+        </app-dashboard-card>
+      </div>
     </div>
-  }
-</div>
+  </div>
 
-
-  <!-- Main Card -->
+  <!-- Main Management Card -->
   <div class="management-card">
     <!-- Card Header -->
     <div class="card-header">
       <div class="header-content">
         <div class="header-text">
-          <h5>{{ currentViewConfig.label }} Management</h5>
-          <p>Manage all {{ currentViewConfig.label.toLowerCase() }} providers in the system</p>
+          <h2 class="header-title">{{ currentViewConfig.label }} Management</h2>
+          <p class="header-subtitle">
+            Manage all {{ currentViewConfig.label.toLowerCase() }} providers in the system
+            <span class="badge badge-light ml-2">v2.1</span>
+          </p>
         </div>
         
         <div class="header-actions">
           <!-- Search Box -->
           <div class="search-box">
-            <input type="text" 
+            <input type="text"
                    class="search-input"
-                   [(ngModel)]="searchTerm" 
+                   [(ngModel)]="searchTerm"
                    (keyup.enter)="loadProviders()"
-                   placeholder="Search {{ currentViewConfig.label.toLowerCase() }}...">
-            <button class="search-button" (click)="loadProviders()">
+                   placeholder="Search {{ currentViewConfig.label.toLowerCase() }}..."
+                   [disabled]="isLoading">
+            <button class="btn-search"
+                    (click)="loadProviders()"
+                    [disabled]="isLoading">
               <fa-icon [icon]="icons.search"></fa-icon>
+              <span class="sr-only">Search</span>
             </button>
           </div>
 
-          <!-- View Toggle -->
+          <!-- View Type Toggle -->
           <div class="view-toggle">
-            @for (view of viewConfigs; track view.type) {
-              <button type="button"
-                      class="view-button"
-                      [class.active]="currentView === view.type"
-                      (click)="changeView(view.type)">
-                <fa-icon [icon]="view.icon" class="me-2"></fa-icon>
-                {{ view.label }}
-              </button>
-            }
+            <button type="button"
+                    *ngFor="let view of viewConfigs"
+                    class="btn-view-toggle"
+                    [class.active]="currentView === view.type"
+                    (click)="changeView(view.type)"
+                    [disabled]="isLoading">
+              <fa-icon [icon]="view.icon" class="mr-2"></fa-icon>
+              {{ view.label }}
+            </button>
           </div>
         </div>
       </div>
@@ -80,149 +85,240 @@
 
     <!-- Card Body -->
     <div class="card-body">
-      @if (errorMessage) {
-        <div class="error-alert">
-          {{ errorMessage }}
-        </div>
-      }
+      <!-- Error Alert -->
+      <div *ngIf="errorMessage" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Error:</strong> {{ errorMessage }}
+        <button type="button" class="close" (click)="errorMessage = ''" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
 
       <!-- Providers Table -->
-      <div class="table-responsive">
-        <table class="providers-table">
-          <thead>
-            <tr>
-              <th>Provider</th>
-              <th>Type</th>
-              <th>Status</th>
-              <th>Registered</th>
-              <th>Contact</th>
-              <th class="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            @if (isLoading) {
+      <div class="table-container">
+        <div class="table-responsive">
+          <table class="table providers-table">
+            <thead class="thead-light">
               <tr>
-                <td colspan="6" class="loading-state">
-                  <div class="spinner"></div>
-                  <span>Loading providers...</span>
+                <th scope="col" class="provider-column">Provider</th>
+                <th scope="col" class="type-column">Type</th>
+                <th scope="col" class="status-column">Status</th>
+                <th scope="col" class="registered-column">Registered</th>
+                <th scope="col" class="contact-column">Contact</th>
+                <th scope="col" class="actions-column text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loading State -->
+              <tr *ngIf="isLoading">
+                <td colspan="6" class="text-center py-5">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <div class="spinner-border text-primary mr-3" role="status">
+                      <span class="sr-only">Loading...</span>
+                    </div>
+                    <span class="loading-text">Loading providers data...</span>
+                  </div>
                 </td>
               </tr>
-            } @else {
-              @for (provider of providers; track trackByProviderId($index, provider)) {
-                <tr>
-                  <td>
-                    <div class="provider-info">
-                      <div class="avatar-container">
-                        <img [src]="provider.imageURL || 'assets/images/default-provider.png'"
-                             alt="Provider logo"
-                             class="provider-logo">
-                        <span class="status-indicator"
-                              [ngClass]="{
-                                'approved': provider.verificationStatus === AssetStatus.APPROVED,
-                                'pending': provider.verificationStatus === AssetStatus.PENDING,
-                                'under-review': provider.verificationStatus === AssetStatus.UNDER_REVIEW
-                              }"></span>
-                      </div>
-                      <div class="provider-details">
-                        <div class="provider-name">{{ provider.assetName }}</div>
-                        <div class="provider-meta">{{ provider.firstName }} {{ provider.lastName }}</div>
-                      </div>
+
+              <!-- Empty State -->
+              <tr *ngIf="!isLoading && providers.length === 0">
+                <td colspan="6" class="text-center py-5 empty-state">
+                  <fa-icon [icon]="icons.list" size="3x" class="mb-3 text-muted"></fa-icon>
+                  <h5 class="text-muted">No Providers Found</h5>
+                  <p class="text-muted">There are currently no {{ currentViewConfig.label.toLowerCase() }} providers in the system</p>
+                  <button class="btn btn-primary mt-2" (click)="addNewProvider()">
+                    <fa-icon [icon]="icons.add" class="mr-2"></fa-icon>
+                    Add New Provider
+                  </button>
+                </td>
+              </tr>
+
+              <!-- Providers List -->
+              <tr *ngFor="let provider of providers; trackBy: trackByProviderId">
+                <td class="provider-cell">
+                  <div class="d-flex align-items-center">
+                    <div class="avatar-container position-relative mr-3">
+                      <img [src]="provider.imageURL || 'assets/images/default-provider.png'"
+                          alt="{{ provider.assetName }} logo"
+                          class="provider-avatar rounded-circle">
+                      <span class="status-badge"
+                            [ngClass]="{
+                              'badge-approved': getAssetStatus(provider.status) === AssetStatus.APPROVED,
+                              'badge-pending': getAssetStatus(provider.status) === AssetStatus.PENDING,
+                              'badge-under-review': getAssetStatus(provider.status) === AssetStatus.UNDER_REVIEW,
+                              'badge-rejected': getAssetStatus(provider.status) === AssetStatus.REJECTED
+                            }"></span>
                     </div>
-                  </td>
-                  <td>
-                    <span class="provider-type-badge">
-                      {{ getProviderType(provider) }}
-                    </span>
-                  </td>
-                  <td>
-                    <app-status-badge
-                      [statusValue]="provider.verificationStatus"
-                      [statusIcon]="getStatusIcon(provider.verificationStatus)">
-                    </app-status-badge>
-                  </td>
-                  <td>
-                    {{ provider.acquisitionDate | date:'mediumDate' }}
-                  </td>
-                  <td>
-                    <div class="contact-info">
-                      <div>{{ provider.assetEmail }}</div>
-                      <div>{{ provider.phone }}</div>
+                    <div>
+                      <h6 class="mb-0 provider-name">{{ provider.assetName }}</h6>
+                      <small class="text-muted">{{ provider.firstName }} {{ provider.lastName }}</small>
                     </div>
-                  </td>
-                  <td class="text-end">
-                    <div class="action-buttons">
-                      <button class="btn-action view" 
-                              title="View details"
-                              (click)="viewProviderDetails(provider.id)">
-                        <fa-icon [icon]="icons.view"></fa-icon>
-                      </button>
-                      @if (provider.verificationStatus !== AssetStatus.APPROVED) {
-                        <button class="btn-action approve" 
-                                title="Approve"
-                                (click)="changeProviderStatus(provider.id, true)"
-                                [disabled]="isLoading">
-                          <fa-icon [icon]="icons.approve"></fa-icon>
-                        </button>
-                      }
-                      @if (provider.verificationStatus !== AssetStatus.PENDING) {
-                        <button class="btn-action reject" 
-                                title="Reject"
-                                (click)="changeProviderStatus(provider.id, false)"
-                                [disabled]="isLoading">
-                          <fa-icon [icon]="icons.reject"></fa-icon>
-                        </button>
-                      }
-                    </div>
-                  </td>
-                </tr>
-              } @empty {
-                <tr>
-                  <td colspan="6" class="empty-state">
-                    No providers found
-                  </td>
-                </tr>
-              }
-            }
-          </tbody>
-        </table>
+                  </div>
+                </td>
+                <td class="type-cell">
+                  {{ getProviderType(provider) }}
+                </td>
+                <td class="status-cell">
+                  <span class="status-badge"
+                        [ngClass]="{
+                          'badge-approved': getAssetStatus(provider.status) === AssetStatus.APPROVED,
+                          'badge-pending': getAssetStatus(provider.status) === AssetStatus.PENDING,
+                          'badge-under-review': getAssetStatus(provider.status) === AssetStatus.UNDER_REVIEW,
+                          'badge-rejected': getAssetStatus(provider.status) === AssetStatus.REJECTED
+                        }">
+                    {{ getAssetStatus(provider.status) | statusLabel }}
+                  </span>
+                </td>
+                <td class="registered-cell">
+                  {{ provider.acquisitionDate | date:'mediumDate' }}
+                </td>
+                <td class="contact-cell">
+                  <div class="d-flex flex-column">
+                    <a href="mailto:{{ provider.assetEmail }}" class="text-truncate">
+                      {{ provider.assetEmail }}
+                    </a>
+                    <a href="tel:{{ provider.phone }}" class="text-muted small">
+                      {{ provider.phone }}
+                    </a>
+                  </div>
+                </td>
+                <td class="actions-cell text-right">
+                  <div class="btn-group" role="group">
+                    <!-- View Button -->
+                    <button type="button" 
+                            class="btn btn-sm btn-outline-primary"
+                            (click)="viewProviderDetails(provider.id)"
+                            [disabled]="isLoading || provider.isStatusChanging"
+                            title="View details">
+                      <fa-icon [icon]="icons.view"></fa-icon>
+                    </button>
+
+                    <!-- Approve Button (يظهر فقط إذا لم يكن Approved) -->
+                    <button type="button" 
+                            *ngIf="getAssetStatus(provider.status) !== AssetStatus.APPROVED"
+                            class="btn btn-sm btn-outline-success"
+                            (click)="approveProvider(provider)"
+                            [disabled]="isLoading || provider.isStatusChanging"
+                            title="Approve provider">
+                      <fa-icon [icon]="icons.approve"></fa-icon>
+                    </button>
+
+                    <!-- Reject Button: only show if status is not Pending and not Rejected -->
+                    <button type="button" 
+                            *ngIf="getAssetStatus(provider.status) !== AssetStatus.REJECTED && getAssetStatus(provider.status) !== AssetStatus.PENDING"
+                            class="btn btn-sm btn-outline-danger"
+                            (click)="openRejectDialog(provider)"
+                            [disabled]="isLoading || provider.isStatusChanging"
+                            title="Reject provider">
+                      <fa-icon [icon]="icons.reject"></fa-icon>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
 
       <!-- Pagination -->
-      @if (pagination.totalPages > 1) {
-        <div class="pagination-container">
-          <div class="pagination-info">
-            {{ showingRange }}
-          </div>
-          
-          <nav class="pagination-nav">
-            <ul class="pagination">
-              <li class="page-item" [class.disabled]="pagination.page === 1">
-                <a class="page-link" (click)="onPageChange(pagination.page - 1)">
-                  &laquo;
-                </a>
-              </li>
-              
-              @for (page of getPageNumbers(); track page) {
-                <li class="page-item" 
-                    [class.active]="page === pagination.page"
-                    [class.disabled]="page === -1">
-                  @if (page !== -1) {
-                    <a class="page-link" (click)="onPageChange(page)">{{ page }}</a>
-                  } @else {
-                    <span class="page-link">...</span>
-                  }
-                </li>
-              }
-              
-              <li class="page-item" [class.disabled]="pagination.page === pagination.totalPages">
-                <a class="page-link" (click)="onPageChange(pagination.page + 1)">
-                  &raquo;
-                </a>
-              </li>
-            </ul>
-          </nav>
+      <div *ngIf="pagination.totalPages > 1" class="pagination-container">
+        <div class="pagination-info">
+          {{ showingRange }}
         </div>
-      }
+        
+        <nav aria-label="Providers pagination">
+          <ul class="pagination mb-0">
+            <li class="page-item" [class.disabled]="pagination.page === 1">
+              <a class="page-link" 
+                (click)="onPageChange(pagination.page - 1)"
+                aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+              </a>
+            </li>
+            
+            <ng-container *ngFor="let page of getPageNumbers(); trackBy: trackByIndex">
+              <li class="page-item" 
+                  [class.active]="page === pagination.page"
+                  [class.disabled]="page === -1">
+                <a *ngIf="page !== -1" 
+                  class="page-link" 
+                  (click)="onPageChange(page)">
+                  {{ page }}
+                </a>
+                <span *ngIf="page === -1" class="page-link">...</span>
+              </li>
+            </ng-container>
+            
+            <li class="page-item" [class.disabled]="pagination.page === pagination.totalPages">
+              <a class="page-link" 
+                (click)="onPageChange(pagination.page + 1)"
+                aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Provider Details Modal -->
+<div class="modal-backdrop-custom" *ngIf="showProviderModal">
+  <div class="modal-dialog modal-xl provider-modal-dialog">
+    <div class="modal-content provider-modal-content">
+      <div class="modal-header provider-modal-header">
+        <img [src]="selectedProvider?.imageURL || 'assets/images/default-provider.png'" 
+             alt="Provider image" 
+             class="provider-modal-avatar">
+        <div>
+          <div class="provider-modal-title">{{ selectedProvider?.assetName }}</div>
+          <div class="provider-modal-badges">
+            <span class="badge provider-type-badge">{{ getProviderType(selectedProvider!) }}</span>
+            <span class="badge"
+                  [ngClass]="{
+                    'badge-approved': getAssetStatus(selectedProvider!.status) === AssetStatus.APPROVED,
+                    'badge-pending': getAssetStatus(selectedProvider!.status) === AssetStatus.PENDING,
+                    'badge-under-review': getAssetStatus(selectedProvider!.status) === AssetStatus.UNDER_REVIEW,
+                    'badge-rejected': getAssetStatus(selectedProvider!.status) === AssetStatus.REJECTED
+                  }">
+              {{ getAssetStatus(selectedProvider!.status) | statusLabel }}
+            </span>
+          </div>
+        </div>
+        <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="closeProviderModal()"></button>
+      </div>
+      <div class="modal-body provider-modal-body">
+        <div class="section-title">Provider Information</div>
+        <div class="row">
+          <div class="col-md-6 mb-2">
+            <strong>Email:</strong> {{ selectedProvider?.assetEmail }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Phone:</strong> {{ selectedProvider?.phone }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Contact Person:</strong> {{ selectedProvider?.firstName }} {{ selectedProvider?.lastName }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Registered:</strong> {{ selectedProvider?.acquisitionDate | date:'mediumDate' }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Address:</strong> {{ selectedProvider?.address || 'N/A' }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>City:</strong> {{ selectedProvider?.city || 'N/A' }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Governorate:</strong> {{ selectedProvider?.governorate || 'N/A' }}
+          </div>
+          <div class="col-md-6 mb-2">
+            <strong>Country:</strong> {{ selectedProvider?.country || 'N/A' }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>

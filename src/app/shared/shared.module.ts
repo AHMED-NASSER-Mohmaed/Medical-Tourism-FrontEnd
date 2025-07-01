@@ -10,6 +10,7 @@ import { SearchFilterComponent } from './components/search-filter/search-filter.
 import { ModalComponent } from './components/modal/modal.component';
 import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-loader.component';
 import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode-toggle.component';
+import { StatusLabelPipe } from './pipes/status.pipe';
 
 @NgModule({
   declarations: [
@@ -18,12 +19,13 @@ import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode
     SearchFilterComponent,
     ModalComponent,
     SkeletonLoaderComponent,
-    DarkModeToggleComponent
+    DarkModeToggleComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
-    FontAwesomeModule
+    FontAwesomeModule,
+    StatusLabelPipe
   ],
   exports: [
     DataTableComponent,
@@ -31,7 +33,8 @@ import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode
     SearchFilterComponent,
     ModalComponent,
     CommonModule,
-    FormsModule
+    FormsModule,
+    StatusLabelPipe
   ]
 })
 export class SharedModule { }
