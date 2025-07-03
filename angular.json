@@ -39,16 +39,18 @@
             ],
             "styles": [
 
+
               "src/styles.css",
               "src/assets/styles/home.css",
-              "src/assets/styles/bootstrap.min.css",
+                "src/assets/styles/bootstrap.min.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/assets/styles/auth.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
               "@angular/material/prebuilt-themes/azure-blue.css"
 
+
             ],
-            "scripts": []
+            "scripts": [  ]
           },
           "configurations": {
             "production": {
@@ -91,6 +93,7 @@
             }
           },
           "defaultConfiguration": "development"
+
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"
@@ -115,7 +118,7 @@
 
                             "src/styles.css",
                             "src/assets/styles/home.css",
-              "assets/styles/bootstrap.min.css",
+               "src/assets/styles/bootstrap.min.css",
                 "node_modules/bootstrap-icons/font/bootstrap-icons.css",
                "node_modules/@ng-select/ng-select/themes/default.theme.css",
                "node_modules/leaflet/dist/leaflet.css",
@@ -129,7 +132,7 @@
 
             ],
             "scripts": [
-               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+
 
             ]
           }

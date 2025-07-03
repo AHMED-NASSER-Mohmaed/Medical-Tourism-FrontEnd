@@ -40,6 +40,7 @@ import {CoreRoutingModule} from './core-routing-module';
     RouterModule,
     CoreRoutingModule
 
+
   ],
   exports: [
     HttpClientModule,
@@ -61,6 +62,7 @@ import {CoreRoutingModule} from './core-routing-module';
       useClass: AuthInterceptor,
       multi: true
     }
+
   ]
 
 

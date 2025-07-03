@@ -22,42 +22,51 @@ export class PasswordRecoveryComponent {
   }
 
   onSubmit(): void {
-    this.submitted = true;
-    if (this.recoveryForm.invalid) return;
+  this.submitted = true;
 
-    const email = this.recoveryForm.value.email as string;
+  // If form is invalid, do not proceed
+  if (this.recoveryForm.invalid) return;
 
-    this.auth.forgotPassword(email).subscribe({
-      next: res => {
-        Swal.fire({
-          icon: 'success',
-          title: 'Request Sent',
-          text: res.message || 'If the email exists, a reset link has been sent!',
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3500,
-          timerProgressBar: true
-        });
+  const email = this.recoveryForm.value.email as string;
 
-        this.recoveryForm.reset();
-        this.submitted = false;
-      },
-      error: err => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops!',
-          text: 'Something went wrong. Please try again.',
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3500,
-          timerProgressBar: true
-        });
+  this.auth.forgotPassword(email).subscribe({
+    next: res => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Request Sent',
+        text:  'A reset link has been sent!',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3500,
+        timerProgressBar: true
+      });
 
-        console.error(err);
-      }
-    });
-  }
+      // Reset form on success
+      this.recoveryForm.reset();
+      this.submitted = false;
+    },
+    error: (err) => {
+      // Handle backend error and display the message
+      const errorMessage = err?.error?.message || 'Something went wrong. Please try again.';
+
+      // Show error message using Swal
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops!',
+        text: errorMessage,
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3500,
+        timerProgressBar: true
+      });
+
+      // Optionally log the error
+      console.error('Backend Error:', err);
+    }
+  });
+}
+
 }
 

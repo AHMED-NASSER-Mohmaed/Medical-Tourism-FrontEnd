@@ -1,0 +1,74 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <div class="sidebar-brand">
+    <a routerLink="/dashboard" class="brand-link">
+      <div class="brand-logo">
+        <fa-icon [icon]="icons.shield"></fa-icon>
+      </div>
+      <span class="brand-text" *ngIf="!collapsed">Elagy</span>
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    @for (item of items; track item.label) {
+      @if (!item.children) {
+        <a class="nav-link" 
+           [routerLink]="item.link" 
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}">
+          <fa-icon [icon]="item.icon"></fa-icon>
+          <span *ngIf="!collapsed">{{ item.label }}</span>
+        </a>
+      } @else {
+        <div class="nav-group">
+          <a class="nav-link" 
+             (click)="toggleItemExpand(item)"
+             [class.expanded]="item.isExpanded">
+            <fa-icon [icon]="item.icon"></fa-icon>
+            <span *ngIf="!collapsed">{{ item.label }}</span>
+            <fa-icon *ngIf="!collapsed" 
+                    [icon]="item.isExpanded ? icons.chevronDown : icons.chevronUp">
+            </fa-icon>
+          </a>
+          
+          @if (item.isExpanded && !collapsed) {
+            <div class="nav-submenu">
+              @for (child of item.children; track child.label) {
+                @if (!child.children) {
+                  <a class="nav-link" 
+                     [routerLink]="child.link" 
+                     routerLinkActive="active">
+                    <fa-icon [icon]="child.icon"></fa-icon>
+                    {{ child.label }}
+                  </a>
+                } @else {
+                  <div class="nav-subgroup">
+                    <a class="nav-link" 
+                       (click)="toggleItemExpand(child)"
+                       [class.expanded]="child.isExpanded">
+                      <fa-icon [icon]="child.icon"></fa-icon>
+                      {{ child.label }}
+                      <fa-icon [icon]="child.isExpanded ? icons.chevronDown : icons.chevronUp"></fa-icon>
+                    </a>
+                    
+                    @if (child.isExpanded) {
+                      <div class="nav-sub-submenu">
+                        @for (subChild of child.children; track subChild.label) {
+                          <a class="nav-link" 
+                             [routerLink]="subChild.link" 
+                             routerLinkActive="active">
+                            <fa-icon [icon]="subChild.icon"></fa-icon>
+                            {{ subChild.label }}
+                          </a>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              }
+            </div>
+          }
+        </div>
+      }
+    }
+  </nav>
+</aside>

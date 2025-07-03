@@ -1,0 +1,215 @@
+<div class="account-modal-container">
+  <div class="account-modal-overlay" (click)="close.emit()"></div>
+  
+  <div class="account-modal-card">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="user-profile-header">
+        <img [src]="account?.imageURL || 'assets/images/default-avatar.png'" 
+             class="user-avatar" 
+             alt="User avatar">
+        <div class="user-info">
+          <h2>{{ account?.firstName }} {{ account?.lastName }}</h2>
+          <div class="user-badges">
+            <span class="badge user-type">{{ getUserTypeLabel(account!) }}</span>
+            <span class="badge status-badge" 
+                  [ngClass]="getStatusClass(account?.status!)">
+              {{ getStatusLabel(account?.status!) }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="close-btn" (click)="close.emit()">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Error/Success Messages -->
+      <div *ngIf="errorMessage" class="alert-message error">
+        {{ errorMessage }}
+        <button (click)="errorMessage = ''">&times;</button>
+      </div>
+      <div *ngIf="successMessage" class="alert-message success">
+        {{ successMessage }}
+        <button (click)="successMessage = ''">&times;</button>
+      </div>
+
+      <!-- Personal Information Section -->
+      <div class="info-section">
+        <h3 class="section-title">Personal Information</h3>
+        
+        <div class="info-grid">
+          <!-- Row 1 -->
+          <div class="info-label">Email</div>
+          <div class="info-value email-value">
+            {{ account?.email }}
+            <button class="icon-btn" (click)="showEmailForm = true" *ngIf="!showEmailForm">
+              <fa-icon [icon]="faEnvelope"></fa-icon>
+            </button>
+          </div>
+          
+          <div class="info-label">Phone</div>
+          <div class="info-value">{{ account?.phone || 'N/A' }}</div>
+          
+          <!-- Email Form -->
+          <div class="info-form" *ngIf="showEmailForm">
+            <form [formGroup]="emailForm" (ngSubmit)="updateEmail()">
+              <input type="email" formControlName="newEmail" placeholder="New email">
+              <div class="form-actions">
+                <button type="submit" [disabled]="emailForm.invalid || isUpdating">
+                  <span *ngIf="!isUpdating">Save</span>
+                  <span *ngIf="isUpdating" class="spinner"></span>
+                </button>
+                <button type="button" (click)="showEmailForm = false">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="info-label">Gender</div>
+          <div class="info-value">{{ getGenderLabel(account?.gender!) }}</div>
+          
+          <div class="info-label">Date of Birth</div>
+          <div class="info-value">{{ account?.dateOfBirth | date:'mediumDate' }}</div>
+          
+          <!-- Row 3 -->
+          <div class="info-label">Address</div>
+          <div class="info-value address-value">{{ account?.address || 'N/A' }}</div>
+          
+          <!-- Row 4 -->
+          <div class="info-label">City</div>
+          <div class="info-value">{{ account?.city || 'N/A' }}</div>
+          
+          <!-- Row 5 -->
+          <div class="info-label">Governorate</div>
+          <div class="info-value">{{ account?.governorate || 'N/A' }}</div>
+          
+          <!-- Row 6 -->
+          <div class="info-label">Country</div>
+          <div class="info-value">{{ account?.country || 'N/A' }}</div>
+        </div>
+      </div>
+
+      <!-- Account Status Section -->
+      <div class="info-section">
+        <h3 class="section-title">Account Status</h3>
+        
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-label">Email Confirmed</span>
+            <span class="status-value" [ngClass]="account?.emailConfirmed ? 'confirmed' : 'pending'">
+              {{ account?.emailConfirmed ? 'Yes' : 'No' }}
+            </span>
+          </div>
+          
+          <div class="status-item">
+            <span class="status-label">Account Status</span>
+            <span class="status-value" [ngClass]="getStatusClass(account?.status!)">
+              {{ getStatusLabel(account?.status!) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Type-Specific Sections -->
+      <ng-container *ngIf="isPatientAccount()">
+        <div class="info-section">
+          <h3 class="section-title">Medical Information</h3>
+          <div class="medical-grid">
+            <div class="medical-item">
+              <span class="medical-label">Blood Group</span>
+              <span class="medical-value">{{ getPatient()?.bloodGroup || 'N/A' }}</span>
+            </div>
+            <div class="medical-item">
+              <span class="medical-label">Height</span>
+              <span class="medical-value">{{ getPatient()?.height || 'N/A' }} cm</span>
+            </div>
+            <div class="medical-item">
+              <span class="medical-label">Weight</span>
+              <span class="medical-value">{{ getPatient()?.weight || 'N/A' }} kg</span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="isProviderAccount()">
+        <div class="info-section">
+          <h3 class="section-title">Provider Details</h3>
+          <div class="info-grid">
+            <div class="info-label">Provider Name</div>
+            <div class="info-value">{{ getAssetName() || 'N/A' }}</div>
+            
+            <div class="info-label">Verification Status</div>
+            <div class="info-value">{{ getVerificationStatusLabel(getVerificationStatus()!) }}</div>
+            
+            <div class="info-label">Location</div>
+            <div class="info-value">{{ getLocationDescription() || 'N/A' }}</div>
+            
+            <div *ngIf="getVerificationNotes()" class="info-label">Verification Notes</div>
+            <div *ngIf="getVerificationNotes()" class="info-value notes-value">{{ getVerificationNotes() }}</div>
+          </div>
+        </div>
+
+        <!-- Hotel Specific -->
+        <div class="info-section" *ngIf="getHotelProvider()">
+          <h4 class="section-subtitle">Hotel Details</h4>
+          <div class="info-grid">
+            <div class="info-label">Star Rating</div>
+            <div class="info-value">{{ getHotelProvider()?.starRating || 'N/A' }}</div>
+            
+            <div class="info-label">Facilities</div>
+            <div class="info-value">
+              <span *ngIf="getHotelProvider()?.hasPool" class="facility-badge">Pool</span>
+              <span *ngIf="getHotelProvider()?.hasRestaurant" class="facility-badge">Restaurant</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hospital Specific -->
+        <div class="info-section" *ngIf="getHospitalProvider()">
+          <h4 class="section-subtitle">Hospital Details</h4>
+          <div class="info-grid">
+            <div class="info-label">Departments</div>
+            <div class="info-value">{{ getHospitalProvider()?.numberOfDepartments || 'N/A' }}</div>
+            
+            <div class="info-label">Emergency Services</div>
+            <div class="info-value">
+              <span class="status-badge" [ngClass]="getHospitalProvider()?.emergencyServices ? 'active' : 'inactive'">
+                {{ getHospitalProvider()?.emergencyServices ? 'Available' : 'Not Available' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Car Rental Specific -->
+        <div class="info-section" *ngIf="getCarRentalProvider()">
+          <h4 class="section-subtitle">Car Rental Details</h4>
+          <div class="info-grid">
+            <div class="info-label">Transmission</div>
+            <div class="info-value">
+              {{ getCarRentalProvider()?.transmission === 0 ? 'Manual' : 'Automatic' }}
+            </div>
+            
+            <div class="info-label">Fuel Types</div>
+            <div class="info-value">
+              <span *ngFor="let fuel of getCarRentalProvider()?.fuelTypes" 
+                    class="facility-badge">
+                {{ getFuelTypeLabel(fuel) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="action-btn reset-password" 
+              (click)="resetPassword()" 
+              [disabled]="isResettingPassword">
+        <span *ngIf="!isResettingPassword">Reset Password</span>
+        <span *ngIf="isResettingPassword" class="spinner"></span>
+      </button>
+    </div>
+  </div>
+</div>

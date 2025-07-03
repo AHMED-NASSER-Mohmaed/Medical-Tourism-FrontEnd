@@ -1,9 +1,4 @@
-
-
-
-
-<app-navbar></app-navbar>
-
+<app-navbar *ngIf="showNavFooter"></app-navbar>
+<app-loading></app-loading>
 <router-outlet></router-outlet>
-<app-footer></app-footer>
-
+<app-footer *ngIf="showNavFooter"></app-footer>

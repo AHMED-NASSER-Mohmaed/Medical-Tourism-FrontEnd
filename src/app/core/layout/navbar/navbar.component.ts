@@ -23,7 +23,8 @@ export class NavbarComponent implements OnInit {
 
 userImage: string = '';
 defaultUserImage = '/assets/images/user.png';
-
+// Add this to your navbar.component.ts
+dropdownOpen = false;
 ngOnInit(): void {
   this.authService.loginStatus$.subscribe(status => {
     this.isLoggedIn = status;

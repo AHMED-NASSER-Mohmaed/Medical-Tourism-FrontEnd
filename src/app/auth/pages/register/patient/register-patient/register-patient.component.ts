@@ -9,6 +9,10 @@ import { RegisterPatientRequest } from '../../../../models/auth.model';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { CountryService } from '../../../../services/country.service';
+import { LoadingService } from '../../../../../shared/services/loading.service';
+// bootstrap Tab typings
+// @ts-ignore
+import * as bootstrap from 'bootstrap';
 
 interface Gov { id: number; name: string; }
 interface CountryInfo { name: string; governorates: Gov[]; }
@@ -36,7 +40,7 @@ export class RegisterPatientComponent implements OnInit, AfterViewInit {
   submitted = false;
   loading   = false;
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router,private countriesSrv:CountryService) {}
+  constructor( private loadingService: LoadingService,private fb: FormBuilder, private auth: AuthService, private router: Router,private countriesSrv:CountryService) {}
 
   /* ───── life-cycle ───── */
   ngOnInit(): void {
@@ -58,28 +62,29 @@ this.countriesSrv.getCountries().subscribe(
   }
 
   /* ───── build form ───── */
-  private buildForm(): void {
-    this.registerForm = this.fb.group({
-      firstName  : ['', Validators.required],
-      lastName   : ['', Validators.required],
-      email      : ['', [Validators.required, Validators.email]],
-      phone      : ['', Validators.required],
-      gender     : [null, [Validators.required]],
-      dateOfBirth: ['', Validators.required],
+private buildForm(): void {
+  this.registerForm = this.fb.group({
+    firstName  : ['', [Validators.required, Validators.minLength(3)]],
+    lastName   : ['', [Validators.required, Validators.minLength(3)]],
+    email      : ['', [Validators.required, Validators.email]],
+    phone      : ['', [Validators.required, Validators.pattern(/^[+]?[0-9]{10,15}$/)]],
+    gender     : [null, [Validators.required]],
+    dateOfBirth: ['', Validators.required],
 
-      bloodGroup : ['', Validators.required],
-      height     : [null, [Validators.required, Validators.min(1)]],
-      weight     : [null, [Validators.required, Validators.min(1)]],
-      address    : ['', Validators.required],
-      city       : ['', Validators.required],
+    bloodGroup : ['', Validators.required],
+    height     : [null, [Validators.required, Validators.min(1)]],
+    weight     : [null, [Validators.required, Validators.min(1)]],
+    address    : ['', [Validators.required, Validators.minLength(10)]],
+    city       : ['', Validators.required],
 
-      countryId     : [null, Validators.required],
-      governorateId : [null, Validators.required],
+    countryId     : [null, Validators.required],
+    governorateId : [null, Validators.required],
 
-      password       : ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-    }, { validators: this.passwordMatch });
-  }
+    password       : ['', [Validators.required, Validators.minLength(6)]],
+    confirmPassword: ['', Validators.required],
+  }, { validators: this.passwordMatch });
+}
+
 
   /* ───── dynamic gov list ───── */
 onCountryChange(val: any): void {
@@ -91,9 +96,62 @@ onCountryChange(val: any): void {
 
 
   /* ───── wizard helpers ───── */
-  goTo(tabId: string): void {
-    (document.querySelector(`a[href="#${tabId}"]`) as HTMLElement)?.click();
+goTo(tabId: string): void {
+  // Get the current active tab
+  const currentTab = this.wizardNav.nativeElement.querySelector('.nav-link.active');
+  const currentStep = currentTab?.getAttribute('href')?.split('#')[1];
+
+  // Check if the currentStep is valid only when moving forward (not for "Back")
+  if (tabId !== 'step-personal' && currentStep && this.isStepValid(currentStep)) {
+    // Navigate to the next step if the current step is valid
+    const el = this.wizardNav.nativeElement.querySelector(`a[href='#${tabId}']`) as HTMLElement;
+    if (el) {
+      new bootstrap.Tab(el).show();
+      this.updateProgress(); // Update the progress bar when switching tabs
+    }
+  } else if (tabId === 'step-personal' || !currentStep) {
+    // Allow navigating backward without validation (skip validation check)
+    const el = this.wizardNav.nativeElement.querySelector(`a[href='#${tabId}']`) as HTMLElement;
+    if (el) {
+      new bootstrap.Tab(el).show();
+      this.updateProgress(); // Update the progress bar when switching tabs
+    }
+  } else {
+    // If the current step is invalid or undefined, mark all form fields as touched
+    this.registerForm.markAllAsTouched();
   }
+}
+
+
+
+isStepValid(stepId: string): boolean {
+  let isValid = false;
+
+  if (stepId === 'step-personal') {
+    isValid = this.registerForm.get('firstName')?.valid === true &&
+              this.registerForm.get('lastName')?.valid === true &&
+              this.registerForm.get('email')?.valid === true &&
+              this.registerForm.get('phone')?.valid === true &&
+              this.registerForm.get('gender')?.valid === true &&
+              this.registerForm.get('dateOfBirth')?.valid === true;
+  } else if (stepId === 'step-medical') {
+    isValid = this.registerForm.get('bloodGroup')?.valid === true &&
+              this.registerForm.get('height')?.valid === true &&
+              this.registerForm.get('weight')?.valid === true &&
+              this.registerForm.get('address')?.valid === true &&
+              this.registerForm.get('city')?.valid === true;
+  } else if (stepId === 'step-account') {
+    isValid = this.registerForm.get('password')?.valid === true &&
+              this.registerForm.get('confirmPassword')?.valid === true;
+  }
+
+  return isValid;
+}
+
+
+
+
+
 
   private updateProgress(): void {
     const navLinks = this.wizardNav.nativeElement.querySelectorAll('.nav-link');
@@ -121,41 +179,49 @@ onCountryChange(val: any): void {
   private passwordMatch = (g: AbstractControl): ValidationErrors|null =>
     g.get('password')?.value === g.get('confirmPassword')?.value ? null : { mismatch: true };
 
+  private toast(icon: 'success' | 'error', title: string): void {
+    void Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon, title,
+      timer: 3000,
+      showConfirmButton: false,
+      background: '#fff'
+    });
+  }
+
+
   /* ───── submit ───── */
 onSubmit(): void {
-  this.submitted = true;
-  this.registerForm.markAllAsTouched();
-  if (this.registerForm.invalid) return;
+  // Show the loader before making the request
+  this.loadingService.show();
 
   const payload: RegisterPatientRequest = this.registerForm.value;
-  this.loading = true;
 
+  // Simulate registration logic
   this.auth.registerPatient(payload).subscribe({
     next: () => {
-      this.loading = false;
+      this.loadingService.hide();  // Hide the loader when the request is successful
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Registration Successful',
-        text: 'Your account has been created!',
-        showConfirmButton: true,
-      }).then(() => {
-        this.registerForm.reset();
-        this.submitted = false;
-        this.router.navigate(['/auth/login']);
-      });
+      // Show success toast notification using the toast function
+      this.toast('success', 'Registration Successful');
+
+      this.registerForm.reset();
+      this.submitted = false;
+      this.router.navigate(['/auth/login']);
     },
     error: (err) => {
-      this.loading = false;
+      this.loadingService.hide();  // Hide the loader when there is an error
 
-      Swal.fire({
-        icon: 'error',
-        title: 'Registration Failed',
-        text: err?.error?.message || 'Something went wrong. Please try again.',
-        confirmButtonColor: '#e46e6e'
-      });
+      // Show error toast notification using the toast function
+      const msg = err?.error?.message ||
+                  err?.error?.title   ||
+                  err?.message        ||
+                  'Registration failed';
+      this.toast('error', msg);
     }
   });
 }
+
 
 }

@@ -61,6 +61,7 @@ export interface RegisterHotelRequest {
   AssetName: string;
   AssetDescription: string;
   AssetEmail: string;
+  AssetGovernorateId: number;
   LocationDescription: string;
   Latitude: number;
   Longitude: number;
@@ -96,6 +97,7 @@ export interface RegisterHospitalRequest {
   AssetType: number;                 // 2 = Hospital
   AssetName: string;
   AssetDescription: string;
+  AssetGovernorateId: number;
   AssetEmail: string;
   LocationDescription: string;
   Latitude: number;
@@ -125,6 +127,7 @@ export interface RegisterCarRentalRequest {
   AssetName: string;
   AsetDescription: string;
   AssetEmail: string;
+  AssetGovernorateId: number;
 
   LocationDescription: string;
   Latitude: number;

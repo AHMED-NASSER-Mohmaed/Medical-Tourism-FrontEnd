@@ -4,11 +4,12 @@ import { AuthService } from '../../services/auth.service';
 import Swal from 'sweetalert2';
 import { Subscription } from 'rxjs';
 import { finalize } from 'rxjs/operators';
+import { LoadingService } from '../../../shared/services/loading.service'
 
 @Component({
   selector   : 'app-confirm-email',
   standalone : false,
-  template   : '<p class="text-center mt-5" *ngIf="pending">⏳ Validating link…</p>',
+  templateUrl: './confirm-email.component.html'
 })
 export class ConfirmEmailComponent implements OnInit, OnDestroy {
   pending = true;
@@ -17,12 +18,15 @@ export class ConfirmEmailComponent implements OnInit, OnDestroy {
   constructor(
     private ar   : ActivatedRoute,
     private auth : AuthService,
-    private r    : Router
+    private r    : Router,
+    private loadingService:LoadingService
   ) {}
 
 ngOnInit() {
+  this.loadingService.show();
   this.sub = this.ar.queryParams.subscribe(({ userId, token, newEmail }) => {
     if (!userId || !token) {
+      this.loadingService.hide();
       this.error('Invalid link');
       return;
     }
@@ -32,8 +36,12 @@ ngOnInit() {
       : this.auth.confirmEmail(userId, token);
 
     obs.pipe(finalize(() => this.pending = false)).subscribe({
-      next : () => this.ok(newEmail),
-      error: e => this.error(e?.error?.message ?? 'Token invalid / expired'),
+      next : () =>{
+        this.loadingService.hide();
+        this.ok(newEmail)},
+      error: e => {
+        this.loadingService.hide();
+        this.error(e?.error?.message ?? 'Token invalid / expired')},
     });
   });
 }

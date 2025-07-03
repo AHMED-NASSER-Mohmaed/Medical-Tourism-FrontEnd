@@ -1,0 +1,36 @@
+<div class="card border-0 shadow-lg rounded-4 change-email-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <i class="fas fa-envelope-open-text me-2 text-primary"></i>
+      Change User Email
+    </h5>
+    <p class="text-muted mb-0">Update the email address for this user account</p>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="emailForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row g-4">
+        <div class="col-md-8">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="newEmail" formControlName="newEmail" placeholder="Enter new email" [class.is-invalid]="emailForm.get('newEmail')?.invalid && emailForm.get('newEmail')?.touched">
+            <label for="newEmail"><i class="fas fa-envelope me-2 text-primary"></i>New Email Address</label>
+          </div>
+          <div *ngIf="emailForm.get('newEmail')?.errors?.['required'] && emailForm.get('newEmail')?.touched" class="form-text text-danger ms-1">
+            Email is required
+          </div>
+          <div *ngIf="emailForm.get('newEmail')?.errors?.['email'] && emailForm.get('newEmail')?.touched" class="form-text text-danger ms-1">
+            Please enter a valid email address
+          </div>
+        </div>
+      </div>
+      <div class="mt-4 d-flex gap-2">
+        <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="emailForm.invalid || isSubmitting">
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+          <i class="fas fa-save me-2" *ngIf="!isSubmitting"></i>Update Email
+        </button>
+        <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="goBack()" [disabled]="isSubmitting">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

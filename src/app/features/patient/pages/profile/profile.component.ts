@@ -1,4 +1,3 @@
-// profile.component.ts
 import { Component, OnInit } from '@angular/core';
 import { AuthService }            from '../../../../auth/services/auth.service';
 import { CountryService }         from '../../../../auth/services/country.service';
@@ -112,7 +111,7 @@ ngOnInit(): void {
     });
 
 
-    this.onCountryChange(profile.countryId, true); // 👈 تمرير true
+    this.onCountryChange(profile.countryId, true);
 
 
 

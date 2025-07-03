@@ -1,0 +1,332 @@
+<!-- add-hotel-provider.component.html -->
+<div class="card border-0 shadow-lg rounded-4 add-hotel-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <i class="fas fa-hotel me-2 text-primary"></i>
+      Register New Hotel Provider
+    </h5>
+    <p class="text-muted mb-0">Fill in the details to register a new hotel provider</p>
+  </div>
+  <div class="card-body">
+    <!-- API Error Message -->
+    <div *ngIf="apiError" class="alert alert-danger mb-4">
+      <strong>Error:</strong> {{ apiError }}
+    </div>
+
+    <form [formGroup]="hotelForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <!-- User Account Section -->
+      <div class="mb-5">
+        <h6 class="fw-bold text-primary mb-4 pb-2 border-bottom">
+          <i class="fas fa-user me-2"></i>
+          Account Information
+        </h6>
+        
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+              <label for="firstName">First Name</label>
+              <div *ngIf="hotelForm.get('firstName')?.invalid && hotelForm.get('firstName')?.touched" class="form-text text-danger ms-1">
+                First name is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+              <label for="lastName">Last Name</label>
+              <div *ngIf="hotelForm.get('lastName')?.invalid && hotelForm.get('lastName')?.touched" class="form-text text-danger ms-1">
+                Last name is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email">
+              <label for="email">Email</label>
+              <div *ngIf="hotelForm.get('email')?.errors?.['required']" class="form-text text-danger ms-1">
+                Email is required
+              </div>
+              <div *ngIf="hotelForm.get('email')?.errors?.['email']" class="form-text text-danger ms-1">
+                Please enter a valid email
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
+              <label for="phone">Phone</label>
+              <div *ngIf="hotelForm.get('phone')?.invalid && hotelForm.get('phone')?.touched" class="form-text text-danger ms-1">
+                Phone is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
+              <label for="password">Password</label>
+              <div *ngIf="hotelForm.get('password')?.invalid && hotelForm.get('password')?.touched" class="form-text text-danger ms-1">
+                Password must be at least 8 characters
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
+              <label for="confirmPassword">Confirm Password</label>
+              <div *ngIf="hotelForm.errors?.['passwordMismatch'] && hotelForm.get('confirmPassword')?.touched" class="form-text text-danger ms-1">
+                Passwords must match
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-floating">
+              <select class="form-select" id="gender" formControlName="gender">
+                <option [value]="0">Select Gender</option>
+                <option [value]="1">Male</option>
+                <option [value]="2">Female</option>
+              </select>
+              <label for="gender">Gender</label>
+              <div *ngIf="hotelForm.get('gender')?.invalid && hotelForm.get('gender')?.touched" class="form-text text-danger ms-1">
+                Gender is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date of Birth">
+              <label for="dateOfBirth">Date of Birth</label>
+              <div *ngIf="hotelForm.get('dateOfBirth')?.invalid && hotelForm.get('dateOfBirth')?.touched" class="form-text text-danger ms-1">
+                Date of birth is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
+              <label for="city">City</label>
+              <div *ngIf="hotelForm.get('city')?.invalid && hotelForm.get('city')?.touched" class="form-text text-danger ms-1">
+                City is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <select class="form-select" id="governorateId" formControlName="governorateId">
+                <option value="">Select Governorate</option>
+                <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
+              </select>
+              <label for="governorateId">Governorate</label>
+              <div *ngIf="hotelForm.get('governorateId')?.invalid && hotelForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+                Governorate is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <select class="form-select" id="countryId" formControlName="countryId">
+                <option value="">Select Country</option>
+                <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+              </select>
+              <label for="countryId">Country</label>
+              <div *ngIf="hotelForm.get('countryId')?.invalid && hotelForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+                Country is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-12">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
+              <label for="address">Address</label>
+              <div *ngIf="hotelForm.get('address')?.invalid && hotelForm.get('address')?.touched" class="form-text text-danger ms-1">
+                Address is required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Asset Information Section -->
+      <div>
+        <h6 class="fw-bold text-primary mb-4 pb-2 border-bottom">
+          <i class="fas fa-hotel me-2"></i>
+          Hotel Information
+        </h6>
+        
+        <div class="row g-4">
+          <!-- Hotel Name -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hotel Name">
+              <label for="assetName">Hotel Name</label>
+              <div *ngIf="hotelForm.get('assetName')?.invalid && hotelForm.get('assetName')?.touched" class="form-text text-danger ms-1">
+                Hotel name is required
+              </div>
+            </div>
+          </div>
+          <!-- Hotel Description -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 90px"></textarea>
+              <label for="assetDescription">Description</label>
+              <div *ngIf="hotelForm.get('assetDescription')?.invalid && hotelForm.get('assetDescription')?.touched" class="form-text text-danger ms-1">
+                Description is required
+              </div>
+            </div>
+          </div>
+          <!-- Email -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="Email">
+              <label for="assetEmail">Email</label>
+              <div *ngIf="hotelForm.get('assetEmail')?.invalid && hotelForm.get('assetEmail')?.touched" class="form-text text-danger ms-1">
+                Valid email is required
+              </div>
+            </div>
+          </div>
+          <!-- Location Description -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Location">
+              <label for="locationDescription">Location Description</label>
+              <div *ngIf="hotelForm.get('locationDescription')?.invalid && hotelForm.get('locationDescription')?.touched" class="form-text text-danger ms-1">
+                Location description is required
+              </div>
+            </div>
+          </div>
+          <!-- Latitude -->
+          <div class="col-md-3">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="latitude" formControlName="latitude" placeholder="Latitude" step="any">
+              <label for="latitude">Latitude</label>
+              <div *ngIf="hotelForm.get('latitude')?.invalid && hotelForm.get('latitude')?.touched" class="form-text text-danger ms-1">
+                Latitude is required
+              </div>
+            </div>
+          </div>
+          <!-- Longitude -->
+          <div class="col-md-3">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="longitude" formControlName="longitude" placeholder="Longitude" step="any">
+              <label for="longitude">Longitude</label>
+              <div *ngIf="hotelForm.get('longitude')?.invalid && hotelForm.get('longitude')?.touched" class="form-text text-danger ms-1">
+                Longitude is required
+              </div>
+            </div>
+          </div>
+          <!-- Star Rating -->
+          <div class="col-md-3">
+            <div class="form-floating">
+              <select class="form-select" id="starRating" formControlName="starRating" aria-label="Star Rating">
+                <option value="1">1 Star</option>
+                <option value="2">2 Stars</option>
+                <option value="3">3 Stars</option>
+                <option value="4">4 Stars</option>
+                <option value="5">5 Stars</option>
+              </select>
+              <label for="starRating">Star Rating</label>
+              <div *ngIf="hotelForm.get('starRating')?.invalid && hotelForm.get('starRating')?.touched" class="form-text text-danger ms-1">
+                Star rating is required
+              </div>
+            </div>
+          </div>
+          <!-- Languages Supported -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Languages Supported <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let lang of supportedLanguages">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="lang.id" 
+                     (change)="updateArrayControl('languagesSupported', lang.id, $event)"
+                     [checked]="lang.id === 1"> <!-- Default to English -->
+              <label class="form-check-label">{{ lang.name }}</label>
+            </div>
+            <div *ngIf="languagesSupportedArray.invalid && languagesSupportedArray.touched" class="form-text text-danger ms-1">
+              At least one language is required
+            </div>
+          </div>
+          <!-- Facilities -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold text-primary mb-2">Facilities <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let facility of facilitiesList">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="facility" 
+                     (change)="updateArrayControl('facilities', facility, $event)"
+                     [checked]="facility === 'WiFi'"> <!-- Default to WiFi -->
+              <label class="form-check-label">{{ facility }}</label>
+            </div>
+            <div *ngIf="facilitiesArray.invalid && facilitiesArray.touched" class="form-text text-danger ms-1">
+              At least one facility is required
+            </div>
+          </div>
+          <!-- Opening Time -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Opening Time <span class="text-danger">*</span></label>
+            <div class="d-flex gap-2" formGroupName="openingTime">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+              <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+            </div>
+            <div *ngIf="hotelForm.get('openingTime')?.invalid" class="form-text text-danger ms-1">
+              Valid opening time is required
+            </div>
+          </div>
+          <!-- Closing Time -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Closing Time <span class="text-danger">*</span></label>
+            <div class="d-flex gap-2" formGroupName="closingTime">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+              <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+            </div>
+            <div *ngIf="hotelForm.get('closingTime')?.invalid" class="form-text text-danger ms-1">
+              Valid closing time is required
+            </div>
+          </div>
+          <!-- National Docs URL -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="nationalDocsURL" formControlName="nationalDocsURL" placeholder="National Docs URL">
+              <label for="nationalDocsURL">National Docs URL</label>
+            </div>
+          </div>
+          <!-- Credential Doc URL -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="credentialDocURL" formControlName="credentialDocURL" placeholder="Credential Doc URL">
+              <label for="credentialDocURL">Credential Doc URL</label>
+            </div>
+          </div>
+          <!-- Verification Notes -->
+          <div class="col-md-12">
+            <div class="form-floating">
+              <textarea class="form-control" id="verificationNotes" formControlName="verificationNotes" placeholder="Verification Notes" style="height: 70px"></textarea>
+              <label for="verificationNotes">Verification Notes</label>
+            </div>
+          </div>
+          <!-- Submit/Cancel -->
+          <div class="col-12 mt-4">
+            <div class="d-flex justify-content-end gap-2">
+              <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="hotelForm.invalid || isLoading">
+                <i class="fas fa-hotel me-2"></i>{{ isLoading ? 'Creating...' : 'Register Hotel' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-lg px-4" routerLink="/super-admin/providers/hotels">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

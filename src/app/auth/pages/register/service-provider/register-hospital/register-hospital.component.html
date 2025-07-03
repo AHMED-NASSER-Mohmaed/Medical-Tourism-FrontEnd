@@ -25,33 +25,29 @@
           <div class="card-body pt-4">
             <form [formGroup]="registerForm" (ngSubmit)="submit()" novalidate>
               <!-- pills -->
-              <ul class="nav nav-pills nav-justified form-wizard-header mb-3"
-                  #wizardNav>
-                <li class="nav-item">
-                  <a class="nav-link mod rounded-0 py-2 active"
-                     type="button" data-bs-toggle="tab"
-                     data-bs-target="#step-asset">
-                    <i class="ri-home-8-line me-1"></i>
-                    <span class="d-none d-sm-inline">Asset Info</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link mod rounded-0 py-2"
-                     type="button" data-bs-toggle="tab"
-                     data-bs-target="#step-business">
-                    <i class="ri-building-4-line me-1"></i>
-                    <span class="d-none d-sm-inline">Business Details</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link mod rounded-0 py-2"
-                     type="button" data-bs-toggle="tab"
-                     data-bs-target="#step-account">
-                    <i class="ri-user-settings-line me-1"></i>
-                    <span class="d-none d-sm-inline">Account</span>
-                  </a>
-                </li>
-              </ul>
+             <ul class="nav nav-pills nav-justified form-wizard-header mb-3" #wizardNav>
+  <li class="nav-item">
+    <a data-bs-toggle="tab" href="#step-asset" class="nav-link mod rounded-0 py-2 active"
+       [class.disabled]="!isStepValid('step-asset')"
+       [attr.tabindex]="!isStepValid('sstep-asset') ? -1 : null">
+      <i class="ri-user-line me-1"></i><span class="d-none d-sm-inline">Asset Info</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a data-bs-toggle="tab" href="#step-business" class="nav-link mod rounded-0 py-2"
+       [class.disabled]="!isStepValid('step-asset')"
+       [attr.tabindex]="!isStepValid('step-asset') ? -1 : null">
+      <i class="ri-heart-pulse-line me-1"></i><span class="d-none d-sm-inline">Business Details</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a data-bs-toggle="tab" href="#step-account" class="nav-link mod rounded-0 py-2"
+       [class.disabled]="!isStepValid('step-business')"
+       [attr.tabindex]="!isStepValid('step-business') ? -1 : null">
+      <i class="ri-lock-password-line me-1"></i><span class="d-none d-sm-inline">Account</span>
+    </a>
+  </li>
+</ul>
 
               <!-- progress -->
               <div class="progress mb-4" style="height:6px">
@@ -88,16 +84,24 @@
                         {{error('AssetEmail')}}
                       </small>
                     </div>
+                                        <div class="col-md-6">
+  <label class="form-label">Asset Governorate</label>
+  <ng-select
+    class="custom-bootstrap-style address"
+    [items]="egyptianGovernorates"
+    bindLabel="name"
+    bindValue="id"
+    formControlName="AssetGovernorateId"
+    placeholder="Select Governorate"
+    [searchable]="false"
+    [clearable]="false">
+  </ng-select>
+  <small class="text-danger" *ngIf="error('AssetGovernorateId')">
+    {{error('AssetGovernorateId')}}
+  </small>
+</div>
 
-                    <div class="col-md-6">
-                      <label class="form-label">Location Description</label>
-                      <textarea rows="2" class="form-control"
-                                formControlName="LocationDescription"></textarea>
-                      <small class="text-danger"
-                             *ngIf="error('LocationDescription')">
-                        {{error('LocationDescription')}}
-                      </small>
-                    </div>
+
 
                     <!-- hidden lat/lng -->
                     <input hidden type="number" formControlName="Latitude">
@@ -109,9 +113,9 @@
                       <div #map class="leaflet-map border rounded" style="height:280px"></div>
                       <small class="text-muted">Click anywhere – marker is draggable.</small>
                     </div>
-                    <div *ngIf="showLocationError" class="text-danger mt-2">
-                      Please select a location on the map before continuing.
-                    </div>
+<div *ngIf="!registerForm.get('Latitude')?.value" class="text-danger mt-2">
+  Please select a location on the map.
+</div>
 
                     <!-- departments -->
                     <div class="col-md-6">
@@ -138,15 +142,28 @@
                     <div class="col-md-6">
                       <label class="form-label">Facilities (comma-separated)</label>
                       <input class="form-control" formControlName="Facilities">
+                                            <small class="text-danger"
+                             *ngIf="error('Facilities')">
+                        {{error('Facilities')}}
+                      </small>
+                    </div>
+                                        <div class="col-md-6">
+                      <label class="form-label">Location Description</label>
+                      <textarea rows="2" class="form-control"
+                                formControlName="LocationDescription"></textarea>
+                      <small class="text-danger"
+                             *ngIf="error('LocationDescription')">
+                        {{error('LocationDescription')}}
+                      </small>
                     </div>
 
                   </div>
 
                   <div class="text-end mt-4">
-                    <button type="button" class="btn btn-info"
-                            (click)="onNextStep()">
-                      Next <i class="ri-arrow-right-line ms-1"></i>
-                    </button>
+<button type="button" class="btn btn-info" (click)="goTo('step-business')"
+        [disabled]="!isStepValid('step-asset')">
+  Next <i class="ri-arrow-right-line ms-1"></i>
+</button>
                   </div>
                 </div>
 
@@ -184,9 +201,7 @@
   [clearable]="false"
   (change)="onCountryChange($event)">
 </ng-select>
-                      <small class="text-danger" *ngIf="error('CountryId')">
-                        {{error('CountryId')}}
-                      </small>
+                      <small class="text-danger" *ngIf="msg('countryId') as m">{{ m }}</small>
                     </div>
 
                     <!-- governorate -->
@@ -202,9 +217,7 @@
   [searchable]="false"
   [clearable]="false">
 </ng-select>
-                      <small class="text-danger" *ngIf="error('GovernorateId')">
-                        {{error('GovernorateId')}}
-                      </small>
+                     <small class="text-danger" *ngIf="msg('governorateId') as m">{{ m }}</small>
                     </div>
 
                     <!-- verification -->
@@ -224,8 +237,8 @@
                              (change)="onImagesSelected($event)"
                              class="form-control"
                              [disabled]="imageFiles.length >= 2">
-                      <small class="text-danger" *ngIf="uploadError">
-                        Max 2 images allowed. Remove one to add another.
+                      <small class="text-danger" *ngIf="imageFiles.length==1">
+                        Please upload exactly 2 images.
                       </small>
 
                       <div *ngIf="imagePreviews.length"
@@ -244,16 +257,16 @@
 
                   </div>
 
-                  <div class="d-flex justify-content-between mt-4">
-                    <button class="btn btn-light" type="button"
-                            (click)="goTo('step-asset')">
-                      <i class="ri-arrow-left-line me-1"></i>Back
-                    </button>
-                    <button class="btn btn-info" type="button"
-                            (click)="goTo('step-account')">
-                      Next <i class="ri-arrow-right-line ms-1"></i>
-                    </button>
-                  </div>
+<div class="d-flex justify-content-between mt-4">
+  <button class="btn btn-light" type="button" (click)="goTo('step-asset')">
+    <i class="ri-arrow-left-line me-1"></i>Back
+  </button>
+<button class="btn btn-info" type="button" (click)="goTo('step-account')"
+        [disabled]="!isStepValid('step-business')">
+  Next <i class="ri-arrow-right-line ms-1"></i>
+</button>
+
+</div>
                 </div>
 
                 <!-- ░░ Step-3 ░░ -->
@@ -347,12 +360,11 @@
                   </div>
 
                   <div class="d-flex justify-content-between mt-4">
-                    <button class="btn btn-light" type="button"
-                            (click)="goTo('step-business')">
+                    <button class="btn btn-light" type="button" (click)="goTo('step-business')">
                       <i class="ri-arrow-left-line me-1"></i>Back
                     </button>
-                    <button class="btn btn-success" type="submit">
-                      Submit
+                    <button class="btn btn-success" type="submit" [disabled]="registerForm.invalid ">
+                       Register
                     </button>
                   </div>
                 </div>

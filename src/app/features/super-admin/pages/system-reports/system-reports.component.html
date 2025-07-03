@@ -1,0 +1,121 @@
+features/super-admin/pages/system-reports/system-reports.component.html
+<div class="row">
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Total Users" 
+      [value]="reports?.totalUsers || 0" 
+      icon="users" 
+      color="primary">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Active Users" 
+      [value]="reports?.activeUsers || 0" 
+      icon="user-check" 
+      color="success">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="New Users (30d)" 
+      [value]="reports?.newUsersLast30Days || 0" 
+      icon="user-plus" 
+      color="info">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Pending Providers" 
+      [value]="reports?.pendingProviders || 0" 
+      icon="hourglass" 
+      color="warning">
+    </app-dashboard-card>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Total Patients" 
+      [value]="reports?.totalPatients || 0" 
+      icon="procedures" 
+      color="primary">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Hotel Providers" 
+      [value]="reports?.totalHotelProviders || 0" 
+      icon="hotel" 
+      color="success">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Hospital Providers" 
+      [value]="reports?.totalHospitalProviders || 0" 
+      icon="hospital" 
+      color="info">
+    </app-dashboard-card>
+  </div>
+  <div class="col-md-3 mb-4">
+    <app-dashboard-card 
+      title="Car Rental Providers" 
+      [value]="reports?.totalCarRentalProviders || 0" 
+      icon="car" 
+      color="warning">
+    </app-dashboard-card>
+  </div>
+</div>
+
+<div class="card card-custom">
+  <div class="card-header card-header-custom d-flex justify-content-between align-items-center">
+    <span>System Analytics</span>
+    <div>
+      <small class="text-muted me-3" *ngIf="lastUpdated">
+        Last updated: {{ lastUpdated | date:'medium' }}
+      </small>
+      <button class="btn btn-sm btn-primary" (click)="refreshReports()" [disabled]="isLoading">
+        <fa-icon [icon]="['fas', 'sync']" [spin]="isLoading"></fa-icon>
+        Refresh
+      </button>
+    </div>
+  </div>
+  
+  <div class="card-body">
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    
+    <div *ngIf="reports && !isLoading">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="chart-container">
+            <canvas baseChart
+              [type]="'pie'"
+              [data]="getReportData()"
+              [options]="{
+                responsive: true,
+                plugins: {
+                  legend: {
+                    position: 'right'
+                  }
+                }
+              }">
+            </canvas>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <!-- Additional charts can be added here -->
+          <div class="alert alert-info">
+            <fa-icon [icon]="['fas', 'chart-line']"></fa-icon>
+            More detailed analytics coming soon
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

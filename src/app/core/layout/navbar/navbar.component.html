@@ -34,17 +34,38 @@
         <!-- Show Register & Login when not logged in -->
         <ng-container *ngIf="!isLoggedIn; else profileMenu">
           <!-- Register Dropdown -->
-          <div class="dropdown">
-            <button class="btn btn-outline-primary me-2 dropdown-toggle" type="button" id="registerDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-              Register
-            </button>
-            <ul class="dropdown-menu" aria-labelledby="registerDropdown">
-              <li><a class="dropdown-item" routerLink="/auth/register/patient">Patient Registration</a></li>
-              <li><a class="dropdown-item" routerLink="/auth/register/car">Car Rental Registration</a></li>
-              <li><a class="dropdown-item" routerLink="/auth/register/hospital">Hospital Registration</a></li>
-              <li><a class="dropdown-item" routerLink="/auth/register/hotel">Hotel Registration</a></li>
-            </ul>
-          </div>
+<div class="custom-dropdown" (mouseleave)="dropdownOpen = false">
+  <button
+    class="btn btn-outline-primary me-2 dropdown-toggle"
+    type="button"
+    (click)="dropdownOpen = !dropdownOpen"
+    [attr.aria-expanded]="dropdownOpen"
+  >
+    Register
+  </button>
+<ul class="dropdown-menu show" *ngIf="dropdownOpen">
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/patient" (click)="dropdownOpen = false">
+      Patient Registration
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/car" (click)="dropdownOpen = false">
+      Car Rental Registration
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/hospital" (click)="dropdownOpen = false">
+      Hospital Registration
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/hotel" (click)="dropdownOpen = false">
+      Hotel Registration
+    </a>
+  </li>
+</ul>
+</div>
 
           <!-- Login Button -->
           <a (click)="login()" class="btn btn-primary">Login</a>

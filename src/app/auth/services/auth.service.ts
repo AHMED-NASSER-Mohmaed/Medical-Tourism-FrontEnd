@@ -1,8 +1,12 @@
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject,throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import {jwtDecode} from 'jwt-decode';
+
+
+
 import {
   LoginRequest,
   LoginResponse,
@@ -11,6 +15,7 @@ import {
   PatientProfile
 } from '../models/auth.model';
 import { tap } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 
 
 @Injectable({ providedIn: 'root' })
@@ -29,10 +34,17 @@ export class AuthService {
 
 
 
+
   login(data: LoginRequest): Observable<LoginResponse> {
     const headers = this.getAuthHeaders();
-    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data, { headers });
+    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data, { headers }).pipe(
+      catchError((err) => {
+        // Handle backend errors here
+        return throwError(err); // Rethrow the error to be caught in the component
+      })
+    );
   }
+
 logout(): void {
 
   this.cookieService.delete('auth_token', '/');
@@ -162,6 +174,17 @@ updatePatientProfile(data: any) {
   return this.http.put(`${this.baseUrl}/Patient/profile`, data);
 }
 
+getUserRole(): string | null {
+  const token = this.cookieService.get('auth_token'); // Get the token from cookie
+  if (token) {
+    const decodedToken: any = jwtDecode(token); // Decode the token
+    console.log('Decoded Token:', decodedToken); // Debugging to check the structure
+    // Check for the role in the specific claim
+    console.log(decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
+    return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null; // Return the role if it exists
+  }
+  return null; // If no token exists
+}
 
 
 

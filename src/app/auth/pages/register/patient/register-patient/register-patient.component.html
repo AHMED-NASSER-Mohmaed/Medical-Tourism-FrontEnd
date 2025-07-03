@@ -23,23 +23,33 @@
             <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
 
               <!-- wizard pills -->
-              <ul class="nav nav-pills nav-justified form-wizard-header mb-3" #wizardNav>
-                <li class="nav-item">
-                  <a data-bs-toggle="tab" href="#step-personal" class="nav-link mod rounded-0 py-2 active">
-                    <i class="ri-user-line me-1"></i><span class="d-none d-sm-inline">Personal</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a data-bs-toggle="tab" href="#step-medical" class="nav-link mod rounded-0 py-2">
-                    <i class="ri-heart-pulse-line me-1"></i><span class="d-none d-sm-inline">Medical & Location</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a data-bs-toggle="tab" href="#step-account" class="nav-link mod rounded-0 py-2">
-                    <i class="ri-lock-password-line me-1"></i><span class="d-none d-sm-inline">Account</span>
-                  </a>
-                </li>
-              </ul>
+<ul class="nav nav-pills nav-justified form-wizard-header mb-3" #wizardNav>
+  <li class="nav-item">
+    <a data-bs-toggle="tab" href="#step-personal" class="nav-link mod rounded-0 py-2 active"
+       [class.disabled]="!isStepValid('step-personal')"
+       [attr.tabindex]="!isStepValid('step-personal') ? -1 : null">
+      <i class="ri-user-line me-1"></i><span class="d-none d-sm-inline">Personal</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a data-bs-toggle="tab" href="#step-medical" class="nav-link mod rounded-0 py-2"
+       [class.disabled]="!isStepValid('step-personal')"
+       [attr.tabindex]="!isStepValid('step-personal') ? -1 : null">
+      <i class="ri-heart-pulse-line me-1"></i><span class="d-none d-sm-inline">Medical & Location</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a data-bs-toggle="tab" href="#step-account" class="nav-link mod rounded-0 py-2"
+       [class.disabled]="!isStepValid('step-medical')"
+       [attr.tabindex]="!isStepValid('step-medical') ? -1 : null">
+      <i class="ri-lock-password-line me-1"></i><span class="d-none d-sm-inline">Account</span>
+    </a>
+  </li>
+</ul>
+
+
+
+
 
               <!-- progress -->
               <div class="progress mb-4" style="height:6px">
@@ -92,9 +102,13 @@
                   </div>
 
                   <div class="d-flex justify-content-end mt-4">
-                    <button type="button" class="btn btn-info" (click)="goTo('step-medical')">
-                      Next <i class="ri-arrow-right-line ms-1"></i>
-                    </button>
+<!-- For the "Next" button in the personal step -->
+<button type="button" class="btn btn-info" (click)="goTo('step-medical')"
+        [disabled]="!isStepValid('step-personal')">
+  Next <i class="ri-arrow-right-line ms-1"></i>
+</button>
+
+
                   </div>
                 </div>
 
@@ -175,9 +189,11 @@
                     <button class="btn btn-light" type="button" (click)="goTo('step-personal')">
                       <i class="ri-arrow-left-line me-1"></i>Back
                     </button>
-                    <button class="btn btn-info" type="button" (click)="goTo('step-account')">
-                      Next <i class="ri-arrow-right-line ms-1"></i>
-                    </button>
+<button type="button" class="btn btn-info" (click)="goTo('step-account')"
+        [disabled]="!isStepValid('step-medical')">
+  Next <i class="ri-arrow-right-line ms-1"></i>
+</button>
+
                   </div>
                 </div>
 

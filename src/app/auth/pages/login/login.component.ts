@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { login } from '../../store/auth.actions';
 import { AuthState } from '../../store/auth.reducer';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: false,
@@ -14,13 +14,14 @@ import { Router } from '@angular/router';
 export class LoginComponent {
   loginForm: FormGroup;
   submitted = false;
+  errorMessage: string | null = null
   currentYear = new Date().getFullYear();
 
 
-  constructor(private fb: FormBuilder, private store: Store<{ auth: AuthState }>, private router: Router) {
+  constructor(private fb: FormBuilder, private store: Store<{ auth: AuthState }>, private router: Router,private authService: AuthService) {
   this.loginForm = this.fb.group({
   email: ['', [Validators.required, Validators.email]],
-  password: ['', Validators.required],
+  password: ['', [Validators.required, Validators.minLength(6)]],
   rememberMe: [false]
 });
 
@@ -29,10 +30,52 @@ goToRecover(): void {
   this.router.navigate(['/auth/recover']);
 }
   onSubmit(): void {
-     console.log('Form submitted');
-    this.submitted = true;
-    if (this.loginForm.invalid) return;
+  this.submitted = true;
 
-    this.store.dispatch(login({ credentials: this.loginForm.value }));
+  if (this.loginForm.invalid) return;
+
+  this.authService.login(this.loginForm.value).subscribe({
+    next: (res) => {
+      // Dispatch login action
+      this.store.dispatch(login({ credentials: this.loginForm.value }));
+
+      // Wait for the token to be set before getting the role
+      setTimeout(() => {
+        const role = this.authService.getUserRole();
+        console.log('User Role:', role);
+
+        // Example: Perform actions based on the role
+        if (role === 'SuperAdmin') {
+          this.router.navigate(['/super-admin/manage-accounts/patients']);
+        } else if (role === 'Patient') {
+          this.router.navigate(['/profile']);
+        } else if (role === 'ServiceProvider') {
+          this.router.navigate(['/service-provider/dashboard']);
+        } else {
+          this.router.navigate(['/']);  // Default route
+        }
+      }, 500); // Delay to ensure token is set before calling getUserRole()
+    },
+
+    error: (err) => {
+      // Capture the error message from the backend
+      if (err?.error?.message) {
+        this.errorMessage = err.error.message; // Show backend error
+      } else {
+        this.errorMessage = 'An unexpected error occurred. Please try again later.';
+      }
+    },
+  });
+}
+
+    error(ctrl: string): string | null {
+    const c = this.loginForm.get(ctrl);
+    if (!c || !(c.touched || this.submitted)) return null;
+
+    if (c.errors?.['required'])   return 'Required';
+    if (c.errors?.['email'])      return 'Invalid email';
+    if (c.errors?.['minlength'])  return `Password must be at least ${c.errors['minlength'].requiredLength} characters`;
+
+    return null;
   }
 }

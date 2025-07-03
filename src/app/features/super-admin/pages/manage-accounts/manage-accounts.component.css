@@ -1,0 +1,385 @@
+.manage-accounts-card,
+.management-card {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+  background: #fff;
+  border-radius: 1.5rem 1.5rem 0 0;
+  padding: 1.5rem 2rem 1rem 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-content {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-text h5 {
+  font-weight: 700;
+  color: #22223b;
+  margin-bottom: 0.2rem;
+}
+
+.header-text p {
+  color: #64748b;
+  font-size: 1.04rem;
+  margin-bottom: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border-radius: 0.7rem;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.07);
+  overflow: hidden;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  padding: 0.7rem 1rem;
+  font-size: 1.05rem;
+  outline: none;
+  min-width: 180px;
+  font-weight: 500;
+}
+
+.search-input:focus {
+  background: #fff;
+}
+
+.search-button {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  border: none;
+  color: #fff;
+  padding: 0.7rem 1.2rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: background 0.18s;
+}
+
+.search-button:hover {
+  background: #2563eb;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.view-button {
+  background: #f1f5f9;
+  border: none;
+  color: #3b82f6;
+  font-weight: 600;
+  padding: 0.6rem 1.1rem;
+  border-radius: 0.7rem;
+  transition: background 0.18s, color 0.18s;
+}
+
+.view-button.active,
+.view-button:hover {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  color: #fff;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.accounts-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: transparent;
+  font-size: 1.04rem;
+  margin-bottom: 0;
+}
+
+.accounts-table thead th {
+  background: #f8fafc;
+  font-weight: 700;
+  color: #22223b;
+  padding: 1rem 0.8rem;
+  border-top: none;
+}
+
+.accounts-table tbody tr {
+  transition: background 0.2s;
+}
+
+.accounts-table tbody tr:hover {
+  background: linear-gradient(90deg, #e0f2fe 0%, #f1f5f9 100%);
+}
+
+.accounts-table td {
+  vertical-align: middle;
+  padding: 0.85rem 0.8rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.avatar-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.user-avatar {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59,130,246,0.10);
+}
+
+.status-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 4px 1px #0001;
+}
+
+.status-indicator.active { background: #10b981; }
+.status-indicator.pending { background: #fbbf24; }
+.status-indicator.inactive { background: #64748b; }
+.status-indicator.suspended { background: #ef4444; }
+
+.user-details .user-name {
+  font-weight: 600;
+  color: #22223b;
+}
+
+.user-details .user-meta {
+  color: #64748b;
+  font-size: 0.97rem;
+}
+
+.account-type-badge {
+  background: #e0e7ef;
+  color: #3b82f6;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.97rem;
+}
+
+.status-badge {
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.97rem;
+}
+
+.status-badge.bg-success { background: #d1fae5; color: #10b981; }
+.status-badge.bg-warning { background: #fef9c3; color: #fbbf24; }
+.status-badge.bg-danger { background: #fee2e2; color: #ef4444; }
+.status-badge.bg-secondary { background: #e0e7ef; color: #64748b; }
+
+.action-buttons {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+}
+
+.btn-action {
+  background: #f1f5f9;
+  border: none;
+  color: #3b82f6;
+  border-radius: 0.5rem;
+  padding: 0.35rem 0.7rem;
+  font-size: 1rem;
+  transition: background 0.15s, color 0.15s;
+}
+
+.btn-action.view:hover { background: #e0f2fe; }
+.btn-action.activate:hover { background: #d1fae5; color: #10b981; }
+.btn-action.deactivate:hover { background: #fee2e2; color: #ef4444; }
+
+.loading-state, .empty-state {
+  text-align: center;
+  color: #64748b;
+  font-size: 1.08rem;
+  font-weight: 500;
+  padding: 2.5rem 0;
+}
+
+.spinner {
+  border: 3px solid #e0e7ef;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+  margin-right: 0.7rem;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+.error-alert {
+  background: #fee2e2;
+  color: #ef4444;
+  border-radius: 0.7rem;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.2rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.pagination-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.pagination-info {
+  color: #64748b;
+  font-size: 0.97rem;
+  font-weight: 500;
+}
+
+.pagination-nav .pagination {
+  margin-bottom: 0;
+}
+
+.pagination .page-link {
+  border-radius: 0.5rem !important;
+  margin: 0 2px;
+  color: #3b82f6;
+  border: none;
+  background: #f1f5f9;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  color: #fff;
+}
+
+@media (max-width: 991.98px) {
+  .manage-accounts-card,
+  .management-card {
+    border-radius: 1rem;
+  }
+  .card-header {
+    padding: 1rem 1rem 1rem 1rem;
+  }
+  .accounts-table th, .accounts-table td {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.4rem;
+  }
+  .header-actions {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+}
+/* Add these styles to manage-accounts.component.css */
+.stat-card {
+  background: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.stat-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.1);
+}
+
+.stat-card.active {
+  border-color: #3b82f6;
+  background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%);
+}
+
+.stat-card h6 {
+  color: #64748b;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.stat-card h3 {
+  color: #22223b;
+  font-weight: 700;
+  margin-bottom: 0;
+  font-size: 1.8rem;
+}
+
+.stat-card.active h3 {
+  color: #3b82f6;
+}
+
+/* Adjust header actions to wrap properly */
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+  .header-actions {
+    width: 100%;
+    margin-top: 1rem;
+  }
+  
+  .search-box {
+    order: 1;
+    flex: 1;
+  }
+  
+  .view-toggle {
+    order: 2;
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .stat-card {
+    padding: 1rem;
+  }
+  
+  .stat-card h3 {
+    font-size: 1.5rem;
+  }
+}
