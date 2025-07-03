@@ -1,0 +1,43 @@
+<div class="container py-5 animate__animated animate__fadeIn">
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="error" class="alert alert-danger animate__animated animate__shakeX">{{ error }}</div>
+  <div *ngIf="profile" class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 animate__animated animate__zoomIn">
+        <div class="card-header bg-primary text-white text-center rounded-top">
+          <h2 class="mb-0"><i class="bi bi-building"></i> {{ profile.assetName || 'Hotel Profile' }}</h2>
+          <p class="mb-0">Welcome, {{ profile.firstName }} {{ profile.lastName }}</p>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-4 text-center">
+              <img [src]="profile.imageURL || 'https://via.placeholder.com/150'" class="rounded-circle shadow" style="width: 120px; height: 120px; object-fit: cover; border: 4px solid #0d6efd;" alt="Profile Image">
+              <div class="mt-2">
+                <span class="badge bg-info">{{ profile.starRating }} <i class="bi bi-star-fill"></i></span>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item"><i class="bi bi-envelope"></i> {{ profile.email }}</li>
+                <li class="list-group-item"><i class="bi bi-telephone"></i> {{ profile.phone }}</li>
+                <li class="list-group-item"><i class="bi bi-geo-alt"></i> {{ profile.address }}, {{ profile.city }}, {{ profile.countryName }}</li>
+                <li class="list-group-item"><i class="bi bi-clock"></i> Open: {{ profile.openingTime?.hour }}:{{ profile.openingTime?.minute | number: '2.0' }} - {{ profile.closingTime?.hour }}:{{ profile.closingTime?.minute | number: '2.0' }}</li>
+                <li class="list-group-item"><i class="bi bi-translate"></i> Languages: {{ profile.languagesSupported?.join(', ') }}</li>
+                <li class="list-group-item"><i class="bi bi-info-circle"></i> {{ profile.description }}</li>
+                <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Facilities: <span *ngFor="let f of profile.facilities" class="badge bg-success me-1">{{ f }}</span></li>
+                <li class="list-group-item"><i class="bi bi-water"></i> Pool: <span [ngClass]="profile.hasPool ? 'text-success' : 'text-danger'">{{ profile.hasPool ? 'Yes' : 'No' }}</span> | <i class="bi bi-cup-straw"></i> Restaurant: <span [ngClass]="profile.hasRestaurant ? 'text-success' : 'text-danger'">{{ profile.hasRestaurant ? 'Yes' : 'No' }}</span></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer text-end bg-light rounded-bottom">
+          <button class="btn btn-outline-primary animate__animated animate__pulse animate__infinite" type="button"><i class="bi bi-pencil"></i> Edit Profile</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

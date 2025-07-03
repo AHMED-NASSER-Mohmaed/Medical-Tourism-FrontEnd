@@ -7,7 +7,6 @@ import { ToastrModule } from 'ngx-toastr';
 import { SuperAdminRoutingModule } from './super-admin-routing.module';
 import { DashboardModule } from '../../dashboard/dashboard.module';
 import { SharedModule } from '../../shared/shared.module';
-import { ManageAccountsComponent } from './pages/manage-accounts/manage-accounts.component';
 import { ManageProvidersComponent } from './pages/manage-providers/manage-providers.component';
 import { AddHospitalProviderComponent } from './pages/providers/add-hospital-provider/add-hospital-provider.component';
 import { ChangeEmailComponent } from './pages/user-actions/change-email/change-email.component';
@@ -21,10 +20,14 @@ import { StatusBadgeComponent } from '../../shared/components/status-badge/statu
 import { DashboardShellComponent } from './dashboard-shell/dashboard-shell.component';
 import { AccountDetailsComponent } from './pages/account-details/account-details.component';
 import { StatusLabelPipe } from '../../shared/pipes/status.pipe';
+import { PatientsAccountsComponent } from './pages/manage-accounts/patients-accounts/patients-accounts.component';
+import { HospitalsAccountsComponent } from './pages/manage-accounts/hospitals-accounts/hospitals-accounts.component';
+import { HotelsAccountsComponent } from './pages/manage-accounts/hotels-accounts/hotels-accounts.component';
+import { CarRentalsAccountsComponent } from './pages/manage-accounts/car-rentals-accounts/car-rentals-accounts.component';
+import { AddPatientProviderComponent } from './pages/providers/add-patient-provider/add-patient-provider.component';
 
 @NgModule({
   declarations: [
-    ManageAccountsComponent,
     ManageProvidersComponent,
     AddHospitalProviderComponent,
     ChangeEmailComponent,
@@ -35,6 +38,11 @@ import { StatusLabelPipe } from '../../shared/pipes/status.pipe';
     SuperAdminProfileComponent,
     DashboardShellComponent,
     AccountDetailsComponent,
+    PatientsAccountsComponent,
+    HospitalsAccountsComponent,
+    HotelsAccountsComponent,
+    CarRentalsAccountsComponent,
+    AddPatientProviderComponent
   ],
   imports: [
     CommonModule,

@@ -428,17 +428,18 @@ export class SuperAdminService {
       );
   }
 
- changeUserEmail(userId: string, newEmail: string): Observable<void> {
-  // Create query parameters with userId
-  const params = { userId };
 
-  return this.http
-    .put<void>(
-      `${environment.apiUrl}/superadmin/change-user-email`, // Endpoint without userId in path
-      JSON.stringify(newEmail), // Email as plain string in body
+
+  // Create query parameters with userId
+  // Email as plain string in body
+   changeUserEmail(userId: string, newEmail: string): Observable<void> {
+    const params = { userId };
+    return this.http.put<void>(
+      `${environment.apiUrl}/superadmin/change-user-email`,
+      JSON.stringify(newEmail),
       {
-        headers: this.jsonHeaders,
-        params: params // userId as query parameter
+        headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+        params: params
       }
     )
     .pipe(
@@ -453,7 +454,9 @@ export class SuperAdminService {
       }),
       catchError((error) => this.handleError(error, 'changing user email'))
     );
-}
+  }
+
+
 
  resetUserPassword(userId: string): Observable<void> {
     return this.http

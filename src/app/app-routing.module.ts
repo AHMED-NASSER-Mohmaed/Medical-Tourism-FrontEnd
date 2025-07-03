@@ -11,6 +11,7 @@ const routes: Routes = [
   },
 
 
+
   {
     path: 'auth',
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
@@ -29,6 +30,12 @@ const routes: Routes = [
     loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
     pathMatch: 'full'
   },
+    {
+    path: 'hotel-provider',
+    loadChildren: () =>
+      import('./features/hotel-provider/hotel-provider.module').then(m => m.HotelProviderModule)
+  },
+  { path: '', redirectTo: 'hotel-provider', pathMatch: 'full' },
 
  {
     path: '',
@@ -40,6 +47,9 @@ const routes: Routes = [
     path: '**',
     redirectTo: 'auth/login'
   },
+
+
+
 ];
 
 
