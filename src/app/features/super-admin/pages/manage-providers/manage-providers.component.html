@@ -50,25 +50,31 @@
           </p>
         </div>
         
-        <div class="header-actions">
-          <!-- Search Box -->
-          <div class="search-box">
-            <input type="text"
-                   class="search-input"
-                   [(ngModel)]="searchTerm"
-                   (keyup.enter)="loadProviders()"
-                   placeholder="Search {{ currentViewConfig.label.toLowerCase() }}..."
-                   [disabled]="isLoading">
-            <button class="btn-search"
-                    (click)="loadProviders()"
-                    [disabled]="isLoading">
-              <fa-icon [icon]="icons.search"></fa-icon>
-              <span class="sr-only">Search</span>
-            </button>
+        <div class="header-actions ms-auto d-flex align-items-center" style="gap: 1.5rem;">
+          <div class="d-flex flex-wrap gap-2 align-items-center">
+            <div class="input-group input-group-lg" style="max-width: 300px;">
+              <input type="text"
+                     class="form-control"
+                     [(ngModel)]="searchTerm"
+                     (keyup.enter)="loadProviders()"
+                     [placeholder]="'Search ' + currentViewConfig.label.toLowerCase() + '...'"
+                     [disabled]="isLoading">
+              <button class="btn btn-primary" type="button" (click)="loadProviders()" [disabled]="isLoading">
+                <fa-icon [icon]="icons.search"></fa-icon>
+              </button>
+            </div>
+            <div class="ms-2" style="min-width: 160px;">
+              <select class="form-select form-select-lg"
+                      [(ngModel)]="statusFilter"
+                      (change)="loadProviders()">
+                <option value="all">All</option>
+                <option [ngValue]="AssetStatus.APPROVED">Approved</option>
+                <option [ngValue]="AssetStatus.REJECTED">Rejected</option>
+                <option [ngValue]="AssetStatus.PENDING">Pending</option>
+              </select>
+            </div>
           </div>
-
-          <!-- View Type Toggle -->
-          <div class="view-toggle">
+          <div class="view-toggle ms-4">
             <button type="button"
                     *ngFor="let view of viewConfigs"
                     class="btn-view-toggle"

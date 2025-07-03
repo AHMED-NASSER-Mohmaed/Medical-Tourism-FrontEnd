@@ -1,0 +1,84 @@
+/* add-patient-provider.component.css */
+.add-patient-card {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+}
+
+.card-header {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.form-floating > .form-control,
+.form-floating > .form-select {
+  border-radius: 0.8rem;
+  background: rgba(248,250,252,0.7);
+  border: 1px solid #e0e7ef;
+  font-weight: 500;
+}
+
+.form-floating > label {
+  color: #3b82f6;
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 0.15rem rgba(59,130,246,0.13);
+}
+
+.form-label.fw-semibold {
+  font-size: 1.05rem;
+  letter-spacing: 0.2px;
+  color: #334155;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  border: none;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.10);
+  min-width: 200px;
+}
+
+.btn-primary:disabled {
+  background: #a5b4fc;
+  border: none;
+}
+
+.btn-outline-secondary {
+  font-weight: 600;
+  border-radius: 0.7rem;
+  min-width: 120px;
+}
+
+@media (max-width: 767.98px) {
+  .add-patient-card {
+    border-radius: 1rem;
+  }
+  .card-header {
+    padding: 1rem 1rem 1rem 1rem;
+  }
+  .btn-primary, .btn-outline-secondary {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+.is-invalid {
+  border-color: #ef4444;
+}
+
+.text-danger {
+  color: #ef4444;
+  font-size: 0.85rem;
+}
+
+.alert-danger {
+  background-color: #fee2e2;
+  border-color: #fecaca;
+  color: #b91c1c;
+} 

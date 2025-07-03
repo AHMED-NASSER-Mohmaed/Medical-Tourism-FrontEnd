@@ -1,0 +1,177 @@
+import { Component, OnInit } from '@angular/core';
+import { SuperAdminService } from '../../../services/super-admin.service';
+import { HotelProvider, UserStatus, PaginatedResponse } from '../../../models/super-admin.model';
+import { finalize } from 'rxjs/operators';
+import { faHotel, faUserCheck, faUserClock, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
+
+@Component({
+  selector: 'app-hotels-accounts',
+  standalone: false,
+  templateUrl: './hotels-accounts.component.html',
+  styleUrl: './hotels-accounts.component.css'
+})
+export class HotelsAccountsComponent implements OnInit {
+  accounts: HotelProvider[] = [];
+  pagination = { page: 1, pageSize: 10, totalCount: 0, totalPages: 0 };
+  isLoading = false;
+  searchTerm = '';
+  errorMessage = '';
+  showAccountModal = false;
+  selectedAccount: HotelProvider | null = null;
+  statusFilter: 'all' | 'active' | 'inactive' | 'pending' | 'suspended' = 'all';
+  UserStatus = UserStatus;
+  stats: any[] = [];
+
+  constructor(private superAdminService: SuperAdminService, private router: Router) {}
+
+  ngOnInit(): void {
+    this.loadAccounts();
+  }
+
+  loadAccounts(): void {
+    this.isLoading = true;
+    this.errorMessage = '';
+    const filters: any = { searchTerm: this.searchTerm };
+    if (this.statusFilter !== 'all') {
+      filters.status = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
+    }
+    this.superAdminService.getHotelProviders(this.pagination.page, this.pagination.pageSize, filters)
+      .pipe(finalize(() => this.isLoading = false))
+      .subscribe({
+        next: (response: PaginatedResponse<HotelProvider>) => {
+          this.accounts = response.items;
+          this.pagination = {
+            page: response.pageNumber,
+            pageSize: response.pageSize,
+            totalCount: response.totalCount,
+            totalPages: response.totalPages
+          };
+          this.updateStats();
+        },
+        error: (err) => {
+          this.errorMessage = err.userMessage || 'Failed to load hotels';
+        }
+      });
+  }
+
+  updateStats() {
+    this.stats = [
+      {
+        title: 'Total Accounts',
+        value: this.pagination.totalCount,
+        icon: faHotel,
+        color: 'primary',
+        trend: 0,
+        trendUp: true
+      },
+      {
+        title: 'Active',
+        value: this.activeAccountCount,
+        icon: faUserCheck,
+        color: 'success',
+        trend: this.calculateTrend(this.activeAccountCount),
+        trendUp: this.calculateTrend(this.activeAccountCount) >= 0
+      },
+      {
+        title: 'Pending',
+        value: this.pendingAccountCount,
+        icon: faUserClock,
+        color: 'warning',
+        trend: this.calculateTrend(this.pendingAccountCount),
+        trendUp: this.calculateTrend(this.pendingAccountCount) >= 0
+      },
+      {
+        title: 'Inactive',
+        value: this.inactiveAccountCount,
+        icon: faTimes,
+        color: 'danger',
+        trend: this.calculateTrend(this.inactiveAccountCount),
+        trendUp: this.calculateTrend(this.inactiveAccountCount) >= 0
+      }
+    ];
+  }
+
+  get activeAccountCount(): number {
+    return this.accounts.filter(a => a.status === UserStatus.ACTIVE).length;
+  }
+  get pendingAccountCount(): number {
+    return this.accounts.filter(a => a.status === UserStatus.PENDING).length;
+  }
+  get inactiveAccountCount(): number {
+    return this.accounts.filter(a => a.status === UserStatus.INACTIVE).length;
+  }
+  get suspendedAccountCount(): number {
+    return this.accounts.filter(a => a.status === UserStatus.SUSPENDED).length;
+  }
+  calculateTrend(count: number): number {
+    if (!this.pagination.totalCount) return 0;
+    return Math.round((count / this.pagination.totalCount) * 100);
+  }
+
+  onPageChange(page: number): void {
+    if (page >= 1 && page <= this.pagination.totalPages) {
+      this.pagination.page = page;
+      this.loadAccounts();
+    }
+  }
+  getPageNumbers(): number[] {
+    const { page, totalPages } = this.pagination;
+    const pageNumbers = [];
+    const range = 2;
+    pageNumbers.push(1);
+    let start = Math.max(2, page - range);
+    let end = Math.min(totalPages - 1, page + range);
+    if (start > 2) pageNumbers.push(-1);
+    for (let i = start; i <= end; i++) pageNumbers.push(i);
+    if (end < totalPages - 1) pageNumbers.push(-1);
+    if (totalPages > 1) pageNumbers.push(totalPages);
+    return pageNumbers;
+  }
+
+  changeStatusFilter(status: 'all' | 'active' | 'inactive' | 'pending' | 'suspended'): void {
+    this.statusFilter = status;
+    this.pagination.page = 1;
+    this.loadAccounts();
+  }
+
+  changeUserStatus(userId: string, activate: boolean): void {
+    this.isLoading = true;
+    const action = activate ? 'activate' : 'deactivate';
+    this.superAdminService.changeUserState(userId, action).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: () => {
+        this.loadAccounts();
+      },
+      error: (err) => {
+        this.errorMessage = err.userMessage || `Failed to ${action} user`;
+      }
+    });
+  }
+  viewAccount(account: HotelProvider): void {
+    this.selectedAccount = account;
+    this.showAccountModal = true;
+  }
+  closeAccountModal(): void {
+    this.showAccountModal = false;
+    this.selectedAccount = null;
+  }
+
+  getStatusBadgeClass(status: UserStatus): string {
+    switch(status) {
+      case UserStatus.ACTIVE: return 'bg-soft-success text-success';
+      case UserStatus.PENDING: return 'bg-soft-warning text-warning';
+      case UserStatus.INACTIVE: return 'bg-soft-secondary text-secondary';
+      case UserStatus.SUSPENDED: return 'bg-soft-danger text-danger';
+      default: return 'bg-soft-secondary text-secondary';
+    }
+  }
+  getUserStatusText(status: UserStatus): string {
+    return UserStatus[status] || 'Unknown';
+  }
+
+  onAddClick() {
+    this.router.navigate(['/super-admin/providers/hotels/add']);
+  }
+}

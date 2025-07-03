@@ -1,0 +1,32 @@
+<div class="container py-5 animate__animated animate__fadeIn">
+  <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="error" class="alert alert-danger animate__animated animate__shakeX">{{ error }}</div>
+  <div *ngIf="room" class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0 animate__animated animate__zoomIn">
+        <div class="card-header bg-info text-white text-center rounded-top">
+          <h2 class="mb-0"><i class="bi bi-door-closed"></i> Room {{ room.roomNumber }}</h2>
+        </div>
+        <img [src]="room.imageUrls?.[0] || 'https://via.placeholder.com/300x180'" class="card-img-top" style="height: 220px; object-fit: cover;">
+        <div class="card-body">
+          <ul class="list-group list-group-flush mb-2">
+            <li class="list-group-item"><i class="bi bi-currency-dollar"></i> {{ room.price | currency }}</li>
+            <li class="list-group-item"><i class="bi bi-people"></i> Max Occupancy: {{ room.maxOccupancy }}</li>
+            <li class="list-group-item"><i class="bi bi-info-circle"></i> {{ room.description }}</li>
+            <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Amenities: <span *ngFor="let a of room.amenities" class="badge bg-success me-1">{{ a }}</span></li>
+            <li class="list-group-item"><i class="bi bi-eye"></i> View: {{ room.viewType }}</li>
+            <li class="list-group-item"><i class="bi bi-cup-straw"></i> Breakfast: <span [ngClass]="room.includesBreakfast ? 'text-success' : 'text-danger'">{{ room.includesBreakfast ? 'Yes' : 'No' }}</span></li>
+            <li class="list-group-item"><i class="bi bi-door-open"></i> Status: <span [ngClass]="room.status === 1 ? 'text-success' : 'text-danger'">{{ room.status === 1 ? 'Available' : 'Unavailable' }}</span></li>
+          </ul>
+        </div>
+        <div class="card-footer text-end bg-light rounded-bottom">
+          <a [routerLink]="['/hotel-provider/rooms', room.id, 'edit']" class="btn btn-outline-primary animate__animated animate__pulse animate__infinite"><i class="bi bi-pencil"></i> Edit Room</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

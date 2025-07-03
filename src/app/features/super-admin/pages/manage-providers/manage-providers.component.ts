@@ -15,6 +15,7 @@ import { finalize } from 'rxjs/operators';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { faList, faCheck, faTimes, faSearch, faPlus, faEye, faHospital, faHotel, faCar } from '@fortawesome/free-solid-svg-icons';
+import { Router } from '@angular/router';
 
 export type CardColor = 'primary' | 'success' | 'warning' | 'danger';
 
@@ -35,6 +36,7 @@ export class ManageProvidersComponent implements OnInit {
   searchTerm = '';
   currentView: 'hospital' | 'hotel' | 'car-rental' = 'hospital';
   errorMessage = '';
+  statusFilter: 'all' | AssetStatus = 'all';
   AssetStatus = AssetStatus;
   ProviderType = ProviderType;
   icons = {
@@ -71,7 +73,7 @@ export class ManageProvidersComponent implements OnInit {
   selectedProvider: UIProvider | null = null;
   showProviderModal = false;
 
-  constructor(private superAdminService: SuperAdminService) {}
+  constructor(private superAdminService: SuperAdminService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadProviders();
@@ -81,12 +83,16 @@ export class ManageProvidersComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = '';
     let request$: Observable<PaginatedResponse<AnyProvider>>;
+    const filters: any = { searchTerm: this.searchTerm };
+    if (this.statusFilter !== 'all') {
+      filters.verificationStatus = this.statusFilter;
+    }
     if (this.currentView === 'hospital') {
-      request$ = this.superAdminService.getHospitalProviders(this.pagination.page, this.pagination.pageSize) as Observable<PaginatedResponse<AnyProvider>>;
+      request$ = this.superAdminService.getHospitalProviders(this.pagination.page, this.pagination.pageSize, filters) as Observable<PaginatedResponse<AnyProvider>>;
     } else if (this.currentView === 'hotel') {
-      request$ = this.superAdminService.getHotelProviders(this.pagination.page, this.pagination.pageSize) as Observable<PaginatedResponse<AnyProvider>>;
+      request$ = this.superAdminService.getHotelProviders(this.pagination.page, this.pagination.pageSize, filters) as Observable<PaginatedResponse<AnyProvider>>;
     } else {
-      request$ = this.superAdminService.getCarRentalProviders(this.pagination.page, this.pagination.pageSize) as Observable<PaginatedResponse<AnyProvider>>;
+      request$ = this.superAdminService.getCarRentalProviders(this.pagination.page, this.pagination.pageSize, filters) as Observable<PaginatedResponse<AnyProvider>>;
     }
     request$.pipe(
       finalize(() => {
@@ -255,8 +261,13 @@ export class ManageProvidersComponent implements OnInit {
   }
 
   addNewProvider(): void {
-    // Implement navigation or modal opening logic here
-    console.log('Add New Provider clicked');
+    if (this.currentView === 'hospital') {
+      this.router.navigate(['/super-admin/providers/hospitals/add']);
+    } else if (this.currentView === 'hotel') {
+      this.router.navigate(['/super-admin/providers/hotels/add']);
+    } else if (this.currentView === 'car-rental') {
+      this.router.navigate(['/super-admin/providers/car-rentals/add']);
+    }
   }
 
   getProviderType(provider: UIProvider): string {

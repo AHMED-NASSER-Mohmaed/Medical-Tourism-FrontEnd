@@ -14,7 +14,7 @@ import {
 export class DashboardShellComponent {
   title = 'Elagy Admin';
   userRole = 'Super Admin';
-  avatar = 'src/assets/images/ww.jpg';
+  avatar = 'https://in.pinterest.com/pin/68398488086750379/';
   breadcrumbs = [
     { label: 'Home', link: '/super-admin/dashboard' },
     { label: 'Dashboard' }
@@ -33,16 +33,10 @@ export class DashboardShellComponent {
       link: '/super-admin/manage-accounts',
       isExpanded: false,
       children: [
-        { label: 'All Users', icon: faUser, link: '/super-admin/manage-accounts' },
-      //   { 
-      //     label: 'Quick Actions', 
-      //     icon: faEdit,
-      //     link: '#',
-      //     children: [
-      //       { label: 'Change Email', icon: faEnvelope, link: '/super-admin/user/USER_ID/change-email' },
-      // { label: 'Reset Password', icon: faKey, link: '/super-admin/user/USER_ID/reset-password' }
-      //     ]
-      //   }
+        { label: 'Patients', icon: faUserInjured, link: '/super-admin/manage-accounts/patients' },
+        { label: 'Hospitals', icon: faHospital, link: '/super-admin/manage-accounts/hospitals' },
+        { label: 'Hotels', icon: faHotel, link: '/super-admin/manage-accounts/hotels' },
+        { label: 'Car Rentals', icon: faCar, link: '/super-admin/manage-accounts/car-rentals' }
       ]
     },
     {
@@ -52,16 +46,16 @@ export class DashboardShellComponent {
       isExpanded: false,
       children: [
         { label: 'All Providers', icon: faListAlt, link: '/super-admin/manage-providers' },
-        { 
-          label: 'Add New', 
-          icon: faPlus,
-          link: '#',
-          children: [
-            { label: 'Hospital', icon: faHospital, link: '/super-admin/providers/hospitals/add' },
-            { label: 'Hotel', icon: faHotel, link: '/super-admin/providers/hotels/add' },
-            { label: 'Car Rental', icon: faCar, link: '/super-admin/providers/car-rentals/add' }
-          ]
-        },
+        // { 
+        //   label: 'Add New', 
+        //   icon: faPlus,
+        //   link: '#',
+        //   children: [
+        //     { label: 'Hospital', icon: faHospital, link: '/super-admin/providers/hospitals/add' },
+        //     { label: 'Hotel', icon: faHotel, link: '/super-admin/providers/hotels/add' },
+        //     { label: 'Car Rental', icon: faCar, link: '/super-admin/providers/car-rentals/add' }
+        //   ]
+        // },
        
       ]
     },
