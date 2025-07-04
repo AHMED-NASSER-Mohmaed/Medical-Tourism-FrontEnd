@@ -1,16 +1,16 @@
 import { Component } from '@angular/core';
 import { HospitalService } from '../../../services/Hospital.service';
-import { Doctor } from '../../../models/Hospital.model';
+import { Doctor, Clinic } from '../../../models/Hospital.model';  // Ensure these types are imported
 
 @Component({
   selector: 'app-hospital-doctors',
   standalone: false,
   templateUrl: './hospital-doctors.component.html',
-  styleUrl: './hospital-doctors.component.css'
+  styleUrls: ['./hospital-doctors.component.css']
 })
 export class HospitalDoctorsComponent {
 
-  selectedDoctor: any = null;
+  selectedDoctor: Doctor | null = null;
   showSchedulePopup: boolean = false;
   doctorSchedule: any[][] = []; // 2D array for weeks and days
   selectedDate: Date | null = null;
@@ -20,24 +20,23 @@ export class HospitalDoctorsComponent {
 
   ngOnInit() {
     // Initialize any necessary data or fetch initial doctor list
-    this.doctorService.getDoctorsByHospitalAndClinic(1,1).subscribe(doctors => {
-      this.Doctors = doctors!;
+    this.doctorService.getDoctorsByHospitalAndClinic(1, 1).subscribe((doctors: Doctor[]) => {
+      this.Doctors = doctors;
       console.log('Doctors:', this.Doctors);
-    })
+    });
   }
 
-  onShowAvailableDates(doctor: any) {
+  onShowAvailableDates(doctor: Doctor) {
     const hospitalId = 1; // Replace with actual hospitalId if available
     const clinicId = 1; // Replace with actual clinicId if available
     this.selectedDoctor = doctor;
     this.showSchedulePopup = true;
     this.selectedDate = null;
-    this.doctorService.getDoctorSchedule(hospitalId, clinicId, doctor.id).subscribe(schedule => {
+
+    this.doctorService.getDoctorSchedule(hospitalId, clinicId, doctor.id).subscribe((schedule: any[]) => {
       // Ensure schedule is a 2D array for the calendar
       this.doctorSchedule = Array.isArray(schedule) && Array.isArray(schedule[0]) ? schedule : [];
       console.log('Doctor Schedule:', this.doctorSchedule);
-
-      console.log(schedule);
     });
   }
 
