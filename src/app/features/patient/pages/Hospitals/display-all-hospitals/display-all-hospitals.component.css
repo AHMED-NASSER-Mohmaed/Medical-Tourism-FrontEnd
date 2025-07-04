@@ -305,3 +305,41 @@
     display: none; /* Hide sidebar on very small screens */
   }
 }
+/* Pagination Styles */
+.pagination-nav {
+  display: flex;
+  justify-content: center;  /* Center pagination items horizontally */
+  align-items: center;  /* Vertically center if needed */
+  margin: 32px auto;  /* Center the container horizontally and give top/bottom margin */
+  width: 100%;  /* Ensure the container spans the full width */
+}
+
+.pagination-list {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  gap: 6px;  /* Space between pagination buttons */
+}
+
+.pagination-list li {
+  background: #fff;
+  border: 1px solid #2563b6;
+  color: #2563b6;
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
+}
+
+.pagination-list li.active,
+.pagination-list li:hover:not(.disabled) {
+  background: #2563b6;
+  color: #fff;
+}
+
+.pagination-list li.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}

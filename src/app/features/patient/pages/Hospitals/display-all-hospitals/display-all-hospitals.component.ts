@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { HospitalService } from '../../../services/Hospital.service';
 import { Router } from '@angular/router';
 import { CountryService } from '../../../../../auth/services/country.service';
+import { LoadingService } from '../../../../../shared/services/loading.service'; // Import loading service
 
 @Component({
   selector: 'app-display-all-hospitals',
-  standalone:false,
+  standalone: false,
   templateUrl: './display-all-hospitals.component.html',
   styleUrls: ['./display-all-hospitals.component.css']
 })
@@ -14,15 +15,20 @@ export class DisplayAllHospitalsComponent implements OnInit {
   filterCriteria = {
     name: '',
     specialty: '',
-    location: 0  // Represents governorateId
+    location: 0 // Represents governorateId
   };
   pageNumber: number = 1;
-  pageSize: number = 10;
-   totalPages: number = 1;
+  pageSize: number = 8; // Set page size to 8
+  totalPages: number = 1;
   hospitals: any[] = [];
   governorates: any[] = [];
 
-  constructor(private hospitalService: HospitalService, private router: Router, private countryService: CountryService) {}
+  constructor(
+    private hospitalService: HospitalService,
+    private router: Router,
+    private countryService: CountryService,
+    private loadingService: LoadingService // Inject loading service
+  ) {}
 
   ngOnInit() {
     this.loadSpecialties();
@@ -44,38 +50,46 @@ export class DisplayAllHospitalsComponent implements OnInit {
   }
 
   // Fetch hospitals with filter criteria
-loadHospitals() {
-  console.log('Loading hospitals with filters:', this.filterCriteria);
+  loadHospitals() {
+    console.log('Loading hospitals with filters:', this.filterCriteria);
 
-  // Convert specialty to a number, or pass undefined if it's empty or invalid
-  const specialtyId = this.filterCriteria.specialty ? Number(this.filterCriteria.specialty) : undefined;
+    // Show the loader before making the request
+    this.loadingService.show();
 
-  // Pass the individual filter parameters
-  this.hospitalService.getHospitals(
-    this.pageNumber,
-    this.pageSize,
-    this.filterCriteria.name,
-    specialtyId,  // Pass specialtyId (undefined if no specialty is selected)
-    this.filterCriteria.location || 0  // Pass governorateId
-  ).subscribe(
-    (data: any) => {
-      console.log('Hospitals loaded:', data);
-      this.hospitals = data?.items || [];
-      // Update the pagination if needed
-      this.totalPages = data.totalPages;  // Update total pages
-    },
-    (error) => {
-      console.error('Error fetching hospitals:', error);
-    }
-  );
-}
+    // Convert specialty to a number, or pass undefined if it's empty or invalid
+    const specialtyId = this.filterCriteria.specialty ? Number(this.filterCriteria.specialty) : undefined;
 
-onPageChange(page: number) {
-  if (page < 1 || page > this.totalPages) return;
-  this.pageNumber = page;
-  this.loadHospitals();
-}
+    // Pass the individual filter parameters
+    this.hospitalService.getHospitals(
+      this.pageNumber,
+      this.pageSize, // Use the new pageSize
+      this.filterCriteria.name,
+      specialtyId,  // Pass specialtyId (undefined if no specialty is selected)
+      this.filterCriteria.location || 0  // Pass governorateId
+    ).subscribe(
+      (data: any) => {
+        console.log('Hospitals loaded:', data);
+        this.hospitals = data?.items || [];
+        // Update the pagination if needed
+        this.totalPages = data.totalPages;  // Update total pages
 
+        // Hide the loader after the request is successful
+        this.loadingService.hide();
+      },
+      (error) => {
+        console.error('Error fetching hospitals:', error);
+
+        // Hide the loader if there's an error
+        this.loadingService.hide();
+      }
+    );
+  }
+
+  onPageChange(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.pageNumber = page;
+    this.loadHospitals();
+  }
 
   // View details for a hospital
   ViewHospitalDetails(hospitalId: string) {

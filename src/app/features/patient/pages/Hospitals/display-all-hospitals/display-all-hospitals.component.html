@@ -52,27 +52,34 @@
         <h3>{{ hospital.assetName }}</h3>
         <p>{{ hospital.description }}</p>
         <a href="#" class="departments-more" (click)="ViewHospitalDetails(hospital.id)">
-          Read More <i class="flaticon-right-arrow"></i>
+         Specialists <i class="flaticon-right-arrow"></i>
         </a>
       </div>
     </div>
   </section>
 
   <!-- Pagination -->
-  <nav *ngIf="totalPages > 1" class="pagination-nav">
-    <ul class="pagination pagination-sm justify-content-center">
-      <li class="page-item" [class.disabled]="pageNumber === 1" (click)="onPageChange(pageNumber - 1)">
-        <span class="page-link">&laquo;</span>
-      </li>
-      <li *ngFor="let page of [].constructor(totalPages); let i = index"
-          class="page-item"
-          [class.active]="pageNumber === (i + 1)"
-          (click)="onPageChange(i + 1)">
-        <span class="page-link">{{ i + 1 }}</span>
-      </li>
-      <li class="page-item" [class.disabled]="pageNumber === totalPages" (click)="onPageChange(pageNumber + 1)">
-        <span class="page-link">&raquo;</span>
-      </li>
-    </ul>
-  </nav>
+<!-- Pagination -->
+<nav *ngIf="totalPages > 1" class="pagination-nav">
+  <ul class="pagination pagination-sm justify-content-center">
+    <!-- Previous page button -->
+    <li class="page-item" [class.disabled]="pageNumber === 1" (click)="onPageChange(pageNumber - 1)">
+      <span class="page-link">&laquo;</span>
+    </li>
+
+    <!-- Page number buttons -->
+    <li *ngFor="let page of [].constructor(totalPages); let i = index"
+        class="page-item"
+        [class.active]="pageNumber === (i + 1)"
+        (click)="onPageChange(i + 1)">
+      <span class="page-link">{{ i + 1 }}</span>
+    </li>
+
+    <!-- Next page button -->
+    <li class="page-item" [class.disabled]="pageNumber === totalPages" (click)="onPageChange(pageNumber + 1)">
+      <span class="page-link">&raquo;</span>
+    </li>
+  </ul>
+</nav>
+
 </div>
