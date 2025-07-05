@@ -82,11 +82,15 @@
           
           <!-- Row 5 -->
           <div class="info-label">Governorate</div>
-          <div class="info-value">{{ account?.governorate || 'N/A' }}</div>
+          <div class="info-value">
+            {{ getDisplayGovernorate(enrichedAccount) }}
+          </div>
           
           <!-- Row 6 -->
           <div class="info-label">Country</div>
-          <div class="info-value">{{ account?.country || 'N/A' }}</div>
+          <div class="info-value">
+            {{ getDisplayCountry(enrichedAccount) }}
+          </div>
         </div>
       </div>
 

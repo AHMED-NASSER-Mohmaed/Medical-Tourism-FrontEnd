@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuperAdminService } from '../../../services/super-admin.service';
 import { Router } from '@angular/router';
-import { Gender } from '../../../models/super-admin.model';
+import { Gender, CountriesGovernatesResponse, CountryWithGovernates, Governate } from '../../../models/super-admin.model';
 
 @Component({
   selector: 'app-add-patient-provider',
@@ -10,23 +10,17 @@ import { Gender } from '../../../models/super-admin.model';
   styleUrls: ['./add-patient-provider.component.css'],
   standalone: false,
 })
-export class AddPatientProviderComponent {
+export class AddPatientProviderComponent implements OnInit {
   patientForm: FormGroup;
   isLoading = false;
   apiError: string | null = null;
 
   Gender = Gender;
-  countries = [
-    { id: 1, name: 'Egypt' },
-    { id: 2, name: 'Saudi Arabia' },
-    { id: 3, name: 'United Arab Emirates' }
-  ];
-  governorates = [
-    { id: 1, name: 'Cairo' },
-    { id: 2, name: 'Alexandria' },
-    { id: 3, name: 'Giza' }
-  ];
+  countries: { id: number; name: string }[] = [];
+  governorates: { id: number; name: string }[] = [];
   bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+  private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -54,6 +48,33 @@ export class AddPatientProviderComponent {
     });
   }
 
+  ngOnInit(): void {
+    this.superAdminService.getCountriesAndGovernates().subscribe({
+      next: (response: CountriesGovernatesResponse) => {
+        this.countriesMap = response.data;
+        this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+      },
+      error: () => {
+        this.apiError = 'Failed to load countries and governates.';
+      }
+    });
+
+    this.patientForm.get('countryId')?.valueChanges.subscribe((countryId: number) => {
+      this.updateGovernorates(countryId);
+    });
+  }
+
+  private updateGovernorates(countryId: number) {
+    if (!countryId || !this.countriesMap[countryId]) {
+      this.governorates = [];
+      this.patientForm.patchValue({ governorateId: null });
+      return;
+    }
+    const govObj = this.countriesMap[countryId].governates;
+    this.governorates = Object.values(govObj).map(g => ({ id: g.governateId, name: g.governateName }));
+    this.patientForm.patchValue({ governorateId: null });
+  }
+
   private passwordMatchValidator(form: FormGroup) {
     const password = form.get('password');
     const confirmPassword = form.get('confirmPassword');
@@ -68,6 +89,8 @@ export class AddPatientProviderComponent {
     if (this.patientForm.valid) {
       this.isLoading = true;
       const formValue = this.patientForm.value;
+      const country = this.countriesMap[formValue.countryId];
+      const governate = country?.governates[formValue.governorateId];
       const payload = {
         email: formValue.email,
         password: formValue.password,
@@ -79,7 +102,9 @@ export class AddPatientProviderComponent {
         address: formValue.address,
         city: formValue.city,
         governorateId: Number(formValue.governorateId),
+        governorateName: governate?.governateName,
         countryId: Number(formValue.countryId),
+        countryName: country?.countryName,
         dateOfBirth: new Date(formValue.dateOfBirth).toISOString(),
         bloodGroup: formValue.bloodGroup,
         height: Number(formValue.height),

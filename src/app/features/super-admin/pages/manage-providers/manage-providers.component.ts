@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SuperAdminService } from '../../services/super-admin.service';
 import {
   AssetStatus,
@@ -11,13 +11,12 @@ import {
   Provider,
   UserStatus
 } from '../../models/super-admin.model';
-import { finalize } from 'rxjs/operators';
+import { finalize, takeUntil } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { faList, faCheck, faTimes, faSearch, faPlus, faEye, faHospital, faHotel, faCar } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-
-export type CardColor = 'primary' | 'success' | 'warning' | 'danger';
+import type { CardColor } from '../../../../dashboard/components/dashboard-card/dashboard-card.component';
 
 type AnyProvider = HotelProvider | HospitalProvider | CarRentalProvider;
 
@@ -29,7 +28,7 @@ type UIProvider = Provider & { isStatusChanging?: boolean };
   styleUrls: ['./manage-providers.component.css'],
   standalone: false,
 })
-export class ManageProvidersComponent implements OnInit {
+export class ManageProvidersComponent implements OnInit, OnDestroy {
   providers: UIProvider[] = [];
   pagination = { page: 1, pageSize: 10, totalCount: 0, totalPages: 0 };
   isLoading = false;
@@ -39,6 +38,7 @@ export class ManageProvidersComponent implements OnInit {
   statusFilter: 'all' | AssetStatus = 'all';
   AssetStatus = AssetStatus;
   ProviderType = ProviderType;
+  UserStatus = UserStatus;
   icons = {
     list: faList,
     approve: faCheck,
@@ -72,6 +72,7 @@ export class ManageProvidersComponent implements OnInit {
   ];
   selectedProvider: UIProvider | null = null;
   showProviderModal = false;
+  private destroy$ = new Subject<void>();
 
   constructor(private superAdminService: SuperAdminService, private router: Router) {}
 
@@ -85,7 +86,7 @@ export class ManageProvidersComponent implements OnInit {
     let request$: Observable<PaginatedResponse<AnyProvider>>;
     const filters: any = { searchTerm: this.searchTerm };
     if (this.statusFilter !== 'all') {
-      filters.verificationStatus = this.statusFilter;
+      filters.UserStatus = this.statusFilter;
     }
     if (this.currentView === 'hospital') {
       request$ = this.superAdminService.getHospitalProviders(this.pagination.page, this.pagination.pageSize, filters) as Observable<PaginatedResponse<AnyProvider>>;
@@ -94,14 +95,13 @@ export class ManageProvidersComponent implements OnInit {
     } else {
       request$ = this.superAdminService.getCarRentalProviders(this.pagination.page, this.pagination.pageSize, filters) as Observable<PaginatedResponse<AnyProvider>>;
     }
-    request$.pipe(
-      finalize(() => {
-        this.isLoading = false;
-      })
-    ).subscribe({
-      next: (response) => this.handleSuccessResponse(response),
-      error: (error) => this.handleErrorResponse(error)
-    });
+    request$
+      .pipe(finalize(() => { this.isLoading = false; }),
+            takeUntil(this.destroy$))
+      .subscribe({
+        next: (response) => this.handleSuccessResponse(response),
+        error: (error) => this.handleErrorResponse(error)
+      });
   }
 
   private handleSuccessResponse(response: PaginatedResponse<AnyProvider>): void {
@@ -121,6 +121,7 @@ export class ManageProvidersComponent implements OnInit {
 
   private handleErrorResponse(error: { message?: string }): void {
     this.errorMessage = error.message || 'Failed to load providers';
+    this.showToast('Error', this.errorMessage, 'error');
     console.error('Error loading providers:', error);
   }
 
@@ -130,9 +131,8 @@ export class ManageProvidersComponent implements OnInit {
       provider.id,
       provider.assetType
     ).pipe(
-      finalize(() => {
-        provider.isStatusChanging = false;
-      })
+      finalize(() => { provider.isStatusChanging = false; }),
+      takeUntil(this.destroy$)
     ).subscribe({
       next: (response) => this.handleStatusChangeSuccess(response, provider),
       error: (error) => this.handleStatusChangeError(error, provider)
@@ -165,9 +165,8 @@ export class ManageProvidersComponent implements OnInit {
   private rejectProvider(provider: UIProvider, notes: string): void {
     provider.isStatusChanging = true;
     this.superAdminService.rejectProvider(provider.id, provider.assetType, notes).pipe(
-      finalize(() => {
-        provider.isStatusChanging = false;
-      })
+      finalize(() => { provider.isStatusChanging = false; }),
+      takeUntil(this.destroy$)
     ).subscribe({
       next: (response) => this.handleStatusChangeSuccess(response, provider),
       error: (error) => this.handleStatusChangeError(error, provider)
@@ -176,28 +175,12 @@ export class ManageProvidersComponent implements OnInit {
 
   private handleStatusChangeSuccess(response: ProviderStatusChangeResponse, provider: UIProvider): void {
     provider.status = response.newStatus as unknown as UserStatus;
-    Swal.fire({
-      position: 'top-end',
-      toast: true,
-      title: 'Success',
-      text: response.message || 'Operation completed successfully',
-      icon: 'success',
-      timer: 3000,
-      showConfirmButton: false
-    });
+    this.showToast('Success', response.message || 'Operation completed successfully', 'success');
   }
 
   private handleStatusChangeError(error: any, provider: UIProvider): void {
     console.error('Full error:', error);
-    Swal.fire({
-      position: 'top-end',
-      toast: true,
-      title: 'Error',
-      text: error.message || 'Operation failed',
-      icon: 'error',
-      timer: 3000,
-      showConfirmButton: false
-    });
+    this.showToast('Error', error.message || 'Operation failed', 'error');
   }
 
   changeView(viewType: 'hospital' | 'hotel' | 'car-rental'): void {
@@ -248,26 +231,18 @@ export class ManageProvidersComponent implements OnInit {
     return pageNumbers;
   }
 
+  get rejectedCount(): number {
+    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.REJECTED).length;
+  }
+  get pendingCount(): number {
+    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.PENDING).length;
+  }
   get approvedCount(): number {
     return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.APPROVED).length;
   }
 
-  get rejectedCount(): number {
-    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.REJECTED).length;
-  }
-
-  get pendingCount(): number {
-    return this.providers.filter(p => this.getAssetStatus(p.status) === AssetStatus.PENDING).length;
-  }
-
   addNewProvider(): void {
-    if (this.currentView === 'hospital') {
-      this.router.navigate(['/super-admin/providers/hospitals/add']);
-    } else if (this.currentView === 'hotel') {
-      this.router.navigate(['/super-admin/providers/hotels/add']);
-    } else if (this.currentView === 'car-rental') {
-      this.router.navigate(['/super-admin/providers/car-rentals/add']);
-    }
+    this.router.navigate(['/super-admin/providers/add']);
   }
 
   getProviderType(provider: UIProvider): string {
@@ -275,16 +250,12 @@ export class ManageProvidersComponent implements OnInit {
       case ProviderType.HOSPITAL: return 'Hospital';
       case ProviderType.HOTEL: return 'Hotel';
       case ProviderType.CAR_RENTAL: return 'Car Rental';
-      default: return '';
+      default: return 'Unknown';
     }
   }
 
   viewProviderDetails(providerId: string): void {
-    const provider = this.providers.find(p => p.id === providerId);
-    if (provider) {
-      this.selectedProvider = provider;
-      this.showProviderModal = true;
-    }
+    this.router.navigate(['/super-admin/providers', providerId]);
   }
 
   closeProviderModal(): void {
@@ -293,21 +264,44 @@ export class ManageProvidersComponent implements OnInit {
   }
 
   get showingRange(): string {
-    const { page, pageSize, totalCount } = this.pagination;
-    if (totalCount === 0) return 'No results';
-    const start = (page - 1) * pageSize + 1;
-    const end = Math.min(page * pageSize, totalCount);
-    return `Showing ${start}–${end} of ${totalCount}`;
+    const start = (this.pagination.page - 1) * this.pagination.pageSize + 1;
+    const end = Math.min(this.pagination.page * this.pagination.pageSize, this.pagination.totalCount);
+    return `Showing ${start}–${end} of ${this.pagination.totalCount}`;
   }
 
   getAssetStatus(userStatus: number): AssetStatus {
-    // Map UserStatus to AssetStatus as appropriate for your business logic
     switch (userStatus) {
-      case 1: return AssetStatus.APPROVED;      // ACTIVE
-      case 2: return AssetStatus.PENDING;       // PENDING
-      case 3: return AssetStatus.REJECTED;      // SUSPENDED
-      case 0: return AssetStatus.UNDER_REVIEW;  // INACTIVE
+      case UserStatus.ACTIVE: return AssetStatus.APPROVED;
+      case UserStatus.PENDING: return AssetStatus.PENDING;
+      case UserStatus.INACTIVE: return AssetStatus.UNDER_REVIEW;
+      case UserStatus.SUSPENDED: return AssetStatus.REJECTED;
       default: return AssetStatus.PENDING;
     }
+  }
+
+  private showToast(title: string, text: string, icon: 'success' | 'error' | 'warning' | 'info'): void {
+    Swal.fire({
+      position: 'top-end',
+      toast: true,
+      title,
+      text,
+      icon,
+      timer: 3000,
+      showConfirmButton: false
+    });
+  }
+
+  get stats() {
+    return [
+      { title: 'Total Providers', value: this.pagination.totalCount, icon: this.icons.list, color: this.currentViewConfig.color as CardColor },
+      { title: 'Approved', value: this.approvedCount, icon: this.icons.approve, color: 'success' as CardColor },
+      { title: 'Pending', value: this.pendingCount, icon: this.icons.search, color: 'warning' as CardColor },
+      { title: 'Rejected', value: this.rejectedCount, icon: this.icons.reject, color: 'danger' as CardColor }
+    ];
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -34,7 +34,7 @@ export class CarRentalsAccountsComponent implements OnInit {
     this.errorMessage = '';
     const filters: any = { searchTerm: this.searchTerm };
     if (this.statusFilter !== 'all') {
-      filters.status = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
+      filters.UserStatus = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
     }
     this.superAdminService.getCarRentalProviders(this.pagination.page, this.pagination.pageSize, filters)
       .pipe(finalize(() => this.isLoading = false))
@@ -149,8 +149,8 @@ export class CarRentalsAccountsComponent implements OnInit {
       }
     });
   }
-  viewAccount(account: CarRentalProvider): void {
-    this.selectedAccount = account;
+  async viewAccount(account: CarRentalProvider): Promise<void> {
+    this.selectedAccount = await this.superAdminService.enrichCountryAndGovernorate(account);
     this.showAccountModal = true;
   }
   closeAccountModal(): void {

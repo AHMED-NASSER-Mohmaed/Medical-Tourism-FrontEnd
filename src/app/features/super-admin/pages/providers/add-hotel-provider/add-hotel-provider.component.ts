@@ -1,12 +1,14 @@
 // add-hotel-provider.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { SuperAdminService } from '../../../services/super-admin.service';
 import { 
   Gender,
   ProviderType,
   AssetStatus,
-  TimeObject
+  TimeObject,
+  CountriesGovernatesResponse,
+  CountryWithGovernates
 } from '../../../models/super-admin.model';
 import { Router } from '@angular/router';
 
@@ -16,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-hotel-provider.component.css'],
   standalone: false, // This component is not standalone, it uses Angular's FormsModule and ReactiveFormsModule
 })
-export class AddHotelProviderComponent {
+export class AddHotelProviderComponent implements OnInit {
   hotelForm: FormGroup;
   isLoading = false;
   apiError: string | null = null;
@@ -30,17 +32,11 @@ export class AddHotelProviderComponent {
     { id: 2, name: 'Arabic' },
     { id: 3, name: 'French' }
   ];
-  countries = [
-    { id: 1, name: 'Egypt' },
-    { id: 2, name: 'Saudi Arabia' },
-    { id: 3, name: 'United Arab Emirates' }
-  ];
-  governorates = [
-    { id: 1, name: 'Cairo' },
-    { id: 2, name: 'Alexandria' },
-    { id: 3, name: 'Giza' }
-  ];
+  countries: { id: number; name: string }[] = [];
+  governorates: { id: number; name: string }[] = [];
   facilitiesList = ['WiFi', 'Parking', 'Spa', 'Gym', 'Bar', 'Room Service'];
+
+  private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -93,8 +89,34 @@ export class AddHotelProviderComponent {
       validators: [this.passwordMatchValidator]
     });
 
-    // Initialize with default values for arrays
     this.addDefaultArrayValues();
+  }
+
+  ngOnInit(): void {
+    this.superAdminService.getCountriesAndGovernates().subscribe({
+      next: (response: CountriesGovernatesResponse) => {
+        this.countriesMap = response.data;
+        this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+      },
+      error: () => {
+        this.apiError = 'Failed to load countries and governates.';
+      }
+    });
+
+    this.hotelForm.get('countryId')?.valueChanges.subscribe((countryId: number) => {
+      this.updateGovernorates(countryId);
+    });
+  }
+
+  private updateGovernorates(countryId: number) {
+    if (!countryId || !this.countriesMap[countryId]) {
+      this.governorates = [];
+      this.hotelForm.patchValue({ governorateId: null });
+      return;
+    }
+    const govObj = this.countriesMap[countryId].governates;
+    this.governorates = Object.values(govObj).map(g => ({ id: g.governateId, name: g.governateName }));
+    this.hotelForm.patchValue({ governorateId: null });
   }
 
   private passwordMatchValidator(form: FormGroup) {
@@ -148,7 +170,8 @@ export class AddHotelProviderComponent {
     if (this.hotelForm.valid) {
       this.isLoading = true;
       const formValue = this.hotelForm.value;
-
+      const country = this.countriesMap[formValue.countryId];
+      const governate = country?.governates[formValue.governorateId];
       // Prepare payload for the service
       const payload = {
         // User account fields
@@ -162,7 +185,9 @@ export class AddHotelProviderComponent {
         address: formValue.address,
         city: formValue.city,
         governorateId: Number(formValue.governorateId),
+        governorateName: governate?.governateName,
         countryId: Number(formValue.countryId),
+        countryName: country?.countryName,
         dateOfBirth: new Date(formValue.dateOfBirth).toISOString(),
 
         // Asset fields

@@ -635,5 +635,46 @@ private clearProviderCaches(): void {
     this.isCarRentalProviderCacheLoaded = false;
   }
 
+  // ==================== COUNTRIES & GOVERNATES ====================
 
+  getCountriesAndGovernates(): Observable<{
+    data: {
+      [countryId: string]: {
+        countryId: number;
+        countryName: string;
+        governates: {
+          [governateId: string]: {
+            governateId: number;
+            governateName: string;
+          };
+        };
+      };
+    };
+  }> {
+    return this.http.get<{ data: { [countryId: string]: { countryId: number; countryName: string; governates: { [governateId: string]: { governateId: number; governateName: string; }; }; }; }; }>(
+      `${environment.apiUrl}/Country/Countries-Governates`
+    );
+  }
+
+  /**
+   * Maps countryId/governorateId to country/governorate names for a user object.
+   * If the user object is missing country/governorate names, it fills them in using the countries-governates API.
+   * Returns a Promise that resolves to the enriched user object.
+   */
+  async enrichCountryAndGovernorate(user: any): Promise<any> {
+    if ((user.country && user.governorate) || (!user.countryId && !user.governorateId)) {
+      return user;
+    }
+    const countriesData = await this.getCountriesAndGovernates().toPromise();
+    if (!countriesData || !countriesData.data) return user;
+    const countryObj = countriesData.data?.[user.countryId];
+    if (countryObj) {
+      user.country = countryObj.countryName;
+      const govObj = countryObj.governates?.[user.governorateId];
+      if (govObj) {
+        user.governorate = govObj.governateName;
+      }
+    }
+    return user;
+  }
 }

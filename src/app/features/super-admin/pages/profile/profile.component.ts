@@ -27,8 +27,14 @@ export class SuperAdminProfileComponent implements OnInit {
 
   loadProfile() {
     this.superAdminService.getProfile().subscribe({
-      next: (profile) => {
-        this.profile = profile;
+      next: (profile: any) => {
+        // Map API fields to model fields if needed
+        this.profile = {
+          ...profile,
+          governorate: profile.governorateName ?? profile.governorate ?? '',
+          country: profile.countryName ?? profile.country ?? '',
+          imageURL: profile.imageURL || null
+        };
       },
       error: (err) => console.error('Error loading profile:', err)
     });

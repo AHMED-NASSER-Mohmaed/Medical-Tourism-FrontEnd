@@ -14,7 +14,7 @@ import {
 export class DashboardShellComponent {
   title = 'Elagy Admin';
   userRole = 'Super Admin';
-  avatar = 'https://in.pinterest.com/pin/68398488086750379/';
+  avatar = 'assets/images/www-avatat.png';
   breadcrumbs = [
     { label: 'Home', link: '/super-admin/dashboard' },
     { label: 'Dashboard' }

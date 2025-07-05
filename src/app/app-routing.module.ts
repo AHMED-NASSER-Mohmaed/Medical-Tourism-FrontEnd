@@ -42,6 +42,8 @@ const routes: Routes = [
     loadChildren: () => import('./features/patient/patient.module').then(m => m.PatientModule)
   },
 
+  { path: 'hotels', loadChildren: () => import('./features/hotel-website/hotel-website.module').then(m => m.HotelWebsiteModule) },
+
 
   {
     path: '**',

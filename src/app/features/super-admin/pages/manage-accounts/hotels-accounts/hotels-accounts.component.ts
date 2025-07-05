@@ -34,7 +34,7 @@ export class HotelsAccountsComponent implements OnInit {
     this.errorMessage = '';
     const filters: any = { searchTerm: this.searchTerm };
     if (this.statusFilter !== 'all') {
-      filters.status = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
+      filters.UserStatus = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
     }
     this.superAdminService.getHotelProviders(this.pagination.page, this.pagination.pageSize, filters)
       .pipe(finalize(() => this.isLoading = false))
@@ -149,8 +149,8 @@ export class HotelsAccountsComponent implements OnInit {
       }
     });
   }
-  viewAccount(account: HotelProvider): void {
-    this.selectedAccount = account;
+  async viewAccount(account: HotelProvider): Promise<void> {
+    this.selectedAccount = await this.superAdminService.enrichCountryAndGovernorate(account);
     this.showAccountModal = true;
   }
   closeAccountModal(): void {

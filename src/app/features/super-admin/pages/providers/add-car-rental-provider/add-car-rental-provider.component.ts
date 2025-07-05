@@ -1,5 +1,5 @@
 // add-car-rental-provider.component.ts
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators, FormArray } from '@angular/forms';
 import { SuperAdminService } from '../../../services/super-admin.service';
 import { 
@@ -10,7 +10,9 @@ import {
   ProviderType,
   AssetStatus,
   TimeObject,
-  UserBase
+  UserBase,
+  CountriesGovernatesResponse,
+  CountryWithGovernates
 } from '../../../models/super-admin.model';
 import { Router } from '@angular/router';
 import { faCar, faUser, faEnvelope, faLock, faPhone, faVenusMars, faMapMarkerAlt, faCalendar } from '@fortawesome/free-solid-svg-icons';
@@ -21,7 +23,7 @@ import { faCar, faUser, faEnvelope, faLock, faPhone, faVenusMars, faMapMarkerAlt
   styleUrls: ['./add-car-rental-provider.component.css'],
   standalone: false,
 })
-export class AddCarRentalProviderComponent {
+export class AddCarRentalProviderComponent implements OnInit {
   // Icons
   faCar = faCar;
   faUser = faUser;
@@ -50,16 +52,9 @@ export class AddCarRentalProviderComponent {
     { id: 2, name: 'Arabic' },
     { id: 3, name: 'French' }
   ];
-  countries = [
-    { id: 1, name: 'Egypt' },
-    { id: 2, name: 'Saudi Arabia' },
-    { id: 3, name: 'United Arab Emirates' }
-  ];
-  governorates = [
-    { id: 1, name: 'Cairo' },
-    { id: 2, name: 'Alexandria' },
-    { id: 3, name: 'Giza' }
-  ];
+  countries: { id: number; name: string }[] = [];
+  governorates: { id: number; name: string }[] = [];
+  private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -101,6 +96,33 @@ export class AddCarRentalProviderComponent {
 
     // Initialize with default values to prevent empty arrays
     this.addDefaultArrayValues();
+  }
+
+  ngOnInit(): void {
+    this.superAdminService.getCountriesAndGovernates().subscribe({
+      next: (response: CountriesGovernatesResponse) => {
+        this.countriesMap = response.data;
+        this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+      },
+      error: () => {
+        this.apiError = 'Failed to load countries and governates.';
+      }
+    });
+
+    this.carRentalForm.get('countryId')?.valueChanges.subscribe((countryId: number) => {
+      this.updateGovernorates(countryId);
+    });
+  }
+
+  private updateGovernorates(countryId: number) {
+    if (!countryId || !this.countriesMap[countryId]) {
+      this.governorates = [];
+      this.carRentalForm.patchValue({ governorateId: null });
+      return;
+    }
+    const govObj = this.countriesMap[countryId].governates;
+    this.governorates = Object.values(govObj).map(g => ({ id: g.governateId, name: g.governateName }));
+    this.carRentalForm.patchValue({ governorateId: null });
   }
 
   // Add default values to all array controls
@@ -154,6 +176,8 @@ export class AddCarRentalProviderComponent {
     if (this.carRentalForm.valid) {
       this.isLoading = true;
       const formValue = this.carRentalForm.value;
+      const country = this.countriesMap[formValue.countryId];
+      const governate = country?.governates[formValue.governorateId];
       
       // Prepare the complete payload with all required properties
       const providerData: Omit<CarRentalProvider, keyof UserBase | "assetId"> = {
@@ -190,7 +214,9 @@ export class AddCarRentalProviderComponent {
         address: formValue.address,
         city: formValue.city,
         governorateId: Number(formValue.governorateId), // Convert to number
+        governorateName: governate?.governateName,
         countryId: Number(formValue.countryId), // Convert to number
+        countryName: country?.countryName,
         dateOfBirth: new Date(formValue.dateOfBirth).toISOString(), // Convert to ISO string
         
         // Provider data
