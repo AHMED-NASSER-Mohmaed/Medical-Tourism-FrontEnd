@@ -30,13 +30,13 @@
               <th>Active</th>
             </tr>
           </thead>
-          <tbody>
+            <tbody>
             <tr *ngFor="let schedule of appointments.items">
               <td>{{schedule.id}}</td>
               <td>{{schedule.doctorName}}</td>
               <td>{{schedule.specialty}}</td>
               <td>{{schedule.hospital}}</td>
-              <td>{{schedule.dayOfWeek?.name}}</td>
+              <td>{{schedule.dayOfWeek.name}}</td>
               <td>{{schedule.startTime}}</td>
               <td>{{schedule.endTime}}</td>
               <td>{{schedule.timeSlotSize}}</td>
@@ -46,12 +46,33 @@
               <td>{{schedule.bookedSlots}}</td>
               <td>{{schedule.cancelledSlots}}</td>
               <td>
-                <span class="badge btn" [ngClass]="{'badge-success': schedule.isActive, 'badge-danger': !schedule.isActive}" (click)="ChangeStatus(schedule.id, !schedule.isActive)">
-                  {{schedule.isActive ? 'Active' : 'Inactive'}}
-                </span>
+              <span class="badge btn" [ngClass]="{'badge-success': schedule.isActive, 'badge-danger': !schedule.isActive}" (click)="ChangeStatus(schedule.id, !schedule.isActive)">
+                {{schedule.isActive ? 'Active' : 'Inactive'}}
+              </span>
               </td>
             </tr>
-          </tbody>
+            </tbody>
+           <tfoot *ngIf="appointments.totalCount! > 1">
+            <tr>
+              <td colspan="14">
+                <nav>
+                  <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item" [class.disabled]="appointments.pageNumber === 1">
+                      <a class="page-link" (click)="goToPage(appointments.pageNumber! - 1)" style="cursor:pointer;">Previous</a>
+                    </li>
+                    <li class="page-item"
+                        *ngFor="let page of [].constructor(appointments.totalCount); let i = index"
+                        [class.active]="appointments.pageNumber === (i + 1)">
+                      <a class="page-link" (click)="goToPage(i + 1)" style="cursor:pointer;">{{i + 1}}</a>
+                    </li>
+                    <li class="page-item" [class.disabled]="appointments.pageNumber === appointments.totalCount">
+                      <a class="page-link" (click)="goToPage(appointments.pageNumber! + 1)" style="cursor:pointer;">Next</a>
+                    </li>
+                  </ul>
+                </nav>
+              </td>
+            </tr>
+          </tfoot>
         </table>
       </div>
     </div>
