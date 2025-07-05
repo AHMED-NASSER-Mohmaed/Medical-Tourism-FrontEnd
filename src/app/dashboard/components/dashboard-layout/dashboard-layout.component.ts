@@ -1,5 +1,5 @@
 // src/app/dashboard/components/dashboard-layout/dashboard-layout.component.ts
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardMenuItem, BreadcrumbItem } from '../dashboard.types';
 
 @Component({
@@ -14,10 +14,15 @@ export class DashboardLayoutComponent {
   @Input() userRole = '';
   @Input() breadcrumbs: BreadcrumbItem[] = [];
   @Input() avatar = 'assets/default-avatar.png';
+  @Output() logout = new EventEmitter<void>();
   
   isSidebarCollapsed = false;
 
   toggleSidebar(): void {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
+  onLogout() {
+    this.logout.emit();
   }
 }

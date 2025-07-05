@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { 
   faShieldAlt, faUsersCog, faUserInjured, 
   faHospital, faHotel, faCar, faListAlt, 
   faEdit, faHeadset, faPlus, faUser, faKey, faEnvelope 
 } from '@fortawesome/free-solid-svg-icons';
+import { AuthService } from '../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-shell',
@@ -66,4 +68,11 @@ export class DashboardShellComponent {
       isExpanded: false
     }
   ];
+
+  constructor(@Inject(AuthService) public auth: AuthService, public router: Router) {}
+
+  onLogout() {
+    this.auth.logout();
+    this.router.navigate(['/auth/login']);
+  }
 }

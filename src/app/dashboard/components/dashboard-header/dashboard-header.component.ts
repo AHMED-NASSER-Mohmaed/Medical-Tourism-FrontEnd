@@ -14,4 +14,9 @@ export class DashboardHeaderComponent {
   @Input() avatar = 'assets/images/www-avatat.png';
   @Input() breadcrumbs: BreadcrumbItem[] = [];
   @Output() menuToggle = new EventEmitter<void>();
+  @Output() logout = new EventEmitter<void>();
+
+  onLogout() {
+    this.logout.emit();
+  }
 }
