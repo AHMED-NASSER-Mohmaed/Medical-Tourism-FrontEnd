@@ -1,0 +1,68 @@
+<div class="container py-5 animate__animated animate__fadeIn">
+  <div class="row">
+    <div class="col-md-3 mb-4">
+      <div class="card shadow-sm animate__animated animate__fadeInLeft">
+        <div class="card-header bg-primary text-white">
+          <h5 class="mb-0"><i class="bi bi-funnel"></i> Refine Search</h5>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="mb-3">
+              <label for="searchRoom" class="form-label">Search by Room Number</label>
+              <input type="text" class="form-control" id="searchRoom" placeholder="e.g., 101">
+            </div>
+            <div class="mb-3">
+              <label for="roomType" class="form-label">Room Type</label>
+              <select class="form-select" id="roomType">
+                <option value="">All Types</option>
+                <option value="0">Single</option>
+                <option value="1">Double</option>
+                <option value="2">Suite</option>
+                <option value="3">Family</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="minPrice" class="form-label">Min Price</label>
+              <input type="number" class="form-control" id="minPrice" placeholder="0">
+            </div>
+            <div class="mb-3">
+              <label for="maxPrice" class="form-label">Max Price</label>
+              <input type="number" class="form-control" id="maxPrice" placeholder="1000">
+            </div>
+            <button type="button" class="btn btn-primary w-100 animate__animated animate__pulse animate__infinite"><i class="bi bi-search"></i> Apply Filters</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div *ngIf="loading" class="d-flex justify-content-center align-items-center" style="height: 300px;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </div>
+      <div *ngIf="error" class="alert alert-danger animate__animated animate__shakeX">{{ error }}</div>
+      <div *ngIf="rooms.length" class="row g-4">
+        <div class="col-md-6 col-lg-4" *ngFor="let room of rooms">
+          <div class="card shadow-lg border-0 animate__animated animate__zoomIn">
+            <div class="card-header bg-info text-white text-center rounded-top">
+              <h5 class="mb-0"><i class="bi bi-door-closed"></i> Room {{ room.roomNumber }}</h5>
+            </div>
+            <img [src]="room.imageUrls?.[0] || 'https://via.placeholder.com/300x180'" class="card-img-top" style="height: 180px; object-fit: cover;">
+            <div class="card-body">
+              <ul class="list-group list-group-flush mb-2">
+                <li class="list-group-item"><i class="bi bi-currency-dollar"></i> {{ room.price | currency }}</li>
+                <li class="list-group-item"><i class="bi bi-people"></i> Max Occupancy: {{ room.maxOccupancy }}</li>
+                <li class="list-group-item"><i class="bi bi-info-circle"></i> {{ room.description }}</li>
+                <li class="list-group-item"><i class="bi bi-check-circle-fill text-success"></i> Amenities: <span *ngFor="let a of room.amenities" class="badge bg-success me-1">{{ a }}</span></li>
+                <li class="list-group-item"><i class="bi bi-eye"></i> View: {{ room.viewType }}</li>
+                <li class="list-group-item"><i class="bi bi-cup-straw"></i> Breakfast: <span [ngClass]="room.includesBreakfast ? 'text-success' : 'text-danger'">{{ room.includesBreakfast ? 'Yes' : 'No' }}</span></li>
+              </ul>
+              <a [routerLink]="['/hotel-provider/rooms', room.id]" class="btn btn-outline-primary w-100 mt-2 animate__animated animate__pulse animate__infinite"><i class="bi bi-eye"></i> View Details</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!rooms.length && !loading" class="alert alert-info animate__animated animate__fadeIn">No rooms found.</div>
+    </div>
+  </div>
+</div>

@@ -136,7 +136,7 @@ export class HospitalService {
             ]
         }
     ];
-    
+
     constructor(private http: HttpClient) {}
 
     getHospitals(): Observable<any> {

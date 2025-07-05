@@ -1,0 +1,37 @@
+<!-- src/app/dashboard/components/dashboard-header/dashboard-header.component.html -->
+<header class="dashboard-header">
+  <div class="header-content">
+    <div class="header-left">
+      <button class="menu-toggle" (click)="menuToggle.emit()">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <div class="header-title">
+        <h1>{{ title }}</h1>
+        <nav class="breadcrumb-nav">
+          @for (crumb of breadcrumbs; track crumb.label; let last = $last) {
+            <span class="breadcrumb-item">
+              @if (!last && crumb.link) {
+                <a [routerLink]="crumb.link">{{ crumb.label }}</a>
+                <span class="separator">/</span>
+              } @else {
+                <span>{{ crumb.label }}</span>
+              }
+            </span>
+          }
+        </nav>
+      </div>
+    </div>
+    
+    <div class="user-profile">
+      <div class="user-info">
+        <div class="user-role">{{ userRole }}</div>
+        <div class="last-login">Last login: Today</div>
+      </div>
+      <div class="user-avatar">
+        <img [src]="avatar" alt="User Avatar">
+        <span class="status-indicator"></span>
+      </div>
+    </div>
+  </div>
+</header>

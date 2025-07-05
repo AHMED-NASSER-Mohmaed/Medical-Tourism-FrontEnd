@@ -1,0 +1,112 @@
+.data-table-card {
+  border-radius: 1.5rem;
+  background: rgba(255,255,255,0.97);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  overflow: hidden;
+}
+
+.table-responsive {
+  margin-bottom: 0;
+}
+
+.table {
+  border-radius: 1rem;
+  overflow: hidden;
+  background: transparent;
+  font-size: 1.04rem;
+  letter-spacing: 0.01em;
+}
+
+.table thead th {
+  border-top: none;
+  font-weight: 700;
+  color: #22223b;
+  background: #f8fafc;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1.07rem;
+  letter-spacing: 0.02em;
+}
+
+.table tbody tr {
+  transition: background 0.2s;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+  background-color: #f6f8fa;
+}
+
+.table-hover tbody tr:hover {
+  background: linear-gradient(90deg, #e0f2fe 0%, #f1f5f9 100%);
+  transition: background 0.2s;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+  padding: 0.85rem 1rem;
+}
+
+.action-buttons .btn {
+  margin-right: 0.25rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.93rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.07);
+  transition: background 0.15s, color 0.15s;
+}
+
+.action-buttons .btn:last-child {
+  margin-right: 0;
+}
+
+.action-buttons .btn-primary {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  border: none;
+  color: #fff;
+}
+
+.action-buttons .btn-outline-secondary {
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+  background: #fff;
+}
+
+.action-buttons .btn-outline-secondary:hover {
+  background: #e0e7ef;
+  color: #22223b;
+}
+
+.pagination .page-link {
+  border-radius: 0.5rem !important;
+  margin: 0 2px;
+  color: #3b82f6;
+  border: none;
+  background: #f1f5f9;
+  transition: background 0.2s, color 0.2s;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link:hover {
+  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
+  color: #fff;
+}
+
+.no-results {
+  background: #f8fafc;
+  border-radius: 1rem;
+  padding: 2rem 1rem;
+  text-align: center;
+  color: #64748b;
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+@media (max-width: 991.98px) {
+  .data-table-card {
+    border-radius: 1rem;
+  }
+  .table th, .table td {
+    font-size: 0.97rem;
+    padding: 0.7rem 0.5rem;
+  }
+}

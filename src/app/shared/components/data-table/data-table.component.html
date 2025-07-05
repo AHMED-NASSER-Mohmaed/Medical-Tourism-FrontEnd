@@ -1,0 +1,71 @@
+<div class="card border-0 shadow-lg rounded-4 data-table-card mb-4">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover table-striped align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th *ngFor="let col of columns" class="fw-bold text-dark">{{ col.label }}</th>
+            <th *ngIf="!rowTemplate" class="fw-bold text-dark">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Custom row template -->
+          <ng-container *ngIf="rowTemplate; else defaultRow">
+            <ng-container *ngFor="let item of items">
+              <ng-template [ngTemplateOutlet]="rowTemplate" [ngTemplateOutletContext]="{ $implicit: item }"></ng-template>
+            </ng-container>
+          </ng-container>
+
+          <!-- Default row template -->
+          <ng-template #defaultRow>
+            <tr *ngFor="let item of items">
+              <td *ngFor="let col of columns">{{ getDisplayValue(item, col.key) }}</td>
+              <td class="action-buttons">
+                <ng-content select="[actions]"></ng-content>
+              </td>
+            </tr>
+          </ng-template>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="d-flex justify-content-center my-4" *ngIf="isLoading">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <!-- No Results -->
+    <div class="no-results d-flex flex-column align-items-center justify-content-center"
+         *ngIf="!isLoading && items.length === 0">
+      <i class="fas fa-folder-open fa-2x mb-2 text-primary"></i>
+      <div>No results found</div>
+      <button class="btn btn-primary mt-3" *ngIf="searchTerm" (click)="onClearSearch()">
+        <i class="fas fa-times me-1"></i>Clear search
+      </button>
+    </div>
+
+    <!-- Pagination -->
+    <nav *ngIf="pagination && pagination.totalPages > 1" class="mt-3">
+      <ul class="pagination justify-content-center flex-wrap mb-0">
+        <li class="page-item me-1" [class.disabled]="pagination.pageNumber === 1">
+          <a class="page-link rounded" (click)="onPageChange(pagination.pageNumber - 1)">
+            <i class="fas fa-angle-left"></i>
+          </a>
+        </li>
+        <li class="page-item me-1" *ngFor="let page of getPages()" 
+            [class.active]="page === pagination.pageNumber"
+            [class.disabled]="page === -1">
+          <a *ngIf="page !== -1" class="page-link rounded" (click)="onPageChange(page)">{{ page }}</a>
+          <span *ngIf="page === -1" class="page-link rounded disabled">...</span>
+        </li>
+        <li class="page-item" [class.disabled]="pagination.pageNumber === pagination.totalPages">
+          <a class="page-link rounded" (click)="onPageChange(pagination.pageNumber + 1)">
+            <i class="fas fa-angle-right"></i>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

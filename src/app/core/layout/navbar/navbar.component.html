@@ -1,0 +1,108 @@
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <!-- Brand Logo -->
+    <a class="navbar-brand" href="#">
+      <i class="fas fa-hospital-alt me-2"></i>Elagy
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/treatments" routerLinkActive="active">Treatments</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/hospitals" routerLinkActive="active">Hospitals</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/hotels" routerLinkActive="active">Hotels</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/about-us" routerLinkActive="active">About Us</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/faq" routerLinkActive="active">FAQ</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center">
+        <!-- Show Register & Login when not logged in -->
+        <ng-container *ngIf="!isLoggedIn; else profileMenu">
+          <!-- Register Dropdown -->
+<div class="custom-dropdown" (mouseleave)="dropdownOpen = false">
+  <button
+    class="btn btn-outline-primary me-2 dropdown-toggle"
+    type="button"
+    (click)="dropdownOpen = !dropdownOpen"
+    [attr.aria-expanded]="dropdownOpen"
+  >
+    Register
+  </button>
+<ul class="dropdown-menu show" *ngIf="dropdownOpen">
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/patient" (click)="dropdownOpen = false">
+      Patient Registration
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/car" (click)="dropdownOpen = false">
+      Car Rental Registration
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/hospital" (click)="dropdownOpen = false">
+      Hospital Registration
+    </a>
+  </li>
+  <li>
+    <a class="dropdown-item" routerLink="/auth/register/hotel" (click)="dropdownOpen = false">
+      Hotel Registration
+    </a>
+  </li>
+</ul>
+</div>
+
+          <!-- Login Button -->
+          <a (click)="login()" class="btn btn-primary">Login</a>
+        </ng-container>
+
+        <!-- Profile Menu when logged in -->
+        <ng-template #profileMenu>
+          <div class="dropdown">
+            <button class="btn btn-outline-primary me-2 dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+              <img [src]="userImage" alt="User" class="rounded-circle me-2" width="30" height="30" />
+              <span>{{ userName }}</span>
+              <i class="fas fa-chevron-down ms-2"></i> <!-- Dropdown icon -->
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="userDropdown">
+              <!-- Profile Info -->
+              <li>
+                <a class="dropdown-item" (click)="goToDashboard()">
+                  <i class="fas fa-user me-2"></i>My Profile
+                </a>
+              </li>
+              <!-- Profile Settings -->
+              <li>
+                <a class="dropdown-item" (click)="goToProfileSettings()">
+                  <i class="fas fa-cogs me-2"></i>Profile Settings
+                </a>
+              </li>
+              <li><hr class="dropdown-divider"></li>
+              <!-- Logout -->
+              <li>
+                <a class="dropdown-item" (click)="logout()">
+                  <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </a>
+              </li>
+            </ul>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</nav>

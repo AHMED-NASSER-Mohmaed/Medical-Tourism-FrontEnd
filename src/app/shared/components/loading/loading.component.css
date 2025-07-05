@@ -1,0 +1,24 @@
+/* Center the overlay and make it cover the full screen */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Optional: darkens the background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Increase the size of the spinner */
+.loading-spinner .spinner-border {
+  width: 100px;  /* Adjust the size of the spinner */
+  height: 100px; /* Adjust the size of the spinner */
+}
+
+/* Optional: Add spinner animation */
+.spinner-border {
+  border-width: 8px; /* Makes the spinner thicker */
+}

@@ -1,0 +1,187 @@
+<div class="card border-0 shadow-lg rounded-4 add-patient-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <i class="fas fa-user-injured me-2 text-primary"></i>
+      Register New Patient
+    </h5>
+    <p class="text-muted mb-0">Fill in the details to register a new patient</p>
+  </div>
+  <div class="card-body">
+    <div *ngIf="apiError" class="alert alert-danger mb-4">
+      <strong>Error:</strong> {{ apiError }}
+    </div>
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+            <label for="firstName">First Name</label>
+            <div *ngIf="patientForm.get('firstName')?.invalid && patientForm.get('firstName')?.touched" class="form-text text-danger ms-1">
+              First name is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+            <label for="lastName">Last Name</label>
+            <div *ngIf="patientForm.get('lastName')?.invalid && patientForm.get('lastName')?.touched" class="form-text text-danger ms-1">
+              Last name is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email">
+            <label for="email">Email</label>
+            <div *ngIf="patientForm.get('email')?.errors?.['required']" class="form-text text-danger ms-1">
+              Email is required
+            </div>
+            <div *ngIf="patientForm.get('email')?.errors?.['email']" class="form-text text-danger ms-1">
+              Please enter a valid email
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
+            <label for="phone">Phone</label>
+            <div *ngIf="patientForm.get('phone')?.invalid && patientForm.get('phone')?.touched" class="form-text text-danger ms-1">
+              Phone is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
+            <label for="password">Password</label>
+            <div *ngIf="patientForm.get('password')?.invalid && patientForm.get('password')?.touched" class="form-text text-danger ms-1">
+              Password must be at least 8 characters
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
+            <label for="confirmPassword">Confirm Password</label>
+            <div *ngIf="patientForm.errors?.['passwordMismatch'] && patientForm.get('confirmPassword')?.touched" class="form-text text-danger ms-1">
+              Passwords must match
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating">
+            <select class="form-select" id="gender" formControlName="gender">
+              <option [value]="Gender.UNSPECIFIED">Select Gender</option>
+              <option [value]="Gender.MALE">Male</option>
+              <option [value]="Gender.FEMALE">Female</option>
+            </select>
+            <label for="gender">Gender</label>
+            <div *ngIf="patientForm.get('gender')?.invalid && patientForm.get('gender')?.touched" class="form-text text-danger ms-1">
+              Gender is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating">
+            <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date of Birth">
+            <label for="dateOfBirth">Date of Birth</label>
+            <div *ngIf="patientForm.get('dateOfBirth')?.invalid && patientForm.get('dateOfBirth')?.touched" class="form-text text-danger ms-1">
+              Date of birth is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
+            <label for="city">City</label>
+            <div *ngIf="patientForm.get('city')?.invalid && patientForm.get('city')?.touched" class="form-text text-danger ms-1">
+              City is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating position-relative">
+            <select class="form-select" id="countryId" formControlName="countryId" [disabled]="countries.length === 0 || isLoading">
+              <option value="">Select Country</option>
+              <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+            </select>
+            <label for="countryId"><i class="fas fa-globe-africa me-1 text-primary"></i> Country</label>
+            <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+            <div *ngIf="patientForm.get('countryId')?.invalid && patientForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+              Country is required
+            </div>
+            <div *ngIf="!isLoading && countries.length === 0" class="form-text text-warning ms-1">
+              No countries available
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating position-relative">
+            <select class="form-select" id="governorateId" formControlName="governorateId" [disabled]="governorates.length === 0 || !patientForm.get('countryId')?.value || isLoading">
+              <option value="">Select Governorate</option>
+              <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
+            </select>
+            <label for="governorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Governorate</label>
+            <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+            <div *ngIf="patientForm.get('governorateId')?.invalid && patientForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+              Governorate is required
+            </div>
+            <div *ngIf="!isLoading && governorates.length === 0 && patientForm.get('countryId')?.value" class="form-text text-warning ms-1">
+              No governorates available for this country
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
+            <label for="address">Address</label>
+            <div *ngIf="patientForm.get('address')?.invalid && patientForm.get('address')?.touched" class="form-text text-danger ms-1">
+              Address is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating">
+            <select class="form-select" id="bloodGroup" formControlName="bloodGroup">
+              <option value="">Select Blood Group</option>
+              <option *ngFor="let bg of bloodGroups" [value]="bg">{{ bg }}</option>
+            </select>
+            <label for="bloodGroup">Blood Group</label>
+            <div *ngIf="patientForm.get('bloodGroup')?.invalid && patientForm.get('bloodGroup')?.touched" class="form-text text-danger ms-1">
+              Blood group is required
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="height" formControlName="height" placeholder="Height (cm)">
+            <label for="height">Height (cm)</label>
+            <div *ngIf="patientForm.get('height')?.invalid && patientForm.get('height')?.touched" class="form-text text-danger ms-1">
+              Height is required (30-250 cm)
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="weight" formControlName="weight" placeholder="Weight (kg)">
+            <label for="weight">Weight (kg)</label>
+            <div *ngIf="patientForm.get('weight')?.invalid && patientForm.get('weight')?.touched" class="form-text text-danger ms-1">
+              Weight is required (2-300 kg)
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mt-4">
+          <div class="d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="patientForm.invalid || isLoading">
+              <i class="fas fa-user-injured me-2"></i>{{ isLoading ? 'Creating...' : 'Register Patient' }}
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4" routerLink="/super-admin/manage-accounts/patients">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div> 

@@ -1,0 +1,238 @@
+<div class="card border-0 shadow-lg rounded-4 add-hospital-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <fa-icon [icon]="faHospital" class="me-2 text-primary"></fa-icon>
+      Register New Hospital Provider
+    </h5>
+    <p class="text-muted mb-0">Fill in the details to register a new healthcare facility</p>
+  </div>
+  <div class="card-body">
+    <form [formGroup]="hospitalForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <div class="row g-4">
+
+        <!-- User Info -->
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+            <label for="firstName">First Name</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+            <label for="lastName">Last Name</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
+            <label for="phone">Phone</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="email" formControlName="email" placeholder="User Email">
+            <label for="email">User Email</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
+            <label for="password">Password</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
+            <label for="confirmPassword">Confirm Password</label>
+          </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="col-md-6">
+          <label class="form-label">Gender</label>
+          <select class="form-select" formControlName="gender">
+            <option [value]="0">Male</option>
+            <option [value]="1">Female</option>
+          </select>
+        </div>
+
+        <!-- Date of Birth -->
+        <div class="col-md-6">
+          <label class="form-label">Date of Birth</label>
+          <input type="date" class="form-control" formControlName="dateOfBirth">
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
+            <label for="address">Address</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
+            <label for="city">City</label>
+          </div>
+        </div>
+
+        <!-- Country -->
+        <div class="col-md-6">
+          <div class="form-floating position-relative">
+            <select class="form-select" formControlName="countryId" [disabled]="countries.length === 0 || isLoading">
+              <option value="">Select Country</option>
+              <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+            </select>
+            <label for="countryId"><i class="fas fa-globe-africa me-1 text-primary"></i> Country</label>
+            <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+            <div *ngIf="hospitalForm.get('countryId')?.invalid && hospitalForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+              Country is required
+            </div>
+            <div *ngIf="!isLoading && countries.length === 0" class="form-text text-warning ms-1">
+              No countries available
+            </div>
+          </div>
+        </div>
+        <!-- Governorate -->
+        <div class="col-md-6">
+          <div class="form-floating position-relative">
+            <select class="form-select" formControlName="governorateId" [disabled]="governorates.length === 0 || !hospitalForm.get('countryId')?.value || isLoading">
+              <option value="">Select Governorate</option>
+              <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
+            </select>
+            <label for="governorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Governorate</label>
+            <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+            <div *ngIf="hospitalForm.get('governorateId')?.invalid && hospitalForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+              Governorate is required
+            </div>
+            <div *ngIf="!isLoading && governorates.length === 0 && hospitalForm.get('countryId')?.value" class="form-text text-warning ms-1">
+              No governorates available for this country
+            </div>
+          </div>
+        </div>
+
+        <!-- Hospital Asset Info -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hospital Name">
+            <label for="assetName">Hospital Name</label>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <div class="form-floating">
+            <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 90px"></textarea>
+            <label for="assetDescription">Description</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="contact@hospital.com">
+            <label for="assetEmail">Asset Email</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Full physical address">
+            <label for="locationDescription">Location Description</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
+            <label for="latitude">Latitude</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
+            <label for="longitude">Longitude</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="number" class="form-control" id="numberOfDepartments" formControlName="numberOfDepartments" min="1" placeholder="Number of Departments">
+            <label for="numberOfDepartments">Number of Departments</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label fw-semibold text-primary mb-2">Facility Type</label>
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" formControlName="hasEmergencyRoom" id="hasEmergencyRoom">
+            <label class="form-check-label" for="hasEmergencyRoom">Has Emergency Room</label>
+          </div>
+          <div class="form-check mb-1">
+            <input class="form-check-input" type="checkbox" formControlName="isTeachingHospital" id="isTeachingHospital">
+            <label class="form-check-label" for="isTeachingHospital">Teaching Hospital</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" formControlName="emergencyServices" id="emergencyServices">
+            <label class="form-check-label" for="emergencyServices">24/7 Emergency Services</label>
+          </div>
+        </div>
+
+        <!-- Facilities (dynamic) -->
+        <div class="col-md-12" formArrayName="facilities">
+          <label class="form-label fw-semibold text-primary mb-2">Facilities</label>
+          <div *ngFor="let facility of facilities.controls; let i = index" class="input-group mb-2">
+            <input class="form-control" [formControlName]="i" placeholder="Facility name">
+            <button type="button" class="btn btn-outline-danger" (click)="removeFacility(i)" [disabled]="facilities.length === 1">Remove</button>
+          </div>
+          <button type="button" class="btn btn-outline-primary btn-sm" (click)="addFacility()">Add Facility</button>
+        </div>
+
+        <!-- Languages Supported (checkboxes) -->
+        <div class="col-md-12">
+          <label class="form-label fw-semibold text-primary mb-2">Languages Supported</label>
+          <div class="form-check form-check-inline" *ngFor="let lang of availableLanguages">
+            <input class="form-check-input" type="checkbox" [id]="'lang-' + lang.id" (change)="onLanguageChange($event, lang.id)">
+            <label class="form-check-label" [for]="'lang-' + lang.id">{{ lang.name }}</label>
+          </div>
+        </div>
+
+        <!-- Opening and Closing Time -->
+<div class="col-md-6" formGroupName="openingTime">
+          <label class="form-label fw-semibold text-primary mb-2">Opening Time</label>
+          <div class="row g-2">
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="Hour">
+            </div>
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="Minute">
+            </div>
+          </div>
+        </div>
+<div class="col-md-6" formGroupName="closingTime">
+          <label class="form-label fw-semibold text-primary mb-2">Closing Time</label>
+          <div class="row g-2">
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="Hour">
+            </div>
+            <div class="col-6">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="Minute">
+            </div>
+          </div>
+        </div>
+
+        <!-- Verification Notes -->
+        <div class="col-md-12">
+          <div class="form-floating">
+            <textarea class="form-control" id="verificationNotes" formControlName="verificationNotes" placeholder="Verification Notes" style="height: 60px"></textarea>
+            <label for="verificationNotes">Verification Notes</label>
+          </div>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="col-12 mt-4">
+          <div class="d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="hospitalForm.invalid">
+              <fa-icon [icon]="faHospital" class="me-2"></fa-icon>Register Hospital
+            </button>
+            <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="goBack()">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

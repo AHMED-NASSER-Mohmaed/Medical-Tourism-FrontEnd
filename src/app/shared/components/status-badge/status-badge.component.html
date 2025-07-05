@@ -1,0 +1,6 @@
+<span class="status-badge" [ngClass]="'bg-' + statusClass">
+  @if (statusIcon) {
+    <fa-icon [icon]="statusIcon" class="me-1"></fa-icon>
+  }
+  {{ displayText | titlecase }}
+</span>
