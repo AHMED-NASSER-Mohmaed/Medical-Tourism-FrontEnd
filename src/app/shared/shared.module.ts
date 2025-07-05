@@ -22,11 +22,12 @@ import { LoadingComponent } from './components/loading/loading.component';
     SkeletonLoaderComponent,
     DarkModeToggleComponent,
     LoadingComponent,
+    FontAwesomeModule
   ],
   imports: [
     CommonModule,
     FormsModule,
-    FontAwesomeModule,
+   
     StatusLabelPipe
   ],
   exports: [
@@ -37,7 +38,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     CommonModule,
     FormsModule,
     StatusLabelPipe,
-    LoadingComponent
+    LoadingComponent,
+    FontAwesomeModule
   ]
 })
 export class SharedModule { }

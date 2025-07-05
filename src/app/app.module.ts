@@ -21,11 +21,10 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 import { CoreModule } from './core/core.module';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { ReactiveFormsModule } from '@angular/forms';
 import { DisplayAllHospitalsComponent } from './features/patient/pages/Hospitals/display-all-hospitals/display-all-hospitals.component';
-import { HospitalClinicsComponent } from './features/patient/pages/Hospitals/hospital-clinics/hospital-clinics.component';
-import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hospital-doctors/hospital-doctors.component';
+
 
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -46,7 +45,7 @@ import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/d
 import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
 import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
 import { RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { TruncatePipe } from './truncate.pipe';
 //
 // import { TruncatePipe } from './pipes/truncate.pip';
@@ -72,8 +71,6 @@ export function HttpLoaderFactory(http: HttpClient) {
   declarations: [
     AppComponent,
     DisplayAllHospitalsComponent,
-    HospitalClinicsComponent,
-    HospitalDoctorsComponent,
    // DashBoardComponent,
     SpecialistsListComponent,
     SpecialistsFormComponent,
@@ -84,9 +81,10 @@ export function HttpLoaderFactory(http: HttpClient) {
     TruncatePipe
     ],
 
-  ],
+  
 
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -102,19 +100,11 @@ export function HttpLoaderFactory(http: HttpClient) {
     MatDividerModule,
     RouterModule,
     FormsModule,
-    ReactiveFormsModule
-
-
-  ],
-  providers: [DatePipe],
-
-
+    ReactiveFormsModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-
     HttpClientModule,
-    AppRoutingModule,
     DashboardModule,
     SharedModule,
     SuperAdminModule,
@@ -126,9 +116,8 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient]
       }
     })
-
   ],
-
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 

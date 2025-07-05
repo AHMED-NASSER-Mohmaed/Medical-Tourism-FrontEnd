@@ -1,44 +1,14 @@
-<div class="wrapper container-fluid p-0">
-<div class="sidebar bg-dark vh-100 p-3 text-white">
-  <div class="sidebar-brand mb-4">
-    <h1 class="h4">
-      <span>Hospital</span>Admin
-    </h1>
-  </div>
-
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item border-0 p-0 mb-2 bg-transparent">
-      <a class="nav-link d-flex align-items-center text-white" routerLink="dashboard" routerLinkActive="active">
-        <i class="fas fa-fw fa-tachometer-alt me-2"></i>
-        <span>Dashboard</span>
-      </a>
-    </li>
-
-    <li class="list-group-item border-0 p-0 mb-2 bg-transparent">
-      <a class="nav-link d-flex align-items-center text-white" routerLink="specialists" routerLinkActive="active">
-      <i class="fas fa-fw fa-clinic-medical me-2"></i>
-      <span>Specialists</span>
-      </a>
-    </li>
-    <li class="list-group-item border-0 p-0 mb-2 bg-transparent">
-      <a class="nav-link d-flex align-items-center text-white" routerLink="doctors" routerLinkActive="active">
-        <i class="fas fa-fw fa-user-md me-2"></i>
-        <span>Doctors</span>
-      </a>
-    </li>
-    <li class="list-group-item border-0 p-0 mb-2 bg-transparent">
-      <a class="nav-link d-flex align-items-center text-white" routerLink="appointments" routerLinkActive="active">
-        <i class="fas fa-fw fa-calendar-check me-2"></i>
-        <span>Appointments</span>
-      </a>
-    </li>
-    <li class="list-group-item border-0 p-0 bg-transparent">
-      <a class="nav-link d-flex align-items-center text-white" href="#">
-        <i class="fas fa-fw fa-cog me-2"></i>
-        <span>Settings</span>
-      </a>
-    </li>
-  </ul>
-</div>
-<router-outlet></router-outlet>
+<div class="app-root-bg min-vh-100 d-flex flex-column">
+  <app-dashboard-layout
+    [sidebarItems]="menuItems"
+    [headerTitle]="title"
+    [userRole]="userRole"
+    [breadcrumbs]="breadcrumbs"
+    [avatar]="avatar">
+    <div class="container-fluid px-2 px-md-4 py-4 app-content-area flex-grow-1 d-flex flex-column">
+      <div class="dashboard-glass-wrapper flex-grow-1">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </app-dashboard-layout>
 </div>
