@@ -1,0 +1,220 @@
+/* dashboard.component.css */
+
+/* Main layout structure */
+/* dashboard.component.css */
+.dashboard-container {
+  padding: 0;
+  margin: 0;
+}
+
+/* Tighten card spacing */
+.card {
+  margin-bottom: 0;
+  border-radius: 0;
+}
+
+/* Remove space between rows */
+.row {
+  margin: 0;
+}
+
+/* Adjust card header padding */
+.card-header {
+  padding: 0.75rem 1.25rem;
+}
+
+/* Compact card body */
+.card-body {
+  padding: 1rem;
+}
+
+
+.container-fluid {
+  margin-left: 250px; /* Should match sidebar width */
+  padding: 20px;
+  width: calc(100% - 250px); /* Calculate remaining width */
+  min-width: 0; /* Prevent overflow */
+}
+
+/* Responsive adjustments */
+
+/* Card styling to prevent overflow */
+.card {
+  min-width: 0; /* Important for flexbox children */
+  word-wrap: break-word;
+}
+
+/* Table responsive behavior */
+.table-responsive {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  width: 100%;
+}
+
+/* Chart container */
+.chart-pie {
+  position: relative;
+  height: 300px;
+  min-width: 0; /* Prevent chart overflow */
+}
+
+
+/* Header styles */
+.h3.text-gray-800 {
+  color: #5a5c69;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+/* Card styles */
+.card {
+  border: none;
+  border-radius: 0.35rem;
+  box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+}
+
+.card-header {
+  background-color: #f8f9fc;
+  border-bottom: 1px solid #e3e6f0;
+}
+
+/* Border colors for cards */
+.border-left-primary {
+  border-left: 0.25rem solid #4e73df !important;
+}
+
+.border-left-success {
+  border-left: 0.25rem solid #1cc88a !important;
+}
+
+.border-left-info {
+  border-left: 0.25rem solid #36b9cc !important;
+}
+
+.border-left-warning {
+  border-left: 0.25rem solid #f6c23e !important;
+}
+
+/* Card content styles */
+.card-body {
+  padding: 1.25rem;
+}
+
+.text-xs {
+  font-size: 0.7rem;
+}
+
+.font-weight-bold {
+  font-weight: 600 !important;
+}
+
+.text-uppercase {
+  letter-spacing: 0.1em;
+}
+
+.text-gray-800 {
+  color: #5a5c69 !important;
+}
+
+/* Badge styles */
+.badge {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+.badge-success {
+  background-color: #1cc88a;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #f6c23e;
+  color: white;
+}
+
+.badge-info {
+  background-color: #36b9cc;
+  color: white;
+}
+
+/* Table styles */
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #858796;
+}
+
+.table-bordered {
+  border: 1px solid #e3e6f0;
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Chart container */
+.chart-pie {
+  position: relative;
+  height: 15rem;
+  width: 100%;
+}
+
+/* Icon colors */
+.text-gray-300 {
+  color: #dddfeb !important;
+}
+
+.text-primary {
+  color: #4e73df !important;
+}
+
+.text-success {
+  color: #1cc88a !important;
+}
+
+.text-info {
+  color: #36b9cc !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container-fluid {
+    margin-left: 0;
+    padding: 15px;
+  }
+  
+  .card {
+    margin-bottom: 20px;
+  }
+}
+
+/* Animation for cards */
+.card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0.5rem 2rem 0 rgba(58, 59, 69, 0.2);
+}
+
+/* Ensure proper spacing between rows */
+.row {
+  margin-bottom: 20px;
+}
+
+/* Font Awesome icon alignment */
+.fa-2x {
+  font-size: 2em;
+  vertical-align: middle;
+}

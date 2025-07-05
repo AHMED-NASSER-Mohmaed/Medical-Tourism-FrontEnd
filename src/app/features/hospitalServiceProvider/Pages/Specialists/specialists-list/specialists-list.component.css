@@ -1,0 +1,28 @@
+/* Status badges */
+.badge {
+  display: inline-block;
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 700;
+  line-height: 1;
+  color: white;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: 0.25rem;
+}
+
+/* Active status */
+.badge-success {
+  background-color: #28a745; /* Green */
+}
+
+/* Inactive status */
+.badge-danger {
+  background-color: #dc3545; /* Red */
+}
+
+/* If you want to add some spacing around the badge */
+td {
+  padding: 0.5rem;
+}

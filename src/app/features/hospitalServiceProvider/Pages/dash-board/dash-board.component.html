@@ -1,0 +1,145 @@
+
+
+<div class="container-fluid p-0">
+  
+  <h1 class="h3 mb-4 text-gray-800">Dashboard</h1>
+
+  <div class="row">
+    <!-- Cards -->
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                Total Specialists
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{specialistsCount}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clinic-medical fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-success shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                Total Doctors
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{doctorsCount}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-user-md fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                Today's Appointments
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{todaysAppointments}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+      <div class="card border-left-warning shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                Pending Appointments
+              </div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800">{{pendingAppointments}}</div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-clock fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <!-- Recent Appointments -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Recent Appointments</h6>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Doctor</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let appointment of recentAppointments">
+                  <td>{{appointment.patientName}}</td>
+                  <td>{{appointment.doctorName}}</td>
+                  <td>{{appointment.date | date}}</td>
+                  <td>
+                    <span class="badge" [ngClass]="{
+                      'badge-success': appointment.status === 'Completed',
+                      'badge-warning': appointment.status === 'Pending',
+                      'badge-info': appointment.status === 'Confirmed'
+                    }">{{appointment.status}}</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Specialists Summary -->
+    <div class="col-lg-6 mb-4">
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">Specialists Summary</h6>
+        </div>
+        <div class="card-body">
+          <div class="chart-pie pt-4 pb-2">
+            <canvas id="specialistsChart"></canvas>
+          </div>
+          <div class="mt-4 text-center small">
+            <span class="mr-2">
+              <i class="fas fa-circle text-primary"></i> Cardiology
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-success"></i> Neurology
+            </span>
+            <span class="mr-2">
+              <i class="fas fa-circle text-info"></i> Orthopedics
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,114 @@
+<div class="container mt-4">
+  <h3 class="mb-4 text-gray-800">{{ isEditMode ? 'Edit' : 'Add' }} Doctor Schedule</h3>
+
+  <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+    <!-- Basic Info -->
+    <div class="row">
+       <!-- Specialty -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Specialty <span class="text-danger">*</span></label>
+          <select class="form-control" id="hospitalSpecialtyId" formControlName="hospitalSpecialtyId" (change)="loadDoctors()">
+            <option value="">Select Specialty</option>
+            <option *ngFor="let specialty of specialties" [value]="specialty.id">{{ specialty.specialtyName }}</option>
+          </select>
+          <div *ngIf="getFormControl('hospitalSpecialtyId').invalid && (getFormControl('hospitalSpecialtyId').dirty || getFormControl('hospitalSpecialtyId').touched)" class="text-danger">
+            <div *ngIf="getFormControl('hospitalSpecialtyId').errors?.['required']">
+              Specialty is required
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Doctor -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Doctor <span class="text-danger">*</span></label>
+          <select class="form-control" id="doctorId" formControlName="doctorId">
+            <option value="">Select Doctor</option>
+            <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.firstName}} {{ doctor.lastName }}</option>
+          </select>
+          <div *ngIf="getFormControl('doctorId').invalid && (getFormControl('doctorId').dirty || getFormControl('doctorId').touched)" class="text-danger">
+            <div *ngIf="getFormControl('doctorId').errors?.['required']">
+              Doctor is required
+            </div>
+          </div>
+        </div>
+      </div>
+
+     
+    </div>
+
+    <!-- Day & Time -->
+    <div class="row">
+      <!-- Day of Week -->
+      <div class="col-md-6">
+        <div class="form-group">
+          <label>Day of Week <span class="text-danger">*</span></label>
+          <select class="form-control" id="dayOfWeekId" formControlName="dayOfWeekId">
+            <option value="">Select Day</option>
+            <option *ngFor="let day of daysOfWeek" [value]="day.id">{{ day.name }}</option>
+          </select>
+          <div *ngIf="getFormControl('dayOfWeekId').invalid && (getFormControl('dayOfWeekId').dirty || getFormControl('dayOfWeekId').touched)" class="text-danger">
+            <div *ngIf="getFormControl('dayOfWeekId').errors?.['required']">
+              Day is required
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Start Time -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>Start Time</label>
+          <div class="input-group input-group-sm">
+            <input type="number" class="form-control" placeholder="HH" min="0" max="23"
+                   [formControl]="getFormControl('startTime.hour')">
+            <input type="number" class="form-control" placeholder="MM" min="0" max="59"
+                   [formControl]="getFormControl('startTime.minute')">
+          </div>
+        </div>
+      </div>
+
+      <!-- End Time -->
+      <div class="col-md-3">
+        <div class="form-group">
+          <label>End Time</label>
+          <div class="input-group input-group-sm">
+            <input type="number" class="form-control" placeholder="HH" min="0" max="23"
+                   [formControl]="getFormControl('endTime.hour')">
+            <input type="number" class="form-control" placeholder="MM" min="0" max="59"
+                   [formControl]="getFormControl('endTime.minute')">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slot Size | Max Capacity | Price -->
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Time Slot Size (minutes)</label>
+          <input type="number" class="form-control" id="timeSlotSize" formControlName="timeSlotSize" min="1">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Max Capacity</label>
+          <input type="number" class="form-control" id="maxCapacity" formControlName="maxCapacity" min="1">
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label>Price</label>
+          <input type="number" class="form-control" id="price" formControlName="price" min="0">
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="btn btn-primary" [disabled]="scheduleForm.invalid">
+      {{ isEditMode ? 'Update' : 'Save' }}
+    </button>
+  </form>
+</div>

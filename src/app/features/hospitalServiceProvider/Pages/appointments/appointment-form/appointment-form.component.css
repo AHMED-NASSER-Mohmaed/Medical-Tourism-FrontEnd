@@ -1,0 +1,12 @@
+.min-vh-100 {
+  min-height: 100vh;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: #4e73df;
+}
+
+.card {
+  border-radius: 0.5rem !important;
+}
