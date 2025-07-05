@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DisplayAllHospitalsComponent } from './features/patient/pages/Hospitals/display-all-hospitals/display-all-hospitals.component';
-import { HospitalClinicsComponent } from './features/patient/pages/Hospitals/hospital-clinics/hospital-clinics.component';
-import { HospitalDoctorsComponent } from './features/patient/pages/Hospitals/hospital-doctors/hospital-doctors.component';
+
 import { DashBoardComponent } from './features/hospitalServiceProvider/Pages/dash-board/dash-board.component';
 import { SpecialistsListComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-list/specialists-list.component';
 import { DoctorsListComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-list/doctors-list.component';
@@ -10,6 +9,8 @@ import { SidebarComponent } from './features/hospitalServiceProvider/components/
 import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
 import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
 import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
+
+
 
 const routes: Routes = [
   {
@@ -26,8 +27,55 @@ const routes: Routes = [
     ]
   },
   { path: 'hospitals', component: DisplayAllHospitalsComponent },
-  { path: 'Clinics', component: HospitalClinicsComponent },
-  { path: 'Doctors', component: HospitalDoctorsComponent }
+
+
+  {
+    path: 'super-admin',
+    loadChildren: () => import('./features/super-admin/super-admin.module').then(m => m.SuperAdminModule)
+  },
+
+
+
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule)
+  },
+
+
+  {
+    path: '',
+    loadChildren: () => import('./core/core.module').then(m => m.CoreModule),
+    pathMatch: 'full'
+  },
+
+
+  {
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    pathMatch: 'full'
+  },
+    {
+    path: 'hotel-provider',
+    loadChildren: () =>
+      import('./features/hotel-provider/hotel-provider.module').then(m => m.HotelProviderModule)
+  },
+  { path: '', redirectTo: 'hotel-provider', pathMatch: 'full' },
+
+ {
+    path: '',
+    loadChildren: () => import('./features/patient/patient.module').then(m => m.PatientModule)
+  },
+
+  { path: 'hotels', loadChildren: () => import('./features/hotel-website/hotel-website.module').then(m => m.HotelWebsiteModule) },
+
+
+  {
+    path: '**',
+    redirectTo: 'auth/login'
+  },
+
+
+
 ];
 
 

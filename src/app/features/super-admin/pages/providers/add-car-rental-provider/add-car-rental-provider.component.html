@@ -1,0 +1,346 @@
+<!-- add-car-rental-provider.component.html -->
+<div class="card border-0 shadow-lg rounded-4 add-car-rental-card">
+  <div class="card-header bg-white py-4 rounded-top-4 border-0">
+    <h5 class="mb-0 fw-bold text-dark">
+      <fa-icon [icon]="faCar" class="me-2 text-primary"></fa-icon>
+      Register New Car Rental Provider
+    </h5>
+  </div>
+  <div class="card-body">
+    <!-- API Error Message -->
+    <div *ngIf="apiError" class="alert alert-danger mb-4">
+      <strong>Error:</strong> {{ apiError }}
+    </div>
+
+    <form [formGroup]="carRentalForm" (ngSubmit)="onSubmit()" autocomplete="off">
+      <!-- User Account Section -->
+      <div class="mb-5">
+        <h6 class="fw-bold text-primary mb-4 pb-2 border-bottom">
+          <fa-icon [icon]="faUser" class="me-2"></fa-icon>
+          Account Information
+        </h6>
+        
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
+              <label for="firstName">First Name</label>
+              <div *ngIf="carRentalForm.get('firstName')?.invalid && carRentalForm.get('firstName')?.touched" class="form-text text-danger ms-1">
+                First name is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
+              <label for="lastName">Last Name</label>
+              <div *ngIf="carRentalForm.get('lastName')?.invalid && carRentalForm.get('lastName')?.touched" class="form-text text-danger ms-1">
+                Last name is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email">
+              <label for="email">Email</label>
+              <div *ngIf="carRentalForm.get('email')?.errors?.['required']" class="form-text text-danger ms-1">
+                Email is required
+              </div>
+              <div *ngIf="carRentalForm.get('email')?.errors?.['email']" class="form-text text-danger ms-1">
+                Please enter a valid email
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
+              <label for="phone">Phone</label>
+              <div *ngIf="carRentalForm.get('phone')?.invalid && carRentalForm.get('phone')?.touched" class="form-text text-danger ms-1">
+                Phone is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
+              <label for="password">Password</label>
+              <div *ngIf="carRentalForm.get('password')?.invalid && carRentalForm.get('password')?.touched" class="form-text text-danger ms-1">
+                Password must be at least 8 characters
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
+              <label for="confirmPassword">Confirm Password</label>
+              <div *ngIf="carRentalForm.errors?.['passwordMismatch'] && carRentalForm.get('confirmPassword')?.touched" class="form-text text-danger ms-1">
+                Passwords must match
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-floating">
+              <select class="form-select" id="gender" formControlName="gender">
+                <option [value]="Gender.UNSPECIFIED">Select Gender</option>
+                <option [value]="Gender.MALE">Male</option>
+                <option [value]="Gender.FEMALE">Female</option>
+              </select>
+              <label for="gender">Gender</label>
+              <div *ngIf="carRentalForm.get('gender')?.invalid && carRentalForm.get('gender')?.touched" class="form-text text-danger ms-1">
+                Gender is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date of Birth">
+              <label for="dateOfBirth">Date of Birth</label>
+              <div *ngIf="carRentalForm.get('dateOfBirth')?.invalid && carRentalForm.get('dateOfBirth')?.touched" class="form-text text-danger ms-1">
+                Date of birth is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-4">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
+              <label for="city">City</label>
+              <div *ngIf="carRentalForm.get('city')?.invalid && carRentalForm.get('city')?.touched" class="form-text text-danger ms-1">
+                City is required
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-6">
+            <div class="form-floating position-relative">
+              <select class="form-select" id="countryId" formControlName="countryId" [disabled]="countries.length === 0 || isLoading">
+                <option value="">Select Country</option>
+                <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+              </select>
+              <label for="countryId"><i class="fas fa-globe-africa me-1 text-primary"></i> Country</label>
+              <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+              <div *ngIf="carRentalForm.get('countryId')?.invalid && carRentalForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+                Country is required
+              </div>
+              <div *ngIf="!isLoading && countries.length === 0" class="form-text text-warning ms-1">
+                No countries available
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-floating position-relative">
+              <select class="form-select" id="governorateId" formControlName="governorateId" [disabled]="governorates.length === 0 || !carRentalForm.get('countryId')?.value || isLoading">
+                <option value="">Select Governorate</option>
+                <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
+              </select>
+              <label for="governorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Governorate</label>
+              <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+              <div *ngIf="carRentalForm.get('governorateId')?.invalid && carRentalForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+                Governorate is required
+              </div>
+              <div *ngIf="!isLoading && governorates.length === 0 && carRentalForm.get('countryId')?.value" class="form-text text-warning ms-1">
+                No governorates available for this country
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-md-12">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
+              <label for="address">Address</label>
+              <div *ngIf="carRentalForm.get('address')?.invalid && carRentalForm.get('address')?.touched" class="form-text text-danger ms-1">
+                Address is required
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Asset Information Section -->
+      <div>
+        <h6 class="fw-bold text-primary mb-4 pb-2 border-bottom">
+          <fa-icon [icon]="faCar" class="me-2"></fa-icon>
+          Car Rental Information
+        </h6>
+        
+        <div class="row g-4">
+          <!-- Basic Information -->
+          <div class="col-md-12">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Company Name">
+              <label for="assetName">Company Name</label>
+              <div *ngIf="carRentalForm.get('assetName')?.invalid && carRentalForm.get('assetName')?.touched" class="form-text text-danger ms-1">
+                Company name is required
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-12">
+            <div class="form-floating">
+              <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 100px"></textarea>
+              <label for="assetDescription">Description</label>
+              <div *ngIf="carRentalForm.get('assetDescription')?.invalid && carRentalForm.get('assetDescription')?.touched" class="form-text text-danger ms-1">
+                Description is required
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Information -->
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="Business Email">
+              <label for="assetEmail">Business Email</label>
+              <div *ngIf="carRentalForm.get('assetEmail')?.errors?.['required']" class="form-text text-danger ms-1">
+                Email is required
+              </div>
+              <div *ngIf="carRentalForm.get('assetEmail')?.errors?.['email']" class="form-text text-danger ms-1">
+                Please enter a valid email
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Location Description">
+              <label for="locationDescription">Location Description</label>
+              <div *ngIf="carRentalForm.get('locationDescription')?.invalid && carRentalForm.get('locationDescription')?.touched" class="form-text text-danger ms-1">
+                Location description is required
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
+              <label for="latitude">Latitude</label>
+              <div *ngIf="carRentalForm.get('latitude')?.invalid && carRentalForm.get('latitude')?.touched" class="form-text text-danger ms-1">
+                Latitude is required
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="form-floating">
+              <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
+              <label for="longitude">Longitude</label>
+              <div *ngIf="carRentalForm.get('longitude')?.invalid && carRentalForm.get('longitude')?.touched" class="form-text text-danger ms-1">
+                Longitude is required
+              </div>
+            </div>
+          </div>
+
+          <!-- Vehicle Models -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Vehicle Models <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let model of vehicleModels">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="model" 
+                     (change)="updateArrayControl('models', model, $event)"
+                     [checked]="model === 'Sedan'"> <!-- Default selected -->
+              <label class="form-check-label">{{ model }}</label>
+            </div>
+            <div *ngIf="modelsArray.invalid && modelsArray.touched" class="form-text text-danger ms-1">
+              At least one vehicle model is required
+            </div>
+          </div>
+
+          <!-- Fuel Types -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Fuel Types <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let fuel of [FuelType.GASOLINE, FuelType.DIESEL, FuelType.ELECTRIC, FuelType.HYBRID]">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="fuel" 
+                     (change)="updateArrayControl('fuelTypes', fuel, $event)"
+                     [checked]="fuel === FuelType.GASOLINE"> <!-- Default selected -->
+              <label class="form-check-label">
+                {{ fuel === FuelType.GASOLINE ? 'Gasoline' : 
+                   fuel === FuelType.DIESEL ? 'Diesel' : 
+                   fuel === FuelType.ELECTRIC ? 'Electric' : 'Hybrid' }}
+              </label>
+            </div>
+            <div *ngIf="fuelTypesArray.invalid && fuelTypesArray.touched" class="form-text text-danger ms-1">
+              At least one fuel type is required
+            </div>
+          </div>
+
+          <!-- Transmission Type -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Transmission <span class="text-danger">*</span></label>
+            <select class="form-select" formControlName="transmission">
+              <option [value]="TransmissionType.MANUAL">Manual</option>
+              <option [value]="TransmissionType.AUTOMATIC">Automatic</option>
+            </select>
+            <div *ngIf="carRentalForm.get('transmission')?.invalid && carRentalForm.get('transmission')?.touched" class="form-text text-danger ms-1">
+              Transmission is required
+            </div>
+          </div>
+
+          <!-- Facilities -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Facilities <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let facility of availableFacilities">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="facility" 
+                     (change)="updateArrayControl('facilities', facility, $event)"
+                     [checked]="facility === '24/7 Support'"> <!-- Default selected -->
+              <label class="form-check-label">{{ facility }}</label>
+            </div>
+            <div *ngIf="facilitiesArray.invalid && facilitiesArray.touched" class="form-text text-danger ms-1">
+              At least one facility is required
+            </div>
+          </div>
+
+          <!-- Rental Policies -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Rental Policies <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let policy of availablePolicies">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="policy" 
+                     (change)="updateArrayControl('rentalPolicies', policy, $event)"
+                     [checked]="policy === 'Insurance Included'"> <!-- Default selected -->
+              <label class="form-check-label">{{ policy }}</label>
+            </div>
+            <div *ngIf="rentalPoliciesArray.invalid && rentalPoliciesArray.touched" class="form-text text-danger ms-1">
+              At least one rental policy is required
+            </div>
+          </div>
+
+          <!-- Languages Supported -->
+          <div class="col-md-6">
+            <label class="form-label fw-semibold">Languages Supported <span class="text-danger">*</span></label>
+            <div class="form-check" *ngFor="let lang of supportedLanguages">
+              <input class="form-check-input" type="checkbox" 
+                     [value]="lang.id" 
+                     (change)="updateArrayControl('languagesSupported', lang.id, $event)"
+                     [checked]="lang.id === 1"> <!-- Default selected -->
+              <label class="form-check-label">{{ lang.name }}</label>
+            </div>
+            <div *ngIf="languagesSupportedArray.invalid && languagesSupportedArray.touched" class="form-text text-danger ms-1">
+              At least one language is required
+            </div>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="col-12 mt-4">
+            <div class="d-flex justify-content-end gap-2">
+              <button type="submit" class="btn btn-primary btn-lg px-4" [disabled]="carRentalForm.invalid || isLoading">
+                <fa-icon [icon]="faCar" class="me-2"></fa-icon>
+                {{ isLoading ? 'Creating...' : 'Register Provider' }}
+              </button>
+              <button type="button" class="btn btn-outline-secondary btn-lg px-4" (click)="goBack()">
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

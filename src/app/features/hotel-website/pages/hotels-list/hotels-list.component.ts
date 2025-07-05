@@ -1,0 +1,59 @@
+import { Component, OnInit } from '@angular/core';
+import { HotelWebsiteService } from '../../services/hotel-website.service';
+import { Hotel } from '../../models/hotel.model';
+
+@Component({
+  selector: 'app-hotels-list',
+  standalone: false,
+  templateUrl: './hotels-list.component.html',
+  styleUrl: './hotels-list.component.css'
+})
+export class HotelsListComponent implements OnInit {
+  hotels: Hotel[] = [];
+  loading = false;
+  currentPage = 1;
+  pageSize = 10;
+  totalPages = 1;
+  filters: any = {};
+
+  constructor(private hotelService: HotelWebsiteService) {}
+
+  ngOnInit() {
+    this.fetchHotels();
+  }
+
+  onFiltersChanged(filters: any) {
+    this.filters = filters;
+    this.currentPage = 1;
+    this.fetchHotels();
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.fetchHotels();
+  }
+
+  fetchHotels() {
+    this.loading = true;
+    const params: any = {
+      PageNumber: this.currentPage,
+      PageSize: this.pageSize,
+      SearchTerm: this.filters.searchTerm || undefined,
+      UserStatus: this.filters.userStatus !== '' ? this.filters.userStatus : undefined,
+      GovernerateId: this.filters.governorateId !== '' ? this.filters.governorateId : undefined,
+      // Add more filters as needed
+    };
+    this.hotelService.getHotels(params).subscribe({
+      next: (data: any) => {
+        this.hotels = data.items || data || [];
+        this.totalPages = data.totalPages || 1;
+        this.loading = false;
+      },
+      error: () => {
+        this.hotels = [];
+        this.loading = false;
+      }
+    });
+  }
+}

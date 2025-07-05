@@ -1,0 +1,517 @@
+  :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #1e3d72;
+            --accent-color: #4fc3f7;
+            --success-color: #26c6da;
+            --warning-color: #ffa726;
+            --danger-color: #ef5350;
+            --gradient-primary: linear-gradient(135deg, #2c5aa0 0%, #4fc3f7 100%);
+            --gradient-card: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+            --shadow-card: 0 10px 40px rgba(44, 90, 160, 0.1);
+            --shadow-hover: 0 20px 60px rgba(44, 90, 160, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+/* Navbar Styles */
+/* Enlarge the Navbar */
+.navbar {
+    background: white;
+    padding: 1.5rem 0; /* Increase padding for a larger navbar */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Slightly bigger shadow */
+    transition: all 0.3s ease;
+    height: 80px; /* Increase the height */
+}
+
+/* Brand styling - make the logo and text bigger */
+.navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+    font-size: 1.75rem; /* Larger brand font size */
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand i {
+    color: var(--accent-color);
+}
+
+/* Enlarge nav links */
+.nav-link {
+    color: var(--secondary-color) !important;
+    font-weight: 700; /* Make text bolder */
+    font-size: 1.1rem; /* Larger font size */
+    margin: 0 0.7rem; /* Increase spacing between links */
+    padding: 0.75rem 1.5rem !important; /* Larger padding */
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+/* Hover and active states */
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
+    background: rgba(44,90,160,0.1);
+}
+
+.nav-link.active:after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 3px;
+    background-color: var(--primary-color);
+    border-radius: 2px;
+}
+
+/* Navbar toggler button */
+.navbar-toggler {
+    border: none;
+    font-size: 1.2rem; /* Larger toggler icon */
+}
+
+/* Toggler icon */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(44, 90, 160, 0.7)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Register and login buttons - enlarge */
+.btn-outline-primary, .btn-primary {
+    padding: 0.8rem 2rem; /* Larger padding */
+    font-weight: 700; /* Bold button text */
+    font-size: 1.1rem; /* Larger font size */
+    border-radius: 50px;
+}
+
+.btn-outline-primary:hover, .btn-primary:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Dropdown styling for Register button */
+.navbar .dropdown-toggle::after {
+    content: none !important; /* Remove default dropdown icon */
+}
+
+.navbar .dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Dropdown items */
+.navbar .dropdown-item {
+    font-weight: 600;
+    font-size: 1.1rem; /* Larger font size */
+    padding: 1rem 1.5rem;
+    color: var(--secondary-color);
+}
+
+.navbar .dropdown-item:hover {
+    background-color: rgba(44,90,160,0.1);
+    color: var(--primary-color);
+}
+
+/* Navbar for mobile screens */
+@media (max-width: 767px) {
+    .navbar {
+        padding: 1.2rem 0;
+        height: auto; /* Adjust height for small screens */
+    }
+    .navbar-nav .nav-link {
+        font-size: 1rem; /* Smaller font on mobile */
+    }
+    .navbar-toggler-icon {
+        font-size: 1.5rem;
+    }
+}
+
+
+.btn-primary {
+    background: var(--primary-color);
+    color: white !important;
+    border-radius: 50px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(44,90,160, 0.2);
+    background: var(--secondary-color);
+}
+/* Register Dropdown Styles */
+.navbar .dropdown-toggle::after {
+    content: none !important; /* Remove the default dropdown icon */
+}
+
+.navbar .dropdown-menu {
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.navbar .dropdown-item {
+    font-weight: 600;
+    padding: 0.8rem 1.5rem;
+    transition: all 0.3s ease;
+    color: var(--secondary-color);
+}
+
+.navbar .dropdown-item:hover {
+    background-color: rgba(44,90,160,0.05);
+    color: var(--primary-color);
+}
+
+/* Dropdown button hover effect */
+.navbar .dropdown-toggle:hover {
+    background: var(--primary-color);
+    color: white;
+}
+.dropdown-item {
+  cursor: pointer;
+}
+
+        /* Section Styling */
+        .section {
+            padding: 5rem 0;
+            position: relative;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: #64748b;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Card Styling */
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: none;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .service-card .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .service-card .card-body {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-card .card-text {
+            flex-grow: 1;
+        }
+
+        .service-card .card-title {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 0.75rem;
+        }
+
+        .service-card .card-text {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card .price {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .service-card .btn-details {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            padding: 0.5rem 1.5rem;
+        }
+
+        .service-card .btn-details:hover {
+            background-color: var(--secondary-color);
+        }
+
+
+        /* All Treatments Modal */
+        #allTreatmentsModal .modal-dialog {
+            max-width: 80%;
+        }
+
+        #allTreatmentsModal .modal-body {
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        #allTreatmentsModal .service-card {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Why Choose Us Section */
+        .feature-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-card);
+            text-align: center;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .feature-box .icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        .feature-box h3 {
+            font-weight: 600;
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+
+        .feature-box p {
+            color: #64748b;
+        }
+
+        /* FAQ Section */
+        .accordion-item {
+            margin-bottom: 1rem;
+            border-radius: 10px !important;
+            overflow: hidden;
+            border: none;
+            box-shadow: var(--shadow-card);
+        }
+
+        .accordion-button {
+            font-weight: 600;
+            color: var(--secondary-color);
+            background: white;
+        }
+
+        .accordion-button:not(.collapsed) {
+            color: var(--primary-color);
+            background: rgba(79, 195, 247, 0.1);
+        }
+
+        .accordion-button:focus {
+            box-shadow: none;
+            border-color: transparent;
+        }
+
+        /* Testimonials */
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            margin: 1rem;
+        }
+
+        .testimonial-card:before {
+            content: '"';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            font-size: 4rem;
+            color: rgba(79, 195, 247, 0.2);
+            font-family: serif;
+            line-height: 1;
+        }
+
+        .testimonial-card .rating {
+            color: #ffa726;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-card .client-info {
+            display: flex;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .testimonial-card .client-info img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1rem;
+        }
+
+        /* Packages Section */
+        .package-card {
+            background: var(--gradient-card);
+            border-radius: 15px;
+            box-shadow: var(--shadow-card);
+            transition: all 0.3s ease;
+            height: 100%;
+            border: 1px solid transparent;
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .package-card .card-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+
+        .package-card.popular .card-header {
+            background: var(--gradient-primary);
+        }
+
+        .package-card .card-body {
+            padding: 2rem;
+        }
+
+        .package-card .price-tag {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+        }
+
+        .package-card .price-tag small {
+            font-size: 1rem;
+            color: #64748b;
+        }
+
+        .package-card .list-group-item {
+            background: transparent;
+            border: none;
+            padding: 0.75rem 0;
+            color: #333;
+        }
+
+        .package-card .list-group-item i {
+            color: var(--success-color);
+            margin-right: 10px;
+        }
+
+        .package-card .btn-book {
+            background: var(--primary-color);
+            color: white;
+            border-radius: 50px;
+        }
+
+        .package-card.popular .btn-book {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 991px) {
+            .navbar-collapse {
+                background: white;
+                padding: 1rem;
+                margin-top: 1rem;
+                border-radius: 15px;
+                box-shadow: var(--shadow-card);
+            }
+
+            .nav-link {
+                margin: 0.25rem 0;
+                padding: 0.75rem !important;
+            }
+
+            .navbar-nav .d-flex {
+                flex-direction: column;
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .navbar-nav .btn {
+                width: 100%;
+                margin: 0.25rem 0 !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .section {
+                padding: 3rem 0;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+            #allTreatmentsModal .modal-dialog {
+                max-width: 95%;
+            }
+        }
