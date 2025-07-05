@@ -157,6 +157,27 @@
   100% { box-shadow: 0 0 0 0 #22c55e55; }
 }
 
+.logout-btn {
+  background: linear-gradient(135deg, #ef4444 0%, #f59e42 100%);
+  border: none;
+  color: #fff;
+  border-radius: 0.7rem;
+  padding: 0.4rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(239,68,68,0.10);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.logout-btn:hover {
+  background: linear-gradient(135deg, #dc2626 0%, #fbbf24 100%);
+  box-shadow: 0 4px 16px rgba(239,68,68,0.18);
+}
+
 @media (max-width: 991.98px) {
   .dashboard-header {
     margin: 1rem 0.5rem 0 0;
