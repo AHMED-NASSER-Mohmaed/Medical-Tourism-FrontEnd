@@ -21,7 +21,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     ModalComponent,
     SkeletonLoaderComponent,
     DarkModeToggleComponent,
-    LoadingComponent,
+    LoadingComponent
+
   ],
   imports: [
     CommonModule,
@@ -37,7 +38,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     CommonModule,
     FormsModule,
     StatusLabelPipe,
-    LoadingComponent
+    LoadingComponent,
+
   ]
 })
 export class SharedModule { }

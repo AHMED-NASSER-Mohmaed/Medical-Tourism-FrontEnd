@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class HospitalService {
-  private baseUrl = 'http://localhost:5211/api/Website/Hospitals';
+  private baseUrl = 'https://localhost:7078/api/Website/Hospitals';
 
   constructor(private http: HttpClient) {}
 
