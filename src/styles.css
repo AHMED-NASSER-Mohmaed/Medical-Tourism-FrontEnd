@@ -2,10 +2,23 @@
 /* Leaflet default skin */
 @import "leaflet/dist/leaflet.css";
 
-/* You can add global styles to this file, and also import other style files */
-
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height: 100vh;
+  display: flex;
+  flex-direction: column; }
+
+.app-root, app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1 0 auto;
+}
+footer.bg-dark {
+  flex-shrink: 0;
+}
 
 
 

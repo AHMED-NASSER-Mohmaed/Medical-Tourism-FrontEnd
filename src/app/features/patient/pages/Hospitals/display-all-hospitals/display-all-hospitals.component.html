@@ -22,7 +22,7 @@
       <label>Medical Specialty</label>
       <select class="form-select" [(ngModel)]="filterCriteria.specialty">
         <option value="">All Specialties</option>
-        <option *ngFor="let specialty of specialties" [value]="specialty.id">
+        <option *ngFor="let specialty of specialties" [value]="specialty.id" >
           {{ specialty.name }}
         </option>
       </select>
@@ -36,6 +36,11 @@
         </option>
       </select>
     </div>
+        <div class="back-button-container">
+  <button class="btn btn-secondary back-btn" (click)="goBack()">
+    <span class="icon">↩️</span> Back
+  </button>
+</div>
     <div class="filter-item filter-btn-item">
       <button class="btn btn-primary filter-btn" (click)="applyFilters()">
         <span class="icon">🔍</span> Apply Filters
@@ -51,9 +56,10 @@
       <div class="content">
         <h3>{{ hospital.assetName }}</h3>
         <p>{{ hospital.description }}</p>
-        <a href="#" class="departments-more" (click)="ViewHospitalDetails(hospital.id)">
-         Specialists <i class="flaticon-right-arrow"></i>
-        </a>
+<a  class="departments-more" (click)="ViewClinicsForSpecialty(hospital.id)">
+  Specialists <i class="flaticon-right-arrow"></i>
+</a>
+
       </div>
     </div>
   </section>

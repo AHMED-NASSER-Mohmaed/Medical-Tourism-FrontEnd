@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { HospitalService } from '../../../services/Hospital.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CountryService } from '../../../../../auth/services/country.service';
-import { LoadingService } from '../../../../../shared/services/loading.service'; // Import loading service
-
+import { LoadingService } from '../../../../../shared/services/loading.service';
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-display-all-hospitals',
   standalone: false,
@@ -15,33 +15,44 @@ export class DisplayAllHospitalsComponent implements OnInit {
   filterCriteria = {
     name: '',
     specialty: '',
-    location: 0 // Represents governorateId
+    location: 0
   };
   pageNumber: number = 1;
-  pageSize: number = 8; // Set page size to 8
+  pageSize: number = 8;
   totalPages: number = 1;
   hospitals: any[] = [];
   governorates: any[] = [];
+  specialistId: string | null = null;
 
   constructor(
     private hospitalService: HospitalService,
     private router: Router,
     private countryService: CountryService,
-    private loadingService: LoadingService // Inject loading service
+    private loadingService: LoadingService,
+    private activatedRoute: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit() {
+       this.activatedRoute.paramMap.subscribe(params => {
+      this.specialistId = params.get('specialistId');
+      console.log('Specialist ID:', this.specialistId);
+
+      if (this.specialistId) {
+        this.filterCriteria.specialty = this.specialistId;
+      }
+    });
     this.loadSpecialties();
     this.loadHospitals();
     this.loadGovernorates();
   }
 
-  // Fetch specialties from the API
+
   loadSpecialties() {
     this.hospitalService.getSpecialties().subscribe(
       (specialties) => {
         console.log('Specialties loaded:', specialties);
-        this.specialties = specialties; // Now we have an array of specialties
+        this.specialties = specialties;
       },
       (error) => {
         console.error('Error fetching specialties:', error);
@@ -49,37 +60,33 @@ export class DisplayAllHospitalsComponent implements OnInit {
     );
   }
 
-  // Fetch hospitals with filter criteria
-  loadHospitals() {
+
+loadHospitals() {
     console.log('Loading hospitals with filters:', this.filterCriteria);
 
-    // Show the loader before making the request
     this.loadingService.show();
 
-    // Convert specialty to a number, or pass undefined if it's empty or invalid
-    const specialtyId = this.filterCriteria.specialty ? Number(this.filterCriteria.specialty) : undefined;
+    const specialtyId = this.specialistId ? +this.specialistId : (this.filterCriteria.specialty ? Number(this.filterCriteria.specialty) : undefined);
 
-    // Pass the individual filter parameters
+
     this.hospitalService.getHospitals(
       this.pageNumber,
-      this.pageSize, // Use the new pageSize
+      this.pageSize,
       this.filterCriteria.name,
-      specialtyId,  // Pass specialtyId (undefined if no specialty is selected)
-      this.filterCriteria.location || 0  // Pass governorateId
+      specialtyId,
+      this.filterCriteria.location || 0
     ).subscribe(
       (data: any) => {
         console.log('Hospitals loaded:', data);
         this.hospitals = data?.items || [];
-        // Update the pagination if needed
-        this.totalPages = data.totalPages;  // Update total pages
 
-        // Hide the loader after the request is successful
+        this.totalPages = data.totalPages;
+
         this.loadingService.hide();
       },
       (error) => {
         console.error('Error fetching hospitals:', error);
 
-        // Hide the loader if there's an error
         this.loadingService.hide();
       }
     );
@@ -91,23 +98,18 @@ export class DisplayAllHospitalsComponent implements OnInit {
     this.loadHospitals();
   }
 
-  // View details for a hospital
-  ViewHospitalDetails(hospitalId: string) {
-    // Navigate to hospital details page
-    this.router.navigate(['/hospital-details', hospitalId]);
-  }
 
-  // Apply the filter to the list of hospitals
+
+
   applyFilters() {
     console.log('Applying filters:', this.filterCriteria);
-    this.loadHospitals(); // Re-fetch hospitals with the updated filters
+    this.loadHospitals();
   }
 
-  // Fetch governorates for Egypt (countryId = 1)
+
   loadGovernorates() {
     this.countryService.getCountries().subscribe(
       (data) => {
-        // Get governorates for Egypt (countryId = 1)
         const egyptGovernorates = data.countryMap.get(1)?.governorates || [];
         this.governorates = egyptGovernorates;
         console.log('Egypt Governorates:', this.governorates);
@@ -116,5 +118,11 @@ export class DisplayAllHospitalsComponent implements OnInit {
         console.error('Error fetching governorates:', error);
       }
     );
+  }
+    ViewClinicsForSpecialty(hospitalId: string): void {
+    this.router.navigate(['/hospital', hospitalId, 'specialists']);
+  }
+        goBack(): void {
+    this.location.back();
   }
 }

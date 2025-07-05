@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';  // Import map operator
-import { Clinic, DisplayHospitals, Doctor } from '../models/Hospital.model';  // Assuming your hospital model is correctly defined
+import { map } from 'rxjs/operators';
+import { Clinic, DisplayHospitals, Doctor } from '../models/Hospital.model';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HospitalService {
-  private baseUrl = 'http://localhost:5211/api/Website/Hospitals'; // Replace with your real API URL
+  private baseUrl = 'http://localhost:5211/api/Website/Hospitals';
 
   constructor(private http: HttpClient) {}
 
@@ -19,7 +20,7 @@ getHospitals(
   specialtyId: number = 0,
   governorateId: number = 0
 ): Observable<any> {
-  // Build query params dynamically based on the values of specialtyId and governorateId
+
   let url = `${this.baseUrl}?PageNumber=${pageNumber}&PageSize=${pageSize}&SearchTerm=${search}`;
 
   if (specialtyId !== 0 ) {
@@ -30,16 +31,14 @@ getHospitals(
     url += `&GovernerateId=${governorateId}`;
   }
 
-  console.log('API URL:', url);  // Log the URL for debugging
   return this.http.get<any>(url);
 }
 
 
   getSpecialties(): Observable<any[]> {
-    const url = 'http://localhost:5211/api/Website/Specilties';  // Your API URL for specialties
+    const url = `${environment.apiUrl}/Website/Specilties`;
     return this.http.get<any>(url).pipe(
       map((data: any) => {
-        // Ensure that we're returning the items array (the specialties)
         return data?.items || [];
       })
     );
@@ -70,4 +69,20 @@ getHospitals(
       observer.complete();
     });
   }
+
+  getSpecialistsForSuperAdmin(pageNumber: number, pageSize: number, searchQuery: string): Observable<any> {
+    const url = `${environment.apiUrl}/Specialties/SuperAdmin?pageNumber=${pageNumber}&pageSize=${pageSize}&SearchTerm=${searchQuery}`;
+    return this.http.get<any>(url);
+  }
+
+
+  getSpecialistsForHospital(hospitalId: string, pageNumber: number, pageSize: number, searchQuery: string): Observable<any> {
+    const url = `${environment.apiUrl}/Website/Specilties-in-Hospital/${hospitalId}?pageNumber=${pageNumber}&pageSize=${pageSize}&SearchTerm=${searchQuery}`;
+    return this.http.get<any>(url);
+  }
+    getDoctorsForSpecialty(specialtyId: string, hospitalId: string, pageNumber: number, pageSize: number, searchQuery: string): Observable<any> {
+    const url = `${environment.apiUrl}/Website/Doctors-in-Specialty/${specialtyId}/${hospitalId}?PageNumber=${pageNumber}&PageSize=${pageSize}&SearchTerm=${searchQuery}`;
+    return this.http.get<any>(url);
+  }
+
 }
