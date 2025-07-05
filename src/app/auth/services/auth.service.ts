@@ -175,13 +175,13 @@ updatePatientProfile(data: any) {
 }
 
 getUserRole(): string | null {
-  const token = this.cookieService.get('auth_token'); // Get the token from cookie
+  const token = this.cookieService.get('auth_token');
   if (token) {
-    const decodedToken: any = jwtDecode(token); // Decode the token
-    console.log('Decoded Token:', decodedToken); // Debugging to check the structure
-    // Check for the role in the specific claim
+    const decodedToken: any = jwtDecode(token);
+    console.log('Decoded Token:', decodedToken);
+
     console.log(decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
-    return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null; // Return the role if it exists
+    return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
   }
   return null; // If no token exists
 }

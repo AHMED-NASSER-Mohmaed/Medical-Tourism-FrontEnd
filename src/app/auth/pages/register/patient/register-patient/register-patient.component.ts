@@ -164,6 +164,9 @@ isStepValid(stepId: string): boolean {
   msg(ctrl: string): string|null {
     const c = this.registerForm.get(ctrl);
     if (!c || !(c.touched || this.submitted)) return null;
+       if (ctrl === 'governorateId' && c.errors?.['required'] &&  this.registerForm.get('countryId')?.value==null) {
+    return 'Please select a country first';
+  }
 
     if (c.errors?.['required'])  return 'Required';
     if (c.errors?.['email'])     return 'Invalid email';

@@ -69,7 +69,6 @@ export class RegisterCarRentalComponent
   /* uploads */
   imageFiles    : File[]   = [];
   imagePreviews : string[] = [];
-  uploadError   = false;
 
   constructor(
     private fb     : FormBuilder,
@@ -313,12 +312,12 @@ onCountryChange(val: any): void {
 
     const selected = Array.from(input.files);
     if (this.imageFiles.length + selected.length > 2) {
-      this.uploadError = true;
+
       input.value = '';
       this.cd.markForCheck();
       return;
     }
-    this.uploadError = false;
+
 
     selected.forEach(file => {
       const reader = new FileReader();
@@ -335,7 +334,6 @@ onCountryChange(val: any): void {
   removeImage(i: number): void {
     this.imageFiles.splice(i, 1);
     this.imagePreviews.splice(i, 1);
-    this.uploadError = false;
     this.cd.markForCheck();
   }
 
@@ -375,7 +373,7 @@ onCountryChange(val: any): void {
     this.loadingService.show();
     this.submitted = true;
     this.registerForm.markAllAsTouched();
-    if (this.registerForm.invalid || this.uploadError) { return; }
+    if (this.registerForm.invalid ) { return; }
 
     const data = this.buildPayload();
     const fd   = new FormData();

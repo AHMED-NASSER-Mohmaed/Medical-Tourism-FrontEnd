@@ -38,10 +38,11 @@
 /* Sidebar improvements */
 /* Sidebar horizontal bar layout */
 /* Sidebar horizontal bar layout */
+/* Sidebar container */
 .improved-sidebar {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Spread content */
+  justify-content: flex-start; /* Spread content horizontally */
   gap: 24px;
   background: #fff;
   border-radius: 18px;
@@ -52,6 +53,7 @@
   max-width: 100%;
 }
 
+/* Sidebar title (Icon + Text) */
 .sidebar-title {
   display: flex;
   flex-direction: row; /* Icon and text side by side */
@@ -64,38 +66,77 @@
   line-height: 1.1;
   white-space: nowrap;
 }
+
 .sidebar-title .icon {
   font-size: 1.7rem;
-  margin-bottom: 0;
   margin-right: 8px;
 }
+
 .refine-title {
   font-size: 1.25rem;
   font-weight: 700;
   color: #0a174e;
 }
 
+/* Sidebar fields layout */
 .sidebar-fields-horizontal {
   display: flex;
-  flex: 1;
   gap: 24px;
-  align-items: flex-end;
-  justify-content: space-between;
+  align-items: center; /* Align elements in the middle vertically */
+  width: 100%; /* Take full width */
 }
 
+/* Each filter item */
 .filter-item {
   display: flex;
   flex-direction: column;
   min-width: 180px;
   max-width: 220px;
-  flex: 1 1 0;
+  flex: 1 1 0; /* Allow flexibility */
 }
 
-/* Responsive: stack vertically on small screens */
+/* Make the search input fill the remaining space */
+.filter-item.search-bar {
+  flex-grow: 1;  /* This will make the search bar take the remaining space */
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* Apply button container */
+.filter-btn-item {
+  min-width: 140px;
+  max-width: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+/* Button styles */
+.filter-btn {
+  width: 100%;
+  background: #2563b6;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  padding: 0.7rem 0;
+  font-size: 1.05rem;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.filter-btn:hover {
+  background: #17408b;
+}
+
+/* Responsive layout on smaller screens */
 @media (max-width: 1100px) {
   .improved-sidebar,
   .sidebar-fields-horizontal {
-    flex-direction: column;
+    flex-direction: column;  /* Stack filter items vertically on smaller screens */
     align-items: stretch;
     gap: 12px;
   }
@@ -113,6 +154,7 @@
     width: 100%;
   }
 }
+
 
 .filter-item label {
   font-size: 1rem;
@@ -146,25 +188,7 @@
   justify-content: flex-end;
 }
 
-.filter-btn {
-  width: 100%;
-  background: #2563b6;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  font-weight: 600;
-  padding: 0.7rem 0;
-  font-size: 1.05rem;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-}
 
-.filter-btn:hover {
-  background: #17408b;
-}
 
 /* Responsive: stack vertically on small screens */
 @media (max-width: 1100px) {
@@ -180,12 +204,7 @@
     margin-bottom: 8px;
     margin-right: 0;
   }
-  .filter-item,
-  .filter-btn-item {
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-  }
+
 }
 /* Hospital cards grid: 4 per row */
 .improved-hospitals-list {
@@ -248,7 +267,6 @@
 .departments-card .content .departments-more:hover {
   color: #16213E;
   letter-spacing: 0.25px;
-  cursor: pointer;
 }
 
 /* Icons next to description */
@@ -343,6 +361,36 @@
 .pagination-list li.disabled {
   opacity: 0.5;
   pointer-events: none;
+}
+/* Apply Filter Button container */
+.filter-btn-item {
+  display: flex;
+  flex-direction: column;  /* Stack vertically */
+  align-items: flex-end;
+  justify-content: flex-start;
+  margin-top: 20px;  /* Add margin to push it down */
+}
+
+/* Apply Filter Button */
+.filter-btn {
+  width: 100%;
+  background: #2563b6;
+  color: #fff;
+  border: none;
+  border-radius: 7px;
+  font-weight: 600;
+  padding: 0.7rem 0;
+  font-size: 1.05rem;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+/* Hover effect for Apply Filter button */
+.filter-btn:hover {
+  background: #17408b;
 }
 
 /* Back Button Container */

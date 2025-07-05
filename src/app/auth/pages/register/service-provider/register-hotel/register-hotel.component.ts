@@ -53,7 +53,6 @@ showLocationError = false;
   registerForm!: FormGroup;
   languages: { id: number, name: string }[] = [];
   submitted = false;
-  uploadError = false;
 imageFiles: File[] = [];
 imagePreviews: string[] = [];
   constructor(private fb: FormBuilder, private auth: AuthService, private cd: ChangeDetectorRef, private router: Router,private countriesSrv:CountryService,private loadingService:LoadingService ) {}
@@ -313,13 +312,11 @@ onImagesSelected(event: Event): void {
 
 
   if (this.imageFiles.length + selected.length > 2) {
-    this.uploadError = true;
     input.value = '';
     this.cd.markForCheck();
     return;
   }
 
-  this.uploadError = false;
 
 
   selected.forEach(file => {
@@ -340,10 +337,6 @@ removeImage(index: number): void {
   this.imageFiles.splice(index, 1);
   this.imagePreviews.splice(index, 1);
 
-
-  if (this.imageFiles.length < 3) {
-    this.uploadError = false;
-  }
 
   this.cd.markForCheck();
 }
@@ -385,7 +378,7 @@ submit(): void {
   this.loadingService.show();
   this.submitted = true;
   this.registerForm.markAllAsTouched();
-  if (this.registerForm.invalid || this.uploadError) { return; }
+  if (this.registerForm.invalid) { return; }
 
   /* 1️⃣  Get the typed data */
   const data: RegisterHotelRequest = this.buildPayload();

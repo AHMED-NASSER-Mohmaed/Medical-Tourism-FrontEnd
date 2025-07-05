@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from './auth/services/auth.service';
+import { Router,NavigationEnd  } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 
 
@@ -14,23 +16,41 @@ import { AuthService } from './auth/services/auth.service';
 export class AppComponent {
 
   title = 'Medical-Tourism-FrontEnd';
-  // Store user name when logged in
+
   showNavFooter = true;
 constructor(
   public dialog: MatDialog,
-  private authService: AuthService
+  private authService: AuthService,
+    private router: Router,
 ) {
 
 
 }
 ngOnInit(): void {
-    // Subscribe to login status and update role accordingly
+
     this.authService.loginStatus$.subscribe(() => {
       const role = this.authService.getUserRole();
       this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin');
 
     });
 
+   this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.checkRouteVisibility();
+    });
+
+
+    this.checkRouteVisibility();
+
+}
+ checkRouteVisibility(): void {
+    const currentRoute = this.router.url;
+    if (currentRoute.includes('confirm')) {
+      this.showNavFooter = false;
+    } else {
+      this.showNavFooter = (this.authService.getUserRole() !== 'ServiceProvider') && (this.authService.getUserRole() !== 'SuperAdmin');
+    }
   }
 
 

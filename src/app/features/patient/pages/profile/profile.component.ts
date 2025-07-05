@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
+import { LoadingService } from '../../../../shared/services/loading.service';
 
 interface MedicalCard { title: string; value: string | number; icon: string; }
 interface SidebarLink { text: string; icon: string; badge?: number; }
@@ -60,7 +61,8 @@ export class ProfileComponent implements OnInit {
       private auth:AuthService,
       private fb:FormBuilder,
       private router:Router,
-      private countriesSrv:CountryService,private route:ActivatedRoute) {}
+      private countriesSrv:CountryService,private route:ActivatedRoute,
+    private loadingSrv:LoadingService) {}
 
   /* ══════════════════════════════════ init ══════════════════════════════════ */
 
@@ -255,11 +257,13 @@ this.auth.updateProfileImage(formData).subscribe({
 }
 
 onChangePassword() {
+  this.loadingSrv.show();
     this.submittedPass = true;
     if (this.changePasswordForm.invalid) return;
 
     this.auth.changePassword(this.changePasswordForm.value).subscribe({
       next: () => {
+        this.loadingSrv.hide();
         Swal.fire({
           icon: 'success',
           title: 'Password updated',
@@ -272,6 +276,7 @@ onChangePassword() {
           this.router.navigate(['/auth/login'])});
       },
       error: err => {
+        this.loadingSrv.hide();
         Swal.fire({
           icon: 'error',
           title: 'Failed',
@@ -282,19 +287,24 @@ onChangePassword() {
   }
 
   onChangeEmail() {
+    this.loadingSrv.show();
     this.submittedEmail = true;
     if (this.changeEmailForm.invalid) return;
 
     this.auth.changeEmail(this.changeEmailForm.value).subscribe({
       next: (res) => {
+        this.loadingSrv.hide();
         Swal.fire({
           icon: 'success',
           title: 'Email change',
           text: res.message,
           confirmButtonText: 'OK'
-        }).then(() => this.router.navigate(['/auth/login']));
+        }).then(() =>{
+           this.auth.logout();
+          this.router.navigate(['/auth/login'])});
       },
       error: err => {
+        this.loadingSrv.hide();
         Swal.fire({
           icon: 'error',
           title: 'Failed',

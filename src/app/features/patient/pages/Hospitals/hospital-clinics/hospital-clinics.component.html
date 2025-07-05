@@ -44,7 +44,7 @@
                         <div style="background: #fff; border-radius: 0 0 12px 12px; padding: 16px;">
                             <div style="font-size: 1.1rem; font-weight: 500; color: #2563eb;">{{ clinic.name }}</div>
                             <div style="color: #64748b; font-size: 1rem; margin-bottom: 16px;">
-                                {{ clinic.doctors.length || 0 }} Doctors
+                                {{ clinic.doctors?.length || 0 }} Doctors
                             </div>
                             <button (click)="ViewClinicDetails(clinic.id)" style="width: 100%; padding: 10px; border: 1.5px solid #2563eb; border-radius: 8px; background: #fff; color: #2563eb; font-weight: 600; font-size: 1rem; cursor: pointer;">
                                 Available Appointments

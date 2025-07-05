@@ -1,0 +1,71 @@
+footer.bg-dark {
+  background-color: #343a40;
+  color: #fff;
+  padding: 10px 0; /* Add minimal padding for space */
+  min-height: 385px; /* Set minimum height */
+  max-height:385px;
+  position: relative;
+}
+
+footer .container {
+  padding: 0; /* Remove padding inside the container to save space */
+}
+
+/* Reduce the size of the header and links */
+footer h5 {
+  font-size: 1rem; /* Reduce font size */
+  font-weight: 600;
+  margin-bottom: 5px; /* Reduce space below each heading */
+}
+
+footer .social-icons {
+  display: flex;
+  gap: 10px;  /* Reduce space between icons */
+}
+
+footer .social-icons i {
+  font-size: 1rem; /* Make icons smaller */
+}
+
+footer .row {
+  margin: 0; /* Remove extra margin between footer sections */
+  padding: 0; /* Remove extra padding */
+}
+
+footer .col-md-6 p {
+  font-size: 0.9rem; /* Smaller text */
+  margin: 0; /* Remove extra margin */
+}
+
+footer ul li a {
+  font-size: 0.9rem;
+  color: #ddd;
+  text-decoration: none;
+  line-height: 1.2;
+  margin-bottom: 4px;  /* Reduce space between links */
+}
+
+footer ul li a:hover {
+  color: #fff;
+}
+
+footer .col-md-6 a {
+  font-size: 0.8rem;
+  color: #ddd;
+  margin-right: 10px;  /* Space between the links */
+}
+
+/* Small screen adjustments */
+@media (max-width: 768px) {
+  footer .social-icons i {
+    font-size: 0.9rem;
+  }
+
+  footer .col-md-6 p {
+    font-size: 0.8rem;
+  }
+
+  footer .col-md-6 a {
+    font-size: 0.8rem;
+  }
+}
