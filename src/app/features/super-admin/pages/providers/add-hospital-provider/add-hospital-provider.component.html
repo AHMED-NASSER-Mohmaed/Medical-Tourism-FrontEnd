@@ -78,18 +78,37 @@
 
         <!-- Country -->
         <div class="col-md-6">
-          <label class="form-label">Country</label>
-          <select class="form-select" formControlName="countryId">
-            <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
-          </select>
+          <div class="form-floating position-relative">
+            <select class="form-select" formControlName="countryId" [disabled]="countries.length === 0 || isLoading">
+              <option value="">Select Country</option>
+              <option *ngFor="let country of countries" [value]="country.id">{{ country.name }}</option>
+            </select>
+            <label for="countryId"><i class="fas fa-globe-africa me-1 text-primary"></i> Country</label>
+            <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+            <div *ngIf="hospitalForm.get('countryId')?.invalid && hospitalForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+              Country is required
+            </div>
+            <div *ngIf="!isLoading && countries.length === 0" class="form-text text-warning ms-1">
+              No countries available
+            </div>
+          </div>
         </div>
-
         <!-- Governorate -->
         <div class="col-md-6">
-          <label class="form-label">Governorate</label>
-          <select class="form-select" formControlName="governorateId">
-            <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
-          </select>
+          <div class="form-floating position-relative">
+            <select class="form-select" formControlName="governorateId" [disabled]="governorates.length === 0 || !hospitalForm.get('countryId')?.value || isLoading">
+              <option value="">Select Governorate</option>
+              <option *ngFor="let gov of governorates" [value]="gov.id">{{ gov.name }}</option>
+            </select>
+            <label for="governorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Governorate</label>
+            <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
+            <div *ngIf="hospitalForm.get('governorateId')?.invalid && hospitalForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+              Governorate is required
+            </div>
+            <div *ngIf="!isLoading && governorates.length === 0 && hospitalForm.get('countryId')?.value" class="form-text text-warning ms-1">
+              No governorates available for this country
+            </div>
+          </div>
         </div>
 
         <!-- Hospital Asset Info -->

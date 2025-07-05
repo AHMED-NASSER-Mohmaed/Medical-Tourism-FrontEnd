@@ -1,11 +1,13 @@
-
 /* Leaflet default skin */
 @import "leaflet/dist/leaflet.css";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height: 100vh;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  padding-top: 0 !important;
+ }
+ .navbar + * { margin-top: 0 !important; }
 
 .app-root, app-root {
   display: flex;
@@ -19,6 +21,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
 footer.bg-dark {
   flex-shrink: 0;
 }
+
+
+
 
 
 

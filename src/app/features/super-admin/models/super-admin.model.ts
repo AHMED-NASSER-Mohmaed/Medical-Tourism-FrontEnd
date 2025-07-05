@@ -270,3 +270,23 @@ function mapUserStatusToAssetStatus(userStatus: number): AssetStatus {
     default: return AssetStatus.PENDING;
   }
 }
+
+// ========== Location API Models ========== //
+export interface Governate {
+  governateId: number;
+  governateName: string;
+}
+
+export interface CountryWithGovernates {
+  countryId: number;
+  countryName: string;
+  governates: {
+    [governateId: string]: Governate;
+  };
+}
+
+export interface CountriesGovernatesResponse {
+  data: {
+    [countryId: string]: CountryWithGovernates;
+  };
+}

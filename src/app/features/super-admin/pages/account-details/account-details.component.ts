@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { SuperAdminService } from '../../services/super-admin.service';
 import {
@@ -29,7 +29,7 @@ function isProvider(account: AccountType): account is HospitalProvider | HotelPr
   styleUrls: ['./account-details.component.css'],
   standalone: false
 })
-export class AccountDetailsComponent {
+export class AccountDetailsComponent implements OnChanges {
   @Input() account: AccountType | null = null;
   @Output() close = new EventEmitter<void>();
 
@@ -49,6 +49,8 @@ export class AccountDetailsComponent {
   readonly HOSPITAL = ProviderType.HOSPITAL;
   readonly CAR_RENTAL = ProviderType.CAR_RENTAL;
 
+  enrichedAccount: AccountType | null = null;
+
   constructor(
     private superAdminService: SuperAdminService,
     private fb: FormBuilder
@@ -56,6 +58,12 @@ export class AccountDetailsComponent {
     this.emailForm = this.fb.group({
       newEmail: ['', [Validators.required, Validators.email]]
     });
+  }
+
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
+    if (changes['account'] && this.account) {
+      this.enrichedAccount = await this.superAdminService.enrichCountryAndGovernorate({ ...this.account });
+    }
   }
 
   updateEmail(): void {
@@ -127,45 +135,52 @@ export class AccountDetailsComponent {
   getVerificationStatusLabel(status?: AssetStatus): string {
     if (status === undefined) return 'Unknown';
     switch (status) {
- 
       case AssetStatus.APPROVED: return 'Approved';
       case AssetStatus.REJECTED: return 'Rejected';
       default: return 'Unknown';
     }
   }
-getStatusClass(status: UserStatus): string {
-  switch(status) {
-    case UserStatus.ACTIVE: return 'active';
-    case UserStatus.PENDING: return 'pending';
-    case UserStatus.INACTIVE: return 'inactive';
-    case UserStatus.SUSPENDED: return 'suspended';
-    default: return '';
+
+  getStatusClass(status: UserStatus): string {
+    switch(status) {
+      case UserStatus.ACTIVE: return 'active';
+      case UserStatus.PENDING: return 'pending';
+      case UserStatus.INACTIVE: return 'inactive';
+      case UserStatus.SUSPENDED: return 'suspended';
+      default: return '';
+    }
   }
-}
+
   isPatientAccount(): boolean {
     return this.account ? isPatient(this.account) : false;
   }
+
   isProviderAccount(): boolean {
     return this.account ? isProvider(this.account) : false;
   }
+
   getPatient(): Patient | null {
     return this.isPatientAccount() ? this.account as Patient : null;
   }
+
   getHotelProvider(): HotelProvider | null {
     return this.account && isProvider(this.account) && this.account.assetType === this.HOTEL
       ? this.account as HotelProvider
       : null;
   }
+
   getHospitalProvider(): HospitalProvider | null {
     return this.account && isProvider(this.account) && this.account.assetType === this.HOSPITAL
       ? this.account as HospitalProvider
       : null;
   }
+
   getCarRentalProvider(): CarRentalProvider | null {
     return this.account && isProvider(this.account) && this.account.assetType === this.CAR_RENTAL
       ? this.account as CarRentalProvider
       : null;
   }
+
   getFuelTypeLabel(fuelType: number): string {
     switch (fuelType) {
       case 0: return 'Gasoline';
@@ -175,19 +190,34 @@ getStatusClass(status: UserStatus): string {
       default: return 'Unknown';
     }
   }
+
   getAssetType(): ProviderType | null {
     return this.account && isProvider(this.account) ? this.account.assetType : null;
   }
+
   getAssetName(): string | null {
     return this.account && isProvider(this.account) ? this.account.assetName : null;
   }
+
   getVerificationStatus(): AssetStatus | null {
     return this.account && isProvider(this.account) ? this.account.verificationStatus : null;
   }
+
   getLocationDescription(): string | null {
     return this.account && isProvider(this.account) ? this.account.locationDescription : null;
   }
+
   getVerificationNotes(): string | null {
     return this.account && isProvider(this.account) ? this.account.verificationNotes : null;
+  }
+
+  getDisplayCountry(account: any): string {
+    if (!account) return 'N/A';
+    return account.country || account.countryName || (account.countryId ? ('#' + account.countryId) : 'N/A');
+  }
+
+  getDisplayGovernorate(account: any): string {
+    if (!account) return 'N/A';
+    return account.governorate || account.governorateName || (account.governorateId ? ('#' + account.governorateId) : 'N/A');
   }
 }

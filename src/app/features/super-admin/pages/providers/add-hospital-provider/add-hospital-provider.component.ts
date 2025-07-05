@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SuperAdminService } from '../../../services/super-admin.service';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators, FormArray, FormGroup } from '@angular/forms';
 import { faHospital } from '@fortawesome/free-solid-svg-icons';
-import { AssetStatus } from '../../../models/super-admin.model';
+import { AssetStatus, CountriesGovernatesResponse, CountryWithGovernates } from '../../../models/super-admin.model';
 
 @Component({
   selector: 'app-add-hospital-provider',
@@ -11,7 +11,7 @@ import { AssetStatus } from '../../../models/super-admin.model';
   styleUrls: ['./add-hospital-provider.component.css'],
   standalone: false
 })
-export class AddHospitalProviderComponent {
+export class AddHospitalProviderComponent implements OnInit {
   faHospital = faHospital;
 
   hospitalForm: FormGroup;
@@ -22,14 +22,11 @@ export class AddHospitalProviderComponent {
     { id: 2, name: 'Arabic' },
     { id: 3, name: 'French' }
   ];
-  countries = [
-    { id: 1, name: 'Egypt' },
-    { id: 2, name: 'Saudi Arabia' }
-  ];
-  governorates = [
-    { id: 1, name: 'Cairo' },
-    { id: 2, name: 'Giza' }
-  ];
+  countries: { id: number; name: string }[] = [];
+  governorates: { id: number; name: string }[] = [];
+  isLoading = false;
+
+  private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -47,8 +44,8 @@ export class AddHospitalProviderComponent {
       dateOfBirth: ['', Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
-      countryId: [1, Validators.required],
-      governorateId: [1, Validators.required],
+      countryId: [null, Validators.required],
+      governorateId: [null, Validators.required],
 
       assetName: ['', Validators.required],
       assetDescription: ['', Validators.required],
@@ -78,6 +75,33 @@ export class AddHospitalProviderComponent {
         millisecond: [0]
       })
     });
+  }
+
+  ngOnInit(): void {
+    this.superAdminService.getCountriesAndGovernates().subscribe({
+      next: (response: CountriesGovernatesResponse) => {
+        this.countriesMap = response.data;
+        this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+      },
+      error: () => {
+        // Optionally handle error
+      }
+    });
+
+    this.hospitalForm.get('countryId')?.valueChanges.subscribe((countryId: number) => {
+      this.updateGovernorates(countryId);
+    });
+  }
+
+  private updateGovernorates(countryId: number) {
+    if (!countryId || !this.countriesMap[countryId]) {
+      this.governorates = [];
+      this.hospitalForm.patchValue({ governorateId: null });
+      return;
+    }
+    const govObj = this.countriesMap[countryId].governates;
+    this.governorates = Object.values(govObj).map(g => ({ id: g.governateId, name: g.governateName }));
+    this.hospitalForm.patchValue({ governorateId: null });
   }
 
   get facilities(): FormArray {
@@ -114,7 +138,8 @@ export class AddHospitalProviderComponent {
   onSubmit(): void {
     if (this.hospitalForm.valid) {
       const formValue = this.hospitalForm.value;
-
+      const country = this.countriesMap[formValue.countryId];
+      const governate = country?.governates[formValue.governorateId];
       const payload = {
         email: formValue.email,
         password: formValue.password,
@@ -126,7 +151,9 @@ export class AddHospitalProviderComponent {
         address: formValue.address,
         city: formValue.city,
         countryId: formValue.countryId,
+        countryName: country?.countryName,
         governorateId: formValue.governorateId,
+        governorateName: governate?.governateName,
         dateOfBirth: formValue.dateOfBirth,
 
         assetName: formValue.assetName,
@@ -142,8 +169,8 @@ export class AddHospitalProviderComponent {
         languagesSupported: formValue.languagesSupported,
         assetType: 0,
         openingTime: formValue.openingTime,
-  closingTime: formValue.closingTime,
-  verificationStatus:  AssetStatus.APPROVED
+        closingTime: formValue.closingTime,
+        verificationStatus:  AssetStatus.APPROVED
       };
 
       this.superAdminService.addHospitalProvider(payload).subscribe({

@@ -10,6 +10,7 @@
   width: 100vw;
   z-index: 100;
   box-shadow: 0 2px 12px #0002;
+  margin-top:80px;
 }
 
 .banner h1 {

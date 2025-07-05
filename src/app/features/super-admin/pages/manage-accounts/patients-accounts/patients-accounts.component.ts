@@ -34,7 +34,7 @@ export class PatientsAccountsComponent implements OnInit {
     this.errorMessage = '';
     const filters: any = { searchTerm: this.searchTerm };
     if (this.statusFilter !== 'all') {
-      filters.status = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
+      filters.UserStatus = UserStatus[this.statusFilter.toUpperCase() as keyof typeof UserStatus];
     }
     this.superAdminService.getPatients(this.pagination.page, this.pagination.pageSize, filters)
       .pipe(finalize(() => this.isLoading = false))
@@ -156,8 +156,8 @@ export class PatientsAccountsComponent implements OnInit {
       }
     });
   }
-  viewAccount(account: Patient): void {
-    this.selectedAccount = account;
+  async viewAccount(account: Patient): Promise<void> {
+    this.selectedAccount = await this.superAdminService.enrichCountryAndGovernorate(account);
     this.showAccountModal = true;
   }
   closeAccountModal(): void {
