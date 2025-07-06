@@ -16,7 +16,7 @@ export class SpecialistsListComponent implements OnInit {
   };
   specialists: any[] = [];
   pageNumber: number = 1;
-  pageSize: number = 8;
+  pageSize: number = 9;
   totalPages: number = 1;
 
   constructor(

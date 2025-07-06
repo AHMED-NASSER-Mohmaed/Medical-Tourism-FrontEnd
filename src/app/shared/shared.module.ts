@@ -12,6 +12,7 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
 import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode-toggle.component';
 import { StatusLabelPipe } from './pipes/status.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     ModalComponent,
     SkeletonLoaderComponent,
     DarkModeToggleComponent,
-    LoadingComponent
+    LoadingComponent,
+    NotFoundComponent
 
   ],
   imports: [

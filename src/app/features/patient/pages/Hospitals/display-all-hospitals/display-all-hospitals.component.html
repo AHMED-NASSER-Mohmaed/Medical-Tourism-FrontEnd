@@ -1,91 +1,100 @@
-<!-- Header and Navigation -->
-
-<!-- Banner -->
 <div class="banner">
-    <h1>Find Hospitals</h1>
-    <p>Explore our network of accredited hospitals for your medical needs.</p>
-</div>
-
-<div class="main-content improved-layout">
-  <!-- Refine Search Sidebar (Fixed as it was) -->
-<aside class="sidebar improved-sidebar">
-  <div class="sidebar-title">
-    <span class="icon">🔎</span>
-    <span class="refine-title">Refine Search</span>
-  </div>
-  <div class="sidebar-fields-horizontal">
-    <div class="filter-item">
-      <label>Search by Hospital Name</label>
-      <input type="text" class="form-control" placeholder="e.g., Global Health" [(ngModel)]="filterCriteria.name">
+        <h1>Find Hospitals</h1>
+        <p>Explore our network of accredited hospitals for your medical needs.</p>
     </div>
-    <div class="filter-item">
-      <label>Medical Specialty</label>
-      <select class="form-select" [(ngModel)]="filterCriteria.specialty">
-        <option value="">All Specialties</option>
-        <option *ngFor="let specialty of specialties" [value]="specialty.id" >
-          {{ specialty.name }}
-        </option>
-      </select>
+
+    <!-- Layout Container -->
+    <div class="main-layout">
+
+        <!-- Sidebar for Filters -->
+        <aside class="sidebar">
+            <div class="sidebar-title">
+                <span class="icon">🔎</span>
+                <span class="refine-title">Refine Search</span>
+            </div>
+
+            <div class="filter-item">
+                <label>Search by Hospital Name</label>
+                <input type="text" class="form-control" placeholder="e.g., Global Health" [(ngModel)]="filterCriteria.name">
+            </div>
+
+            <div class="filter-item">
+                <label>Medical Specialty</label>
+                <select class="form-select" [(ngModel)]="filterCriteria.specialty">
+                    <option value="">All Specialties</option>
+                    <option *ngFor="let specialty of specialties" [value]="specialty.id">
+                        {{ specialty.name }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="filter-item">
+                <label>Location (Governorate)</label>
+                <!--
+                  SETUP INSTRUCTIONS FOR NG-SELECT:
+                  1. Install the package in your project:
+                     npm install @ng-select/ng-select
+                  2. Import the NgSelectModule into your component's Angular module:
+                     import { NgSelectModule } from '@ng-select/ng-select';
+                     @NgModule({
+                       imports: [ NgSelectModule, ... ]
+                     })
+                -->
+                <ng-select
+                class="custom-bootstrap-style"
+                    [items]="governorates"
+                    bindLabel="name"
+                    bindValue="id"
+                    placeholder="Select Location"
+                    [(ngModel)]="filterCriteria.location"
+
+
+  [searchable]="false"
+  [clearable]="false">
+
+                </ng-select>
+            </div>
+
+            <div class="sidebar-buttons">
+                <button class="btn btn-primary" (click)="applyFilters()">
+                    <span class="icon">🔍</span> Apply Filters
+                </button>
+                <button class="btn btn-secondary" (click)="goBack()">
+                    <span class="icon">↩️</span> Back
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- List Hospitals -->
+            <section class="hospitals-list improved-hospitals-list">
+                <div *ngFor="let hospital of hospitals" class="departments-card">
+                    <img src="../../../../../../assets/images/hospital2.jpg" alt="{{ hospital.assetName }} Image">
+                    <div class="content">
+                        <h3>{{ hospital.assetName }}</h3>
+                        <p>{{ hospital.description }}</p>
+                        <a class="departments-more" (click)="ViewClinicsForSpecialty(hospital.id)">
+                            Specialists <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <nav *ngIf="totalPages > 1" class="pagination-nav">
+                <ul class="pagination pagination-sm justify-content-center">
+                    <li class="page-item" [class.disabled]="pageNumber === 1" (click)="onPageChange(pageNumber - 1)">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                    <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item" [class.active]="pageNumber === (i + 1)" (click)="onPageChange(i + 1)">
+                        <span class="page-link">{{ i + 1 }}</span>
+                    </li>
+                    <li class="page-item" [class.disabled]="pageNumber === totalPages" (click)="onPageChange(pageNumber + 1)">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                </ul>
+            </nav>
+        </main>
+
     </div>
-    <div class="filter-item">
-      <label>Location (Governorate)</label>
-      <select class="form-select" [(ngModel)]="filterCriteria.location">
-        <option value="" selected>All Locations</option>
-        <option *ngFor="let governorate of governorates" [value]="governorate.id">
-          {{ governorate.name }}
-        </option>
-      </select>
-    </div>
-        <div class="back-button-container">
-  <button class="btn btn-secondary back-btn" (click)="goBack()">
-    <span class="icon">↩️</span> Back
-  </button>
-</div>
-    <div class="filter-item filter-btn-item">
-      <button class="btn btn-primary filter-btn" (click)="applyFilters()">
-        <span class="icon">🔍</span> Apply Filters
-      </button>
-    </div>
-  </div>
-</aside>
-
-  <!-- List Hospitals -->
-  <section class="hospitals-list improved-hospitals-list">
-    <div *ngFor="let hospital of hospitals" class="departments-card">
-      <img src="../../../../../../assets/images/hospital2.jpg" alt="{{ hospital.assetName }} Image">
-      <div class="content">
-        <h3>{{ hospital.assetName }}</h3>
-        <p>{{ hospital.description }}</p>
-<a  class="departments-more" (click)="ViewClinicsForSpecialty(hospital.id)">
-  Specialists <i class="flaticon-right-arrow"></i>
-</a>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Pagination -->
-<!-- Pagination -->
-<nav *ngIf="totalPages > 1" class="pagination-nav">
-  <ul class="pagination pagination-sm justify-content-center">
-    <!-- Previous page button -->
-    <li class="page-item" [class.disabled]="pageNumber === 1" (click)="onPageChange(pageNumber - 1)">
-      <span class="page-link">&laquo;</span>
-    </li>
-
-    <!-- Page number buttons -->
-    <li *ngFor="let page of [].constructor(totalPages); let i = index"
-        class="page-item"
-        [class.active]="pageNumber === (i + 1)"
-        (click)="onPageChange(i + 1)">
-      <span class="page-link">{{ i + 1 }}</span>
-    </li>
-
-    <!-- Next page button -->
-    <li class="page-item" [class.disabled]="pageNumber === totalPages" (click)="onPageChange(pageNumber + 1)">
-      <span class="page-link">&raquo;</span>
-    </li>
-  </ul>
-</nav>
-
-</div>

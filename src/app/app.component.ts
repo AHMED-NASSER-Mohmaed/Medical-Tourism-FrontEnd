@@ -44,14 +44,15 @@ ngOnInit(): void {
     this.checkRouteVisibility();
 
 }
- checkRouteVisibility(): void {
-    const currentRoute = this.router.url;
-    if (currentRoute.includes('confirm')) {
-      this.showNavFooter = false;
-    } else {
-      this.showNavFooter = (this.authService.getUserRole() !== 'ServiceProvider') && (this.authService.getUserRole() !== 'SuperAdmin');
-    }
-  }
+checkRouteVisibility(): void {
+  const currentRoute = this.router.url;
+
+
+  const hideNavFooter = this.router.routerState.snapshot.root.firstChild?.data?.['hideNavFooter'] || false;
+  this.showNavFooter = !(currentRoute.includes('confirm') || hideNavFooter ||
+    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin');
+}
+
 
 
 

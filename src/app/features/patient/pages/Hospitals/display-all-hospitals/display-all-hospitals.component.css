@@ -1,3 +1,4 @@
+ /* Banner from your code */
 /* Fixed Banner */
 .banner {
   background: #305cae;
@@ -24,353 +25,292 @@
   opacity: 0.95;
 }
 
-/* Add top margin to main content to avoid overlap with fixed banner */
-.main-content.improved-layout {
-  display: flex;
-  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-  gap: 32px;
-  max-width: 1300px;
-  margin: 0 auto;
-  padding: 40px 12px 0 12px;
-  margin-top: 50px; /* Adjusted for the reduced banner height */
-  padding-bottom: 80px; /* Add padding at the bottom to avoid overlap with footer */
+
+        /* Main Layout for Sidebar and Content */
+        .main-layout {
+            display: flex;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1rem 2rem 1rem;
+        }
+
+        /* Sidebar styles for vertical layout */
+        .sidebar {
+            flex: 0 0 300px; /* Fixed width */
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            height: fit-content;
+        }
+
+        .sidebar-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0a174e;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .sidebar-title .icon {
+            font-size: 1.7rem;
+        }
+
+        .refine-title {
+             font-size: 1.25rem;
+        }
+
+        .filter-item {
+            margin-bottom: 1.25rem;
+        }
+
+        .filter-item label {
+            display: block;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #16213E;
+        }
+
+        .filter-item input,
+        .filter-item select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: #f6f8fa;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+
+        .filter-item input:focus,
+        .filter-item select:focus {
+            border-color: #2563b6;
+            box-shadow: 0 0 0 3px rgba(37, 99, 182, 0.2);
+            outline: none;
+        }
+
+        /* Custom styles for ng-select to match your design */
+        .filter-item .ng-select .ng-select-container {
+            background-color: #f6f8fa;
+            border-radius: 8px;
+            border: 1px solid #d1d5db;
+            height: auto;
+            min-height: 45px; /* Match height of other inputs */
+        }
+
+        .filter-item .ng-select.ng-select-focused .ng-select-container {
+            border-color: #2563b6;
+            box-shadow: 0 0 0 3px rgba(37, 99, 182, 0.2);
+        }
+
+        .sidebar-buttons {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            padding: 0.8rem 0;
+            font-size: 1rem;
+            transition: background-color 0.2s, transform 0.2s;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #2563b6;
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:hover {
+            background: #1e4c90;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        .content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .improved-hospitals-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 items per row */
+            gap: 28px;
+            width: 100%;
+        }
+
+        .departments-card {
+            background-color: #ffffff;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .departments-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .departments-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .departments-card .content {
+            padding: 22px;
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .departments-card .content h3 {
+            font-size: 20px;
+            color: #16213E;
+            margin-bottom: 10px;
+        }
+
+        .departments-card .content p {
+            color: #6E6E6E;
+            font-size: 14px;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .departments-card .content .departments-more {
+            display: block;
+            color: #2563b6;
+            font-weight: 600;
+            font-size: 15px;
+            margin-top: 15px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .departments-card .content .departments-more:hover {
+            color: #16213E;
+        }
+
+        .pagination-nav {
+            display: flex;
+            justify-content: center;
+            margin: 32px 0 24px 0;
+        }
+
+        .pagination {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            gap: 6px;
+        }
+
+        .page-item .page-link {
+            display: block;
+            padding: 6px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            color: #2563b6;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .page-item.active .page-link,
+        .page-item .page-link:hover {
+            background: #2563b6;
+            color: #fff;
+            border-color: #2563b6;
+        }
+
+        .page-item.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .sidebar {
+                flex-basis: auto;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .improved-hospitals-list {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .improved-hospitals-list {
+                grid-template-columns: 1fr;
+            }
+        }
+::ng-deep ng-select.custom-bootstrap-style .ng-option {
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  color: #212529;
+  background-color: #fff;
+  transition: background-color 0.2s ease-in-out;
 }
 
-/* Sidebar improvements */
-/* Sidebar horizontal bar layout */
-/* Sidebar horizontal bar layout */
-.improved-sidebar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Spread content */
-  gap: 24px;
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 2px 12px #0001;
-  padding: 18px 24px;
-  margin-bottom: 32px;
-  width: 100%;
-  max-width: 100%;
+::ng-deep ng-select.custom-bootstrap-style .ng-option:hover {
+  background-color: #e9ecef;
 }
 
-.sidebar-title {
-  display: flex;
-  flex-direction: row; /* Icon and text side by side */
-  align-items: center;
-  min-width: 0;
-  margin-right: 24px;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #0a174e;
-  line-height: 1.1;
-  white-space: nowrap;
-}
-.sidebar-title .icon {
-  font-size: 1.7rem;
-  margin-bottom: 0;
-  margin-right: 8px;
-}
-.refine-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #0a174e;
-}
-
-.sidebar-fields-horizontal {
-  display: flex;
-  flex: 1;
-  gap: 24px;
-  align-items: flex-end;
-  justify-content: space-between;
-}
-
-.filter-item {
-  display: flex;
-  flex-direction: column;
-  min-width: 180px;
-  max-width: 220px;
-  flex: 1 1 0;
-}
-
-/* Responsive: stack vertically on small screens */
-@media (max-width: 1100px) {
-  .improved-sidebar,
-  .sidebar-fields-horizontal {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  .sidebar-title {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 8px;
-    margin-right: 0;
-    justify-content: flex-start;
-  }
-  .filter-item,
-  .filter-btn-item {
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-  }
-}
-
-.filter-item label {
-  font-size: 1rem;
+::ng-deep ng-select.custom-bootstrap-style .ng-option-selected {
+  background-color: #dbeafe !important;
   font-weight: 500;
-  margin-bottom: 6px;
-  color: #16213E;
-  white-space: nowrap;
 }
 
-.filter-item input,
-.filter-item select {
-  padding: 7px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 1rem;
-  background: #f6f8fa;
-  transition: border-color 0.2s;
+::ng-deep ng-select.custom-bootstrap-style .ng-value {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  font-size: 1rem !important;
+  color: #212529 !important;
+  font-weight: normal !important;
 }
 
-.filter-item input:focus,
-.filter-item select:focus {
-  border-color: #2563b6;
-  outline: none;
-}
 
-.filter-btn-item {
-  min-width: 140px;
-  max-width: 160px;
-  display: flex;
-  align-items: flex-end;
-  justify-content: flex-end;
-}
 
-.filter-btn {
-  width: 100%;
-  background: #2563b6;
-  color: #fff;
-  border: none;
-  border-radius: 7px;
-  font-weight: 600;
-  padding: 0.7rem 0;
-  font-size: 1.05rem;
-  transition: background 0.2s;
-  display: flex;
+::ng-deep ng-select.custom-bootstrap-style .ng-select-container {
+  min-height: 38px;
+  padding: 0 0.5rem;
   align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-}
-
-.filter-btn:hover {
-  background: #17408b;
-}
-
-/* Responsive: stack vertically on small screens */
-@media (max-width: 1100px) {
-  .improved-sidebar,
-  .sidebar-fields-horizontal {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 12px;
-  }
-  .sidebar-title {
-    flex-direction: row;
-    align-items: center;
-    margin-bottom: 8px;
-    margin-right: 0;
-  }
-  .filter-item,
-  .filter-btn-item {
-    min-width: 0;
-    max-width: 100%;
-    width: 100%;
-  }
-}
-/* Hospital cards grid: 4 per row */
-.improved-hospitals-list {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4 items per row */
-  gap: 28px;
-  width: 100%;
-  margin-top: 40px; /* Give space for the horizontal sidebar */
-}
-
-/* Hospital card styles */
-.departments-card {
-  background-color: #ffffff;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  border-radius: 12px;
-  overflow: hidden;
-  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-  width: 100%;
-}
-
-.departments-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-}
-
-.departments-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover; /* To maintain the aspect ratio of the image */
-  border-bottom: 5px solid #ddd;
-}
-
-.departments-card .content {
-  padding: 22px;
-  text-align: center;
-}
-
-.departments-card .content h3 {
-  font-size: 20px;
-  color: #16213E;
-  margin-bottom: 10px;
-}
-
-.departments-card .content p {
-  color: #6E6E6E;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-.departments-card .content .departments-more {
-  display: block;
-  color: #2563b6;
-  font-weight: 600;
-  font-size: 15px;
-  margin-top: 15px;
-  text-decoration: none;
-}
-
-.departments-card .content .departments-more:hover {
-  color: #16213E;
-  letter-spacing: 0.25px;
-  cursor: pointer;
-}
-
-/* Icons next to description */
-.departments-card .content i {
-  color: #2563b6;
-  margin-right: 8px;
-}
-
-/* Pagination styles */
-.pagination-nav {
-  display: flex;
-  justify-content: center;
-  margin: 32px 0 24px 0;
-}
-
-.pagination-list {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  gap: 6px;
-}
-
-.pagination-list li {
-  background: #fff;
-  border: 1px solid #2563b6;
-  color: #2563b6;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  user-select: none;
-}
-
-.pagination-list li.active,
-.pagination-list li:hover:not(.disabled) {
-  background: #2563b6;
-  color: #fff;
-}
-
-.pagination-list li.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-/* Responsive: 3 per row on medium, 2 per row on smaller screens, 1 per row on mobile */
-
-
-@media (max-width: 700px) {
-  .improved-hospitals-list {
-    grid-template-columns: 1fr; /* 1 item per row */
-  }
-
-  .improved-sidebar {
-    display: none; /* Hide sidebar on very small screens */
-  }
-}
-/* Pagination Styles */
-.pagination-nav {
-  display: flex;
-  justify-content: center;  /* Center pagination items horizontally */
-  align-items: center;  /* Vertically center if needed */
-  margin: 32px auto;  /* Center the container horizontally and give top/bottom margin */
-  width: 100%;  /* Ensure the container spans the full width */
-}
-
-.pagination-list {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  gap: 6px;  /* Space between pagination buttons */
-}
-
-.pagination-list li {
-  background: #fff;
-  border: 1px solid #2563b6;
-  color: #2563b6;
-  border-radius: 6px;
-  padding: 6px 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-  user-select: none;
-}
-
-.pagination-list li.active,
-.pagination-list li:hover:not(.disabled) {
-  background: #2563b6;
-  color: #fff;
-}
-
-.pagination-list li.disabled {
-  opacity: 0.5;
-  pointer-events: none;
-}
-
-/* Back Button Container */
-.back-button-container {
-  margin-top: 20px;
-  text-align: left; /* Align to the left of the container */
-}
-
-.back-btn {
-  background-color: #2563b6; /* Same as your main button color */
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.7rem 1.5rem;
-  font-size: 1.05rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  transition: background-color 0.3s;
-}
-
-.back-btn:hover {
-  background-color: #17408b;
-}
-
-.icon {
-  font-size: 1.2rem;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem;
+  box-shadow: none;
 }

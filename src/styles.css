@@ -3,13 +3,17 @@
 
 
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height: 100vh;
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
   display: flex;
   flex-direction: column;
   padding-top: 0 !important;
- }
+}
+
  .navbar + * { margin-top: 0 !important; }
+
 
 .app-root, app-root {
   display: flex;
@@ -17,9 +21,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
   min-height: 100vh;
 }
 
+.main-content {
+  flex-grow: 1; /* This allows the main content to take the remaining space */
+}
 
 footer.bg-dark {
-  flex-shrink: 0;
+  flex-shrink: 0; /* Ensures the footer doesn't shrink and stays at the bottom */
 }
 
 

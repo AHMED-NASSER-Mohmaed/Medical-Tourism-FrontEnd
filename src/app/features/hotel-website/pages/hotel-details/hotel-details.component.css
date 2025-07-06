@@ -27,6 +27,7 @@
   box-shadow: 0 2px 8px rgba(40,97,197,0.08);
   transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 .btn-back:hover, .btn-back:focus {
   background: #2861c5;
@@ -38,4 +39,28 @@
   margin-right: 0.5rem;
   font-size: 1.1rem;
   vertical-align: middle;
+}
+.banner {
+  background: #305cae;
+  color: #fff;
+  text-align: center;
+  padding: 16px 0 8px 0; /* Reduced padding to minimize the height */
+  position: static;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+  margin-top:80px;
+  box-shadow: 0 2px 12px #0002;
+}
+
+.banner h1 {
+  font-size: 2rem; /* Reduced font size for the heading */
+  font-weight: bold;
+  margin-bottom: 6px; /* Reduced margin */
+}
+
+.banner p {
+  font-size: 1rem; /* Reduced font size for the paragraph */
+  opacity: 0.95;
 }
