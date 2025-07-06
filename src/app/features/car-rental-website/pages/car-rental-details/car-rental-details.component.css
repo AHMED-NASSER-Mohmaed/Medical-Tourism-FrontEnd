@@ -1,0 +1,22 @@
+.car-rentals-header-section {
+  background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
+  color: #fff;
+  padding: 2rem 0 1rem 0;
+  text-align: center;
+  border-radius: 0 0 1.5rem 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.btn-back {
+  background: #f8f9fa;
+  color: #007bff;
+  border: 1px solid #007bff;
+  border-radius: 2rem;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-back:hover {
+  background: #007bff;
+  color: #fff;
+} 

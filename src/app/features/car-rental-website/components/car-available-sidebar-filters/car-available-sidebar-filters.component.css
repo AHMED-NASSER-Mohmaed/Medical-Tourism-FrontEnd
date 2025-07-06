@@ -1,0 +1,29 @@
+.card {
+  border-radius: 1rem;
+  box-shadow: 0 2px 16px rgba(0, 123, 255, 0.08);
+  background: #fff;
+}
+.card-title {
+  font-weight: 600;
+  color: #007bff;
+}
+.form-label {
+  font-weight: 500;
+}
+input[type='number'], input[type='text'], select.form-select {
+  border-radius: 0.5rem;
+  border: 1px solid #e3e6f0;
+  transition: border-color 0.2s;
+}
+input[type='number']:focus, input[type='text']:focus, select.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.1rem rgba(0,123,255,.15);
+}
+.btn-primary {
+  border-radius: 2rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+.animate__animated {
+  animation-duration: 0.7s;
+} 

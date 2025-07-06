@@ -1,0 +1,122 @@
+<div class="car-rentals-header-section animate__animated animate__fadeInDown">
+  <h1 class="fw-bold display-4 text-gradient">Car Rental Details</h1>
+</div>
+<div class="container mb-4">
+  <button class="btn btn-back animate__animated animate__fadeInLeft" (click)="goBack()">
+    <i class="bi bi-arrow-left"></i> Back to Car Rentals List
+  </button>
+</div>
+<div class="container d-flex justify-content-center align-items-center animate__animated animate__fadeInUp" style="min-height: 70vh;">
+  <div *ngIf="!loading && carRental" class="glass-card shadow-lg p-4 rounded-5 animate__animated animate__zoomIn wow">
+    <div class="row g-4 align-items-center">
+      <div class="col-md-5 text-center">
+        <img [src]="carRental.imageURL || 'assets/images/cover.png'" class="img-fluid rounded-4 shadow-lg car-rental-img-detail animate__animated animate__fadeInLeftBig" alt="Car Rental Image" style="max-height: 320px; object-fit: cover; border: 6px solid #fff;">
+      </div>
+      <div class="col-md-7">
+        <h2 class="fw-bold mb-1 text-primary display-6 animate__animated animate__fadeInRightBig">{{ carRental.assetName || carRental.firstName + ' ' + carRental.lastName }}</h2>
+        <p class="lead text-secondary mb-4 animate__animated animate__fadeInRight">{{ carRental.description }}</p>
+        <div class="row mb-2 gy-2">
+          <div class="col-12 col-lg-6 animate__animated animate__fadeInUp">
+            <i class="bi bi-envelope-at-fill text-gradient"></i> <strong>Contact Email:</strong> <span class="text-dark">{{ carRental.email }}</span>
+          </div>
+          <div class="col-12 col-lg-6 animate__animated animate__fadeInUp">
+            <i class="bi bi-telephone-fill text-gradient"></i> <strong>Phone:</strong> <span class="text-dark">{{ carRental.phone }}</span>
+          </div>
+          <div class="col-12 animate__animated animate__fadeInUp">
+            <i class="bi bi-geo-alt-fill text-gradient"></i> <strong>Address:</strong> <span class="text-dark">{{ carRental.address }}, {{ carRental.city }}</span>
+          </div>
+          <div class="col-12 animate__animated animate__fadeInUp">
+            <i class="bi bi-car-front-fill text-gradient"></i> <strong>Models:</strong>
+            <span *ngIf="carRental.models?.length; else noModels">
+              <span *ngFor="let model of carRental.models" class="badge bg-gradient-primary me-1 animate__animated animate__bounceIn" style="font-size:1rem;">{{ model }}</span>
+            </span>
+            <ng-template #noModels><span class="text-muted">None</span></ng-template>
+          </div>
+          <div class="col-12 animate__animated animate__fadeInUp">
+            <i class="bi bi-fuel-pump-fill text-gradient"></i> <strong>Fuel Types:</strong>
+            <span *ngIf="carRental.fuelTypes?.length; else noFuels">
+              <span *ngFor="let fuel of carRental.fuelTypes" class="badge bg-gradient-success me-1 animate__animated animate__bounceIn" style="font-size:1rem;">
+                {{ FuelTypeMap[(fuel !== undefined ? fuel : 0)] || fuel }}
+              </span>
+            </span>
+            <ng-template #noFuels><span class="text-muted">None</span></ng-template>
+          </div>
+          <div class="col-12 animate__animated animate__fadeInUp">
+            <i class="bi bi-gear-fill text-gradient"></i> <strong>Transmission:</strong> <span class="badge bg-gradient-info text-dark animate__animated animate__bounceIn" style="font-size:1rem;">{{ TransmissionTypeMap[(carRental.transmission !== undefined ? carRental.transmission : 0)] || carRental.transmission }}</span>
+          </div>
+          <div class="col-12 animate__animated animate__fadeInUp">
+            <i class="bi bi-clipboard-check-fill text-gradient"></i> <strong>Rental Policies:</strong>
+            <span *ngIf="carRental.rentalPolicies?.length; else noPolicies">
+              <span *ngFor="let policy of carRental.rentalPolicies" class="badge bg-gradient-warning text-dark me-1 animate__animated animate__bounceIn" style="font-size:1rem;">{{ policy }}</span>
+            </span>
+            <ng-template #noPolicies><span class="text-muted">None</span></ng-template>
+          </div>
+          <div class="col-12 col-lg-6 animate__animated animate__fadeInUp">
+            <i class="bi bi-star-fill text-warning"></i> <strong>Star Rating:</strong> <span class="text-dark">{{ carRental.starRating || 'N/A' }}</span>
+          </div>
+          <div class="col-12 col-lg-6 animate__animated animate__fadeInUp">
+            <i class="bi bi-envelope-fill text-gradient"></i> <strong>Asset Email:</strong> <span class="text-dark">{{ carRental.assetEmail }}</span>
+          </div>
+          <div class="col-12 col-lg-6 animate__animated animate__fadeInUp">
+            <i class="bi bi-clock-fill text-gradient"></i> <strong>Opening Time:</strong> <span class="text-dark">{{ carRental.openingTime }}</span>
+          </div>
+          <div class="col-12 col-lg-6 animate__animated animate__fadeInUp">
+            <i class="bi bi-clock-history text-gradient"></i> <strong>Closing Time:</strong> <span class="text-dark">{{ carRental.closingTime }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="!loading && !carRental" class="alert alert-info animate__animated animate__fadeIn">
+    Car rental not found.
+  </div>
+</div>
+
+<!-- Glassmorphism and gradient styles -->
+<style>
+  .glass-card {
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: box-shadow 0.3s, transform 0.3s;
+  }
+  .glass-card:hover {
+    box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.28);
+    transform: translateY(-6px) scale(1.02);
+  }
+  .text-gradient {
+    background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+  }
+  .bg-gradient-primary {
+    background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%) !important;
+    color: #fff !important;
+  }
+  .bg-gradient-success {
+    background: linear-gradient(90deg, #28a745 0%, #00c6ff 100%) !important;
+    color: #fff !important;
+  }
+  .bg-gradient-info {
+    background: linear-gradient(90deg, #17a2b8 0%, #00c6ff 100%) !important;
+    color: #fff !important;
+  }
+  .bg-gradient-warning {
+    background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%) !important;
+    color: #212529 !important;
+  }
+  .car-rental-img-detail {
+    box-shadow: 0 4px 24px rgba(0, 123, 255, 0.15);
+    border-radius: 1.5rem;
+    transition: transform 0.3s;
+  }
+  .car-rental-img-detail:hover {
+    transform: scale(1.05) rotate(-2deg);
+    box-shadow: 0 8px 32px rgba(0, 123, 255, 0.25);
+  }
+</style>
