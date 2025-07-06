@@ -35,6 +35,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/hotel-provider/hotel-provider.module').then(m => m.HotelProviderModule)
   },
+  {
+    path: 'car-rentals',
+    loadChildren: () => import('./features/car-rental-website/car-rental-website.module').then(m => m.CarRentalWebsiteModule)
+  },
   { path: '', redirectTo: 'hotel-provider', pathMatch: 'full' },
 
  {
