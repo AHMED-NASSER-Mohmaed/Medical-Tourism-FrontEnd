@@ -1,5 +1,8 @@
-  <footer class="site-footer">
-        <div class="container">
+<footer class="site-footer">
+    <div class="container">
+
+        <!-- This block is shown ONLY on the home page -->
+        <div *ngIf="isHomePage; else minimizedFooter">
             <div class="row g-4">
                 <div class="col-lg-4">
                     <h5 class="footer-logo mb-3">
@@ -44,4 +47,13 @@
                 <p class="mb-0">&copy; 2024 Elagy. All rights reserved.</p>
             </div>
         </div>
-    </footer>
+
+        <!-- This template is shown on ALL OTHER pages -->
+        <ng-template #minimizedFooter>
+            <div class="minimized-footer-content">
+                <p class="mb-0">&copy; 2024 Elagy. All rights reserved.</p>
+            </div>
+        </ng-template>
+
+    </div>
+</footer>

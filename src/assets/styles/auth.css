@@ -80,10 +80,11 @@ a:hover, a:active, a:focus {
 }
 .auth-page{
    margin-top: 20px;
+   min-height: 100vh;
 }
 .margin-register{
-  margin-top: 60px;
-  padding-top: 20px;
+  margin-top: 80px;
+  padding-top: 50px;
 }
 /* Add to your css/auth.css or inside a <style> tag */
 .error-code {
@@ -100,4 +101,8 @@ a:hover, a:active, a:focus {
   color: rgba(46, 49, 51, 0.6) !important; /* Darker and more muted gray with reduced opacity */
   font-weight: 450;
   letter-spacing: 0.2px;
+}
+
+.mm-login{
+ padding-top: 40px;
 }
