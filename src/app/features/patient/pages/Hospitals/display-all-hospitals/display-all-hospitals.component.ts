@@ -119,9 +119,7 @@ loadHospitals() {
       }
     );
   }
-    ViewClinicsForSpecialty(hospitalId: string): void {
-    this.router.navigate(['/hospital', hospitalId, 'specialists']);
-  }
+
         goBack(): void {
     this.location.back();
   }

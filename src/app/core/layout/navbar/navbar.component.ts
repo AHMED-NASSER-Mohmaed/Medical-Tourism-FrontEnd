@@ -12,7 +12,7 @@ import { CookieService } from 'ngx-cookie-service';
 export class NavbarComponent implements OnInit {
   isLoggedIn = false;
   userName   = '';
-
+activeSection: string | null = null;
   constructor(
     private router: Router,
     private authService: AuthService,
