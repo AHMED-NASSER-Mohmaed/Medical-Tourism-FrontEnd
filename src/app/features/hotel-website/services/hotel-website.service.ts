@@ -21,7 +21,6 @@ export class HotelWebsiteService {
     SearchTerm?: string;
     UserStatus?: number;
     GovernerateId?: number;
-    // Add more filter params as needed
   }): Observable<Hotel[]> {
     let httpParams = new HttpParams();
     if (params.PageNumber !== undefined) httpParams = httpParams.set('PageNumber', params.PageNumber.toString());
@@ -29,7 +28,6 @@ export class HotelWebsiteService {
     if (params.SearchTerm) httpParams = httpParams.set('SearchTerm', params.SearchTerm);
     if (params.UserStatus !== undefined) httpParams = httpParams.set('UserStatus', params.UserStatus.toString());
     if (params.GovernerateId !== undefined) httpParams = httpParams.set('GovernerateId', params.GovernerateId.toString());
-    // Add more filters as needed
     return this.http.get<Hotel[]>(this.baseUrl, { params: httpParams });
   }
 
@@ -65,5 +63,13 @@ export class HotelWebsiteService {
         return Object.values(egypt.governates) as Governate[];
       })
     );
+  }
+
+  getRoomUnavailableDates(roomId: string | number): Observable<{ roomId: number, hotelId: string, hotelName: string, unavailableDates: string[] }> {
+    return this.http.get<{ roomId: number, hotelId: string, hotelName: string, unavailableDates: string[] }>(`${environment.apiUrl}/website/rooms-unavailable-dates/${roomId}`);
+  }
+
+  createRoomBooking(body: any): Observable<any> {
+    return this.http.post(`${environment.apiUrl}/checkout/CreateBooking`, body);
   }
 }

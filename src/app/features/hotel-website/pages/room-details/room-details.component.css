@@ -381,3 +381,339 @@
     font-size: 1rem;
   }
 }
+
+/* Sidebar and profile-container styles for room-details, inspired by doctor-profile */
+.profile-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  max-width: 1280px;
+  margin: auto;
+  padding: 2rem;
+  margin-top: 5px;
+}
+@media (min-width: 1024px) {
+  .profile-container {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+.profile-main-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+.sidebar-card {
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+.schedule-card {
+  background-color: #4338ca;
+  color: white;
+}
+.schedule-card h3, .booking-card h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.booking-card h3 {
+  color: #111827;
+  border-bottom-color: #e5e7eb;
+}
+.booking-card {
+  background-color: #fff;
+}
+.booking-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.booking-card input, .booking-card textarea {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #f3f4f6;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  box-sizing: border-box;
+}
+.booking-card input:focus, .booking-card textarea:focus {
+  outline: 2px solid #4338ca;
+  border-color: transparent;
+}
+.booking-card button {
+  width: 100%;
+  background-color: #4338ca;
+  color: white;
+  font-weight: 700;
+  padding: 0.75rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.booking-card button:hover {
+  background-color: #3730a3;
+}
+.validation-error {
+  color: #dc2626;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+}
+.alert-success {
+  color: #166534;
+  background: #bbf7d0;
+  border: 1px solid #22c55e;
+}
+.alert-danger {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+}
+/* Responsive tweaks for sidebar */
+@media (max-width: 1023px) {
+  .profile-container {
+    grid-template-columns: 1fr;
+  }
+  .profile-sidebar {
+    margin-top: 2rem;
+  }
+}
+
+/* Enhanced sidebar styles for booking-card */
+.sidebar-card.booking-card {
+  background: linear-gradient(135deg, #f8fafc 80%, #e0e7ef 100%);
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 32px 0 rgba(43,183,218,0.10), 0 1.5px 8px 0 rgba(24,59,86,0.08);
+  border: 1.5px solid rgba(43,183,218,0.12);
+  padding: 2.5rem 2rem 2rem 2rem;
+  margin-bottom: 2rem;
+  animation: sidebarFadeIn 0.7s cubic-bezier(0.4,0,0.2,1);
+  transition: box-shadow 0.3s, background 0.3s;
+}
+@keyframes sidebarFadeIn {
+  0% { opacity: 0; transform: translateY(40px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.sidebar-card.booking-card h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #22223b;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.01em;
+}
+.sidebar-card.booking-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.custom-datepicker {
+  width: 100%;
+  background: #f8fafc;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(6,182,212,0.08);
+  border: 1.5px solid #e0e7ef;
+  padding: 0.7rem 1rem 0.2rem 1rem;
+  margin-bottom: 1.2rem;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+.custom-datepicker:focus-within {
+  box-shadow: 0 4px 16px rgba(6,182,212,0.15);
+  border: 1.5px solid #06b6d4;
+}
+.custom-datepicker .mat-form-field-flex {
+  background: transparent;
+  border-radius: 0.7rem;
+  border: none;
+  padding: 0;
+}
+.custom-datepicker .mat-form-field-infix {
+  padding: 0.5em 0 0.2em 0;
+}
+.custom-datepicker .mat-form-field-label {
+  color: #22223b;
+  font-weight: 600;
+  font-size: 1.08rem;
+  letter-spacing: 0.01em;
+}
+.custom-datepicker input.mat-input-element {
+  font-size: 1.12rem;
+  font-weight: 500;
+  color: #22223b;
+  background: transparent;
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.5rem;
+}
+.custom-datepicker .mat-datepicker-toggle {
+  color: #2563eb;
+}
+.custom-datepicker .mat-form-field-suffix .mat-icon-button {
+  background: #e0e7ef;
+  border-radius: 50%;
+  transition: background 0.2s;
+}
+.custom-datepicker .mat-form-field-suffix .mat-icon-button:hover {
+  background: #bae6fd;
+}
+.sidebar-card.booking-card button {
+  width: 100%;
+  background: linear-gradient(90deg, #4338ca 60%, #6366f1 100%);
+  color: #fff;
+  font-weight: 700;
+  padding: 0.85rem 0;
+  border-radius: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  box-shadow: 0 2px 8px rgba(67,56,202,0.08);
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+  margin-top: 0.5rem;
+}
+.sidebar-card.booking-card button:hover {
+  background: linear-gradient(90deg, #3730a3 60%, #6366f1 100%);
+  box-shadow: 0 4px 16px rgba(67,56,202,0.15);
+  transform: translateY(-2px) scale(1.03);
+}
+.sidebar-card.booking-card .mat-form-field {
+  margin-bottom: 0.5rem;
+}
+.sidebar-card.booking-card .validation-error,
+.sidebar-card.booking-card .alert-danger,
+.sidebar-card.booking-card .alert-success {
+  font-size: 1rem;
+  border-radius: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+.sidebar-card.booking-card .alert-success {
+  color: #166534;
+  background: #bbf7d0;
+  border: 1px solid #22c55e;
+}
+.sidebar-card.booking-card .alert-danger {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #ef4444;
+}
+.sidebar-card.booking-card .text-muted {
+  color: #64748b !important;
+  font-size: 0.98rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+@media (max-width: 1023px) {
+  .sidebar-card.booking-card {
+    margin-top: 2rem;
+    padding: 2rem 1rem 1.5rem 1rem;
+  }
+}
+
+/* --- Enhanced Room Details Card Styles --- */
+.room-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+}
+.room-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #22223b;
+  margin-bottom: 0;
+}
+.room-badges {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+.room-price-badge {
+  background: linear-gradient(90deg, #06b6d4 60%, #2563eb 100%);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-radius: 1.5rem;
+  padding: 0.4rem 1.2rem;
+  box-shadow: 0 2px 8px rgba(6,182,212,0.08);
+}
+.availability-badge {
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.available {
+  background: #d1fae5;
+  color: #059669;
+}
+.not-available {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+.room-sections {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+.room-info-section, .hotel-info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.05rem;
+}
+.room-description {
+  margin-bottom: 1rem;
+  color: #475569;
+  font-size: 1.08rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.room-amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.amenity-badge {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-radius: 1rem;
+  padding: 0.3rem 1rem;
+  font-size: 0.98rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.amenity-badge:hover {
+  background: #bae6fd;
+}
+@media (max-width: 768px) {
+  .room-details-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .room-sections {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
