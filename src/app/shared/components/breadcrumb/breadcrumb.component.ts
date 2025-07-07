@@ -8,6 +8,7 @@ import { Breadcrumb, BreadcrumbService } from '../../services/BreadcrumbService'
   standalone:false,
   templateUrl: './breadcrumb.component.html',
   styleUrls: ['./breadcrumb.component.css']
+  
 })
 export class BreadcrumbComponent implements OnInit {
 
