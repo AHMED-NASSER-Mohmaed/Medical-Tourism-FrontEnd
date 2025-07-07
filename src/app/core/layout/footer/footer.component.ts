@@ -9,6 +9,8 @@ import { filter } from 'rxjs/operators';
 })
 export class FooterComponent {
   public isHomePage: boolean = false;
+    currentYear = new Date().getFullYear();
+
     constructor(private router: Router) { }
       ngOnInit(): void {
     // This code listens for route changes
@@ -17,11 +19,11 @@ export class FooterComponent {
     ).subscribe(() => {
       // It checks if the current URL is the home page ('/')
       // and sets the isHomePage flag accordingly.
-      this.isHomePage = this.router.url === '/';
+      this.isHomePage =  (this.router.url === '/' || this.router.url.includes('#contact'));
     });
 
     // We also run the check once initially when the component loads
-    this.isHomePage = this.router.url === '/';
+    this.isHomePage = (this.router.url === '/' || this.router.url.includes('#contact'));
   }
 }
 

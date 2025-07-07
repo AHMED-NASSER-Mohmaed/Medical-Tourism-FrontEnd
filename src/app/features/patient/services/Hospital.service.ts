@@ -10,6 +10,7 @@ import { environment } from '../../../../environments/environment';
 })
 export class HospitalService {
   private baseUrl = 'https://localhost:7078/api/Website/Hospitals';
+  public cachedDoctors: any[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -83,6 +84,10 @@ getHospitals(
     getDoctorsForSpecialty(specialtyId: string, hospitalId: string, pageNumber: number, pageSize: number, searchQuery: string): Observable<any> {
     const url = `${environment.apiUrl}/Website/Doctors-in-Specialty/${specialtyId}/${hospitalId}?PageNumber=${pageNumber}&PageSize=${pageSize}&SearchTerm=${searchQuery}`;
     return this.http.get<any>(url);
+  }
+    getDoctorScheduleById(doctorId: string): Observable<any[]> {
+    const url = `${environment.apiUrl}/HospitalProvider/schedule/available-slots?FilterDoctorId=${doctorId}`;
+    return this.http.get<any[]>(url);
   }
 
 }

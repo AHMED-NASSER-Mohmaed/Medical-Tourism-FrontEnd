@@ -5,6 +5,7 @@ import { DisplayAllHospitalsComponent } from './pages/Hospitals/display-all-hosp
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SpecialistsListComponent } from './pages/specialists-list/specialists-list.component';
 import { DoctorsListComponent } from './pages/Hospitals/doctors-list/doctors-list.component';
+import { DoctorProfileComponent } from './pages/doctor-profile/doctor-profile.component';
 
 const routes: Routes = [
     { path: 'hospitals/:specialistId', component: DisplayAllHospitalsComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
  { path: 'hospital/:id/specialists', component: SpecialistsListComponent },
    { path: 'specialists', component: SpecialistsListComponent },
    { path: 'doctors/:specialtyId/:hospitalId', component: DoctorsListComponent },
+   { path: 'doctor-profile/:doctorId', component: DoctorProfileComponent },
 
 
 

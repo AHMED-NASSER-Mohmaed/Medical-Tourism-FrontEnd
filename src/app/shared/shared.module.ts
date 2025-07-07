@@ -13,6 +13,7 @@ import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode
 import { StatusLabelPipe } from './pipes/status.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -23,14 +24,16 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     SkeletonLoaderComponent,
     DarkModeToggleComponent,
     LoadingComponent,
-    NotFoundComponent
+    NotFoundComponent,
+
 
   ],
   imports: [
     CommonModule,
     FormsModule,
     FontAwesomeModule,
-    StatusLabelPipe
+    StatusLabelPipe,
+    RouterModule
   ],
   exports: [
     DataTableComponent,
@@ -40,7 +43,7 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
     CommonModule,
     FormsModule,
     StatusLabelPipe,
-    LoadingComponent,
+    LoadingComponent
 
   ]
 })

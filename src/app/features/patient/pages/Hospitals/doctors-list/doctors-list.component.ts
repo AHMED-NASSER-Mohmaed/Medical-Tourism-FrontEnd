@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router'; // EDITED: Imported Router
 import { LoadingService } from '../../../../../shared/services/loading.service';
 import { HospitalService } from '../../../services/Hospital.service';
 import { Location } from '@angular/common';
-
 @Component({
   selector: 'app-doctors-list',
   standalone: false,
@@ -21,26 +20,22 @@ export class DoctorsListComponent implements OnInit {
   pageSize: number = 9;
   totalPages: number = 1;
 
-
-
   constructor(
     private route: ActivatedRoute,
     private hospitalService: HospitalService,
     private loadingService: LoadingService,
-     private location: Location
+    private location: Location
   ) {}
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
-        console.log("Params:", params);
       this.hospitalId = params.get('hospitalId');
       this.specialtyId = params.get('specialtyId');
-      console.log("Hospital ID:", this.hospitalId);
-    console.log("Specialty ID:", this.specialtyId);
       this.loadDoctors();
+
+
     });
   }
-
 
   loadDoctors(): void {
     this.loadingService.show();
@@ -52,6 +47,7 @@ export class DoctorsListComponent implements OnInit {
         (data: any) => {
           this.doctors = data.items;
           this.totalPages = data.totalPages;
+          this.hospitalService.cachedDoctors = data.items;
           this.loadingService.hide();
         },
         (error) => {
@@ -72,7 +68,8 @@ export class DoctorsListComponent implements OnInit {
     this.pageNumber = 1;
     this.loadDoctors();
   }
-    goBack(): void {
+
+  goBack(): void {
     this.location.back();
   }
 }

@@ -63,6 +63,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
 import { SuperAdminModule } from './features/super-admin/super-admin.module';
+
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -110,13 +111,15 @@ export function HttpLoaderFactory(http: HttpClient) {
     SuperAdminModule,
     FontAwesomeModule,
     TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
-  ],
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    }),
+    RouterModule
+
+],
   providers: [DatePipe],
   bootstrap: [AppComponent]
 })
