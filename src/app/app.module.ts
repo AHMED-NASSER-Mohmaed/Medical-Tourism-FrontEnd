@@ -61,6 +61,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardModule } from './dashboard/dashboard.module';
 import { SharedModule } from './shared/shared.module';
 import { SuperAdminModule } from './features/super-admin/super-admin.module';
+import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
+import { NgxPaginationModule } from 'ngx-pagination';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
@@ -78,7 +80,8 @@ export function HttpLoaderFactory(http: HttpClient) {
     DoctorsFormComponent,
     AppointmentsListComponent,
     AppointmentFormComponent,
-    TruncatePipe
+    TruncatePipe,
+    DisbursementComponent
     ],
 
  
@@ -103,7 +106,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
-
+    NgxPaginationModule,
     HttpClientModule,
     AppRoutingModule,
     DashboardModule,

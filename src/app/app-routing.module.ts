@@ -9,6 +9,7 @@ import { SidebarComponent } from './features/hospitalServiceProvider/components/
 import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
 import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
 import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
+import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
 
 
 
@@ -24,10 +25,11 @@ const routes: Routes = [
       {path: 'doctor/edit/:id', component: DoctorsFormComponent},
       {path: 'schedule/add', component: AppointmentFormComponent},
       {path: 'schedule/edit/:id', component: AppointmentFormComponent},
+      { path: 'disbursements' , component:DisbursementComponent},
     ]
   },
   { path: 'hospitals', component: DisplayAllHospitalsComponent },
-
+  
 
   {
     path: 'super-admin',

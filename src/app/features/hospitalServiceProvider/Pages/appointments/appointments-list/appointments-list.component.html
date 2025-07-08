@@ -18,15 +18,14 @@
               <th>Doctor</th>
               <th>Specialty</th>
               <th>Hospital</th>
-              <th>Day</th>
+              <!-- <th>Day</th> -->
               <th>Start Time</th>
               <th>End Time</th>
               <th>Slot Size (min)</th>
               <th>Price</th>
               <th>Max Capacity</th>
               <th>Available Slots</th>
-              <th>Booked Slots</th>
-              <th>Cancelled Slots</th>
+             
               <th>Active</th>
             </tr>
           </thead>
@@ -36,15 +35,14 @@
               <td>{{schedule.doctorName}}</td>
               <td>{{schedule.specialty}}</td>
               <td>{{schedule.hospital}}</td>
-              <td>{{schedule.dayOfWeek.name}}</td>
+              <!-- <td>{{schedule.dayOfWeek.name}}</td> -->
               <td>{{schedule.startTime}}</td>
               <td>{{schedule.endTime}}</td>
               <td>{{schedule.timeSlotSize}}</td>
               <td>{{schedule.price | currency}}</td>
               <td>{{schedule.maxCapacity}}</td>
               <td>{{schedule.availableSlots}}</td>
-              <td>{{schedule.bookedSlots}}</td>
-              <td>{{schedule.cancelledSlots}}</td>
+              
               <td>
               <span class="badge btn" [ngClass]="{'badge-success': schedule.isActive, 'badge-danger': !schedule.isActive}" (click)="ChangeStatus(schedule.id, !schedule.isActive)">
                 {{schedule.isActive ? 'Active' : 'Inactive'}}

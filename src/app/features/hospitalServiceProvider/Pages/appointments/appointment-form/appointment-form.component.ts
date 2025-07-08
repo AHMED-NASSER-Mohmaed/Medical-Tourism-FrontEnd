@@ -109,14 +109,8 @@ export class AppointmentFormComponent {
     doctorId: formValue.doctorId, // (string - remains unchanged)
     hospitalSpecialtyId: Number(formValue.hospitalSpecialtyId),
     dayOfWeekId: Number(formValue.dayOfWeekId),
-    startTime: {
-      hour: Number(formValue.startTime?.hour),
-      minute: Number(formValue.startTime?.minute),
-    },
-    endTime: {
-      hour: Number(formValue.endTime?.hour),
-      minute: Number(formValue.endTime?.minute),
-    },
+    startTime: `${formValue.startTime.hour.toString().padStart(2, '0')}:${formValue.startTime.minute.toString().padStart(2, '0')}:00`, // Convert to HH:mm format
+    endTime: `${formValue.endTime.hour.toString().padStart(2, '0')}:${formValue.endTime.minute.toString().padStart(2, '0')}:00`, // Convert to HH:mm format
     timeSlotSize: Number(formValue.timeSlotSize),
     maxCapacity: Number(formValue.maxCapacity),
     price: Number(formValue.price),
@@ -127,7 +121,7 @@ export class AppointmentFormComponent {
       (response) => {
         console.log('Schedule created successfully', response);
         // Navigate to the schedule list or show a success message
-        this.router.navigate(['/hospitalServiceProvider/schedules']);
+        this.router.navigate(['/hospital/schedule']);
       },(error)=>
       {
         console.error('Error creating schedule', error);

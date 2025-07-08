@@ -35,8 +35,8 @@ export interface ScheduleRequestDto {
   doctorId: string;
   hospitalSpecialtyId: number;
   dayOfWeekId: number;
-  startTime: TimeModel;
-  endTime: TimeModel;
+  startTime: string;
+  endTime: string;
   timeSlotSize: number;
   maxCapacity: number;
   price: number;

@@ -1,0 +1,38 @@
+.disbursement-container {
+  padding: 20px;
+  
+  .filter-section {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .table {
+    th {
+      cursor: pointer;
+      user-select: none;
+      
+      &:hover {
+        background-color: #f8f9fa;
+      }
+    }
+  }
+  
+  .stat-card {
+    background: white;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+    
+    .stat-value {
+      font-size: 24px;
+      font-weight: bold;
+      margin: 10px 0 0;
+      color: #007bff;
+    }
+  }
+  
+  .badge {
+    padding: 5px 10px;
+    font-size: 0.8em;
+  }
+}
