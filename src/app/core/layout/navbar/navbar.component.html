@@ -9,27 +9,54 @@
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mx-auto">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/specialists" routerLinkActive="active"  [routerLinkActiveOptions]="{exact: true}">Treatments</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/hospitals" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Hospitals</a>
+<ul class="navbar-nav mx-auto">
+    <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/"
+           [routerLinkActiveOptions]="{exact: true}"
+           routerLinkActive="active" #homeRla="routerLinkActive"
+           [class.active]="homeRla.isActive && !activeSection"
+           (click)="activeSection = null">Home</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/specialists"
+           [routerLinkActiveOptions]="{exact: true}"
+           routerLinkActive="active" #treatmentsRla="routerLinkActive"
+           [class.active]="treatmentsRla.isActive && !activeSection"
+           (click)="activeSection = null">Treatments</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/hospitals"
+           [routerLinkActiveOptions]="{exact: true}"
+           routerLinkActive="active" #hospitalsRla="routerLinkActive"
+           [class.active]="hospitalsRla.isActive && !activeSection"
+           (click)="activeSection = null">Hospitals</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/hotels"
+           routerLinkActive="active" #hotelsRla="routerLinkActive"
+           [class.active]="hotelsRla.isActive && !activeSection"
+           (click)="activeSection = null">Hotels</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/about-us"
+           routerLinkActive="active" #aboutRla="routerLinkActive"
+           [class.active]="aboutRla.isActive && !activeSection"
+           (click)="activeSection = null">About Us</a>
+    </li>
 
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/hotels" routerLinkActive="active">Hotels</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/about-us" routerLinkActive="active">About Us</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/faq" routerLinkActive="active">FAQ</a>
-        </li>
-      </ul>
+    <li class="nav-item">
+        <a class="nav-link"
+           routerLink="/"
+           fragment="faq-section"
+           (click)="activeSection = 'faq'"
+           [class.active]="activeSection === 'faq'">FAQ</a>
+    </li>
+</ul>
 
       <div class="d-flex align-items-center">
         <!-- Show Register & Login when not logged in -->

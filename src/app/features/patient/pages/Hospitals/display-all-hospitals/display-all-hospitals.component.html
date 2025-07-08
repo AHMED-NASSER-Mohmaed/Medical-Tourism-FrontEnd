@@ -60,11 +60,11 @@
             <!-- List Hospitals -->
             <section class="hospitals-list improved-hospitals-list">
                 <div *ngFor="let hospital of hospitals" class="departments-card">
-                    <img src="../../../../../../assets/images/hospital2.jpg" alt="{{ hospital.assetName }} Image">
+                     <img [src]="hospital.assetImages?.[0]?.imageURL || 'https://images.unsplash.com/photo-1586773860418-d37229d7d13d?auto=format&fit=crop&w=1000&q=80'" class="card-img-top" [alt]="hospital.assetName">
                     <div class="content">
                         <h3>{{ hospital.assetName }}</h3>
                         <p>{{ hospital.description }}</p>
-                        <a class="departments-more" (click)="ViewClinicsForSpecialty(hospital.id)">
+                        <a class="departments-more" [routerLink]="['/hospital', hospital.id, 'specialists']">
                             Specialists <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>
