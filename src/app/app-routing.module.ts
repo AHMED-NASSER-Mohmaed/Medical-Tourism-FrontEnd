@@ -9,6 +9,9 @@ import { SidebarComponent } from './features/hospitalServiceProvider/components/
 import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
 import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
 import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+
+
 import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
 
 
@@ -61,6 +64,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./features/hotel-provider/hotel-provider.module').then(m => m.HotelProviderModule)
   },
+  {
+    path: 'car-rentals',
+    loadChildren: () => import('./features/car-rental-website/car-rental-website.module').then(m => m.CarRentalWebsiteModule)
+  },
   { path: '', redirectTo: 'hotel-provider', pathMatch: 'full' },
 
  {
@@ -71,10 +78,12 @@ const routes: Routes = [
   { path: 'hotels', loadChildren: () => import('./features/hotel-website/hotel-website.module').then(m => m.HotelWebsiteModule) },
 
 
-  {
-    path: '**',
-    redirectTo: 'auth/login'
-  },
+
+{
+  path: '**',
+  component: NotFoundComponent,
+  data: { hideNavFooter: true }
+}
 
 
 

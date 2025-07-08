@@ -1,6 +1,11 @@
 /* Leaflet default skin */
 @import "leaflet/dist/leaflet.css";
 
+
+
+
+@import "leaflet/dist/leaflet.css";
+
 /* You can add global styles to this file, and also import other style files */
 /* Import Bootstrap */
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
@@ -9,8 +14,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
   display: flex;
   flex-direction: column;
   padding-top: 0 !important;
- }
+}
+
  .navbar + * { margin-top: 0 !important; }
+
 
 .app-root, app-root {
   display: flex;
@@ -19,13 +26,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
 }
 
 .main-content {
-  flex: 1 0 auto;
+  flex-grow: 1; /* This allows the main content to take the remaining space */
 }
+
 footer.bg-dark {
-  flex-shrink: 0;
+  flex-shrink: 0; /* Ensures the footer doesn't shrink and stays at the bottom */
 }
-
-
 
 
 

@@ -1,0 +1,56 @@
+/* Make the breadcrumb container take up the full width and center it */
+nav[aria-label="breadcrumb"] {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 90px; /* Adjust the top margin if needed */
+}
+
+/* Style the breadcrumb list */
+.breadcrumb {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  padding: 0px 20px; /* Add some padding */
+  padding-top: 30px;
+  background-color: transparent;
+  font-size: 1.5rem; /* Increase font size */
+  text-align: center;
+  margin: 0;
+}
+
+/* Style breadcrumb items */
+.breadcrumb-item {
+  margin: 0 5px; /* Add space between breadcrumb items */
+  font-size: 1.5rem; /* Increase font size */
+}
+
+/* Style the links */
+.breadcrumb-item a {
+  text-decoration: none;
+  color: #0d6efd; /* Change the color of the links */
+}
+
+.breadcrumb-item a:hover {
+  color: #0056b3; /* Hover color */
+}
+
+/* Style the active breadcrumb item */
+.breadcrumb-item.active {
+  font-weight: bold;
+  color: #555;
+}
+
+/* Add a separator (if you want to customize the separator) */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: '>';
+  margin: 0 10px;
+  color: #0d6efd; /* Separator color */
+  font-size: 1.5rem; /* Increase the separator size */
+}
+
+/* Add spacing to the breadcrumb container */
+.breadcrumb-link {
+  margin-top: 10px; /* Adjust top margin */
+}

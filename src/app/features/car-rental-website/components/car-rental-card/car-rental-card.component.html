@@ -1,0 +1,19 @@
+<div class="card car-rental-card shadow-sm h-100 animate__animated animate__fadeInUp">
+  <img [src]="carRental.imageURL || 'assets/images/cover.png'" class="card-img-top car-rental-img" alt="Car Rental Image">
+  <div class="card-body">
+    <h5 class="card-title">{{ carRental.assetName || carRental.firstName + ' ' + carRental.lastName }}</h5>
+    <p class="card-text mb-1">
+      <i class="bi bi-geo-alt"></i> {{ carRental.city }}, {{ carRental.governorateName }}
+    </p>
+    <p class="card-text mb-1">
+      <i class="bi bi-car-front"></i> {{ carRental.models?.join(', ') || 'N/A' }}
+    </p>
+    <div class="mb-2">
+      <span *ngIf="carRental.fuelTypes?.length" class="badge bg-info me-1"><i class="bi bi-fuel-pump"></i> Fuel Types</span>
+      <span *ngIf="carRental.transmission !== undefined" class="badge bg-success"><i class="bi bi-gear"></i> Transmission: {{ carRental.transmission }}</span>
+    </div>
+    <a [routerLink]="['/car-rentals/details', carRental.id]" class="btn btn-outline-primary w-100 animate__animated animate__pulse">
+      View Details <i class="bi bi-arrow-right"></i>
+    </a>
+  </div>
+</div> 

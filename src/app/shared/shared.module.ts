@@ -12,6 +12,9 @@ import { SkeletonLoaderComponent } from './components/skeleton-loader/skeleton-l
 import { DarkModeToggleComponent } from './components/dark-mode-toggle/dark-mode-toggle.component';
 import { StatusLabelPipe } from './pipes/status.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { RouterModule } from '@angular/router';
+import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
 
 @NgModule({
   declarations: [
@@ -22,12 +25,15 @@ import { LoadingComponent } from './components/loading/loading.component';
     SkeletonLoaderComponent,
     DarkModeToggleComponent,
     LoadingComponent,
+    NotFoundComponent,
+    
   ],
   imports: [
     CommonModule,
     FormsModule,
     FontAwesomeModule,
-    StatusLabelPipe
+    StatusLabelPipe,
+    RouterModule
   ],
   exports: [
     DataTableComponent,
@@ -37,7 +43,8 @@ import { LoadingComponent } from './components/loading/loading.component';
     CommonModule,
     FormsModule,
     StatusLabelPipe,
-    LoadingComponent
+    LoadingComponent,
+    
   ]
 })
 export class SharedModule { }

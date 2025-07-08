@@ -78,3 +78,31 @@ a:hover, a:active, a:focus {
   outline: 0;
   text-decoration: none;
 }
+.auth-page{
+   margin-top: 20px;
+   min-height: 100vh;
+}
+.margin-register{
+  margin-top: 80px;
+  padding-top: 50px;
+}
+/* Add to your css/auth.css or inside a <style> tag */
+.error-code {
+  font-size: 5rem;
+  font-weight: 800;
+  color: #334872;
+  text-align: center;
+  margin-top: 32px;
+  margin-bottom: 0px;
+  letter-spacing: 2px;
+  line-height: 1;
+}
+.text-muted {
+  color: rgba(46, 49, 51, 0.6) !important; /* Darker and more muted gray with reduced opacity */
+  font-weight: 450;
+  letter-spacing: 0.2px;
+}
+
+.mm-login{
+ padding-top: 40px;
+}

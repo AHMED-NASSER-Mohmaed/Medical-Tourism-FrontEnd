@@ -5,6 +5,7 @@
 
 .profile-page {
   animation: fadeIn 0.6s ease;
+  padding-top: 50px;
 }
 
 .sidebar-card .cover {

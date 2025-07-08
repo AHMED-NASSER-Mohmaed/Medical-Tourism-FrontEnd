@@ -1,79 +1,68 @@
-<div class="banner">
-    <h1>Find Specialities</h1>
-    <p>Explore our network of accredited specialities for your medical needs.</p>
-</div>
-
-
-<!-- Refine Search Sidebar -->
-<div class="main-content improved-layout">
-<aside class="sidebar improved-sidebar">
-  <div class="sidebar-title">
-    <span class="icon">🔎</span>
-    <span class="refine-title">Refine Search</span>
-  </div>
-  <div class="sidebar-fields-horizontal">
-    <!-- Search Bar Item with 'search-bar' class -->
-    <div class="filter-item search-bar">
-      <label>Search by Specialty</label>
-      <input type="text" class="form-control" placeholder="e.g., Dermatology" [(ngModel)]="filterCriteria.name">
+ <div class="banner">
+        <h1>Find Specialities</h1>
+        <p>Explore our network of accredited specialities for your medical needs.</p>
     </div>
-    <div class="back-button-container">
-  <button class="btn btn-secondary back-btn" (click)="goBack()">
-    <span class="icon">↩️</span> Back
-  </button>
-</div>
 
-    <!-- Apply Filters Button -->
-    <div class="filter-item filter-btn-item">
-      <button class="btn btn-primary filter-btn" (click)="applyFilters()">
-        <span class="icon">🔍</span> Apply Filters
-      </button>
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar for Filters -->
+        <aside class="sidebar">
+            <div class="sidebar-title">
+                  <span class="icon">🔎</span>
+                <span>Refine Search</span>
+            </div>
+
+            <div class="filter-group">
+                <label for="specialty-search">Search by Specialty</label>
+                <input type="text" id="specialty-search" class="form-control" placeholder="e.g., Dermatology" [(ngModel)]="filterCriteria.name">
+            </div>
+
+            <div class="sidebar-buttons">
+                <button class="btn btn-primary" (click)="applyFilters()">
+                    <i class="fa-solid fa-filter"></i> Apply Filters
+                </button>
+                <button class="btn btn-secondary" (click)="goBack()">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <!-- Specialists Grid -->
+            <section class="specialists-grid">
+                <!-- This is where your Angular loop goes -->
+                <div *ngFor="let specialist of specialists" class="specialist-card">
+                    <img src="../../../../../../assets/images/spec.jpg" alt="{{ specialist.name }} Image">
+                    <div class="content">
+                        <h3>{{ specialist.name }}</h3>
+                        <p>{{ specialist.description }}</p>
+                        <!-- Conditional Links -->
+                        <a *ngIf="hospitalId; else showDoctors" class="details-link" [routerLink]="['/doctors', specialist.id, hospitalId ]">
+                            View Doctors <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                        <ng-template #showDoctors>
+                            <a class="details-link" [routerLink]="['/hospitals', specialist.id]">
+                                View Hospitals <i class="fa-solid fa-arrow-right"></i>
+                            </a>
+                        </ng-template>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pagination -->
+            <nav *ngIf="totalPages > 1" class="pagination-nav">
+                <ul class="pagination">
+                    <li class="page-item" [class.disabled]="pageNumber === 1" (click)="onPageChange(pageNumber - 1)">
+                        <span class="page-link">&laquo;</span>
+                    </li>
+                    <li *ngFor="let page of [].constructor(totalPages); let i = index" class="page-item" [class.active]="pageNumber === (i + 1)" (click)="onPageChange(i + 1)">
+                        <span class="page-link">{{ i + 1 }}</span>
+                    </li>
+                    <li class="page-item" [class.disabled]="pageNumber === totalPages" (click)="onPageChange(pageNumber + 1)">
+                        <span class="page-link">&raquo;</span>
+                    </li>
+                </ul>
+            </nav>
+        </main>
     </div>
-  </div>
-</aside>
-
-
-
-<!-- List Hospitals -->
-  <section class="hospitals-list improved-hospitals-list">
-   <div *ngFor="let specialist of specialists" class="departments-card">
-      <img src="../../../../../../assets/images/speciality.jpg" alt="{{ specialist.name }} Image">
-      <div class="content">
-       <h3>{{ specialist.name }}</h3>
-      <p>{{ specialist.description }}</p>
-<a *ngIf="hospitalId; else showDoctors" class="departments-more"
-   [routerLink]="['/doctors', specialist.id, hospitalId ]">
-  Doctors <i class="flaticon-right-arrow"></i>
-</a>
-            <ng-template #showDoctors>
-<a class="departments-more" [routerLink]="['/hospitals', specialist.id]">
-  Hospitals <i class="flaticon-right-arrow"></i>
-</a>
-
-      </ng-template>
-
-      </div>
-    </div>
-  </section>
-
-
-<!-- Pagination -->
-<nav *ngIf="totalPages > 1" class="pagination-nav">
-  <ul class="pagination pagination-sm justify-content-center">
-    <li class="page-item" [class.disabled]="pageNumber === 1" (click)="onPageChange(pageNumber - 1)">
-      <span class="page-link">&laquo;</span>
-    </li>
-
-    <li *ngFor="let page of [].constructor(totalPages); let i = index"
-        class="page-item"
-        [class.active]="pageNumber === (i + 1)"
-        (click)="onPageChange(i + 1)">
-      <span class="page-link">{{ i + 1 }}</span>
-    </li>
-
-    <li class="page-item" [class.disabled]="pageNumber === totalPages" (click)="onPageChange(pageNumber + 1)">
-      <span class="page-link">&raquo;</span>
-    </li>
-  </ul>
-</nav>
-</div>

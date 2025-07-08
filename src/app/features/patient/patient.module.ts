@@ -9,6 +9,12 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { SpecialistsListComponent } from './pages/specialists-list/specialists-list.component';
 import { DoctorsListComponent } from './pages/Hospitals/doctors-list/doctors-list.component';
+import { DoctorProfileComponent } from './pages/doctor-profile/doctor-profile.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
+import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
+
 
 
 
@@ -19,6 +25,10 @@ import { DoctorsListComponent } from './pages/Hospitals/doctors-list/doctors-lis
     ProfileComponent,
     SpecialistsListComponent,
     DoctorsListComponent,
+    DoctorProfileComponent,
+     BreadcrumbComponent
+
+
 
   ],
   imports: [
@@ -26,7 +36,17 @@ import { DoctorsListComponent } from './pages/Hospitals/doctors-list/doctors-lis
     FormsModule,
     PatientRoutingModule
     ,ReactiveFormsModule
-    ,NgSelectModule
+    ,NgSelectModule,
+     MatDatepickerModule,
+    MatInputModule,
+    MatNativeDateModule,
+
+
+
+  ],
+    exports: [
+      BreadcrumbComponent
+
   ]
 })
 export class PatientModule {}

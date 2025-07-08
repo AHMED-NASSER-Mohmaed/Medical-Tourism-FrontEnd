@@ -12,7 +12,11 @@ import { RoomSidebarFiltersComponent } from './components/room-sidebar-filters/r
 import { RoomCardComponent } from './components/room-card/room-card.component';
 import { CoreModule } from '../../core/core.module';
 import { RoomDetailsComponent } from './pages/room-details/room-details.component';
-
+import { PatientModule } from '../patient/patient.module';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,12 @@ import { RoomDetailsComponent } from './pages/room-details/room-details.componen
     HotelWebsiteRoutingModule,
     HttpClientModule,
     FormsModule,
-    CoreModule
+    CoreModule,
+    PatientModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ]
 })
 export class HotelWebsiteModule { }

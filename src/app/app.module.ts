@@ -37,6 +37,38 @@ import { DashBoardComponent } from './features/hospitalServiceProvider/Pages/das
 
 
 
+
+import { SpecialistsListComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-list/specialists-list.component';
+import { SpecialistsFormComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-form/specialists-form.component';
+import { DoctorsListComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-list/doctors-list.component';
+import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
+import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
+import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
+import { RouterModule } from '@angular/router';
+import { CommonModule, DatePipe } from '@angular/common';
+import { TruncatePipe } from './truncate.pipe';
+//
+// import { TruncatePipe } from './pipes/truncate.pip';
+
+
+import { FormsModule } from '@angular/forms';
+
+
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import { DashboardModule } from './dashboard/dashboard.module';
+import { SharedModule } from './shared/shared.module';
+import { SuperAdminModule } from './features/super-admin/super-admin.module';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
+
+
 import { SpecialistsListComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-list/specialists-list.component';
 import { SpecialistsFormComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-form/specialists-form.component';
 import { DoctorsListComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-list/doctors-list.component';
@@ -84,9 +116,12 @@ export function HttpLoaderFactory(http: HttpClient) {
     DisbursementComponent
     ],
 
+
+
  
 
   imports: [
+    CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -103,17 +138,27 @@ export function HttpLoaderFactory(http: HttpClient) {
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    ReactiveFormsModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     NgxPaginationModule,
     HttpClientModule,
-    AppRoutingModule,
     DashboardModule,
     SharedModule,
     SuperAdminModule,
     FontAwesomeModule,
     TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    }),
+    RouterModule
+
+],
+  providers: [DatePipe],
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
