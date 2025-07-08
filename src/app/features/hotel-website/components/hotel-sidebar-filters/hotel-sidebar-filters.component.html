@@ -1,55 +1,64 @@
-<div class="card shadow-sm mb-4 animate__animated animate__fadeInLeft">
-  <div class="card-body">
-    <h5 class="card-title mb-3"><i class="bi bi-funnel"></i> Refine Search</h5>
-    <form>
-      <!-- Search by Hotel Name -->
-      <div class="mb-3">
-        <label for="searchName" class="form-label">Search by Hotel Name</label>
-        <input type="text" class="form-control" id="searchName" placeholder="e.g., Grand Palace" [(ngModel)]="filters.searchTerm" name="searchTerm">
+<div class="sidebar glassmorphism p-4 mb-4 animate__animated animate__fadeInLeft">
+  <h5 class="sidebar-title mb-4 d-flex align-items-center">
+    <i class="bi bi-funnel me-2"></i> Refine Search
+  </h5>
+  <form>
+    <div class="mb-4">
+      <label for="searchName" class="form-label d-flex align-items-center">
+        <i class="bi bi-search me-2"></i> Search by Hotel Name
+      </label>
+      <input type="text" class="form-control shadow-sm" id="searchName" placeholder="e.g., Grand Palace" [(ngModel)]="filters.searchTerm" name="searchTerm">
+    </div>
+    <hr class="sidebar-divider">
+    <div class="mb-4">
+      <label for="userStatus" class="form-label d-flex align-items-center">
+        <i class="bi bi-person-badge me-2"></i> User Status
+      </label>
+      <select class="form-select shadow-sm" id="userStatus" [(ngModel)]="filters.userStatus" name="userStatus">
+        <option value="">All Statuses</option>
+        <option value="0">Pending</option>
+        <option value="1">Active</option>
+        <option value="2">Suspended</option>
+        <option value="3">Rejected</option>
+      </select>
+    </div>
+    <hr class="sidebar-divider">
+    <div class="mb-4">
+      <label for="governorate" class="form-label d-flex align-items-center">
+        <i class="bi bi-geo-alt me-2"></i> Governorate
+      </label>
+      <select class="form-select shadow-sm" id="governorate" [(ngModel)]="filters.governorateId" name="governorateId" [disabled]="governatesLoading">
+        <option value="">All Governorates</option>
+        <option *ngFor="let gov of governates" [value]="gov.governateId">{{ gov.governateName }}</option>
+      </select>
+      <div *ngIf="governatesLoading" class="form-text text-primary"><span class="spinner-border spinner-border-sm"></span> Loading...</div>
+    </div>
+    <hr class="sidebar-divider">
+    <div class="mb-4">
+      <label class="form-label d-flex align-items-center">
+        <i class="bi bi-stars me-2"></i> Facilities
+      </label>
+      <div class="form-check form-switch mb-2">
+        <input class="form-check-input" type="checkbox" id="hasPool" [(ngModel)]="filters.hasPool" name="hasPool">
+        <label class="form-check-label" for="hasPool">Pool</label>
       </div>
-      <!-- User Status -->
-      <div class="mb-3">
-        <label for="userStatus" class="form-label">User Status</label>
-        <select class="form-select" id="userStatus" [(ngModel)]="filters.userStatus" name="userStatus">
-          <option value="">All Statuses</option>
-          <option value="0">Pending</option>
-          <option value="1">Active</option>
-          <option value="2">Suspended</option>
-          <option value="3">Rejected</option>
-        </select>
+      <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" id="hasRestaurant" [(ngModel)]="filters.hasRestaurant" name="hasRestaurant">
+        <label class="form-check-label" for="hasRestaurant">Restaurant</label>
       </div>
-      <!-- Governorate -->
-      <div class="mb-3">
-        <label for="governorate" class="form-label">Governorate</label>
-        <select class="form-select" id="governorate" [(ngModel)]="filters.governorateId" name="governorateId" [disabled]="governatesLoading">
-          <option value="">All Governorates</option>
-          <option *ngFor="let gov of governates" [value]="gov.governateId">{{ gov.governateName }}</option>
-        </select>
-        <div *ngIf="governatesLoading" class="form-text text-primary"><span class="spinner-border spinner-border-sm"></span> Loading...</div>
-      </div>
-      <!-- Facilities -->
-      <div class="mb-3">
-        <label class="form-label">Facilities</label>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="hasPool" [(ngModel)]="filters.hasPool" name="hasPool">
-          <label class="form-check-label" for="hasPool">Pool</label>
-        </div>
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="hasRestaurant" [(ngModel)]="filters.hasRestaurant" name="hasRestaurant">
-          <label class="form-check-label" for="hasRestaurant">Restaurant</label>
-        </div>
-      </div>
-      <!-- Star Rating -->
-      <div class="mb-3">
-        <label for="starRating" class="form-label">Star Rating</label>
-        <select class="form-select" id="starRating" [(ngModel)]="filters.starRating" name="starRating">
-          <option value="">All Ratings</option>
-          <option *ngFor="let star of [5,4,3,2,1]" [value]="star">{{star}} Stars</option>
-        </select>
-      </div>
-      <button type="button" class="btn btn-primary w-100 mt-2 animate__animated animate__pulse" (click)="applyFilters()">
-        <i class="bi bi-search"></i> Apply Filters
-      </button>
-    </form>
-  </div>
+    </div>
+    <hr class="sidebar-divider">
+    <div class="mb-4">
+      <label for="starRating" class="form-label d-flex align-items-center">
+        <i class="bi bi-star-fill me-2"></i> Star Rating
+      </label>
+      <select class="form-select shadow-sm" id="starRating" [(ngModel)]="filters.starRating" name="starRating">
+        <option value="">All Ratings</option>
+        <option *ngFor="let star of [5,4,3,2,1]" [value]="star">{{star}} Stars</option>
+      </select>
+    </div>
+    <button type="button" class="btn btn-gradient w-100 mt-2 animate__animated animate__pulse" (click)="applyFilters()">
+      <i class="bi bi-search"></i> Apply Filters
+    </button>
+  </form>
 </div>

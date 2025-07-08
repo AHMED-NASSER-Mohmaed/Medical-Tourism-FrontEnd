@@ -120,10 +120,10 @@ startBookingFlow(): void {
     cancelButtonText: 'Skip'
   }).then((result) => {
     if (result.isConfirmed) {
-
-      this.router.navigate(['/hotel-website']);
+      const breadcrumbs = this.breadcrumbService.getBreadcrumbs();
+      this.breadcrumbService.setPendingBreadcrumbTrail(breadcrumbs);
+      this.router.navigate(['/hotels']);
     } else {
-
       this.promptForCar();
     }
   });
@@ -141,10 +141,8 @@ private promptForCar(): void {
     cancelButtonText: 'Skip'
   }).then((result) => {
     if (result.isConfirmed) {
-
-      this.router.navigate(['/car-rental-website']);
+      this.router.navigate(['/car-rentals']);
     } else {
-
       this.router.navigate(['/payment']);
     }
   });

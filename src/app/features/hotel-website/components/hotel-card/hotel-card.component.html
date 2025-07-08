@@ -1,5 +1,5 @@
 <div class="card hotel-card shadow-sm h-100 animate__animated animate__fadeInUp">
-  <img [src]="hotel.imageURL || 'assets/images/cover.png'" class="card-img-top hotel-img" alt="Hotel Image">
+  <img [src]="hotel.assetImages[0].imageURL || 'assets/images/cover.png'" class="card-img-top hotel-img" alt="Hotel Image">
   <div class="card-body">
     <h5 class="card-title">{{ hotel.assetName || hotel.firstName + ' ' + hotel.lastName }}</h5>
     <p class="card-text mb-1">
