@@ -22,7 +22,7 @@ import { AppComponent } from './app.component';
 
 import { CoreModule } from './core/core.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -54,14 +54,7 @@ import { TruncatePipe } from './truncate.pipe';
 import { FormsModule } from '@angular/forms';
 
 
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { DashboardModule } from './dashboard/dashboard.module';
-import { SharedModule } from './shared/shared.module';
-import { SuperAdminModule } from './features/super-admin/super-admin.module';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -69,15 +62,6 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
 
-import { SpecialistsListComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-list/specialists-list.component';
-import { SpecialistsFormComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-form/specialists-form.component';
-import { DoctorsListComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-list/doctors-list.component';
-import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
-import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
-import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
-import { RouterModule } from '@angular/router';
-import { DatePipe } from '@angular/common';
-import { TruncatePipe } from './truncate.pipe';
 //
 // import { TruncatePipe } from './pipes/truncate.pip';
 
@@ -95,9 +79,7 @@ import { SharedModule } from './shared/shared.module';
 import { SuperAdminModule } from './features/super-admin/super-admin.module';
 import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
 import { NgxPaginationModule } from 'ngx-pagination';
-export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http);
-}
+
 
 
 @NgModule({
@@ -159,13 +141,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 ],
   providers: [DatePipe],
-      loader: {
-        provide: TranslateLoader,
-        useFactory: HttpLoaderFactory,
-        deps: [HttpClient]
-      }
-    })
-  ],
+
   bootstrap: [AppComponent]
   
 })
