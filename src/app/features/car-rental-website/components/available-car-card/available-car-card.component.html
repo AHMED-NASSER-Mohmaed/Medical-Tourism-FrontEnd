@@ -20,7 +20,7 @@
       <span class="badge bg-warning text-dark px-3 py-2 fs-6 shadow"><i class="bi bi-fuel-pump"></i> {{ getFuelType() }}</span>
     </div>
     <div class="mt-auto">
-      <a [routerLink]="['/car-details', car.id]" [queryParams]="{ rentalId: car.carRentalAssetId }" class="btn btn-gradient w-100 py-2 fs-5 animate__animated animate__pulse animate__delay-1s">
+      <a [routerLink]="['/car-rentals/car-details', car.id]" [queryParams]="{ rentalId: car.carRentalAssetId }" class="btn btn-gradient w-100 py-2 fs-5 animate__animated animate__pulse animate__delay-1s">
         View Car <i class="bi bi-arrow-right"></i>
       </a>
     </div>

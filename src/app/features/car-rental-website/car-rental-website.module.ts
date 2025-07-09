@@ -11,6 +11,7 @@ import { CoreModule } from '../../core/core.module';
 import { FormsModule } from '@angular/forms';
 import { AvailableCarCardComponent } from './components/available-car-card/available-car-card.component';
 import { CarRentalDetailsSidebarFiltersComponent } from './components/car-rental-details-sidebar-filters/car-rental-details-sidebar-filters.component';
+import { CarDetailsComponent } from './pages/car-details/car-details.component';
 // Components will be added here as created
 
 @NgModule({
@@ -20,7 +21,8 @@ import { CarRentalDetailsSidebarFiltersComponent } from './components/car-rental
     CarRentalSidebarFiltersComponent,
     CarRentalDetailsComponent,
     AvailableCarCardComponent,
-    CarRentalDetailsSidebarFiltersComponent
+    CarRentalDetailsSidebarFiltersComponent,
+    CarDetailsComponent
   ],
   imports: [
     CommonModule,

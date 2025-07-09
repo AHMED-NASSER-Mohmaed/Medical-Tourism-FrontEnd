@@ -1,51 +1,70 @@
 <div class="car-details-container animate__animated animate__fadeIn">
-  <div class="car-details-card glassmorphism shadow-lg mb-4 mt-4">
-    <div class="row g-0 align-items-center">
-      <div class="col-md-5 car-images position-relative">
-        <div class="main-img-wrapper">
-          <img
-            *ngIf="car?.carImages?.length"
-            [src]="selectedImage || car?.carImages?.[0]?.imageURL"
-            class="img-fluid rounded main-car-img animate__animated animate__fadeIn"
-            alt="Car Image"
-          />
-          <img *ngIf="!car?.carImages || !car?.carImages.length" src="/assets/images/cover.png" class="img-fluid rounded main-car-img animate__animated animate__fadeIn" alt="Car Image">
+  <div class="car-details-card glassmorphism shadow-lg p-0 overflow-hidden">
+    <!-- Banner/Header -->
+    <div class="car-banner bg-gradient-primary text-white d-flex align-items-center justify-content-between px-4 py-3 animate__animated animate__fadeInDown">
+      <button class="btn btn-back btn-light me-3 animate__animated animate__fadeInLeft" (click)="goBack()">
+        <i class="bi bi-arrow-left"></i> Back
+      </button>
+      <div class="flex-grow-1 text-center">
+        <h1 class="car-title fw-bold mb-0 fs-2">{{ car?.factoryMake || '-' }} {{ car?.modelName || '-' }} <span class="text-light">({{ car?.modelYear || '-' }})</span></h1>
+        <div class="car-price-badge badge bg-warning text-dark fs-5 px-4 py-2 shadow-lg mt-2 animate__animated animate__pulse animate__delay-1s">
+          <i class="bi bi-cash-coin"></i> EGP {{ car?.pricePerDay || '-' }} <span class="unit">/day</span>
         </div>
-        <div class="car-thumbnails mt-3 d-flex flex-wrap justify-content-center" *ngIf="car?.carImages?.length > 1">
+  </div>
+      <div style="width: 120px;"></div> <!-- Spacer for symmetry -->
+    </div>
+    <div class="row g-0 align-items-stretch">
+      <!-- Car Images Section -->
+      <div class="col-md-5 car-images bg-light d-flex flex-column align-items-center justify-content-center p-4 animate__animated animate__fadeInLeft">
+        <div class="main-img-wrapper mb-3 position-relative w-100">
           <img
-            *ngFor="let img of car?.carImages"
-            [src]="img.imageURL"
-            class="img-thumbnail car-thumb animate__animated animate__fadeInUp"
-            [class.active-thumb]="(selectedImage || car?.carImages?.[0]?.imageURL) === img.imageURL"
-            (click)="selectImage(img.imageURL)"
+            *ngIf="car && car.carImages && car.carImages.length > 0"
+            [src]="selectedImage || car.carImages[0]?.imageURL || '/assets/images/cover.png'"
+            class="img-fluid rounded main-car-img shadow-lg w-100 animate__animated animate__zoomIn"
+            alt="Car Image"
+            style="max-height: 320px; object-fit: cover; border-radius: 1.5rem;"
+          />
+          <img *ngIf="car && (!car.carImages || car.carImages.length === 0)" src="/assets/images/cover.png" class="img-fluid rounded main-car-img shadow-lg w-100 animate__animated animate__zoomIn" alt="Car Image" style="max-height: 320px; object-fit: cover; border-radius: 1.5rem;">
+        </div>
+        <div class="car-thumbnails mt-2 d-flex flex-wrap justify-content-center" *ngIf="car && car.carImages && car.carImages.length > 1">
+          <img *ngFor="let img of car.carImages"
+            [src]="img?.imageURL || '/assets/images/cover.png'"
+            class="img-thumbnail car-thumb mx-1 animate__animated animate__fadeInUp"
+            [class.active-thumb]="(selectedImage || car.carImages[0]?.imageURL) === (img?.imageURL || '/assets/images/cover.png')"
+            (click)="img?.imageURL ? selectImage(img.imageURL) : null"
             alt="Car Thumbnail"
+            style="width: 60px; height: 40px; object-fit: cover; cursor: pointer; border: 2px solid #2563b6; border-radius: 0.5rem; transition: transform 0.2s;"
+            [ngStyle]="{ transform: (selectedImage || car.carImages[0]?.imageURL) === img?.imageURL ? 'scale(1.1)' : 'scale(1)' }"
           />
         </div>
       </div>
-      <div class="col-md-7">
-        <div class="card-body animate__animated animate__fadeInRight">
-          <div class="car-details-header animate__animated animate__fadeInDown mb-2">
-            <h2 class="car-title mb-1">{{ car?.factoryMake }} {{ car?.modelName }} ({{ car?.modelYear }})</h2>
-            <div class="car-badges mb-2">
-              <span class="car-price-badge">EGP {{ car?.pricePerDay }} <span class="unit">/day</span></span>
-              <span class="badge bg-info me-1 px-3 py-2 fs-6"><i class="bi bi-car-front"></i> {{ getCarType() }}</span>
-              <span class="badge bg-success px-3 py-2 fs-6"><i class="bi bi-people"></i> {{ car?.capacity }} Seats</span>
-              <span class="badge bg-warning text-dark px-3 py-2 fs-6"><i class="bi bi-gear"></i> {{ getTransmission() }}</span>
-              <span class="badge bg-primary px-3 py-2 fs-6"><i class="bi bi-fuel-pump"></i> {{ getFuelType() }}</span>
-              <span class="badge bg-secondary px-3 py-2 fs-6"><i class="bi bi-building"></i> {{ car?.carRentalAssetName }}</span>
-              <span class="badge bg-light text-dark px-3 py-2 fs-6"><i class="bi bi-hash"></i> ID: {{ car?.carRentalAssetId }}</span>
+      <!-- Car Info Section -->
+      <div class="col-md-7 d-flex align-items-center bg-white animate__animated animate__fadeInRight">
+        <div class="card-body w-100 p-4 d-flex flex-column justify-content-between h-100">
+          <div>
+            <div class="car-badges mb-4 d-flex flex-wrap gap-3 justify-content-start">
+              <span class="badge bg-info px-3 py-2 fs-6 shadow"><i class="bi bi-car-front"></i> {{ getCarType() }}</span>
+              <span class="badge bg-success px-3 py-2 fs-6 shadow"><i class="bi bi-people"></i> {{ car?.capacity || '-' }} Seats</span>
+              <span class="badge bg-warning text-dark px-3 py-2 fs-6 shadow"><i class="bi bi-gear"></i> {{ getTransmission() }}</span>
+              <span class="badge bg-primary px-3 py-2 fs-6 shadow"><i class="bi bi-fuel-pump"></i> {{ getFuelType() }}</span>
+              <span class="badge bg-secondary px-3 py-2 fs-6 shadow"><i class="bi bi-building"></i> {{ car?.carRentalAssetName || '-' }}</span>
+            </div>
+            <div class="car-info-section mb-4 animate__animated animate__fadeInUp">
+              <div class="info-item mb-2"><i class="bi bi-check-circle text-success"></i> <span class="fw-semibold">Status:</span> <span class="badge bg-light text-dark ms-1">{{ car?.status || 'N/A' }}</span></div>
+              <div class="info-item mb-2"><i class="bi bi-activity text-primary"></i> <span class="fw-semibold">Available:</span> <span class="badge" [ngClass]="car?.isAvailable ? 'bg-success' : 'bg-danger'">{{ car?.isAvailable ? 'Yes' : 'No' }}</span></div>
+            </div>
+            <div class="car-description animate__animated animate__fadeInUp" *ngIf="car?.description">
+              <i class="bi bi-info-circle text-info"></i>
+              <span class="ms-2">{{ car?.description }}</span>
             </div>
           </div>
-          <div class="car-info-section mb-2 animate__animated animate__fadeInUp">
-            <div class="info-item"><i class="bi bi-check-circle"></i> <span>Status:</span> <strong>{{ car?.status }}</strong></div>
-            <div class="info-item"><i class="bi bi-activity"></i> <span>Available:</span> <strong>{{ car?.isAvailable ? 'Yes' : 'No' }}</strong></div>
-          </div>
-          <div class="car-description animate__animated animate__fadeInUp" *ngIf="car?.description">
-            <i class="bi bi-info-circle"></i>
-            <span>{{ car?.description }}</span>
+          <div class="d-flex justify-content-end align-items-end mt-auto">
+            <button class="btn btn-gradient btn-lg px-5 py-2 fs-5 fw-bold shadow animate__animated animate__pulse animate__infinite mt-2" style="background: linear-gradient(90deg,#2563b6,#3b82f6); color: #fff; border-radius: 2rem; letter-spacing: 0.03em;">
+              <i class="bi bi-calendar-check me-2"></i> Book Now
+            </button>
           </div>
         </div>
-      </div>
+    </div>
     </div>
   </div>
 </div> 
