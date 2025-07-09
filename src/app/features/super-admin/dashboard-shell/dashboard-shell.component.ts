@@ -18,7 +18,7 @@ export class DashboardShellComponent {
   userRole = 'Super Admin';
   avatar = 'assets/images/www-avatat.png';
   breadcrumbs = [
-    { label: 'Home', link: '/super-admin/dashboard' },
+    { label: 'Home', link: '/super-admin/manage-accounts/patients' },
     { label: 'Dashboard' }
   ];
 

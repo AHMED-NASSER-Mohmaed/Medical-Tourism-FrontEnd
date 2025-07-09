@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CarRental } from '../models/car-rental.model';
+import { AvailableCar } from '../models/available-car.model';
 import { environment } from '../../../../environments/environment';
 import { Governate } from '../models/governate.model';
 import { map } from 'rxjs/operators';
@@ -14,6 +15,16 @@ export interface CarRentalApiResponse {
   hasPreviousPage: boolean;
   hasNextPage: boolean;
   items: CarRental[];
+}
+
+export interface AvailableCarApiResponse {
+  pageNumber: number;
+  pageSize: number;
+  totalPages: number;
+  totalCount: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: AvailableCar[];
 }
 
 @Injectable({
@@ -50,7 +61,7 @@ export class CarRentalWebsiteService {
       minPrice?: number;
       maxPrice?: number;
     }
-  ): Observable<any> {
+  ): Observable<AvailableCarApiResponse> {
     let httpParams = new HttpParams();
     if (params.pageNumber !== undefined) httpParams = httpParams.set('PageNumber', params.pageNumber.toString());
     if (params.pageSize !== undefined) httpParams = httpParams.set('PageSize', params.pageSize.toString());
@@ -58,7 +69,13 @@ export class CarRentalWebsiteService {
     if (params.carType !== undefined) httpParams = httpParams.set('CarType', params.carType.toString());
     if (params.minPrice !== undefined) httpParams = httpParams.set('MinPrice', params.minPrice.toString());
     if (params.maxPrice !== undefined) httpParams = httpParams.set('MaxPrice', params.maxPrice.toString());
-    return this.http.get<any>(`${environment.apiUrl}/website/CarAvailable/${carRentalId}`, { params: httpParams });
+    return this.http.get<AvailableCarApiResponse>(`${environment.apiUrl}/website/CarAvailable/${carRentalId}`, { params: httpParams });
+  }
+
+  getAvailableCarById(carRentalId: string, carId: number): Observable<AvailableCar | undefined> {
+    return this.getAvailableCars(carRentalId, {}).pipe(
+      map(res => res.items.find(car => car.id === carId))
+    );
   }
 
   getEgyptGovernates(): Observable<Governate[]> {

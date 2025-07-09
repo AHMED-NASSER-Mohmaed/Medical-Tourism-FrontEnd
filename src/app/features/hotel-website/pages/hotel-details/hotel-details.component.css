@@ -30,7 +30,7 @@
   margin-top: 1rem;
 }
 .btn-back:hover, .btn-back:focus {
-  background: #2861c5;
+  background: #1e88e5; /* Changed hover color */
   color: #fff;
   transform: translateX(-4px) scale(1.04);
   box-shadow: 0 4px 16px rgba(40,97,197,0.15);

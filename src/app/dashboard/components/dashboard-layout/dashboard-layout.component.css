@@ -11,14 +11,11 @@ app-dashboard-sidebar {
 }
 
 .main-content {
-  flex-grow: 1;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  background: transparent;
-  transition: margin-left 0.3s;
-  padding: 0;
-  margin: 0;
+  margin-left: 260px;
+}
+
+.main-content.sidebar-collapsed {
+  margin-left: 70px;
 }
 
 .content-wrapper {

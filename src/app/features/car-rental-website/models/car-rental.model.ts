@@ -35,10 +35,9 @@ export interface CarRental {
   languagesSupported: string[] | null;
   assetType: number;
   starRating?: number;
-  hasPool?: boolean;
-  hasRestaurant?: boolean;
   fuelTypes?: number[];
   models?: string[];
   transmission?: number;
   rentalPolicies?: string[];
+  assetImages?: { imageURL: string }[];
 } 
