@@ -14,7 +14,7 @@ import { StatusLabelPipe } from './pipes/status.pipe';
 import { LoadingComponent } from './components/loading/loading.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RouterModule } from '@angular/router';
-import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.component';
+
 
 @NgModule({
   declarations: [
@@ -26,7 +26,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     DarkModeToggleComponent,
     LoadingComponent,
     NotFoundComponent,
-    
+
   ],
   imports: [
     CommonModule,
@@ -44,7 +44,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     FormsModule,
     StatusLabelPipe,
     LoadingComponent,
-    
+
   ]
 })
 export class SharedModule { }

@@ -1,4 +1,16 @@
-<app-breadcrumb></app-breadcrumb>
+
+
+<!-- Loading and Error States -->
+<div *ngIf="loading" class="text-center p-5">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</div>
+<div *ngIf="error" class="alert alert-danger text-center animate__animated animate__fadeIn">
+  {{ error }}
+</div>
+
+
 <div *ngIf="room && !loading" class="profile-container">
   <!-- Left: Room Details -->
   <div class="profile-main-content">
@@ -6,11 +18,12 @@
       <div class="row g-0 align-items-center">
         <div class="col-md-5 room-images position-relative">
           <div class="main-img-wrapper">
-            <img *ngIf="room.roomImages && room.roomImages.length" [src]="selectedImage || room.roomImages[0].imageURL" class="img-fluid rounded main-room-img animate__animated animate__fadeIn" alt="Room Image">
-            <img *ngIf="!room.roomImages || !room.roomImages.length" src="/assets/images/room1.jpg" class="img-fluid rounded main-room-img animate__animated animate__fadeIn" alt="Room Image">
+            <img *ngIf="room.roomImages && room.roomImages.length" [src]="selectedImage || firstImage" class="img-fluid rounded main-room-img animate__animated animate__fadeIn" alt="Room Image">
+            <!-- Fallback image if none are provided -->
+            <img *ngIf="!room.roomImages || !room.roomImages.length" src="/assets/images/room1.jpg" class="img-fluid rounded main-room-img animate__animated animate__fadeIn" alt="Default Room Image">
           </div>
           <div class="room-thumbnails mt-3 d-flex flex-wrap justify-content-center" *ngIf="room.roomImages && room.roomImages.length > 1">
-            <img *ngFor="let img of room.roomImages; let i = index" [src]="img.imageURL" class="img-thumbnail room-thumb animate__animated animate__fadeInUp" [class.active-thumb]="(selectedImage || room.roomImages[0].imageURL) === img.imageURL" (click)="selectImage(img.imageURL)" alt="Room Thumbnail">
+            <img *ngFor="let img of room.roomImages" [src]="img.imageURL" class="img-thumbnail room-thumb animate__animated animate__fadeInUp" [class.active-thumb]="(selectedImage || firstImage) === img.imageURL" (click)="selectImage(img.imageURL)" alt="Room Thumbnail">
           </div>
         </div>
         <div class="col-md-7">
@@ -19,7 +32,7 @@
               <div>
                 <h2 class="room-title mb-1">Room {{ room.roomNumber }} - {{ roomTypeLabel(room.roomType) }}</h2>
                 <div class="room-badges">
-                  <span class="room-price-badge">${{ room.price }}</span>
+                  <span class="room-price-badge">${{ room.price }} / night</span>
                   <span class="availability-badge" [ngClass]="room.isAvailable ? 'available' : 'not-available'">
                     <i class="bi" [ngClass]="room.isAvailable ? 'bi-check-circle' : 'bi-x-circle'"></i>
                     {{ room.isAvailable ? 'Available' : 'Not Available' }}
@@ -95,7 +108,7 @@
           </mat-form-field>
         </div>
         <div class="mb-2 text-muted" style="font-size: 0.95rem;">
-          <i class="bi bi-info-circle"></i> Unavailable dates are grayed out and cannot be selected.
+          <i class="bi bi-info-circle"></i> Unavailable dates are grayed out.
         </div>
         <div *ngIf="showDateError" class="validation-error mb-2">Please select both check-in and check-out dates.</div>
         <div *ngIf="bookingError" class="alert alert-danger mb-2">{{ bookingError }}</div>
@@ -105,6 +118,7 @@
     </div>
   </aside>
 </div>
+
 <div *ngIf="error" class="alert alert-danger text-center animate__animated animate__fadeIn">
   {{ error }}
 </div>
