@@ -47,6 +47,6 @@
   cursor: pointer;
 }
 .custom-dropdown .dropdown-item:hover {
-  background-color: #f3f5f5;
+  background-color: rgb(199, 208, 216);
   color: #16181b;
 }

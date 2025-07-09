@@ -1,76 +1,108 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { AuthService } from '../../../auth/services/auth.service';
 import { CookieService } from 'ngx-cookie-service';
 
 @Component({
-  selector   : 'app-navbar',
-  standalone : false,
+  selector: 'app-navbar',
+  standalone:false,
   templateUrl: './navbar.component.html',
-  styleUrls  : ['./navbar.component.css']
+  styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
+
   isLoggedIn = false;
-  userName   = '';
-activeSection: string | null = null;
+  userName = '';
+  userImage: string = '';
+  defaultUserImage = '/assets/images/user.png';
+
+  // Dropdown state properties
+  dropdownOpen = false;
+  // EDITED: Added a new property for the profile dropdown
+  profileDropdownOpen = false;
+
+  activeLink: string = '';
+  private routerSubscription!: Subscription;
+
   constructor(
     private router: Router,
+    private route: ActivatedRoute,
     private authService: AuthService,
     private cookieService: CookieService
   ) {}
 
+  ngOnInit(): void {
+    // --- Authentication Logic ---
+    this.authService.loginStatus$.subscribe(status => {
+      this.isLoggedIn = status;
+      if (status) {
+        this.authService.getPatientProfile().subscribe({
+          next: (res) => {
+            this.userName = `${res.firstName} ${res.lastName}`;
+            this.userImage = res.imageURL || this.defaultUserImage;
+          },
+          error: () => {
+            this.userName = 'User';
+            this.userImage = this.defaultUserImage;
+          }
+        });
+      } else {
+        this.userName = '';
+        this.userImage = this.defaultUserImage;
+      }
+    });
 
+    this.authService.profileImage$.subscribe(url => {
+      this.userImage = url || this.defaultUserImage;
+    });
 
-userImage: string = '';
-defaultUserImage = '/assets/images/user.png';
-// Add this to your navbar.component.ts
-dropdownOpen = false;
-ngOnInit(): void {
-  this.authService.loginStatus$.subscribe(status => {
-    this.isLoggedIn = status;
+    // --- Active Link Logic ---
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.updateActiveLink();
+    });
 
-    if (status) {
+    this.updateActiveLink();
+  }
 
-      this.authService.getPatientProfile().subscribe({
-        next: (res) => {
-          this.userName = `${res.firstName} ${res.lastName}`;
-          this.userImage = res.imageURL || this.defaultUserImage;
-        },
-        error: () => {
-          this.userName = 'User';
-          this.userImage = this.defaultUserImage;
-        }
-      });
+  private updateActiveLink(): void {
+    if (this.router.url.includes('#faq-section')) {
+      this.activeLink = 'faq';
     } else {
-      this.userName = '';
-      this.userImage = this.defaultUserImage;
+      this.activeLink = this.router.url;
     }
-  });
+  }
 
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
+  }
 
-  this.authService.profileImage$.subscribe(url => {
-    this.userImage = url || this.defaultUserImage;
-  });
-}
+  setActive(link: string): void {
+      this.activeLink = link;
+  }
 
-
-
-
-
+  // --- Authentication Methods ---
   login(): void {
     this.router.navigate(['/auth/login']);
   }
 
   logout(): void {
     this.authService.logout();
-    this.authService.setLoggedIn(false);
-    this.router.navigate(['/auth/login']);
+    this.profileDropdownOpen = false; // Close dropdown on logout
   }
-  goToProfileSettings() {
-  this.router.navigate(['/profile'], { queryParams: { tab: 'settings' } });
-}
-goToDashboard() {
-  this.router.navigate(['/profile'], { queryParams: { tab: 'dashboard' } });
-}
 
+  goToDashboard() {
+    this.router.navigate(['/profile'], { queryParams: { tab: 'dashboard' } });
+    this.profileDropdownOpen = false; // Close dropdown after navigation
+  }
+
+  goToProfileSettings() {
+    this.router.navigate(['/profile'], { queryParams: { tab: 'settings' } });
+    this.profileDropdownOpen = false; // Close dropdown after navigation
+  }
 }
