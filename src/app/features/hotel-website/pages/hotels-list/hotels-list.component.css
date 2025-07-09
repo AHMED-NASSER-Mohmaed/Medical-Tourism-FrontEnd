@@ -57,3 +57,23 @@
   font-size: 1rem; /* Reduced font size for the paragraph */
   opacity: 0.95;
 }
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem 1.5rem;
+  justify-content: center;
+  max-width: 900px;
+  margin: 0 auto 2rem auto;
+  padding: 0;
+  min-height: 4 * 260px; /* ensure space for up to 4 rows */
+}
+.card-placeholder {
+  visibility: hidden;
+}
+@media (max-width: 900px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); max-width: 600px; }
+}
+@media (max-width: 600px) {
+  .cards-grid { grid-template-columns: 1fr; max-width: 340px; }
+}

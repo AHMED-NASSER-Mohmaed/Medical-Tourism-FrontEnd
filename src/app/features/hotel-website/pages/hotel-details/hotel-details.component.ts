@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotelWebsiteService } from '../../services/hotel-website.service';
 import { Room } from '../../models/room.model';
+import { Hotel } from '../../models/hotel.model';
 
 @Component({
   selector: 'app-hotel-details',
@@ -11,6 +12,7 @@ import { Room } from '../../models/room.model';
 })
 export class HotelDetailsComponent implements OnInit {
   hotelId!: string;
+  hotel?: Hotel; // Add hotel property
   rooms: Room[] = [];
   loading = false;
   currentPage = 1;
@@ -27,7 +29,14 @@ export class HotelDetailsComponent implements OnInit {
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       this.hotelId = params.get('id')!;
+      this.fetchHotel(); // Fetch hotel details
       this.fetchRooms();
+    });
+  }
+
+  fetchHotel() {
+    this.hotelService.getHotels({}).subscribe((hotels) => {
+      this.hotel = hotels.find(h => h.id === this.hotelId);
     });
   }
 

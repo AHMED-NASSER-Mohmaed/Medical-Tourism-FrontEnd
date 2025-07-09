@@ -1,25 +1,77 @@
 .hotel-card {
+  min-height: 320px;
+  max-height: 340px;
   transition: box-shadow 0.3s, transform 0.3s;
-  border-radius: 1rem;
+  border-radius: 1.5rem;
   overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(40,97,197,0.08);
+  border: none;
 }
 .hotel-card:hover {
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
-  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 12px 48px rgba(40,97,197,0.18);
+  transform: translateY(-10px) scale(1.04);
+}
+.hotel-img-wrapper {
+  position: relative;
+  width: 100%;
+  height: 110px;
+  overflow: hidden;
 }
 .hotel-img {
   object-fit: cover;
-  height: 180px;
+  height: 110px;
   width: 100%;
-  border-top-left-radius: 1rem;
-  border-top-right-radius: 1rem;
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
   background: #f8f9fa;
+  transition: transform 0.3s;
+}
+.hotel-card:hover .hotel-img {
+  transform: scale(1.05) rotate(-1deg);
+}
+.hotel-overlay {
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(40,97,197,0.08) 0%, rgba(0,0,0,0.12) 100%);
+  border-top-left-radius: 1.5rem;
+  border-top-right-radius: 1.5rem;
 }
 .card-title {
-  font-weight: 700;
-  font-size: 1.2rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 2.4em;
+  max-height: 2.4em;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 .badge {
-  font-size: 0.9rem;
-  padding: 0.5em 0.8em;
+  font-size: 1rem;
+  padding: 0.5em 1em;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(40,97,197,0.08);
+}
+.btn-gradient {
+  background: linear-gradient(90deg, #2563b6 0%, #1e88e5 100%);
+  color: #fff;
+  border: none;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(40,97,197,0.12);
+  border-radius: 0.7rem;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.btn-gradient:hover, .btn-gradient:focus {
+  background: linear-gradient(90deg, #1e88e5 0%, #2563b6 100%);
+  color: #fff;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 4px 16px rgba(40,97,197,0.18);
+}
+.card-body {
+  display: flex;
+  flex-direction: column;
+  height: 140px;
+  padding: 0.8rem 1rem 1rem 1rem;
 }

@@ -1,59 +1,77 @@
-<div class="card shadow-sm mb-4 animate__animated animate__fadeInLeft">
-  <div class="card-body">
-    <h5 class="card-title mb-3"><i class="bi bi-funnel"></i> Filter Rooms</h5>
-    <form>
-      <!-- Search by Room Name -->
-      <div class="mb-3">
-        <label for="searchRoom" class="form-label">Search by Room Name</label>
-        <input type="text" class="form-control" id="searchRoom" placeholder="e.g., Deluxe" [(ngModel)]="filters.searchTerm" name="searchTerm">
-      </div>
-      <!-- Room Type -->
-      <div class="mb-3">
-        <label for="roomType" class="form-label">Room Type</label>
-        <select class="form-select" id="roomType" [(ngModel)]="filters.roomType" name="roomType">
-          <option value="">All Types</option>
-          <option value="0">Single</option>
-          <option value="1">Double</option>
-          <option value="2">Suite</option>
-          <option value="3">Family</option>
-        </select>
-      </div>
-      <!-- Price Range -->
-      <div class="mb-3">
-        <label class="form-label">Price Range</label>
-        <div class="input-group mb-2">
-          <span class="input-group-text">Min</span>
-          <input type="number" class="form-control" [(ngModel)]="filters.minPrice" name="minPrice" min="0">
-        </div>
-        <div class="input-group">
-          <span class="input-group-text">Max</span>
-          <input type="number" class="form-control" [(ngModel)]="filters.maxPrice" name="maxPrice" min="0">
-        </div>
-      </div>
-      <!-- Occupancy -->
-      <div class="mb-3">
-        <label class="form-label">Occupancy</label>
-        <div class="input-group mb-2">
-          <span class="input-group-text">Min</span>
-          <input type="number" class="form-control" [(ngModel)]="filters.minOccupancy" name="minOccupancy" min="1">
-        </div>
-        <div class="input-group">
-          <span class="input-group-text">Max</span>
-          <input type="number" class="form-control" [(ngModel)]="filters.maxOccupancy" name="maxOccupancy" min="1">
-        </div>
-      </div>
-      <!-- Governorate -->
-      <div class="mb-3">
-        <label for="filterGovernorateId" class="form-label">Governorate</label>
-        <select class="form-select" id="filterGovernorateId" [(ngModel)]="filters.filterGovernorateId" name="filterGovernorateId" [disabled]="governatesLoading">
-          <option value="">All Governorates</option>
-          <option *ngFor="let gov of governates" [value]="gov.governateId">{{ gov.governateName }}</option>
-        </select>
-        <div *ngIf="governatesLoading" class="form-text text-primary"><span class="spinner-border spinner-border-sm"></span> Loading...</div>
-      </div>
-      <button type="button" class="btn btn-primary w-100 mt-2 animate__animated animate__pulse" (click)="applyFilters()">
-        <i class="bi bi-search"></i> Apply Filters
-      </button>
-    </form>
+<aside class="sidebar">
+  <div class="sidebar-title">
+    <span class="icon">🔎</span>
+    <span class="refine-title">Refine Search</span>
   </div>
-</div> 
+
+  <div class="filter-item">
+    <label>Search by Room Name</label>
+    <input type="text" class="form-control" id="searchRoom" placeholder="e.g., Deluxe" [(ngModel)]="filters.searchTerm" name="searchTerm">
+  </div>
+
+  <div class="filter-item">
+    <label>Room Type</label>
+    <select class="form-select" id="roomType" [(ngModel)]="filters.roomType" name="roomType">
+      <option value="">All Types</option>
+      <option value="0">Single</option>
+      <option value="1">Double</option>
+      <option value="2">Suite</option>
+      <option value="3">Family</option>
+    </select>
+  </div>
+
+  <div class="filter-item">
+    <label>Price Range</label>
+    <div class="price-range-slider">
+      <div class="slider-labels">
+        <span>Min: {{ filters.minPrice }}</span>
+        <span>Max: {{ filters.maxPrice }}</span>
+      </div>
+      <div class="slider-wrapper">
+        <input type="range" [min]="minPriceLimit" [max]="maxPriceLimit" step="50"
+               [(ngModel)]="filters.minPrice"
+               (ngModelChange)="onMinPriceChange($event)"
+               [style.zIndex]="filters.minPrice > maxPriceLimit - 100 ? 5 : 3">
+        <input type="range" [min]="minPriceLimit" [max]="maxPriceLimit" step="50"
+               [(ngModel)]="filters.maxPrice"
+               (ngModelChange)="onMaxPriceChange($event)"
+               [style.zIndex]="4">
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="filter-item">
+    <label>Occupancy</label>
+    <div class="occupancy-range-slider">
+      <div class="slider-labels">
+        <span>Min: {{ filters.minOccupancy }}</span>
+        <span>Max: {{ filters.maxOccupancy }}</span>
+      </div>
+      <div class="slider-wrapper">
+        <input type="range" [min]="minOccupancyLimit" [max]="maxOccupancyLimit" step="1"
+               [ngModel]="filters.minOccupancy"
+               (ngModelChange)="onMinOccupancyChange($event)"
+               [style.zIndex]="filters.minOccupancy > maxOccupancyLimit - 2 ? 5 : 3">
+        <input type="range" [min]="minOccupancyLimit" [max]="maxOccupancyLimit" step="1"
+               [ngModel]="filters.maxOccupancy"
+               (ngModelChange)="onMaxOccupancyChange($event)"
+               [style.zIndex]="4">
+      </div>
+    </div>
+  </div> -->
+
+  <!-- <div class="filter-item">
+    <label>Governorate</label>
+    <select class="form-select" id="filterGovernorateId" [(ngModel)]="filters.filterGovernorateId" name="filterGovernorateId" [disabled]="governatesLoading">
+      <option value="">All Governorates</option>
+      <option *ngFor="let gov of governates" [value]="gov.governateId">{{ gov.governateName }}</option>
+    </select>
+    <div *ngIf="governatesLoading" class="form-text text-primary"><span class="spinner-border spinner-border-sm"></span> Loading...</div>
+  </div> -->
+
+  <div class="sidebar-buttons">
+    <button class="btn btn-primary" type="button" (click)="applyFilters()">
+      <span class="icon">🔍</span> Apply Filters
+    </button>
+  </div>
+</aside> 

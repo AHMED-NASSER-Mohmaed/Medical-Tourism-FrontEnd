@@ -62,4 +62,8 @@ export class HotelsListComponent implements OnInit {
       }
     });
   }
+
+  getEmptySlots() {
+    return Array(Math.max(0, 10 - this.hotels.length));
+  }
 }

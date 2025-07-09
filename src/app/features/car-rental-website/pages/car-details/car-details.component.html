@@ -1,0 +1,51 @@
+<div class="car-details-container animate__animated animate__fadeIn">
+  <div class="car-details-card glassmorphism shadow-lg mb-4 mt-4">
+    <div class="row g-0 align-items-center">
+      <div class="col-md-5 car-images position-relative">
+        <div class="main-img-wrapper">
+          <img
+            *ngIf="car?.carImages?.length"
+            [src]="selectedImage || car?.carImages?.[0]?.imageURL"
+            class="img-fluid rounded main-car-img animate__animated animate__fadeIn"
+            alt="Car Image"
+          />
+          <img *ngIf="!car?.carImages || !car?.carImages.length" src="/assets/images/cover.png" class="img-fluid rounded main-car-img animate__animated animate__fadeIn" alt="Car Image">
+        </div>
+        <div class="car-thumbnails mt-3 d-flex flex-wrap justify-content-center" *ngIf="car?.carImages?.length > 1">
+          <img
+            *ngFor="let img of car?.carImages"
+            [src]="img.imageURL"
+            class="img-thumbnail car-thumb animate__animated animate__fadeInUp"
+            [class.active-thumb]="(selectedImage || car?.carImages?.[0]?.imageURL) === img.imageURL"
+            (click)="selectImage(img.imageURL)"
+            alt="Car Thumbnail"
+          />
+        </div>
+      </div>
+      <div class="col-md-7">
+        <div class="card-body animate__animated animate__fadeInRight">
+          <div class="car-details-header animate__animated animate__fadeInDown mb-2">
+            <h2 class="car-title mb-1">{{ car?.factoryMake }} {{ car?.modelName }} ({{ car?.modelYear }})</h2>
+            <div class="car-badges mb-2">
+              <span class="car-price-badge">EGP {{ car?.pricePerDay }} <span class="unit">/day</span></span>
+              <span class="badge bg-info me-1 px-3 py-2 fs-6"><i class="bi bi-car-front"></i> {{ getCarType() }}</span>
+              <span class="badge bg-success px-3 py-2 fs-6"><i class="bi bi-people"></i> {{ car?.capacity }} Seats</span>
+              <span class="badge bg-warning text-dark px-3 py-2 fs-6"><i class="bi bi-gear"></i> {{ getTransmission() }}</span>
+              <span class="badge bg-primary px-3 py-2 fs-6"><i class="bi bi-fuel-pump"></i> {{ getFuelType() }}</span>
+              <span class="badge bg-secondary px-3 py-2 fs-6"><i class="bi bi-building"></i> {{ car?.carRentalAssetName }}</span>
+              <span class="badge bg-light text-dark px-3 py-2 fs-6"><i class="bi bi-hash"></i> ID: {{ car?.carRentalAssetId }}</span>
+            </div>
+          </div>
+          <div class="car-info-section mb-2 animate__animated animate__fadeInUp">
+            <div class="info-item"><i class="bi bi-check-circle"></i> <span>Status:</span> <strong>{{ car?.status }}</strong></div>
+            <div class="info-item"><i class="bi bi-activity"></i> <span>Available:</span> <strong>{{ car?.isAvailable ? 'Yes' : 'No' }}</strong></div>
+          </div>
+          <div class="car-description animate__animated animate__fadeInUp" *ngIf="car?.description">
+            <i class="bi bi-info-circle"></i>
+            <span>{{ car?.description }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 
