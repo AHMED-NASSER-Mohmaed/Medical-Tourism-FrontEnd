@@ -87,4 +87,9 @@ export class CarRentalWebsiteService {
       })
     );
   }
+
+  createBooking(requestBody: any): Observable<any> {
+    // POST to /api/Checkout/CreateBooking
+    return this.http.post(`${environment.apiUrl}/Checkout/CreateBooking`, requestBody);
+  }
 } 

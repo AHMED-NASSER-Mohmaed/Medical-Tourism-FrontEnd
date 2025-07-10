@@ -14,6 +14,9 @@ html, body {
 
  .navbar + * { margin-top: 0 !important; }
 
+.cdk-overlay-container, .cdk-overlay-pane {
+  z-index: 5000 !important;
+}
 
 .app-root, app-root {
   display: flex;
