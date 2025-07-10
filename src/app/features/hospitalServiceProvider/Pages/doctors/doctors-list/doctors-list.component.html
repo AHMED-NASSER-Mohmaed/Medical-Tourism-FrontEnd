@@ -9,7 +9,7 @@
         <option value= "1">Active</option>
         <option value= "0">Inactive</option>
       </select>
-      <button class="btn btn-primary" [routerLink]="['/hospital/doctor/add']">
+      <button class="btn btn-primary" [routerLink]="['/hospitalProvider/doctor/add']">
         <i class="fas fa-plus"></i> Add Doctor
       </button>
     </div>
@@ -20,8 +20,7 @@
             <tr>
               
               <th>Image</th>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Name</th>
               <th>Gender</th>
               <th>Email</th>
               <th>Phone</th>
@@ -37,9 +36,8 @@
               <td>
               <img [src]="doctor.imageURL ? doctor.imageURL : 'https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper.png'" alt="Doctor Image" width="40" height="40" class="rounded-circle" />
               </td>
-              <td>{{doctor.firstName}}</td>
-              <td>{{doctor.lastName}}</td>
-              <td>
+              <td>{{doctor.firstName}} {{doctor.lastName}}</td>
+             <td class="text-capitalize">
               <span *ngIf="doctor.gender === 0">Male</span>
               <span *ngIf="doctor.gender === 1">Female</span>
               <span *ngIf="doctor.gender === 2">Other</span>

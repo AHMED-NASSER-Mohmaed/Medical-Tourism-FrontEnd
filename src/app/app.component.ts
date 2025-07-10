@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from './auth/services/auth.service';
 import { Router,NavigationEnd  } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { filter, take } from 'rxjs/operators';
 
 
 
@@ -23,14 +23,16 @@ constructor(
   private authService: AuthService,
     private router: Router,
 ) {
+    this.authService.checkTokenAndLogoutIfExpired();
 
 
 }
 ngOnInit(): void {
+    // this.handleInitialRedirect();
 
     this.authService.loginStatus$.subscribe(() => {
       const role = this.authService.getUserRole();
-      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin');
+      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin') && role !=='HospitalServiceProvider';
 
     });
 
@@ -44,13 +46,33 @@ ngOnInit(): void {
     this.checkRouteVisibility();
 
 }
+
+// private handleInitialRedirect(): void {
+
+//     this.authService.loginStatus$.pipe(take(1)).subscribe(isLoggedIn => {
+
+//       if (isLoggedIn && this.router.url === '/') {
+//         const role = this.authService.getUserRole();
+//         console.log(`User is already logged in with role: ${role}. Redirecting...`);
+
+
+//         if (role === 'SuperAdmin') {
+//           this.router.navigate(['/super-admin']);
+//         } else if (role === 'Patient') {
+//           this.router.navigate(['/profile']);
+//         } else if (role === 'HospitalServiceProvider') {
+//           this.router.navigate(['/hospitalProvider/specialists']);
+//         }
+//       }
+//     });
+//   }
 checkRouteVisibility(): void {
   const currentRoute = this.router.url;
 
 
   const hideNavFooter = this.router.routerState.snapshot.root.firstChild?.data?.['hideNavFooter'] || false;
   this.showNavFooter = !(currentRoute.includes('confirm') || hideNavFooter ||
-    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin');
+    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin'|| this.authService.getUserRole() === 'HospitalServiceProvider');
 }
 
 

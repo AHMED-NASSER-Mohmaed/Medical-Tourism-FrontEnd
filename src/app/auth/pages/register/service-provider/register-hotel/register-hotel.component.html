@@ -251,7 +251,7 @@
                     <div class="col-md-6"><label class="form-label">Password</label><input type="password" class="form-control" formControlName="Password"><small class="text-danger" *ngIf="error('Password')">{{error('Password')}}</small></div>
                     <div class="col-md-6"><label class="form-label">Confirm Password</label><input type="password" class="form-control" formControlName="ConfirmPassword"><small class="text-danger" *ngIf="registerForm.errors?.['mismatch'] && submitted">Passwords mismatch</small></div>
                     <div class="col-md-6"><label class="form-label">Gender</label><select class="form-control" formControlName="Gender"><option value="" disabled>Select</option><option [ngValue]="0">Male</option><option [ngValue]="1">Female</option></select><small class="text-danger" *ngIf="error('Gender')">{{error('Gender')}}</small></div>
-                    <div class="col-md-6"><label class="form-label">Date of Birth</label><input type="date" class="form-control" formControlName="DateOfBirth"><small class="text-danger" *ngIf="error('DateOfBirth')">{{error('DateOfBirth')}}</small></div>
+                    <div class="col-md-6"><label class="form-label">Date of Birth</label><input type="date" class="form-control" formControlName="DateOfBirth" [max]="maxDate" onkeydown="return false;"><small class="text-danger" *ngIf="error('DateOfBirth')">{{error('DateOfBirth')}}</small></div>
                                        <div class="col-md-6">
                       <label class="form-label">Address</label>
                       <textarea rows="2" class="form-control" formControlName="Address"></textarea>

@@ -24,6 +24,8 @@ export class AuthService {
 
   private loginStatusSubject: BehaviorSubject<boolean>;
   loginStatus$: Observable<boolean>;
+    // EDITED: Add this property to store the URL
+  public redirectUrl: string | null = null;
 
   constructor(private http: HttpClient, private cookieService: CookieService) {
     const tokenExists = this.cookieService.check('auth_token');
@@ -31,13 +33,37 @@ export class AuthService {
     this.loginStatus$ = this.loginStatusSubject.asObservable();
   }
 
+ public checkTokenAndLogoutIfExpired(): void {
+    const token = this.cookieService.get('auth_token');
+    if (!token) {
+      // No token exists, so do nothing.
+      return;
+    }
 
+    try {
+      const decodedToken: any = jwtDecode(token);
+      // The 'exp' claim in a JWT is in seconds. We convert it to milliseconds.
+      const expirationDate = decodedToken.exp * 1000;
+      const now = Date.now();
+
+      if (expirationDate < now) {
+        // If the token's expiration date is in the past, log the user out.
+        console.warn('AuthService: Token has expired. Logging out.');
+        this.logout();
+        // You could add a Swal.fire alert here to inform the user.
+      }
+    } catch (error) {
+      // If the token is malformed or invalid, log the user out.
+      console.error('AuthService: Error decoding token. Logging out.', error);
+      this.logout();
+    }
+  }
 
 
 
   login(data: LoginRequest): Observable<LoginResponse> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data, { headers }).pipe(
+
+    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data).pipe(
       catchError((err) => {
         // Handle backend errors here
         return throwError(err); // Rethrow the error to be caught in the component
@@ -176,12 +202,30 @@ updatePatientProfile(data: any) {
 
 getUserRole(): string | null {
   const token = this.cookieService.get('auth_token');
+  console.log('Token:', token);
   if (token) {
     const decodedToken: any = jwtDecode(token);
     console.log('Decoded Token:', decodedToken);
 
     console.log(decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
     return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+  }
+  return null; // If no token exists
+}
+
+getUserName(): string | null {
+  const token = this.cookieService.get('auth_token');
+  console.log('Token:', token);
+  if (token) {
+    const decodedToken: any = jwtDecode(token);
+    console.log('Decoded Token:', decodedToken);
+
+    
+  const firstname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']
+  const lastname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+  console.log('First Name:', firstname);
+  console.log('Last Name:', lastname);
+    return firstname+ " "+lastname || null;
   }
   return null; // If no token exists
 }

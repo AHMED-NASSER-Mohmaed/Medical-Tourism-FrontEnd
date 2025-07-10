@@ -34,6 +34,7 @@ export class RegisterHotelComponent implements OnInit, AfterViewInit {
     countryMap = new Map<number, CountryInfo>();
   countryList: { id: number; name: string }[] = [];
 showLocationError = false;
+  maxDate: string;
 
 
   filteredGovernorates: Gov[] = [];
@@ -55,7 +56,13 @@ showLocationError = false;
   submitted = false;
 imageFiles: File[] = [];
 imagePreviews: string[] = [];
-  constructor(private fb: FormBuilder, private auth: AuthService, private cd: ChangeDetectorRef, private router: Router,private countriesSrv:CountryService,private loadingService:LoadingService ) {}
+  constructor(private fb: FormBuilder, private auth: AuthService, private cd: ChangeDetectorRef, private router: Router,private countriesSrv:CountryService,private loadingService:LoadingService ) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.maxDate = `${year}-${month}-${day}`;
+  }
 
   /* ═════════════════════════════════ LIFECYCLE ═════════════════════════════ */
   ngOnInit(): void {

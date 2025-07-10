@@ -13,7 +13,9 @@ import { DoctorProfileComponent } from './pages/doctor-profile/doctor-profile.co
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
-import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcrumb.component';
+import { BookingStepperComponent } from './pages/booking-stepper/booking-stepper.component';
+
+import { PaymentSuccessComponent } from './pages/payment-success/payment-success.component';
 
 
 
@@ -26,7 +28,8 @@ import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcru
     SpecialistsListComponent,
     DoctorsListComponent,
     DoctorProfileComponent,
-     BreadcrumbComponent
+     BookingStepperComponent,
+     PaymentSuccessComponent
 
 
 
@@ -45,7 +48,7 @@ import { BreadcrumbComponent } from '../../shared/components/breadcrumb/breadcru
 
   ],
     exports: [
-      BreadcrumbComponent
+
 
   ]
 })

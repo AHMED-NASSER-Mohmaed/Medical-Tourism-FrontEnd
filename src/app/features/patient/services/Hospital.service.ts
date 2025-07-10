@@ -90,4 +90,16 @@ getHospitals(
     return this.http.get<any[]>(url);
   }
 
+    getAppointmentHistory(pageNumber: number, pageSize: number): Observable<any> {
+    const url = `${environment.apiUrl}/patient/profile/history?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    return this.http.get<any>(url);
+  }
+
+
+  cancelBooking(bookingId: string): Observable<any> {
+    // Assuming your backend has an endpoint like this to handle cancellations
+    const url = `${environment.apiUrl}/Bookings/${bookingId}/cancel`;
+    return this.http.post(url, {});
+  }
+
 }
