@@ -178,10 +178,8 @@ export class AddCarRentalProviderComponent implements OnInit {
       const formValue = this.carRentalForm.value;
       const country = this.countriesMap[formValue.countryId];
       const governate = country?.governates[formValue.governorateId];
-      
       // Prepare the complete payload with all required properties
       const providerData: Omit<CarRentalProvider, keyof UserBase | "assetId"> = {
-        // Asset information
         assetName: formValue.assetName,
         assetDescription: formValue.assetDescription,
         assetEmail: formValue.assetEmail,
@@ -200,51 +198,37 @@ export class AddCarRentalProviderComponent implements OnInit {
         transmission: Number(formValue.transmission),
         rentalPolicies: formValue.rentalPolicies || [],
       };
-
-      // Combine user account data with provider data
       const fullPayload = {
-        // User account information
         email: formValue.email,
         password: formValue.password,
         confirmPassword: formValue.confirmPassword,
         firstName: formValue.firstName,
         lastName: formValue.lastName,
         phone: formValue.phone,
-        gender: Number(formValue.gender), // Convert to number
+        gender: Number(formValue.gender),
         address: formValue.address,
         city: formValue.city,
-        governorateId: Number(formValue.governorateId), // Convert to number
+        governorateId: Number(formValue.governorateId),
         governorateName: governate?.governateName,
-        countryId: Number(formValue.countryId), // Convert to number
+        countryId: Number(formValue.countryId),
         countryName: country?.countryName,
-        dateOfBirth: new Date(formValue.dateOfBirth).toISOString(), // Convert to ISO string
-        
-        // Provider data
+        dateOfBirth: new Date(formValue.dateOfBirth).toISOString(),
         ...providerData
       };
-
-            this.superAdminService.addCarRentalProvider(fullPayload).subscribe({
+      this.superAdminService.addCarRentalProvider(fullPayload).subscribe({
         next: (newProvider) => {
           this.isLoading = false;
-          
-          // FIX: Check if ID exists before navigating to detail view
+          // SweetAlert2 toast is already shown by the service
           if (newProvider?.id) {
             this.router.navigate(['/super-admin/providers/car-rentals', newProvider.id]);
           } else {
-            // If ID is not available, navigate to list view
             this.router.navigate(['/super-admin/providers/car-rentals']);
           }
         },
         error: (err) => {
           this.isLoading = false;
-          console.error('Error adding car rental provider:', err);
-          
-          // Set error message for display
-          if (err.status === 400) {
-            this.apiError = 'Validation failed: ' + (err.error?.technicalMessage || 'Please check all required fields');
-          } else {
-            this.apiError = err.userMessage || 'Failed to create provider';
-          }
+          // SweetAlert2 toast is already shown by the service
+          this.apiError = err.userMessage || 'Failed to create provider';
         }
       });
     } else {

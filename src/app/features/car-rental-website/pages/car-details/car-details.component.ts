@@ -28,6 +28,10 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   navbarHeightPx: number = 0;
   @ViewChild('carDetailsRoot', { static: true }) carDetailsRoot!: ElementRef;
 
+  // Unavailable dates state
+  unavailableDates: string[] = [];
+  unavailableDatesSet: Set<string> = new Set();
+
   // Geolocation state
   latitude: number = 0;
   longitude: number = 0;
@@ -47,6 +51,9 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
       this.carService.getAvailableCarById(carRentalId, +carId).subscribe(car => {
         this.car = car;
         // No loading spinner for initial load
+        if (car) {
+          this.fetchUnavailableDates(car.id);
+        }
       });
     }
     // Geolocation
@@ -64,6 +71,19 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
         }
       );
     }
+  }
+
+  fetchUnavailableDates(carId: number) {
+    this.carService.getCarUnavailableDates(carId).subscribe({
+      next: (data) => {
+        this.unavailableDates = data.unavailableDates || [];
+        this.unavailableDatesSet = new Set(this.unavailableDates);
+      },
+      error: () => {
+        this.unavailableDates = [];
+        this.unavailableDatesSet = new Set();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -190,5 +210,21 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     } else {
       this.retryingLocation = false;
     }
+  }
+
+  // Add a date filter for the calendar
+  formatDate(date: Date | null): string {
+    if (!date) return '';
+    // Use UTC to avoid timezone issues
+    const year = date.getUTCFullYear();
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  dateFilter = (date: Date | null): boolean => {
+    if (!date) return true;
+    const formatted = this.formatDate(date);
+    return !this.unavailableDatesSet.has(formatted);
   }
 } 

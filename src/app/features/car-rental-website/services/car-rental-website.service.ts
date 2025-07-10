@@ -92,4 +92,8 @@ export class CarRentalWebsiteService {
     // POST to /api/Checkout/CreateBooking
     return this.http.post(`${environment.apiUrl}/Checkout/CreateBooking`, requestBody);
   }
+
+  getCarUnavailableDates(carId: number): Observable<{ carId: number, unavailableDates: string[] }> {
+    return this.http.get<{ carId: number, unavailableDates: string[] }>(`${environment.apiUrl}/Website/unavailable-dates/${carId}`);
+  }
 } 

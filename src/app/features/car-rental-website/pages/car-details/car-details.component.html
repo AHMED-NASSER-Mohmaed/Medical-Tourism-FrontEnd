@@ -90,7 +90,8 @@
                                readonly
                                (click)="pickupPicker.open()"
                                placeholder="Choose pick-up date"
-                               [ngClass]="{'is-invalid': carBookingForm.submitted && !pickupDateTime}">
+                               [ngClass]="{'is-invalid': carBookingForm.submitted && !pickupDateTime}"
+                               [matDatepickerFilter]="dateFilter">
                         <mat-datepicker-toggle matSuffix [for]="pickupPicker"></mat-datepicker-toggle>
                         <mat-datepicker #pickupPicker></mat-datepicker>
                       </mat-form-field>
@@ -115,7 +116,8 @@
                                readonly
                                (click)="dropoffPicker.open()"
                                placeholder="Choose drop-off date"
-                               [ngClass]="{'is-invalid': carBookingForm.submitted && !dropoffDateTime}">
+                               [ngClass]="{'is-invalid': carBookingForm.submitted && !dropoffDateTime}"
+                               [matDatepickerFilter]="dateFilter">
                         <mat-datepicker-toggle matSuffix [for]="dropoffPicker"></mat-datepicker-toggle>
                         <mat-datepicker #dropoffPicker></mat-datepicker>
                       </mat-form-field>

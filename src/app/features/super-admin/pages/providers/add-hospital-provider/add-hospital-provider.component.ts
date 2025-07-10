@@ -25,6 +25,7 @@ export class AddHospitalProviderComponent implements OnInit {
   countries: { id: number; name: string }[] = [];
   governorates: { id: number; name: string }[] = [];
   isLoading = false;
+  apiError: string | null = null;
 
   private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
 
@@ -155,7 +156,6 @@ export class AddHospitalProviderComponent implements OnInit {
         governorateId: formValue.governorateId,
         governorateName: governate?.governateName,
         dateOfBirth: formValue.dateOfBirth,
-
         assetName: formValue.assetName,
         assetDescription: formValue.assetDescription,
         assetEmail: formValue.assetEmail,
@@ -172,12 +172,17 @@ export class AddHospitalProviderComponent implements OnInit {
         closingTime: formValue.closingTime,
         verificationStatus:  AssetStatus.APPROVED
       };
-
       this.superAdminService.addHospitalProvider(payload).subscribe({
         next: (newHospital) => {
-          this.router.navigate(['/super-admin/providers/hospitals', newHospital.id]);
+          if (newHospital?.id) {
+            this.router.navigate(['/super-admin/providers/hospitals', newHospital.id]);
+          } else {
+            this.router.navigate(['/super-admin/providers/hospitals']);
+          }
         },
-        error: (err) => console.error('Error adding hospital:', err)
+        error: (err) => {
+          this.apiError = err.userMessage || 'Failed to create hospital provider';
+        }
       });
     }
   }
