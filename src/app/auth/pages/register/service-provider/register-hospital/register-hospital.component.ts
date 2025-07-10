@@ -46,6 +46,7 @@ export class RegisterHospitalComponent
   countryMap = new Map<number, CountryInfo>();
   countryList: { id: number; name: string }[] = [];
   showLocationError = false;
+  maxDate: string;
 
 
 
@@ -65,7 +66,13 @@ export class RegisterHospitalComponent
     private router : Router,
     private countriesSrv: CountryService,
     private loadingService: LoadingService
-  ) {}
+  ) {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.maxDate = `${year}-${month}-${day}`;
+  }
 
   /* ───────── lifecycle ───────── */
   ngOnInit(): void {

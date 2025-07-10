@@ -48,6 +48,7 @@ export class RegisterCarRentalComponent
   private map?: L.Map;
   private marker?: L.Marker;
   egyptianGovernorates: Gov[] = [];
+  maxDate: string;
 
   showLocationError = false;
 
@@ -77,7 +78,13 @@ export class RegisterCarRentalComponent
     private router : Router,
     private countriesSrv: CountryService,
     private loadingService: LoadingService
-  ) {}
+  ) {
+       const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.maxDate = `${year}-${month}-${day}`;
+  }
 
   /* ───── lifecycle ───── */
   ngOnInit(): void {

@@ -373,7 +373,7 @@
 
                     <div class="col-md-6">
                       <label class="form-label">Date of Birth</label>
-                      <input type="date" class="form-control" formControlName="DateOfBirth">
+                      <input type="date" class="form-control" formControlName="DateOfBirth" [max]="maxDate" onkeydown="return false;">
                       <small class="text-danger" *ngIf="error('DateOfBirth')">
                         {{error('DateOfBirth')}}
                       </small>

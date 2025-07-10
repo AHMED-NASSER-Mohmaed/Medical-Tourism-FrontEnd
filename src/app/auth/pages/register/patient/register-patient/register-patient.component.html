@@ -96,7 +96,7 @@
                     </div>
                     <div class="col-md-6">
                       <label class="form-label">Date of Birth</label>
-                      <input type="date" class="form-control" formControlName="dateOfBirth">
+                      <input type="date" class="form-control" formControlName="dateOfBirth" [max]="maxDate" onkeydown="return false;">
                       <small class="text-danger" *ngIf="msg('dateOfBirth') as m">{{ m }}</small>
                     </div>
                   </div>

@@ -115,6 +115,19 @@ export class RoomDetailsComponent implements OnInit {
 
 
   bookRoom() {
+
+   const bookingData = this.bookingService.getBookingData();
+if (!bookingData || !bookingData.specialtiyAppointment) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Booking Step Required',
+        text: 'Please book a doctor\'s appointment before proceeding.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.router.navigate(['/specialists']);
+      });
+      return;
+    }
     if (!this.checkInDate || !this.checkOutDate) {
       this.showDateError = true;
       return;

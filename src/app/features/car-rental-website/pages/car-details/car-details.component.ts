@@ -3,11 +3,13 @@ import { ActivatedRoute } from '@angular/router';
 import { CarRentalWebsiteService } from '../../services/car-rental-website.service';
 import { AvailableCar } from '../../models/available-car.model';
 import { CarTypeMap, FuelTypeMap, TransmissionTypeMap } from '../../utils/car-enums.utils';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-car-details',
   templateUrl: './car-details.component.html',
-  styleUrls: ['./car-details.component.css']
+  styleUrls: ['./car-details.component.css'],
+  standalone:false
 })
 export class CarDetailsComponent implements OnInit {
   car?: AvailableCar;
@@ -16,7 +18,8 @@ export class CarDetailsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private carService: CarRentalWebsiteService
+    private carService: CarRentalWebsiteService,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -41,5 +44,9 @@ export class CarDetailsComponent implements OnInit {
   }
   selectImage(url: string) {
     this.selectedImage = url;
+  }
+
+  goBack() {
+    this.location.back();
   }
 } 

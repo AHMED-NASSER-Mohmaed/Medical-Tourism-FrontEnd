@@ -9,6 +9,8 @@ import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pa
 import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
 import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { LockComponent } from './shared/components/lock/lock.component';
+import { UnauthComponent } from './shared/components/unauth/unauth.component';
 
 
 
@@ -69,6 +71,8 @@ const routes: Routes = [
   },
 
   { path: 'hotels', loadChildren: () => import('./features/hotel-website/hotel-website.module').then(m => m.HotelWebsiteModule) },
+  {path:'lock' ,component:LockComponent},
+   {path:'unauth' ,component:UnauthComponent},
 
 
 

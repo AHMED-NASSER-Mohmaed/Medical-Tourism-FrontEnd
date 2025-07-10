@@ -93,6 +93,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   logout(): void {
     this.authService.logout();
+    this.authService.setLoggedIn(false);
+    this.router.navigate(['/auth/login']);
     this.profileDropdownOpen = false; // Close dropdown on logout
   }
 

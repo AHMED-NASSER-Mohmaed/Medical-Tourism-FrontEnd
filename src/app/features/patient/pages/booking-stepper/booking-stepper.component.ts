@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { LoadChildren, Router } from '@angular/router';
 import { BookingService } from '../../services/Booking.service';
 import { PaymentService } from '../../services/Payment.service';
 import Swal from 'sweetalert2';
+import { LoadingService } from '../../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-booking-stepper',
@@ -19,7 +20,8 @@ export class BookingStepperComponent implements OnInit {
   constructor(
     private router: Router,
     private bookingService: BookingService,
-    private paymentService: PaymentService
+    private paymentService: PaymentService,
+    private isLoadingSrv:LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -57,6 +59,7 @@ export class BookingStepperComponent implements OnInit {
   }
 
   proceedToPayment(): void {
+    this.isLoadingSrv.show();
     this.currentStep = 'payment';
     this.isProcessingPayment = true;
 
@@ -77,6 +80,7 @@ export class BookingStepperComponent implements OnInit {
 
     this.paymentService.createCheckoutSession(payload).subscribe({
       next: (response) => {
+        this.isLoadingSrv.hide();
         if (response && response.checkoutSessionUrl) {
           window.location.href = response.checkoutSessionUrl;
         } else {
@@ -85,6 +89,7 @@ export class BookingStepperComponent implements OnInit {
         }
       },
       error: (err) => {
+        this.isLoadingSrv.hide();
         console.error('Error creating checkout session:', err);
         Swal.fire('Payment Error', 'There was an issue initiating the payment process. Please contact support.', 'error');
         this.isProcessingPayment = false;

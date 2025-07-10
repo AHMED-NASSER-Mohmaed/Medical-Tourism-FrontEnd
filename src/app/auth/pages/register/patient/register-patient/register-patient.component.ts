@@ -31,6 +31,7 @@ export class RegisterPatientComponent implements OnInit, AfterViewInit {
 
   countryMap = new Map<number, CountryInfo>();
   countryList: { id: number; name: string }[] = [];
+  maxDate: string;
 
   bloodGroups = ['A+','A-','B+','B-','AB+','AB-','O+','O-'];
 
@@ -40,7 +41,13 @@ export class RegisterPatientComponent implements OnInit, AfterViewInit {
   submitted = false;
   loading   = false;
 
-  constructor( private loadingService: LoadingService,private fb: FormBuilder, private auth: AuthService, private router: Router,private countriesSrv:CountryService) {}
+  constructor( private loadingService: LoadingService,private fb: FormBuilder, private auth: AuthService, private router: Router,private countriesSrv:CountryService) {
+     const today = new Date();
+    const year = today.getFullYear();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const day = today.getDate().toString().padStart(2, '0');
+    this.maxDate = `${year}-${month}-${day}`;
+  }
 
   /* ───── life-cycle ───── */
   ngOnInit(): void {
