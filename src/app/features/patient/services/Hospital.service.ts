@@ -9,7 +9,7 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root',
 })
 export class HospitalService {
-  private baseUrl = 'https://localhost:7078/api/Website/Hospitals';
+  private baseUrl = `${environment.apiUrl}/Website/Hospitals`;
   public cachedDoctors: any[] = [];
 
   constructor(private http: HttpClient) {}
@@ -47,7 +47,7 @@ getHospitals(
 
   filterHospitals(filterCriteria: { name: string; specialty: string; location: string }): Observable<any[]> {
     return new Observable(observer => {
-      observer.next([]); // Modify as needed based on actual backend filtering
+      observer.next([]);
       observer.complete();
     });
   }
@@ -66,7 +66,7 @@ getHospitals(
 
   filterClinics(hospitalId: string, searchTerm: string, selectedSpecialists: string[]): Observable<Clinic[]> {
     return new Observable(observer => {
-      observer.next([]);  // Modify this line based on actual filtering logic
+      observer.next([]);
       observer.complete();
     });
   }

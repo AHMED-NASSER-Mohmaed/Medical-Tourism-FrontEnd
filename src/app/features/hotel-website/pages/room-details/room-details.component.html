@@ -70,7 +70,9 @@
                    (dateChange)="showDateError = false"
                    placeholder="Choose a date"
                    name="checkInDate"
-                   required>
+                   required
+                   readonly
+                   (click)="checkInPicker.open()">
             <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
             <mat-datepicker #checkInPicker></mat-datepicker>
           </mat-form-field>
@@ -85,7 +87,9 @@
                    (dateChange)="showDateError = false"
                    placeholder="Choose a date"
                    name="checkOutDate"
-                   required>
+                   required
+                   readonly
+                   (click)="checkOutPicker.open()">
             <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
             <mat-datepicker #checkOutPicker></mat-datepicker>
           </mat-form-field>
@@ -100,11 +104,6 @@
       </form>
     </div>
   </aside>
-</div>
-<div *ngIf="loading" class="text-center my-5">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
 </div>
 <div *ngIf="error" class="alert alert-danger text-center animate__animated animate__fadeIn">
   {{ error }}

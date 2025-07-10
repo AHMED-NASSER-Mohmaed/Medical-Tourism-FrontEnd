@@ -4,7 +4,7 @@ export interface Hotel {
   firstName: string;
   lastName: string;
   phone: string;
-  imageURL: string;
+  assetImages:HotelAssets[];
   gender: number;
   address: string;
   city: string;
@@ -54,3 +54,11 @@ export interface Hotel {
   hasPool: boolean;
   hasRestaurant: boolean;
 } 
+
+export interface HotelAssets
+{
+  id:number;
+  imageId: string;
+  imageURL: string;
+  assetId: string;
+}

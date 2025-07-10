@@ -49,332 +49,101 @@
         </div>
     </div>
 
-    <section id="treatments" class="section bg-light">
-        <div class="container">
-            <div class="section-title">
-                <h2>Top Treatments</h2>
-                <p>World-class medical procedures at affordable prices with premium recovery packages</p>
-            </div>
+<section id="treatments" class="section bg-light">
+  <div class="container">
+    <div class="section-title">
+      <h2>Top Treatments</h2>
+      <p>World-class medical procedures at affordable prices with premium recovery packages</p>
+    </div>
 
-            <div class="row g-4">
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1579684453423-f84349ef60b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Cardiac Surgery">
-                        <div class="card-body">
-                            <h5 class="card-title">Cardiac Surgery</h5>
-                            <p class="card-text">Advanced heart procedures with 95% success rate and comprehensive aftercare.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $8,500</span>
-                                <a href="#" class="btn btn-details">Details</a>
-                            </div>
-                        </div>
-                    </div>
+    <div class="row g-4">
+    <div class="col-lg-3 col-md-6" *ngFor="let treatment of treatments | slice:0:4">
+        <div class="service-card">
+            <img [src]="treatment.imageURL || '../../../../../../assets/images/spec.jpg'" class="card-img-top" [alt]="treatment.name">
+            <div class="card-body">
+                <h5 class="card-title">{{ treatment.name }}</h5>
+                <p class="card-text">{{ treatment.description }}</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <a (click)="viewHospitalsForSpecialty(treatment.id)" class="btn btn-details">View Hospitals</a>
                 </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Dental Implants">
-                        <div class="card-body">
-                            <h5 class="card-title">Dental Implants</h5>
-                            <p class="card-text">Premium quality dental implants with lifetime warranty and pain-free procedures.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $1,200</span>
-                                <a href="#" class="btn btn-details">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Cosmetic Surgery">
-                        <div class="card-body">
-                            <h5 class="card-title">Cosmetic Surgery</h5>
-                            <p class="card-text">Natural-looking results with board-certified plastic surgeons and discreet care.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $4,500</span>
-                                <a href="#" class="btn btn-details">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-3 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1579165466741-7d23d850b16f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Orthopedic Surgery">
-                        <div class="card-body">
-                            <h5 class="card-title">Orthopedic Surgery</h5>
-                            <p class="card-text">Joint replacements and sports medicine with advanced rehabilitation programs.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $6,800</span>
-                                <a href="#" class="btn btn-details">Details</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mt-5">
-                <button type="button" class="btn btn-outline-primary btn-lg" data-bs-toggle="modal" data-bs-target="#allTreatmentsModal">
-                    View All Treatments
-                </button>
             </div>
         </div>
-    </section>
+    </div>
+</div>
 
-    <div class="modal fade" id="allTreatmentsModal" tabindex="-1" aria-labelledby="allTreatmentsModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-xl">
-            <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h2 class="modal-title section-title" id="allTreatmentsModalLabel" style="margin-bottom: 0;">Our Treatments</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-4">
-                        <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1579684453423-f84349ef60b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Cardiac Surgery">
-                                <div class="card-body">
-                                    <h5 class="card-title">Cardiac Surgery</h5>
-                                    <p class="card-text">Advanced heart procedures with 95% success rate.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $8,500</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
+    <div class="text-center mt-5">
+      <a routerLink="/specialists" class="btn btn-outline-primary btn-lg">
+        View All Treatments
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="hospitals" class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Top Hospitals</h2>
+            <p>Our network of internationally accredited medical centers.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" *ngFor="let hospital of hospitals | slice:0:3">
+                <div class="service-card">
+                    <img [src]="hospital.assetImages?.[0]?.imageURL || 'https://images.unsplash.com/photo-1586773860418-d37229d7d13d?auto=format&fit=crop&w=1000&q=80'" class="card-img-top" [alt]="hospital.assetName">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ hospital.assetName }}</h5>
+
+                        <div class="mb-3">
+                            <span class="text-muted">
+                                <i class="fas fa-building me-2"></i>{{ hospital.numberOfDepartments }} Departments
+                            </span>
                         </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Dental Implants">
-                                <div class="card-body">
-                                    <h5 class="card-title">Dental Implants</h5>
-                                    <p class="card-text">Premium quality implants with lifetime warranty.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $1,200</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Cosmetic Surgery">
-                                <div class="card-body">
-                                    <h5 class="card-title">Cosmetic Surgery</h5>
-                                    <p class="card-text">Natural-looking results with board-certified surgeons.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $4,500</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1579165466741-7d23d850b16f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Orthopedic Surgery">
-                                <div class="card-body">
-                                    <h5 class="card-title">Orthopedic Surgery</h5>
-                                    <p class="card-text">Joint replacements and sports medicine procedures.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $6,800</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Cancer Treatment">
-                                <div class="card-body">
-                                    <h5 class="card-title">Cancer Treatment</h5>
-                                    <p class="card-text">Comprehensive oncology care and modern therapies.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $10,000</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1527613426441-4da17471b66d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Fertility Treatment">
-                                <div class="card-body">
-                                    <h5 class="card-title">Fertility Treatments</h5>
-                                    <p class="card-text">Advanced IVF and reproductive health services.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $5,500</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1606016159583-b24e65b59a5a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Ophthalmology">
-                                <div class="card-body">
-                                    <h5 class="card-title">Ophthalmology</h5>
-                                    <p class="card-text">LASIK, cataract surgery, and other vision correction.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $2,000</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                         <div class="col-lg-3 col-md-6">
-                            <div class="service-card">
-                                <img src="https://images.unsplash.com/photo-1619451998-239680373a6a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Neurology">
-                                <div class="card-body">
-                                    <h5 class="card-title">Neurology</h5>
-                                    <p class="card-text">Treatment for neurological disorders and conditions.</p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="price">From $7,000</span>
-                                        <a href="#" class="btn btn-details">Details</a>
-                                    </div>
-                                </div>
-                            </div>
+
+                        <p class="card-text">{{ hospital.description }}</p>
+
+                        <div class="d-flex justify-content-center align-items-center">
+                            <a [routerLink]="['/hospital', hospital.id, 'specialists']" class="btn btn-details">Specialists</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
- <section id="services" class="section bg-light">
-        <div class="container">
-            <div class="section-title">
-                <h2>Top Medical Services</h2>
-                <p>Comprehensive healthcare services tailored for international patients</p>
-            </div>
+</section>
 
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Health Checkup">
-                        <div class="card-body">
-                            <h5 class="card-title">Executive Health Checkup</h5>
-                            <p class="card-text">Comprehensive 2-day evaluation with specialists and advanced diagnostics.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">$850</span>
-                                <a href="Medical_Service_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1581056771107-24ca5f033842?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Cancer Screening">
-                        <div class="card-body">
-                            <h5 class="card-title">Advanced Cancer Screening</h5>
-                            <p class="card-text">Early detection with PET-CT scans and molecular diagnostics.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $1,200</span>
-                                <a href="Medical_Service_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1579684453423-f84349ef60b0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Fertility Treatment">
-                        <div class="card-body">
-                            <h5 class="card-title">Fertility Treatment</h5>
-                            <p class="card-text">IVF and reproductive services with high success rates and compassionate care.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $5,500</span>
-                                <a href="Medical_Service_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<section id="hotels" class="section">
+    <div class="container">
+        <div class="section-title">
+            <h2>Top Hotels</h2>
+            <p>Premium accommodation options near our partner medical facilities</p>
         </div>
-    </section>
 
-    <section id="hotels" class="section">
-        <div class="container">
-            <div class="section-title">
-                <h2>Top Hotels</h2>
-                <p>Premium accommodation options near our partner medical facilities</p>
+        <div class="row g-4">
+  <div class="col-lg-4 col-md-6" *ngFor="let hotel of hotels | slice:0:3">
+    <div class="service-card">
+     <img [src]="hotel.imageurls?.[0] || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80'" class="card-img-top" [alt]="hotel.hotelName">
+        <div class="card-body">
+            <h5 class="card-title">{{ hotel.hotelName }}</h5>
+
+            <div class="mb-3">
+                <span class="text-warning" [innerHTML]="getStarRating(hotel.starRating)">
+                </span>
             </div>
 
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Grand Medical Hotel">
-                        <div class="card-body">
-                            <h5 class="card-title">Grand Medical Hotel</h5>
-                            <div class="mb-3">
-                                <span class="text-warning">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="text-muted ms-2">4.9 (1,245 reviews)</span>
-                            </div>
-                            <p class="card-text">5-star luxury with medical-grade rooms and 24/7 nursing station.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $180/night</span>
-                                <a href="Hotel_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <p class="card-text">{{ hotel.hotelDescription}}</p>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Recovery Resort">
-                        <div class="card-body">
-                            <h5 class="card-title">Recovery Resort & Spa</h5>
-                            <div class="mb-3">
-                                <span class="text-warning">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="text-muted ms-2">4.8 (892 reviews)</span>
-                            </div>
-                            <p class="card-text">Post-treatment rehabilitation with therapeutic pools and nutrition programs.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $220/night</span>
-                                <a href="Hotel_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Executive Suites">
-                        <div class="card-body">
-                            <h5 class="card-title">Executive Medical Suites</h5>
-                            <div class="mb-3">
-                                <span class="text-warning">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </span>
-                                <span class="text-muted ms-2">4.6 (1,502 reviews)</span>
-                            </div>
-                            <p class="card-text">Private apartments with kitchenettes and daily housekeeping service.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $150/night</span>
-                                <a href="Hotel_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="d-flex justify-content-center align-items-center">
+                <a [routerLink]="['/hotels/details', hotel.hotelId]"  class="btn btn-details">Review Now</a>
             </div>
+
         </div>
-    </section>
+    </div>
+</div>
+</div>
+    </div>
+</section>
+
+
 
     <section id="transport" class="section bg-light">
         <div class="container">
@@ -509,134 +278,5 @@
             </div>
         </div>
     </section>
-    <section id="faq" class="section bg-light">
-        <div class="container">
-            <div class="section-title">
-                <h2>Frequently Asked Questions</h2>
-                <p>Find answers to common questions about medical tourism with MediTour</p>
-            </div>
-
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="accordion" id="faqAccordion">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    How do I choose the right hospital for my treatment?
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>Our medical advisors evaluate your specific needs and match you with the most appropriate facilities based on:</p>
-                                    <ul>
-                                        <li>Specialty expertise and success rates for your procedure</li>
-                                        <li>Hospital accreditation and international certifications</li>
-                                        <li>Patient reviews and outcomes data</li>
-                                        <li>Language support and international patient services</li>
-                                    </ul>
-                                    <p>We provide detailed profiles of each option to help you make an informed decision.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    What is included in your medical tourism packages?
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>Our comprehensive packages typically include:</p>
-                                    <ul>
-                                        <li>Medical procedure costs (surgeon fees, facility charges, implants if applicable)</li>
-                                        <li>Pre-treatment consultations and diagnostic tests</li>
-                                        <li>Hospital stay and nursing care</li>
-                                        <li>Accommodation (hotel or recovery center)</li>
-                                        <li>Airport transfers and local transportation</li>
-                                        <li>24/7 patient support and concierge services</li>
-                                        <li>Follow-up consultations and telemedicine access</li>
-                                    </ul>
-                                    <p>Packages can be customized based on your specific needs and preferences.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    How much can I save with medical tourism?
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>Savings vary by procedure and country of origin, but typical savings range from:</p>
-                                    <ul>
-                                        <li>Cardiac procedures: 60-75% savings</li>
-                                        <li>Orthopedic surgeries: 50-70% savings</li>
-                                        <li>Dental treatments: 60-80% savings</li>
-                                        <li>Cosmetic surgeries: 40-65% savings</li>
-                                    </ul>
-                                    <p>Even after including travel and accommodation expenses, patients typically save thousands of dollars while receiving care at internationally accredited facilities.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingFour">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                    What safety measures are in place for international patients?
-                                </button>
-                            </h2>
-                            <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>Patient safety is our top priority. We ensure:</p>
-                                    <ul>
-                                        <li>All partner hospitals are JCI accredited or meet equivalent international standards</li>
-                                        <li>Board-certified surgeons with extensive international experience</li>
-                                        <li>Strict infection control protocols and modern facilities</li>
-                                        <li>Comprehensive medical malpractice insurance coverage</li>
-                                        <li>Patient advocates who accompany you to all medical appointments</li>
-                                        <li>Emergency support available 24/7 during your stay</li>
-                                    </ul>
-                                    <p>We also verify all credentials and track patient outcomes to maintain our high standards.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingFive">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                    How do I get started with MediTour?
-                                </button>
-                            </h2>
-                            <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-                                <div class="accordion-body">
-                                    <p>Starting your medical journey is simple:</p>
-                                    <ol>
-                                        <li>Submit an inquiry through our website or call our patient coordinators</li>
-                                        <li>Share your medical records for evaluation by our specialists</li>
-                                        <li>Receive treatment options with detailed cost estimates</li>
-                                        <li>Choose your preferred package and schedule your trip</li>
-                                        <li>We handle all arrangements - just focus on your health</li>
-                                    </ol>
-                                    <p>Our team guides you through every step, from initial consultation to post-treatment follow-up care.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-5">
-                        <div class="card border-0 shadow p-4">
-                            <h4 class="mb-4">Still have questions?</h4>
-                            <p class="mb-4">Our medical advisors are available 24/7 to answer your questions and help plan your treatment journey.</p>
-                            <a href="#" class="btn btn-primary btn-lg px-4">
-                                <i class="fas fa-headset me-2"></i> Contact Our Team
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+ <app-faq id="faq-section"></app-faq>
 

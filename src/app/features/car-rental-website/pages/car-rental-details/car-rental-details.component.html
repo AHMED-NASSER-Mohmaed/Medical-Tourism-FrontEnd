@@ -1,12 +1,22 @@
-<div class="car-rentals-header-section animate__animated animate__fadeInDown">
-  <h1 class="fw-bold display-4 text-gradient">Car Rental Details</h1>
+<!-- Banner/Header -->
+<div class="banner" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
+  <button class="btn btn-back animate__animated animate__fadeInLeft" (click)="goBack()" style="margin-left: 2rem; margin-right: 2.5rem; margin-bottom: 0; margin-top: 0;">
+    <i class="bi bi-arrow-left"></i> Back to Car Rentals List
+  </button>
+  <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
+    <h1 style="margin-bottom: 0;">{{ carRental?.assetName || 'Car Rental Details' }}</h1>
+    <p style="margin-top: 0.5rem;">
+      Easily filter by model, type, price, and more to discover all available cars from this provider.
+    </p>
+  </div>
+  <div style="width: 180px;"></div> <!-- Spacer to balance the button width on the right -->
 </div>
-<div class="container mb-4">
+<!-- <div class="container mb-4">
   <button class="btn btn-back animate__animated animate__fadeInLeft" (click)="goBack()">
     <i class="bi bi-arrow-left"></i> Back to Car Rentals List
   </button>
-</div>
-<div class="container d-flex justify-content-center align-items-center animate__animated animate__fadeInUp" style="min-height: 70vh;">
+</div> -->
+<!-- <div class="container d-flex justify-content-center align-items-center animate__animated animate__fadeInUp" style="min-height: 70vh;">
   <div *ngIf="!loading && carRental" class="glass-card shadow-lg p-4 rounded-5 animate__animated animate__zoomIn wow">
     <div class="row g-4 align-items-center">
       <div class="col-md-5 text-center">
@@ -70,53 +80,7 @@
   <div *ngIf="!loading && !carRental" class="alert alert-info animate__animated animate__fadeIn">
     Car rental not found.
   </div>
-</div>
+</div> -->
 
-<!-- Glassmorphism and gradient styles -->
-<style>
-  .glass-card {
-    background: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 2rem;
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    transition: box-shadow 0.3s, transform 0.3s;
-  }
-  .glass-card:hover {
-    box-shadow: 0 16px 48px 0 rgba(31, 38, 135, 0.28);
-    transform: translateY(-6px) scale(1.02);
-  }
-  .text-gradient {
-    background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-fill-color: transparent;
-  }
-  .bg-gradient-primary {
-    background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%) !important;
-    color: #fff !important;
-  }
-  .bg-gradient-success {
-    background: linear-gradient(90deg, #28a745 0%, #00c6ff 100%) !important;
-    color: #fff !important;
-  }
-  .bg-gradient-info {
-    background: linear-gradient(90deg, #17a2b8 0%, #00c6ff 100%) !important;
-    color: #fff !important;
-  }
-  .bg-gradient-warning {
-    background: linear-gradient(90deg, #ffc107 0%, #ff9800 100%) !important;
-    color: #212529 !important;
-  }
-  .car-rental-img-detail {
-    box-shadow: 0 4px 24px rgba(0, 123, 255, 0.15);
-    border-radius: 1.5rem;
-    transition: transform 0.3s;
-  }
-  .car-rental-img-detail:hover {
-    transform: scale(1.05) rotate(-2deg);
-    box-shadow: 0 8px 32px rgba(0, 123, 255, 0.25);
-  }
-</style>
+<!-- Add the sidebar and available cars grid below the details card -->
+<app-car-rental-details-sidebar-filters *ngIf="carRentalId" [carRentalId]="carRentalId"></app-car-rental-details-sidebar-filters>

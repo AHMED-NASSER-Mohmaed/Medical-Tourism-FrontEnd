@@ -11,9 +11,6 @@
     <!-- Car Rentals List -->
     <div class="col-lg-9">
       <div *ngIf="loading" class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
       </div>
       <div *ngIf="!loading && carRentals.length === 0" class="alert alert-info animate__animated animate__fadeIn">
         No car rentals found. Try adjusting your filters.

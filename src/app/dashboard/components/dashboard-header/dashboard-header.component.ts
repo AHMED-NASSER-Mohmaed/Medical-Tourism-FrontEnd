@@ -1,6 +1,7 @@
 // src/app/dashboard/components/dashboard-header/dashboard-header.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { BreadcrumbItem } from '../dashboard.types';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -16,7 +17,13 @@ export class DashboardHeaderComponent {
   @Output() menuToggle = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 
+  constructor(private router: Router) {}
+
   onLogout() {
     this.logout.emit();
+  }
+
+  onAvatarClick() {
+    this.router.navigate(['/super-admin/profile']);
   }
 }

@@ -9,7 +9,9 @@ import { CarRentalDetailsComponent } from './pages/car-rental-details/car-rental
 import { NavbarComponent } from '../../core/layout/navbar/navbar.component';
 import { CoreModule } from '../../core/core.module';
 import { FormsModule } from '@angular/forms';
-import { CarAvailableSidebarFiltersComponent } from './components/car-available-sidebar-filters/car-available-sidebar-filters.component';
+import { AvailableCarCardComponent } from './components/available-car-card/available-car-card.component';
+import { CarRentalDetailsSidebarFiltersComponent } from './components/car-rental-details-sidebar-filters/car-rental-details-sidebar-filters.component';
+import { CarDetailsComponent } from './pages/car-details/car-details.component';
 // Components will be added here as created
 
 @NgModule({
@@ -18,7 +20,9 @@ import { CarAvailableSidebarFiltersComponent } from './components/car-available-
     CarRentalCardComponent,
     CarRentalSidebarFiltersComponent,
     CarRentalDetailsComponent,
-    CarAvailableSidebarFiltersComponent
+    AvailableCarCardComponent,
+    CarRentalDetailsSidebarFiltersComponent,
+    CarDetailsComponent
   ],
   imports: [
     CommonModule,

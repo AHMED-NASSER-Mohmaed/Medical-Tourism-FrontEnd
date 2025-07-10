@@ -45,6 +45,7 @@ import { BreadcrumbComponent } from './components/breadcrumb/breadcrumb.componen
     StatusLabelPipe,
     LoadingComponent,
     
+    
   ]
 })
 export class SharedModule { }

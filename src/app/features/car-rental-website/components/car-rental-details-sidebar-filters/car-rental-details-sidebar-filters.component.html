@@ -1,0 +1,47 @@
+<div class="car-rental-details-layout">
+  <aside class="sidebar">
+    <div class="sidebar-title">
+      <span class="icon">🚗</span>
+      <span class="refine-title">Refine Search</span>
+    </div>
+    <div class="filter-item">
+      <label>Search by Car Name</label>
+      <input type="text" class="form-control" placeholder="e.g., Corolla" [(ngModel)]="filters.searchTerm" name="searchTerm">
+    </div>
+    <div class="filter-item">
+      <label>Car Type</label>
+      <select class="form-select" [(ngModel)]="filters.carType" name="carType">
+        <option value="">All Types</option>
+        <option *ngFor="let type of carTypes" [value]="type[0]">{{ type[1] }}</option>
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>Price Range</label>
+      <div class="price-range-slider">
+        <div class="slider-labels">
+          <span>Min: {{ filters.minPrice }}</span>
+          <span>Max: {{ filters.maxPrice }}</span>
+        </div>
+        <div class="slider-wrapper">
+          <input type="range" [min]="minPriceLimit" [max]="maxPriceLimit" step="50"
+                 [(ngModel)]="filters.minPrice"
+                 (ngModelChange)="onMinPriceChange($event)">
+          <input type="range" [min]="minPriceLimit" [max]="maxPriceLimit" step="50"
+                 [(ngModel)]="filters.maxPrice"
+                 (ngModelChange)="onMaxPriceChange($event)">
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-buttons">
+      <button class="btn btn-primary" type="button" (click)="applyFilters()">
+        <span class="icon">🔍</span> Apply Filters
+      </button>
+    </div>
+  </aside>
+  <section class="car-cards-section">
+    <div *ngIf="loading" class="loading-spinner">Loading...</div>
+    <div class="car-cards-grid">
+      <app-available-car-card *ngFor="let car of availableCars" [car]="car"></app-available-car-card>
+    </div>
+  </section>
+</div> 

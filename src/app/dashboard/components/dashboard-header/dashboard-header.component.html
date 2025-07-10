@@ -29,7 +29,7 @@
         <div class="last-login">Last login: Today</div>
       </div>
       <div class="user-avatar">
-        <img [src]="avatar" alt="User Avatar">
+        <img [src]="avatar" alt="User Avatar" (click)="onAvatarClick()" style="cursor:pointer;">
         <span class="status-indicator"></span>
       </div>
       <button class="logout-btn" (click)="onLogout()" title="Logout">
