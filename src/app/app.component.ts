@@ -30,7 +30,7 @@ ngOnInit(): void {
 
     this.authService.loginStatus$.subscribe(() => {
       const role = this.authService.getUserRole();
-      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin');
+      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin') && role !=='HospitalServiceProvider';
 
     });
 
@@ -50,7 +50,7 @@ checkRouteVisibility(): void {
 
   const hideNavFooter = this.router.routerState.snapshot.root.firstChild?.data?.['hideNavFooter'] || false;
   this.showNavFooter = !(currentRoute.includes('confirm') || hideNavFooter ||
-    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin');
+    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin'|| this.authService.getUserRole() === 'HospitalServiceProvider');
 }
 
 

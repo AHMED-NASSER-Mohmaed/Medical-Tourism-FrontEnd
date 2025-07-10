@@ -5,7 +5,7 @@
     <div class="card-header py-3 d-flex justify-content-between align-items-center">
       <h6 class="m-0 font-weight-bold text-primary">Appointments List</h6>
       <input type="text" class="form-control mr-2" style="width: 250px; display: inline-block;" placeholder="Search appointments..." [(ngModel)]="searchTerm" (input)="startSearch()">
-      <button class="btn btn-primary" routerLink="/hospital/schedule/add">
+      <button class="btn btn-primary" routerLink="/hospitalProvider/schedule/add">
         <i class="fas fa-plus"></i> Add Appointment
       </button>
     </div>
@@ -14,7 +14,7 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
-              <th>ID</th>
+              
               <th>Doctor</th>
               <th>Specialty</th>
               <th>Hospital</th>
@@ -31,7 +31,7 @@
           </thead>
             <tbody>
             <tr *ngFor="let schedule of appointments.items">
-              <td>{{schedule.id}}</td>
+             
               <td>{{schedule.doctorName}}</td>
               <td>{{schedule.specialty}}</td>
               <td>{{schedule.hospital}}</td>

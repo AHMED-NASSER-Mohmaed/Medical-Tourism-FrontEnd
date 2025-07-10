@@ -31,12 +31,12 @@
                                       'fa-sort-up': sortColumn === 'disbursementDateMonth' && !isAsc,
                                       'fa-sort-down': sortColumn === 'disbursementDateMonth' && isAsc}"></i>
           </th>
-          <th (click)="sort('assetName')">
+          <!-- <th (click)="sort('assetName')">
             Asset 
             <i class="fas" [ngClass]="{'fa-sort': sortColumn !== 'assetName', 
                                       'fa-sort-up': sortColumn === 'assetName' && !isAsc,
                                       'fa-sort-down': sortColumn === 'assetName' && isAsc}"></i>
-          </th>
+          </th> -->
           <th class="text-right" (click)="sort('totalAmount')">
             Amount 
             <i class="fas" [ngClass]="{'fa-sort': sortColumn !== 'totalAmount', 
@@ -56,7 +56,7 @@
       <tbody>
         <tr *ngFor="let disbursement of filteredDisbursements | paginate: { itemsPerPage: pageSize, currentPage: currentPage }">
           <td>{{ disbursement.disbursementDateMonth | date:'MMM yyyy' }}</td>
-          <td>{{ disbursement.assetName }}</td>
+          <!-- <td>{{ disbursement.assetName }}</td> -->
           <td class="text-right">{{ disbursement.totalAmount | currency }}</td>
           <td>
             <span class="badge" [ngClass]="{
@@ -111,7 +111,7 @@
   </div>
 
   <!-- Summary Statistics -->
-  <div class="stats-section mt-4 p-3 bg-light rounded">
+  <!-- <div class="stats-section mt-4 p-3 bg-light rounded">
     <div class="row">
       <div class="col-md-4">
         <div class="stat-card">
@@ -132,5 +132,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </div>

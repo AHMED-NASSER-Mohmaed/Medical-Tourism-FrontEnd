@@ -32,6 +32,7 @@ export class DoctorsFormComponent {
     private doctorService: DoctorService,
     private locationService: LocationService,
     private specialtyService: SpecialistService,
+    private router: Router,
   ) {
     this.doctorForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -150,6 +151,7 @@ export class DoctorsFormComponent {
     this.doctorService.createDoctor(formData).subscribe({
       next: (response) => {
         // Handle success
+        this.router.navigate(['/hospitalProvider/doctors']);
         console.log('Doctor created successfully', response);
       },
       error: (error) => {
