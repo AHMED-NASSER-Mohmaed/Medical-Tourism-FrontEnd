@@ -38,6 +38,7 @@
     "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "ngx-cookie-service": "^19.0.0",
+    "ngx-pagination": "^6.0.3",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "select2": "^4.1.0-rc.0",

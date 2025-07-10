@@ -28,11 +28,11 @@ constructor(
 
 }
 ngOnInit(): void {
-    this.handleInitialRedirect();
+    // this.handleInitialRedirect();
 
     this.authService.loginStatus$.subscribe(() => {
       const role = this.authService.getUserRole();
-      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin');
+      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin') && role !=='HospitalServiceProvider';
 
     });
 
@@ -47,32 +47,32 @@ ngOnInit(): void {
 
 }
 
-private handleInitialRedirect(): void {
+// private handleInitialRedirect(): void {
 
-    this.authService.loginStatus$.pipe(take(1)).subscribe(isLoggedIn => {
+//     this.authService.loginStatus$.pipe(take(1)).subscribe(isLoggedIn => {
 
-      if (isLoggedIn && this.router.url === '/') {
-        const role = this.authService.getUserRole();
-        console.log(`User is already logged in with role: ${role}. Redirecting...`);
+//       if (isLoggedIn && this.router.url === '/') {
+//         const role = this.authService.getUserRole();
+//         console.log(`User is already logged in with role: ${role}. Redirecting...`);
 
 
-        if (role === 'SuperAdmin') {
-          this.router.navigate(['/super-admin']);
-        } else if (role === 'Patient') {
-          this.router.navigate(['/profile']);
-        } else if (role === 'ServiceProvider') {
-          this.router.navigate(['/service-provider/dashboard']);
-        }
-      }
-    });
-  }
+//         if (role === 'SuperAdmin') {
+//           this.router.navigate(['/super-admin']);
+//         } else if (role === 'Patient') {
+//           this.router.navigate(['/profile']);
+//         } else if (role === 'HospitalServiceProvider') {
+//           this.router.navigate(['/hospitalProvider/specialists']);
+//         }
+//       }
+//     });
+//   }
 checkRouteVisibility(): void {
   const currentRoute = this.router.url;
 
 
   const hideNavFooter = this.router.routerState.snapshot.root.firstChild?.data?.['hideNavFooter'] || false;
   this.showNavFooter = !(currentRoute.includes('confirm') || hideNavFooter ||
-    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin');
+    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin'|| this.authService.getUserRole() === 'HospitalServiceProvider');
 }
 
 

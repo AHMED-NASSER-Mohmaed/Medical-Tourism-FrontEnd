@@ -18,9 +18,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userImage: string = '';
   defaultUserImage = '/assets/images/user.png';
 
-  // Dropdown state properties
   dropdownOpen = false;
-  // EDITED: Added a new property for the profile dropdown
   profileDropdownOpen = false;
 
   activeLink: string = '';
@@ -34,20 +32,31 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // --- Authentication Logic ---
+
     this.authService.loginStatus$.subscribe(status => {
       this.isLoggedIn = status;
       if (status) {
-        this.authService.getPatientProfile().subscribe({
-          next: (res) => {
-            this.userName = `${res.firstName} ${res.lastName}`;
-            this.userImage = res.imageURL || this.defaultUserImage;
-          },
-          error: () => {
-            this.userName = 'User';
-            this.userImage = this.defaultUserImage;
-          }
-        });
+
+        const role = this.authService.getUserRole();
+
+
+        if (role === 'Patient') {
+          this.authService.getPatientProfile().subscribe({
+            next: (res) => {
+              this.userName = `${res.firstName} ${res.lastName}`;
+              this.userImage = res.imageURL || this.defaultUserImage;
+            },
+            error: () => {
+              this.userName = 'Patient';
+              this.userImage = this.defaultUserImage;
+            }
+          });
+        } else {
+
+          this.userName = role || 'User';
+          this.userImage = this.defaultUserImage;
+        }
+
       } else {
         this.userName = '';
         this.userImage = this.defaultUserImage;

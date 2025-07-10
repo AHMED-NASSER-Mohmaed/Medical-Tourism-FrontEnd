@@ -19,6 +19,8 @@ import { FooterComponent } from './layout/footer/footer.component';
 import { HomeComponent } from './layout/home/home.component';
 import {CoreRoutingModule} from './core-routing-module';
 import { FaqComponent } from './layout/faq/faq.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { NgxPaginationModule } from 'ngx-pagination';
 
 
 
@@ -42,8 +44,11 @@ import { FaqComponent } from './layout/faq/faq.component';
     MatFormFieldModule,
     MatDividerModule,
     RouterModule,
-    CoreRoutingModule
-
+    CoreRoutingModule,
+     MatToolbarModule,
+    MatButtonModule,
+        FontAwesomeModule,
+           NgxPaginationModule,
 
   ],
   exports: [
@@ -59,7 +64,10 @@ import { FaqComponent } from './layout/faq/faq.component';
     NavbarComponent,
     FooterComponent,
     HomeComponent,
-    FaqComponent
+    FaqComponent,
+        FontAwesomeModule,
+           NgxPaginationModule,
+
 
   ],
   providers: [

@@ -86,10 +86,15 @@
 
     <!-- Slot Size | Max Capacity | Price -->
     <div class="row">
-      <div class="col-md-4">
+      <div class="col-md-3">
         <div class="form-group">
-          <label>Time Slot Size (minutes)</label>
-          <input type="number" class="form-control" id="timeSlotSize" formControlName="timeSlotSize" min="1">
+          <label>time Slot Size</label>
+          <div class="input-group input-group-sm">
+            <input type="number" class="form-control" placeholder="HH" min="0" max="23"
+                   [formControl]="getFormControl('timeSlotSize.hour')">
+            <input type="number" class="form-control" placeholder="MM" min="0" max="59"
+                   [formControl]="getFormControl('timeSlotSize.minute')">
+          </div>
         </div>
       </div>
       <div class="col-md-4">
