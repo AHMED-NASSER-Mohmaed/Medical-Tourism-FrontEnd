@@ -91,7 +91,11 @@ const routes: Routes = [
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    anchorScrolling: 'enabled',
+    scrollPositionRestoration: 'enabled',
+    scrollOffset: [0, 70] // Optional: Adjusts for a fixed navbar height (e.g., 70px)
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }

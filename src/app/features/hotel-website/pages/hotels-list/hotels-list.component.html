@@ -12,17 +12,17 @@
     <!-- Hotels List -->
     <div class="col-lg-9">
       <div *ngIf="loading" class="text-center my-5">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
       </div>
       <div *ngIf="!loading && hotels.length === 0" class="alert alert-info animate__animated animate__fadeIn">
         No hotels found. Try adjusting your filters.
       </div>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4" *ngFor="let hotel of hotels">
+      <div class="cards-grid">
+        <ng-container *ngFor="let hotel of hotels">
           <app-hotel-card [hotel]="hotel"></app-hotel-card>
-        </div>
+        </ng-container>
+        <ng-container *ngFor="let empty of getEmptySlots()">
+          <div class="card hotel-card card-placeholder" style="visibility:hidden;"></div>
+        </ng-container>
       </div>
       <!-- Pagination -->
       <nav *ngIf="!loading && totalPages > 1" class="mt-4">

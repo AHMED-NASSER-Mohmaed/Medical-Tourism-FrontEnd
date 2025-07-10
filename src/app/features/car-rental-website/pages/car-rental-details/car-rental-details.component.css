@@ -1,22 +1,45 @@
-.car-rentals-header-section {
-  background: linear-gradient(90deg, #007bff 0%, #00c6ff 100%);
+.banner {
+  background: #305cae;
   color: #fff;
-  padding: 2rem 0 1rem 0;
   text-align: center;
-  border-radius: 0 0 1.5rem 1.5rem;
-  margin-bottom: 2rem;
+  padding: 16px 0 8px 0;
+  position: static;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 100;
+  margin-top: 80px;
+  box-shadow: 0 2px 12px #0002;
 }
-
+.banner h1 {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+.banner p {
+  font-size: 1rem;
+  opacity: 0.95;
+}
 .btn-back {
-  background: #f8f9fa;
-  color: #007bff;
-  border: 1px solid #007bff;
+  background: #fff;
+  color: #2861c5;
+  border: 2px solid #2861c5;
+  font-weight: 600;
   border-radius: 2rem;
   padding: 0.5rem 1.5rem;
-  font-weight: 500;
-  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(40,97,197,0.08);
+  transition: background 0.2s, color 0.2s, transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
 }
-.btn-back:hover {
-  background: #007bff;
+.btn-back:hover, .btn-back:focus {
+  background: #1e88e5;
   color: #fff;
+  transform: translateX(-4px) scale(1.04);
+  box-shadow: 0 4px 16px rgba(40,97,197,0.15);
+}
+.btn-back i {
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+  vertical-align: middle;
 } 

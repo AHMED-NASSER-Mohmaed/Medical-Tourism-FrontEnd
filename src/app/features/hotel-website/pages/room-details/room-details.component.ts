@@ -17,7 +17,7 @@ export class RoomDetailsComponent implements OnInit {
   room?: Room;
   loading = false;
   error: string | null = null;
-  selectedImage?: string; // For interactive gallery
+  selectedImage?: string; 
 
   // Booking sidebar state
   unavailableDates: string[] = [];
@@ -28,6 +28,8 @@ export class RoomDetailsComponent implements OnInit {
   showDateError: boolean = false;
   bookingError: string = '';
   bookingSuccess: string = '';
+
+  breadcrumbTrail: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
@@ -43,6 +45,12 @@ export class RoomDetailsComponent implements OnInit {
       this.fetchRoomDetails();
       this.fetchUnavailableDates();
       this.setMinDate();
+      // Use pending breadcrumb trail from service if available
+      const pendingTrail = this.breadcrumbService.getPendingBreadcrumbTrail();
+      if (pendingTrail) {
+        this.breadcrumbTrail = pendingTrail;
+        this.breadcrumbService.clearPendingBreadcrumbTrail();
+      }
       this.setBreadcrumbs();
     });
   }
@@ -112,54 +120,11 @@ export class RoomDetailsComponent implements OnInit {
 
   // Booking logic
   bookRoom() {
-    if (!this.checkInDate || !this.checkOutDate || !this.room) {
+    if (!this.checkInDate || !this.checkOutDate) {
+      this.showDateError = true;
       return;
     }
-
-    const bookingPayload = {
-      specialtiyAppointment: {
-        specialtyScheduleId: 0,
-        isOffline: true,
-        appointmentDate: { year: 0, month: 0, day: 0, dayOfWeek: 0 }
-      },
-      roomAppointment: {
-        checkInDate: {
-          year: this.checkInDate.getFullYear(),
-          month: this.checkInDate.getMonth() + 1,
-          day: this.checkInDate.getDate(),
-          dayOfWeek: this.checkInDate.getDay()
-        },
-        checkOutDate: {
-          year: this.checkOutDate.getFullYear(),
-          month: this.checkOutDate.getMonth() + 1,
-          day: this.checkOutDate.getDate(),
-          dayOfWeek: this.checkOutDate.getDay()
-        },
-        roomId: this.room.id
-      },
-      carAppointment: null
-    };
-
-    console.log('Booking payload:', bookingPayload);
-
-    this.loading = true;
-    this.hotelService.createRoomBooking(bookingPayload).subscribe({
-      next: () => {
-        this.bookingSuccess = 'Booking successful!';
-        this.checkInDate = null;
-        this.checkOutDate = null;
-        this.fetchUnavailableDates();
-        this.loading = false;
-        this.promptForCarRental();
-      },
-      error: (err) => {
-        this.bookingError = 'Booking failed. Please try again.';
-        this.loading = false;
-      }
-    });
-  }
-
-  promptForCarRental(): void {
+    this.showDateError = false;
     Swal.fire({
       title: 'Need a Car Rental?',
       text: "We can help you find the best car rentals for your stay.",
@@ -171,7 +136,7 @@ export class RoomDetailsComponent implements OnInit {
       cancelButtonText: 'Skip'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.router.navigate(['/car-rental-website']);
+        this.router.navigate(['/car-rentals']);
       } else {
         this.router.navigate(['/payment']);
       }
@@ -201,11 +166,20 @@ export class RoomDetailsComponent implements OnInit {
   }
 
   setBreadcrumbs() {
+    const url = this.router.url;
     this.breadcrumbService.setBreadcrumbs([
-      { label: 'Doctor-List', url: '/doctor-list' },
-      { label: 'Doctor', url: '/doctor-profile' },
-      { label: 'Hotels-List', url: '/hotel-website' },
-      { label: `Room ${this.room?.roomNumber} - ${this.roomTypeLabel(this.room?.roomType)}`, url: this.router.url }
+      ...this.breadcrumbTrail.map(bc => {
+        if (bc.label === 'Doctor-List') {
+          return { ...bc, url: '/hospitals' };
+        }
+        // Remove 'Room Details' from the incoming trail if present
+        if (bc.label === 'Room Details') {
+          return null;
+        }
+        return bc;
+      }).filter(Boolean),
+      { label: 'Hotels', url: '/hotels' },
+      { label: `Room ${this.room?.roomNumber} - ${this.roomTypeLabel(this.room?.roomType)}`, url }
     ]);
   }
 

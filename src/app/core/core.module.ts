@@ -18,13 +18,17 @@ import { RouterModule } from '@angular/router';
 import { FooterComponent } from './layout/footer/footer.component';
 import { HomeComponent } from './layout/home/home.component';
 import {CoreRoutingModule} from './core-routing-module';
+import { FaqComponent } from './layout/faq/faq.component';
+
 
 
 @NgModule({
   declarations: [
     NavbarComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    FaqComponent,
+
   ],
   imports: [
     CommonModule,
@@ -54,7 +58,9 @@ import {CoreRoutingModule} from './core-routing-module';
     MatDividerModule,
     NavbarComponent,
     FooterComponent,
-    HomeComponent
+    HomeComponent,
+    FaqComponent
+
   ],
   providers: [
     {

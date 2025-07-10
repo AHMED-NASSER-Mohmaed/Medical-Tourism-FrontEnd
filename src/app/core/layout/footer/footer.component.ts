@@ -19,11 +19,11 @@ export class FooterComponent {
     ).subscribe(() => {
       // It checks if the current URL is the home page ('/')
       // and sets the isHomePage flag accordingly.
-      this.isHomePage =  (this.router.url === '/' || this.router.url.includes('#contact'));
+      this.isHomePage =  (this.router.url === '/' || this.router.url.includes('#contact') || this.router.url.includes('#faq-section'));
     });
 
     // We also run the check once initially when the component loads
-    this.isHomePage = (this.router.url === '/' || this.router.url.includes('#contact'));
+    this.isHomePage = (this.router.url === '/' || this.router.url.includes('#contact') || this.router.url.includes('#faq-section'));
   }
 }
 

@@ -49,11 +49,21 @@ export class HotelsListComponent implements OnInit {
         this.hotels = data.items || data || [];
         this.totalPages = data.totalPages || 1;
         this.loading = false;
+        console.log(this.hotels, 'Hotels fetched successfully');
+      this.hotels.forEach(element => {
+          element.assetImages.forEach(image => {
+           console.log(image.imageURL, 'Image URL');
+          })
+        });
       },
       error: () => {
         this.hotels = [];
         this.loading = false;
       }
     });
+  }
+
+  getEmptySlots() {
+    return Array(Math.max(0, 10 - this.hotels.length));
   }
 }
