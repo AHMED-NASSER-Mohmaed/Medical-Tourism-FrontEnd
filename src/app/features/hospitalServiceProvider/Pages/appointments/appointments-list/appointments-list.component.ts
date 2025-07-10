@@ -14,13 +14,13 @@ appointments: ScheduleListResponse = {
   items: [],
   totalCount: 0,
   pageNumber: 1,
-  pageSize: 10
+  pageSize: 4
 };
 OrgAppointments :ScheduleListResponse = {
   items: [],
   totalCount: 0,
   pageNumber: 1,
-  pageSize: 10
+  pageSize: 4
 };;
   loading: boolean = true;
   searchTerm: string = '';

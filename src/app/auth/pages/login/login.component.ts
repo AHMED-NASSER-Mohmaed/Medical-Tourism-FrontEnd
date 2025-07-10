@@ -49,8 +49,8 @@ goToRecover(): void {
           this.router.navigate(['/super-admin/manage-accounts/patients']);
         } else if (role === 'Patient') {
           this.router.navigate(['/profile']);
-        } else if (role === 'ServiceProvider') {
-          this.router.navigate(['/service-provider/dashboard']);
+        } else if (role === 'HospitalServiceProvider') {
+          this.router.navigate(['/hospitalProvider/specialists']);
         } else {
           this.router.navigate(['/']);  // Default route
         }

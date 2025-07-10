@@ -37,7 +37,7 @@ export interface ScheduleRequestDto {
   dayOfWeekId: number;
   startTime: string;
   endTime: string;
-  timeSlotSize: number;
+  timeSlotSize: string;
   maxCapacity: number;
   price: number;
 }

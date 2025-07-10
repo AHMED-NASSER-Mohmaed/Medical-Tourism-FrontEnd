@@ -58,7 +58,10 @@ export class AppointmentFormComponent {
         hour: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
         minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]]
       }),
-      timeSlotSize: [15, [Validators.required, Validators.min(1)]],
+      timeSlotSize: this.fb.group({
+        hour: [0, [Validators.required, Validators.min(0), Validators.max(23)]],
+        minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]]
+      }),
       maxCapacity: [1, [Validators.required, Validators.min(1)]],
       price: [0, [Validators.required, Validators.min(0)]]
     });
@@ -111,7 +114,7 @@ export class AppointmentFormComponent {
     dayOfWeekId: Number(formValue.dayOfWeekId),
     startTime: `${formValue.startTime.hour.toString().padStart(2, '0')}:${formValue.startTime.minute.toString().padStart(2, '0')}:00`, // Convert to HH:mm format
     endTime: `${formValue.endTime.hour.toString().padStart(2, '0')}:${formValue.endTime.minute.toString().padStart(2, '0')}:00`, // Convert to HH:mm format
-    timeSlotSize: Number(formValue.timeSlotSize),
+    timeSlotSize: `${formValue.endTime.hour.toString().padStart(2, '0')}:${formValue.endTime.minute.toString().padStart(2, '0')}:00`, // Convert to HH:mm format
     maxCapacity: Number(formValue.maxCapacity),
     price: Number(formValue.price),
   };
@@ -121,7 +124,8 @@ export class AppointmentFormComponent {
       (response) => {
         console.log('Schedule created successfully', response);
         // Navigate to the schedule list or show a success message
-        this.router.navigate(['/hospital/schedule']);
+        this.router.navigate(['/hospitalProvider/schedule']);
+        
       },(error)=>
       {
         console.error('Error creating schedule', error);

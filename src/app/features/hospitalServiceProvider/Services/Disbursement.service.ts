@@ -16,6 +16,7 @@ export class DisbursementService {
     }
 
     getDisbursementById(id: number): Observable<any> {
+        console.log(`${this.apiUrl}/${id}`)
         return this.http.get<any>(`${this.apiUrl}/${id}`);
     }
 

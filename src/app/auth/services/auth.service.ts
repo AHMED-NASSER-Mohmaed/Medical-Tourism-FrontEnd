@@ -176,12 +176,30 @@ updatePatientProfile(data: any) {
 
 getUserRole(): string | null {
   const token = this.cookieService.get('auth_token');
+  console.log('Token:', token);
   if (token) {
     const decodedToken: any = jwtDecode(token);
     console.log('Decoded Token:', decodedToken);
 
     console.log(decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'])
     return decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || null;
+  }
+  return null; // If no token exists
+}
+
+getUserName(): string | null {
+  const token = this.cookieService.get('auth_token');
+  console.log('Token:', token);
+  if (token) {
+    const decodedToken: any = jwtDecode(token);
+    console.log('Decoded Token:', decodedToken);
+
+    
+  const firstname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']
+  const lastname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
+  console.log('First Name:', firstname);
+  console.log('Last Name:', lastname);
+    return firstname+ " "+lastname || null;
   }
   return null; // If no token exists
 }

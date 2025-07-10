@@ -18,7 +18,7 @@ import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/
 
 const routes: Routes = [
   {
-    path: 'hospital',component: SidebarComponent,
+    path: 'hospitalProvider',component: SidebarComponent,
     children: [
       { path: 'dashboard', component: DashBoardComponent },
       { path: 'specialists', component: SpecialistsListComponent },

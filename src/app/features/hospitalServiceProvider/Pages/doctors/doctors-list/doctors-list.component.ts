@@ -16,7 +16,7 @@ export class DoctorsListComponent {
   loading: boolean = true;
   searchTerm: string = '';
    currentPage: number = 1;
-  pageSize: number = 5;
+  pageSize: number = 4;
   statusFilter: string =""; 
 
   constructor(

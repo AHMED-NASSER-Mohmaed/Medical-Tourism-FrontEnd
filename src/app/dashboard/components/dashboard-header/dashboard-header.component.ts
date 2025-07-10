@@ -1,7 +1,7 @@
 // src/app/dashboard/components/dashboard-header/dashboard-header.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { BreadcrumbItem } from '../dashboard.types';
-import { Router } from '@angular/router';
+import { AuthService } from '../../../auth/services/auth.service';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./dashboard-header.component.css'],
   standalone: false
 })
-export class DashboardHeaderComponent {
+export class DashboardHeaderComponent implements OnInit {
   @Input() title = '';
   @Input() userRole = '';
   @Input() avatar = 'assets/images/www-avatat.png';
@@ -17,13 +17,13 @@ export class DashboardHeaderComponent {
   @Output() menuToggle = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 
-  constructor(private router: Router) {}
+  constructor(private auth:AuthService) {}
+  ngOnInit(): void {
+    this.userRole = this.auth.getUserName() || 'Guest';
+  }
 
   onLogout() {
     this.logout.emit();
-  }
-
-  onAvatarClick() {
-    this.router.navigate(['/super-admin/profile']);
+    
   }
 }

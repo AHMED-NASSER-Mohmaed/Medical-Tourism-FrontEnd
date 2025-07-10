@@ -47,6 +47,7 @@ export class DisbursementComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDisbursements();
+   
   }
 
   loadDisbursements(): void {
@@ -62,8 +63,20 @@ export class DisbursementComponent implements OnInit {
         console.error('Error loading disbursements:', err);
       }
     });
+     
   }
 
+  gerDisbursementDetails(id: number): void 
+  {
+    this.disbursementService.getDisbursementById(1).subscribe({
+          next: (data) => { 
+            console.log('Disbursement with ID 1:', data);
+          },
+          error: (err) => { 
+            console.error('Error fetching disbursement with ID 1:', err);
+          }
+      });
+  }
   applyFilters(): void {
     this.filteredDisbursements = this.disbursements.filter(disbursement => {
       // Text search filter
@@ -150,7 +163,14 @@ export class DisbursementComponent implements OnInit {
 
   viewDetails(id: number): void {
     // Implement navigation to detail view
-    console.log('View details for disbursement:', id);
+    this.disbursementService.getDisbursementById(1).subscribe({
+      next: (data) => { 
+        console.log('Disbursement with ID 1:', data);
+      },
+      error: (err) => { 
+        console.error('Error fetching disbursement with ID 1:', err);
+      }
+    });
   }
 
   editDisbursement(id: number): void {
