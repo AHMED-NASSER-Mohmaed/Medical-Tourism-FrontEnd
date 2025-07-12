@@ -200,24 +200,6 @@
         </div>
         <div class="col-md-6">
           <div class="form-floating">
-            <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
-            <label for="latitude">Latitude</label>
-            <div *ngIf="hospitalForm.get('latitude')?.invalid && (hospitalForm.get('latitude')?.touched || hospitalForm.get('latitude')?.dirty)" class="form-text text-danger ms-1">
-              Latitude is required (-90 to 90)
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-floating">
-            <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
-            <label for="longitude">Longitude</label>
-            <div *ngIf="hospitalForm.get('longitude')?.invalid && (hospitalForm.get('longitude')?.touched || hospitalForm.get('longitude')?.dirty)" class="form-text text-danger ms-1">
-              Longitude is required (-180 to 180)
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6">
-          <div class="form-floating">
             <input type="number" class="form-control" id="numberOfDepartments" formControlName="numberOfDepartments" min="1" placeholder="Number of Departments">
             <label for="numberOfDepartments">Number of Departments</label>
             <div *ngIf="hospitalForm.get('numberOfDepartments')?.invalid && (hospitalForm.get('numberOfDepartments')?.touched || hospitalForm.get('numberOfDepartments')?.dirty)" class="form-text text-danger ms-1">

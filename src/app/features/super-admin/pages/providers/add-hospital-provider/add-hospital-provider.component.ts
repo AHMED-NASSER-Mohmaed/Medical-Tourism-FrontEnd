@@ -158,6 +158,12 @@ export class AddHospitalProviderComponent implements OnInit {
 
   onSubmit(): void {
     if (this.hospitalForm.valid) {
+      // Final check: ensure selected governorateId is valid
+      const selectedGovId = this.hospitalForm.get('governorateId')?.value;
+      if (!this.governorates.some(g => g.id === selectedGovId)) {
+        this.apiError = 'Selected governorate is not valid. Please choose a valid governorate.';
+        return;
+      }
       const formValue = this.hospitalForm.value;
       const country = this.countriesMap[formValue.countryId];
       const governate = country?.governates[formValue.governorateId];

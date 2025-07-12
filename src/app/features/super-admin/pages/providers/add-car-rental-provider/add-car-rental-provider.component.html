@@ -216,26 +216,6 @@
             </div>
           </div>
 
-          <div class="col-md-6">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
-              <label for="latitude">Latitude</label>
-              <div *ngIf="carRentalForm.get('latitude')?.invalid && (carRentalForm.get('latitude')?.touched || carRentalForm.get('latitude')?.dirty)" class="form-text text-danger ms-1">
-                Latitude is required
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
-              <label for="longitude">Longitude</label>
-              <div *ngIf="carRentalForm.get('longitude')?.invalid && (carRentalForm.get('longitude')?.touched || carRentalForm.get('longitude')?.dirty)" class="form-text text-danger ms-1">
-                Longitude is required
-              </div>
-            </div>
-          </div>
-
           <!-- Asset Governorate (Egypt) -->
           <div class="col-md-6">
             <div class="form-floating position-relative">

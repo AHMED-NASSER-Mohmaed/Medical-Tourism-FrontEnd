@@ -212,26 +212,6 @@
               </div>
             </div>
           </div>
-          <!-- Latitude -->
-          <div class="col-md-3">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="latitude" formControlName="latitude" placeholder="Latitude" step="any">
-              <label for="latitude">Latitude</label>
-              <div *ngIf="hotelForm.get('latitude')?.invalid && (hotelForm.get('latitude')?.touched || hotelForm.get('latitude')?.dirty)" class="form-text text-danger ms-1">
-                Latitude is required
-              </div>
-            </div>
-          </div>
-          <!-- Longitude -->
-          <div class="col-md-3">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="longitude" formControlName="longitude" placeholder="Longitude" step="any">
-              <label for="longitude">Longitude</label>
-              <div *ngIf="hotelForm.get('longitude')?.invalid && (hotelForm.get('longitude')?.touched || hotelForm.get('longitude')?.dirty)" class="form-text text-danger ms-1">
-                Longitude is required
-              </div>
-            </div>
-          </div>
           <!-- Star Rating -->
           <div class="col-md-3">
             <div class="form-floating">
@@ -298,20 +278,6 @@
             </div>
             <div *ngIf="hotelForm.get('closingTime')?.invalid" class="form-text text-danger ms-1">
               Valid closing time is required
-            </div>
-          </div>
-          <!-- National Docs URL -->
-          <div class="col-md-6">
-            <div class="form-floating">
-              <input type="text" class="form-control" id="nationalDocsURL" formControlName="nationalDocsURL" placeholder="National Docs URL">
-              <label for="nationalDocsURL">National Docs URL</label>
-            </div>
-          </div>
-          <!-- Credential Doc URL -->
-          <div class="col-md-6">
-            <div class="form-floating">
-              <input type="text" class="form-control" id="credentialDocURL" formControlName="credentialDocURL" placeholder="Credential Doc URL">
-              <label for="credentialDocURL">Credential Doc URL</label>
             </div>
           </div>
           <!-- Verification Notes -->

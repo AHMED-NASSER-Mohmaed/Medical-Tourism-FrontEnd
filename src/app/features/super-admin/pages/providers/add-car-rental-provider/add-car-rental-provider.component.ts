@@ -101,7 +101,7 @@ export class AddCarRentalProviderComponent implements OnInit {
         second: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
       }),
       starRating: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
-    }, {
+    }, { 
       validators: [this.passwordMatchValidator, this.openingClosingTimeValidator]
     });
 
@@ -202,6 +202,12 @@ export class AddCarRentalProviderComponent implements OnInit {
   onSubmit() {
     this.apiError = null;
     if (this.carRentalForm.valid) {
+      // Final check: ensure selected governorateId is valid
+      const selectedGovId = this.carRentalForm.get('governorateId')?.value;
+      if (!this.governorates.some(g => g.id === selectedGovId)) {
+        this.apiError = 'Selected governorate is not valid. Please choose a valid governorate.';
+        return;
+      }
       this.isLoading = true;
       const formValue = this.carRentalForm.value;
       const country = this.countriesMap[formValue.countryId];

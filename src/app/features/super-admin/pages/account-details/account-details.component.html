@@ -5,9 +5,7 @@
     <!-- Modal Header -->
     <div class="modal-header">
       <div class="user-profile-header">
-        <img [src]="account?.imageURL ?? 'assets/images/default-avatar.png'" 
-             class="user-avatar" 
-             alt="User avatar">
+        <!-- Removed user avatar image from modal header -->
         <div class="user-info">
           <h2>{{ account?.firstName }} {{ account?.lastName }}</h2>
           <div class="user-badges">
@@ -137,16 +135,8 @@
       </ng-container>
 
       <ng-container *ngIf="isProviderAccount()">
-        <div class="info-section">
-          <h3 class="section-title">Provider Details</h3>
-          <div class="info-grid">
-            <div class="info-label">Provider Name</div>
-            <div class="info-value">{{ getAssetName() || 'N/A' }}</div>
-            <!-- Removed Verification Status and Location -->
-          </div>
-        </div>
         <!-- Hotel Specific -->
-        <div class="info-section" *ngIf="getHotelProvider()">
+        <!-- <div class="info-section" *ngIf="getHotelProvider()">
           <h4 class="section-subtitle">Hotel Details</h4>
           <div class="info-grid">
             <div class="info-label">Star Rating</div>
@@ -162,7 +152,7 @@
               <span *ngIf="getHotelProvider()?.hasRestaurant" class="facility-badge">Restaurant</span>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Hospital Specific -->
         <div class="info-section" *ngIf="getHospitalProvider()">
