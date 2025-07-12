@@ -32,7 +32,7 @@ ngOnInit(): void {
 
     this.authService.loginStatus$.subscribe(() => {
       const role = this.authService.getUserRole();
-      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin') && role !=='HospitalServiceProvider';
+      this.showNavFooter = (role !== 'ServiceProvider') && (role !== 'SuperAdmin') && (role !=='HospitalServiceProvider')&& (role !== 'Doctor');
 
     });
 

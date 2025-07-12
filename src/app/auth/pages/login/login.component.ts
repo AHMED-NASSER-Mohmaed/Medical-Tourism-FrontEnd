@@ -56,7 +56,9 @@ goToRecover(): void {
           this.router.navigate(['/hospitalProvider/specialists']);
         } else if (role === 'ServiceProvider') {
           this.router.navigate(['/service-provider/dashboard']);
-        } else {
+        }  else if (role === 'Doctor') {
+          this.router.navigate(['/doctor/profile']);
+        }else {
           this.router.navigate(['/']);
         }
       },

@@ -1,0 +1,53 @@
+<div class="card doctor-profile-card shadow-sm" *ngIf="doctor; else noDoctor" >
+  <div class="row g-0">
+    <div class="col-md-4 text-center p-3">
+      <img 
+        [src]="doctor.imageURL || 'assets/default-doctor.png'" 
+        alt="Doctor Photo" 
+        class="img-fluid rounded-circle doctor-photo shadow"
+      >
+      <h5 class="mt-2">{{ doctor.firstName }} {{ doctor.lastName }}</h5>
+      <p class="text-muted">{{ doctor.specialtyName }}</p>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card-body ">
+        <h6 class="card-title mb-2 text-primary">{{ doctor.hospitalName }}</h6>
+        <p class="card-text ">
+          <strong>Email:</strong> {{ doctor.email }} <br>
+          <strong>Phone:</strong> {{ doctor.phone }} <br>
+          <!-- <strong>Gender:</strong> {{ doctor.gender }} <br> -->
+          <strong>Date of Birth:</strong> {{ doctor.dateOfBirth | date:'mediumDate' }} <br>
+          <strong>Years of Experience:</strong> {{ doctor.yearsOfExperience }} years <br>
+          
+          <!-- <strong>Qualification:</strong> {{ doctor.qualification }} <br> -->
+          <strong>Location:</strong> {{ doctor.address }}, {{ doctor.city }}, {{ doctor.governorateName }}, {{ doctor.countryName }} <br>
+          <!-- <strong>Status:</strong>  -->
+          <!-- <span [ngClass]="{
+            'badge bg-success': doctor.status === 'Active',
+            'badge bg-secondary': doctor.status === 'Inactive',
+            'badge bg-warning text-dark': doctor.status === 'Pending'
+          }">{{ doctor.status }}</span>
+        </p> -->
+        <!-- <p class="card-text">
+          <strong>Bio:</strong> {{ doctor.bio }}
+        </p> -->
+      </div>
+    </div>
+     <div class="col-md-4 text-center p-3">
+      <img 
+        [src]="doctor.imageURL || 'assets/default-doctor.png'" 
+        alt="Doctor Photo" 
+        class="img-fluid rounded-circle doctor-photo shadow"
+      >
+      <h5 class="mt-2">Medical Licensce</h5>
+      
+    </div>
+
+  </div>
+</div>
+<ng-template #noDoctor>
+  <div class="alert alert-warning text-center">
+    <i class="bi bi-exclamation-circle"></i> Doctor profile is not available.
+  </div>
+</ng-template>

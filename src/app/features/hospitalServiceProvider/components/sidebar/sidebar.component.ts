@@ -1,14 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { faBook, faCar, faHospital, faHotel, faListAlt, faListUl, faShieldAlt, faUser, faUserInjured, faUsersCog } from '@fortawesome/free-solid-svg-icons';
-//import { DashboardModule } from "../../../../dashboard/dashboard.module";
+import { DashboardModule } from '../../../Dash-Layout/dashboard.module';
 
 
 import { AuthService } from '../../../../auth/services/auth.service';
+import { DashboardLayoutComponent } from '../../../Dash-Layout/dashboard-layout/dashboard-layout.component';
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterModule],
+  imports: [RouterModule ,DashboardModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })

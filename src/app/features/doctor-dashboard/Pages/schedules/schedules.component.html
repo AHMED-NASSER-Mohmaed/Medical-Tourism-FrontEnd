@@ -1,0 +1,63 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Doctor Appointments</h5>
+  </div>
+  <div class="card-body p-0">
+    <div *ngIf="pagedItems?.length; else noAppointments">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Appointment #</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Patient</th>
+            <th>Phone</th>
+            <th>Country</th>
+            <th>Hospital</th>
+            <th>Specialty</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let appt of pagedItems">
+            <td>{{ appt.appointmentId }}</td>
+            <td>{{ appt.date | date: 'mediumDate' }}</td>
+            <td>
+              <span class="badge" [ngClass]="getStatusBadgeClass(appt.status)">
+                {{ appt.status }}
+              </span>
+            </td>
+            <td>{{ appt.patientName || '-' }}</td>
+            <td>{{ appt.patientPhone || '-' }}</td>
+            <td>{{ appt.patientCountry || '-' }}</td>
+            <td>{{ appt.hospitalName || '-' }}</td>
+            <td>{{ appt.specialty || '-' }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noAppointments>
+      <div class="p-3 text-center text-muted">
+        <i class="bi bi-calendar-x fs-3"></i> No appointments found.
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="card-footer bg-light" *ngIf="totalPages > 1">
+    <nav>
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="changePage(currentPage - 1)">Previous</button>
+        </li>
+        <li 
+          class="page-item"
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === (i + 1)">
+          <button class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</button>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="changePage(currentPage + 1)">Next</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

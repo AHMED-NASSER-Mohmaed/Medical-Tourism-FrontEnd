@@ -1,0 +1,72 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-primary text-white">
+    <h5 class="mb-0">Doctor Schedule Slots</h5>
+  </div>
+  <div class="card-body p-0">
+    <div *ngIf="schedules.length; else noSlots">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Doctor</th>
+            <th>Specialty</th>
+            <th>Hospital</th>
+            <th>Day</th>
+            <th>Time</th>
+            <th>Capacity</th>
+            <th>Available</th>
+            <th>Price</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let slot of schedules">
+            <td>{{ slot.doctorName }}</td>
+            <td>{{ slot.specialty }}</td>
+            <td>{{ slot.hospital }}</td>
+            <td>{{ getDayName(slot.dayOfWeekId) }}</td>
+            <td>{{ slot.startTime }} - {{ slot.endTime }}</td>
+            <td>{{ slot.maxCapacity }}</td>
+            <td>{{ slot.availableSlots }}</td>
+            <td>{{ slot.price | currency:'USD' }}</td>
+            <td>
+              <span 
+                class="badge"
+                [ngClass]="{
+                  'bg-success': slot.isActive,
+                  'bg-secondary': !slot.isActive
+                }">
+                {{ slot.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-template #noSlots>
+      <div class="p-3 text-center text-muted">
+        <i class="bi bi-calendar-x fs-3"></i> No schedule slots found.
+      </div>
+    </ng-template>
+  </div>
+
+  <div class="card-footer bg-light" *ngIf="totalPages > 1">
+    <nav>
+      <ul class="pagination justify-content-center mb-0">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <button class="page-link" (click)="changePage(currentPage - 1)">Previous</button>
+        </li>
+
+        <li 
+          class="page-item" 
+          *ngFor="let page of [].constructor(totalPages); let i = index"
+          [class.active]="currentPage === (i + 1)">
+          <button class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</button>
+        </li>
+
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <button class="page-link" (click)="changePage(currentPage + 1)">Next</button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

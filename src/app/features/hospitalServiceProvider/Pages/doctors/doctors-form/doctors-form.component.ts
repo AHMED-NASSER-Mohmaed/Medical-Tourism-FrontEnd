@@ -104,6 +104,7 @@ export class DoctorsFormComponent {
       console.error('Error loading specialties', err);
       }
     });
+    this.getCountries();
     }
 
     passwordMatchValidator(form: FormGroup) {
@@ -113,6 +114,7 @@ export class DoctorsFormComponent {
 
 
   getCountries() {
+    console.log('Loading countries...');
     this.locationService.getCountriesWithGovernorates().subscribe({
     next: (response) => {
       // 1. Safely store the original data

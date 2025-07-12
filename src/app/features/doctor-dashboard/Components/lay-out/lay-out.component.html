@@ -1,0 +1,15 @@
+<div class="app-root-bg min-vh-100 d-flex flex-column">
+  <app-dashboard-layout
+    [sidebarItems]="menuItems"
+    [headerTitle]="title"
+    [userRole]="userRole"
+    [breadcrumbs]="breadcrumbs"
+    [avatar]="avatar"
+    (logout)="onLogout()">
+    <div class="container-fluid px-2 px-md-4 py-4 app-content-area flex-grow-1 d-flex flex-column">
+      <div class="dashboard-glass-wrapper flex-grow-1">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </app-dashboard-layout>
+</div>

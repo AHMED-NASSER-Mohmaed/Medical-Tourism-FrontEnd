@@ -16,9 +16,9 @@ import { DisbursementComponent } from './Pages/Disbursement/disbursement.compone
 // Import your guards
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RoleGuard } from '../../shared/guards/role.guard';
+
 const routes: Routes = [
   {
-
     path: '',
     component: SidebarComponent,
     canActivate: [AuthGuard, RoleGuard],

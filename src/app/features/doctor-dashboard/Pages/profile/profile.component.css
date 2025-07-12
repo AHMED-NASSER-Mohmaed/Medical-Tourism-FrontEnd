@@ -1,0 +1,24 @@
+.doctor-profile-card {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.doctor-photo {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 4px solid #007bff;
+}
+
+.card-body {
+  padding: 1rem;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.badge {
+  font-size: 0.9rem;
+}
