@@ -1,8 +1,6 @@
 
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
-
 import { HttpClient } from '@angular/common/http';
 import {  FaIconLibrary } from '@fortawesome/angular-fontawesome';
 import {
@@ -21,9 +19,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
-
 import { FormsModule } from '@angular/forms';
-
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SharedModule } from './shared/shared.module';
 
 
 
@@ -32,13 +33,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 
-import { StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { EffectsModule } from '@ngrx/effects';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { DashboardModule } from './dashboard/dashboard.module';
-import { SharedModule } from './shared/shared.module';
-import { SuperAdminModule } from './features/super-admin/super-admin.module';
+
+
 
 
 
@@ -56,18 +52,11 @@ import { SuperAdminModule } from './features/super-admin/super-admin.module';
     AppRoutingModule,
     CoreModule,
     FormsModule,
-    RouterModule,
-    FormsModule,
     ReactiveFormsModule,
     StoreModule.forRoot({}),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
     HttpClientModule,
-
-    DashboardModule,
-    SuperAdminModule,
-
-
     RouterModule,
     SharedModule
 ],

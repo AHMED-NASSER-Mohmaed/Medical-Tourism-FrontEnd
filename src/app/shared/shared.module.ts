@@ -18,6 +18,7 @@ import { LockComponent } from './components/lock/lock.component';
 import { UnauthComponent } from './components/unauth/unauth.component';
 
 
+
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -31,13 +32,15 @@ import { UnauthComponent } from './components/unauth/unauth.component';
     LockComponent,
     UnauthComponent,
 
+
   ],
   imports: [
     CommonModule,
     FormsModule,
     FontAwesomeModule,
     StatusLabelPipe,
-    RouterModule
+    RouterModule,
+
   ],
   exports: [
     DataTableComponent,

@@ -1,10 +1,10 @@
-/* EDITED: Added a container to center the card on the page */
+/* Container to center the card on the page */
 .page-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Ensures the container takes up the full screen height */
-  background-color: #f3f4f6; /* A light gray background */
+  min-height: 100vh;
+  background-color: #f3f4f6;
   padding: 1rem;
   box-sizing: border-box;
 }
@@ -12,7 +12,7 @@
 /* Custom styles for the Payment Success page */
 .payment-card {
     background-color: white;
-    padding: 2.5rem;
+    padding: 7rem 2rem;
     border-radius: 0.75rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
     max-width: 28rem;
@@ -65,12 +65,14 @@
     margin-bottom: 2rem;
 }
 
+/* Styles for the details section */
 .details-section {
     background-color: #f9fafb;
     padding: 1.5rem;
     border-radius: 0.5rem;
     text-align: left;
     border: 1px solid #e5e7eb;
+    margin-top: 2rem; /* Add space above the details box */
 }
 
 .details-section h2 {

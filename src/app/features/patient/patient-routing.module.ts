@@ -36,7 +36,7 @@ const routes: Routes = [
     data: { expectedRole: 'Patient' }
   },
   {
-    path: 'payment-success',
+    path: 'payment-success' ,
     component: PaymentSuccessComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { expectedRole: 'Patient' }

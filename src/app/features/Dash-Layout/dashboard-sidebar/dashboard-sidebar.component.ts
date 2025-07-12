@@ -1,9 +1,9 @@
 // src/app/dashboard/components/dashboard-sidebar/dashboard-sidebar.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DashboardMenuItem } from '../dashboard.types';
-import { 
-  faShieldAlt, faChevronDown, faChevronUp, 
-  faChevronLeft, faChevronRight 
+import {
+  faShieldAlt, faChevronDown, faChevronUp,
+  faChevronLeft, faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -17,7 +17,7 @@ export class DashboardSidebarComponent {
   @Input() collapsed = false;
   @Input() userRole = '';
   @Output() toggleCollapse = new EventEmitter<void>();
-  
+
   icons = {
     shield: faShieldAlt,
     chevronDown: faChevronDown,

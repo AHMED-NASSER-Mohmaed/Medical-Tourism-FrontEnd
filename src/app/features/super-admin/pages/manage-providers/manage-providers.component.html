@@ -149,14 +149,14 @@
                 </td>
                 <td class="text-end">
                   <div class="btn-group" role="group">
-                    <button type="button" 
+                    <button type="button"
                             class="btn btn-sm btn-outline-primary"
                             (click)="viewProviderDetails(provider.id)"
                             [disabled]="isLoading || provider.isStatusChanging"
                             title="View details" aria-label="View details">
                       <fa-icon [icon]="icons.view"></fa-icon>
                     </button>
-                    <button type="button" 
+                    <button type="button"
                             *ngIf="getAssetStatus(provider.status) !== AssetStatus.APPROVED"
                             class="btn btn-sm btn-outline-success"
                             (click)="approveProvider(provider)"
@@ -164,7 +164,7 @@
                             title="Approve provider" aria-label="Approve provider">
                       <fa-icon [icon]="icons.approve"></fa-icon>
                     </button>
-                    <button type="button" 
+                    <button type="button"
                             *ngIf="getAssetStatus(provider.status) !== AssetStatus.REJECTED && getAssetStatus(provider.status) !== AssetStatus.PENDING"
                             class="btn btn-sm btn-outline-danger"
                             (click)="openRejectDialog(provider)"
@@ -215,8 +215,8 @@
   <div class="modal-dialog modal-xl provider-modal-dialog">
     <div class="modal-content provider-modal-content">
       <div class="modal-header provider-modal-header">
-        <img [src]="selectedProvider?.imageURL || 'assets/images/default-provider.png'" 
-             alt="Provider image" 
+        <img [src]="selectedProvider?.imageURL || 'assets/images/default-provider.png'"
+             alt="Provider image"
              class="provider-modal-avatar">
         <div>
           <div class="provider-modal-title">{{ selectedProvider?.assetName }}</div>

@@ -1,9 +1,11 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CarRentalWebsiteService } from '../../services/car-rental-website.service';
 import { AvailableCar } from '../../models/available-car.model';
 import { CarTypeMap, FuelTypeMap, TransmissionTypeMap } from '../../utils/car-enums.utils';
 import { Location } from '@angular/common';
+import { BookingService } from '../../../patient/services/Booking.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-car-details',
@@ -26,6 +28,7 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   bookingError: string = '';
   bookingSuccess: string = '';
   navbarHeightPx: number = 0;
+   bookingData: any = {};
   @ViewChild('carDetailsRoot', { static: true }) carDetailsRoot!: ElementRef;
 
   // Unavailable dates state
@@ -41,10 +44,14 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   constructor(
     private route: ActivatedRoute,
     private carService: CarRentalWebsiteService,
-    private location: Location
+    private location: Location,
+     private bookingService: BookingService,
+      private router: Router,
   ) {}
 
   ngOnInit() {
+     this.bookingData = this.bookingService.getBookingData();
+    console.log('Booking data received in CarRentalDetailsComponent:', this.bookingData);
     const carRentalId = this.route.snapshot.queryParamMap.get('rentalId');
     const carId = this.route.snapshot.paramMap.get('id');
     if (carRentalId && carId) {
@@ -115,80 +122,71 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
 
-  bookCar() {
+   bookCar() {
     this.bookingError = '';
     this.bookingSuccess = '';
     const now = new Date();
-    if (!this.pickupDateTime || !this.dropoffDateTime || !this.pickupTime || !this.dropoffTime || !this.locationDescription || !this.car) {
-      this.bookingError = 'Please fill in all required fields.';
+
+    if (!this.pickupDateTime || !this.dropoffDateTime || !this.pickupTime || !this.dropoffTime) {
+      this.bookingError = 'Please fill in all required date and time fields.';
+      Swal.fire('Incomplete Information', this.bookingError, 'warning');
       return;
     }
+
     // Combine date and time for pickup
     const [pickupHour, pickupMinute] = this.pickupTime.split(':').map(Number);
     const pickupDate = new Date(this.pickupDateTime);
     pickupDate.setHours(pickupHour, pickupMinute, 0, 0);
+
     // Combine date and time for dropoff
     const [dropoffHour, dropoffMinute] = this.dropoffTime.split(':').map(Number);
     const dropoffDate = new Date(this.dropoffDateTime);
     dropoffDate.setHours(dropoffHour, dropoffMinute, 0, 0);
+
     if (pickupDate < now) {
       this.bookingError = 'Pick-up date/time cannot be in the past.';
+      Swal.fire('Invalid Date', this.bookingError, 'error');
       return;
     }
+
     if (dropoffDate <= pickupDate) {
       this.bookingError = 'Drop-off date/time must be after pick-up date/time.';
+      Swal.fire('Invalid Dates', this.bookingError, 'error');
       return;
     }
-    this.loading = true;
-    // Prepare request body for car booking (all three keys)
-    const requestBody = {
-      specialtiyAppointment: {
-        specialtyScheduleId: 0,
-        isOffline: true,
-        appointmentDate: {
-          year: 0,
-          month: 0,
-          day: 0,
-          dayOfWeek: 0
-        }
-      },
-      roomAppointment: {
-        checkInDate: {
-          year: 0,
-          month: 0,
-          day: 0,
-          dayOfWeek: 0
-        },
-        checkOutDate: {
-          year: 0,
-          month: 0,
-          day: 0,
-          dayOfWeek: 0
-        },
-        roomId: 0
-      },
-      carAppointment: {
-        startingDateTime: pickupDate.toISOString(),
-        endingDateTime: dropoffDate.toISOString(),
-        latitude: this.latitude,
-        longitude: this.longitude,
-        locationDescription: this.locationDescription,
-        fuelPolicy: this.fuelPolicy,
-        carId: this.car.id
-      }
+
+    const carAppointment = {
+
+      startingDate: this.formatDate(this.pickupDateTime),
+      endingDate: this.formatDate(this.dropoffDateTime),
+      latitude: this.latitude,
+      longitude: this.longitude,
+      locationDescription: this.locationDescription,
+      fuelPolicy: this.fuelPolicy,
+      carId: this.car?.id
     };
-    // Call booking API
-    this.carService.createBooking(requestBody).subscribe({
-      next: (res) => {
-        this.bookingSuccess = 'Car booked successfully!';
-        this.loading = false;
-      },
-      error: (err) => {
-        this.bookingError = 'Booking failed. Please try again.';
-        this.loading = false;
-      }
-    });
+
+    const currentBookingData = this.bookingService.getBookingData();
+    const updatedBookingData = {
+      ...currentBookingData,
+      carAppointment: carAppointment
+    };
+
+    this.bookingService.updateBookingData(updatedBookingData);
+
+    console.log('Final booking data with car:', updatedBookingData);
+
+    this.router.navigate(['/patient/booking-stepper']);
   }
+
+  formatDate(date: Date | null): string {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
 
   retryGeolocation() {
     this.retryingLocation = true;
@@ -212,19 +210,11 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     }
   }
 
-  // Add a date filter for the calendar
-  formatDate(date: Date | null): string {
-    if (!date) return '';
-    // Use UTC to avoid timezone issues
-    const year = date.getUTCFullYear();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
+
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return true;
     const formatted = this.formatDate(date);
     return !this.unavailableDatesSet.has(formatted);
   }
-} 
+}

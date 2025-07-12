@@ -34,9 +34,15 @@ export class BookingStepperComponent implements OnInit {
       return;
     }
 
-    if (this.bookingDetails.roomAppointment) {
+  if (this.bookingDetails.carAppointment) {
+      // If a car has been booked, go directly to the payment step.
+      this.currentStep = 'payment';
+      this.proceedToPayment(); // Automatically trigger payment
+    } else if (this.bookingDetails.roomAppointment) {
+      // If a room has been booked, the next step is the car rental.
       this.currentStep = 'car';
     } else {
+      // Otherwise, the first step is to ask about the hotel.
       this.currentStep = 'hotel';
     }
   }
@@ -71,9 +77,9 @@ export class BookingStepperComponent implements OnInit {
     if (this.bookingDetails.roomAppointment) {
       payload.roomAppointment = this.bookingDetails.roomAppointment;
     }
-    // if (this.bookingDetails.carAppointment) {
-    //   payload.carAppointment = this.bookingDetails.carAppointment;
-    // }
+    if (this.bookingDetails.carAppointment) {
+      payload.carAppointment = this.bookingDetails.carAppointment;
+    }
 
     console.log('Final payload sent to API:', payload);
 

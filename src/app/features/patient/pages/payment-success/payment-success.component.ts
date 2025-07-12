@@ -8,7 +8,7 @@ import { BookingService } from '../../services/Booking.service'; // Adjust the i
   templateUrl: './payment-success.component.html',
   styleUrls: ['./payment-success.component.css']
 })
-export class PaymentSuccessComponent implements OnInit {
+export class PaymentSuccessComponent {
 
   bookingDetails: any;
 
@@ -22,21 +22,21 @@ export class PaymentSuccessComponent implements OnInit {
     private bookingService: BookingService
   ) { }
 
-  ngOnInit(): void {
-    this.bookingDetails = this.bookingService.getBookingData();
-    console.log('Booking details on success page:', this.bookingDetails);
+  // ngOnInit(): void {
+  //   this.bookingDetails = this.bookingService.getBookingData();
+  //   console.log('Booking details on success page:', this.bookingDetails);
 
 
-    if (this.bookingDetails) {
-      this.appointmentWith = this.bookingDetails.doctorName || 'Your Doctor';
+  //   if (this.bookingDetails) {
+  //     this.appointmentWith = this.bookingDetails.doctorName || 'Your Doctor';
 
-      if (this.bookingDetails.specialtyAppointment) {
-        this.appointmentDate = this.bookingDetails.specialtyAppointment.appointmentDate;
+  //     if (this.bookingDetails.specialtyAppointment) {
+  //       this.appointmentDate = this.bookingDetails.specialtyAppointment.appointmentDate;
 
-        this.amountPaid = 150;
-      }
-    }
-  }
+  //       this.amountPaid = 150;
+  //     }
+  //   }
+  // }
 
   goToHomepage(): void {
     this.bookingService.updateBookingData({});

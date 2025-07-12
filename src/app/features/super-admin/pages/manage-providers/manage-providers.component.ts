@@ -16,7 +16,7 @@ import Swal from 'sweetalert2';
 import { Observable, Subject } from 'rxjs';
 import { faList, faCheck, faTimes, faSearch, faPlus, faEye, faHospital, faHotel, faCar } from '@fortawesome/free-solid-svg-icons';
 import { Router } from '@angular/router';
-import type { CardColor } from '../../../../dashboard/components/dashboard-card/dashboard-card.component';
+import type { CardColor } from '../../../../features/Dash-Layout/dashboard-card/dashboard-card.component';
 
 type AnyProvider = HotelProvider | HospitalProvider | CarRentalProvider;
 

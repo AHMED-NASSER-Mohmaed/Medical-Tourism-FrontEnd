@@ -8,7 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { HospitalService } from '../../services/Hospital.service';
-
+import { CarTypeMap, FuelTypeMap, TransmissionTypeMap } from '../../../car-rental-website/utils/car-enums.utils';
 // EDITED: Moved interfaces to a more appropriate location, or they can be in their own model file.
 interface MedicalCard { title: string; value: string | number; icon: string; }
 interface SidebarLink { text: string; icon: string; badge?: number; }
@@ -17,11 +17,12 @@ interface CountryInfo { name: string; governorates: Gov[]; }
 export interface Booking {
   id: string;
   createdAt: string;
-  totalAmount: number;
+  tatalAmount: number;
   status: number;
   specialtyAppoinment: any;
   roomAppointment: any;
   carAppointment: any;
+  canCancel:boolean;
 }
 
 @Component({
@@ -40,8 +41,11 @@ export class ProfileComponent implements OnInit {
 
   public currentPage = 1;
   public totalPages = 1;
-  public pageSize = 5;
+  public pageSize = 4;
   public isLoading=false;
+    // EDITED: Added properties for the modal
+  isModalOpen = false;
+  selectedBookingDetails: any = null;
 
   // EDITED: Updated appointments property to be 'bookings' to match the new logic
   bookings: Booking[] = [];
@@ -214,8 +218,8 @@ private calculateAge(dob: string): number {
   // EDITED: New helper functions for the appointment table
   getStatusLabel(status: number): string {
     switch (status) {
-      case 0: return 'Pending';
-      case 1: return 'Confirmed';
+
+      case 1: return 'Booked';
       case 2: return 'Cancelled';
       default: return 'Unknown';
     }
@@ -234,8 +238,51 @@ private calculateAge(dob: string): number {
     return 'N/A';
   }
 
-  viewDetails(bookingId: string): void {
-    this.router.navigate(['/patient/booking-details', bookingId]);
+viewDetails(booking: Booking): void {
+    this.loadingSrv.show();
+    this.hospitalService.getBookingDetails(booking.id).subscribe({
+      next: (details) => {
+        this.selectedBookingDetails = {
+          ...details,
+          id: booking.id,
+          bookingDate: booking.createdAt,
+          totalAmount: booking.tatalAmount,
+          status: this.getStatusLabel(booking.status)
+        };
+        this.isModalOpen = true;
+        this.loadingSrv.hide();
+        console.log("dfgfdgfdg",this.selectedBookingDetails)
+      },
+      error: (err) => {
+        console.error("Failed to fetch booking details:", err);
+        this.loadingSrv.hide();
+        Swal.fire('Error', 'Could not load booking details.', 'error');
+      }
+    });
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.selectedBookingDetails = null;
+  }
+
+  // EDITED: Added helper functions for the modal template
+  getRoomTypeLabel(type?: number): string {
+    switch (type) {
+      case 0: return 'Standard';
+      case 1: return 'Deluxe';
+      case 2: return 'Suite';
+      default: return 'N/A';
+    }
+  }
+
+  getRoomViewLabel(type?: number): string {
+    switch (type) {
+      case 0: return 'City View';
+      case 1: return 'Sea View';
+      case 2: return 'Pool View';
+      default: return 'N/A';
+    }
   }
 
   cancelBooking(bookingId: string): void {

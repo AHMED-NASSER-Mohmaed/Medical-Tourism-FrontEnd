@@ -6,6 +6,8 @@ import { AuthState } from '../../store/auth.reducer';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { LoadingService } from '../../../shared/services/loading.service';
+import { LoginResponse } from '../../models/auth.model';
+import { firstValueFrom } from 'rxjs';
 @Component({
   selector: 'app-login',
   standalone: false,
@@ -30,57 +32,51 @@ export class LoginComponent {
 goToRecover(): void {
   this.router.navigate(['/auth/recover']);
 }
-  onSubmit(): void {
+ onSubmit(): void {
+    this.submitted = true;
+    if (this.loginForm.invalid) {
+      return;
+    }
     this.loadingSrv.show();
-  this.submitted = true;
 
-  if (this.loginForm.invalid) return;
-
-  this.authService.login(this.loginForm.value).subscribe({
-
-    next: (res) => {
-      this.loadingSrv.hide();
-
-      this.store.dispatch(login({ credentials: this.loginForm.value }));
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (res) => {
+        this.store.dispatch(login({ credentials: this.loginForm.value }));
 
 
-      setTimeout(() => {
         const role = this.authService.getUserRole();
-        console.log('User Role:', role);
 
+        this.loadingSrv.hide();
 
-               if (role === 'SuperAdmin') {
+        if (role === 'SuperAdmin') {
           this.router.navigate(['/super-admin']);
         } else if (role === 'Patient') {
           this.router.navigate(['/profile']);
         } else if (role === 'HospitalServiceProvider') {
           this.router.navigate(['/hospitalProvider/specialists']);
+        } else if (role === 'ServiceProvider') {
+          this.router.navigate(['/service-provider/dashboard']);
         } else {
-          this.router.navigate(['/']);  // Default route
+          this.router.navigate(['/']);
         }
-      }, 500);
-    },
+      },
+      error: (err) => {
+        this.loadingSrv.hide();
+        if (err?.error?.message) {
+          this.errorMessage = err.error.message;
+        } else {
+          this.errorMessage = 'An unexpected error occurred. Please try again.';
+        }
+      },
+    });
+  }
 
-    error: (err) => {
-      this.loadingSrv.hide();
-
-      if (err?.error?.message) {
-        this.errorMessage = err.error.message;
-      } else {
-        this.errorMessage = 'An unexpected error occurred. Please try again later.';
-      }
-    },
-  });
-}
-
-    error(ctrl: string): string | null {
+  error(ctrl: string): string | null {
     const c = this.loginForm.get(ctrl);
     if (!c || !(c.touched || this.submitted)) return null;
-
-    if (c.errors?.['required'])   return 'Required';
-    if (c.errors?.['email'])      return 'Invalid email';
+    if (c.errors?.['required'])  return 'Required';
+    if (c.errors?.['email'])     return 'Invalid email';
     if (c.errors?.['minlength'])  return `Password must be at least ${c.errors['minlength'].requiredLength} characters`;
-
     return null;
   }
 }

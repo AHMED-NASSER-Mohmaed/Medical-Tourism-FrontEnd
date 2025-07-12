@@ -24,8 +24,7 @@ export class AuthService {
 
   private loginStatusSubject: BehaviorSubject<boolean>;
   loginStatus$: Observable<boolean>;
-    // EDITED: Add this property to store the URL
-  public redirectUrl: string | null = null;
+
 
   constructor(private http: HttpClient, private cookieService: CookieService) {
     const tokenExists = this.cookieService.check('auth_token');
@@ -36,24 +35,20 @@ export class AuthService {
  public checkTokenAndLogoutIfExpired(): void {
     const token = this.cookieService.get('auth_token');
     if (!token) {
-      // No token exists, so do nothing.
       return;
     }
 
     try {
       const decodedToken: any = jwtDecode(token);
-      // The 'exp' claim in a JWT is in seconds. We convert it to milliseconds.
       const expirationDate = decodedToken.exp * 1000;
       const now = Date.now();
 
       if (expirationDate < now) {
-        // If the token's expiration date is in the past, log the user out.
+
         console.warn('AuthService: Token has expired. Logging out.');
         this.logout();
-        // You could add a Swal.fire alert here to inform the user.
       }
     } catch (error) {
-      // If the token is malformed or invalid, log the user out.
       console.error('AuthService: Error decoding token. Logging out.', error);
       this.logout();
     }
@@ -62,15 +57,18 @@ export class AuthService {
 
 
   login(data: LoginRequest): Observable<LoginResponse> {
-
     return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data).pipe(
+      tap(response => {
+        if (response && response.token) {
+          this.cookieService.set('auth_token', response.token, { path: '/' });
+          this.setLoggedIn(true);
+        }
+      }),
       catchError((err) => {
-        // Handle backend errors here
-        return throwError(err); // Rethrow the error to be caught in the component
+        return throwError(err);
       })
     );
   }
-
 logout(): void {
 
   this.cookieService.delete('auth_token', '/');
@@ -220,7 +218,7 @@ getUserName(): string | null {
     const decodedToken: any = jwtDecode(token);
     console.log('Decoded Token:', decodedToken);
 
-    
+
   const firstname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']
   const lastname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
   console.log('First Name:', firstname);

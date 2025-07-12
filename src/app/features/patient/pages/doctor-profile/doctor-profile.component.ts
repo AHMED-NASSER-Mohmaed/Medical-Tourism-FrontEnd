@@ -23,7 +23,6 @@ export class DoctorProfileComponent implements OnInit {
   showDateError: boolean = false;
   workingDays: Set<number> = new Set();
 
-  // EDITED: New property to hold the processed schedule
   processedSchedule: { dayName: string, slots: any[] }[] = [];
 
   constructor(
@@ -78,7 +77,6 @@ export class DoctorProfileComponent implements OnInit {
         const workingDayIds = doctorSchedule.map(s => s.dayOfWeekId - 1);
         this.workingDays = new Set(workingDayIds);
 
-        // EDITED: Process the schedule for display
         this.processScheduleForDisplay(doctorSchedule);
 
         this.loadingSrv.hide();
@@ -90,7 +88,6 @@ export class DoctorProfileComponent implements OnInit {
     });
   }
 
-  // EDITED: New method to group schedule by day
   processScheduleForDisplay(schedule: any[]): void {
     const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const grouped = schedule.reduce((acc, curr) => {
@@ -118,7 +115,7 @@ export class DoctorProfileComponent implements OnInit {
     return !this.blockedDates.has(formattedDate);
   }
 
-// EDITED: This method now uses the BookingService
+
   startBookingFlow(): void {
     if (!this.selectedDate) {
       this.showDateError = true;
@@ -134,7 +131,7 @@ export class DoctorProfileComponent implements OnInit {
       return;
     }
         const year = this.selectedDate.getFullYear();
-    const month = (this.selectedDate.getMonth() + 1).toString().padStart(2, '0'); // Add 1 because months are 0-indexed
+    const month = (this.selectedDate.getMonth() + 1).toString().padStart(2, '0');
     const day = this.selectedDate.getDate().toString().padStart(2, '0');
     const formattedDate = `${year}-${month}-${day}`;
 
@@ -144,14 +141,10 @@ export class DoctorProfileComponent implements OnInit {
         isOffline: true,
         appointmentDate: formattedDate
       },
-      doctorName: `${this.doctor.firstName} ${this.doctor.lastName}`,
-      hospitalName: this.doctor.hospitalName,
     };
 
-    // Update the service with the new data
     this.bookingService.updateBookingData(bookingData);
 
-    // Navigate to the booking stepper page
     this.router.navigate(['/patient/booking-stepper']);
   }
 

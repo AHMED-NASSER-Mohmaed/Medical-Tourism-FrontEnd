@@ -106,21 +106,23 @@
           <td>{{ getAppointmentDate(booking) | date:'longDate' }}</td>
           <td>
             <span class="badge" [ngClass]="{
-              'bg-success-soft': getStatusLabel(booking.status) === 'Confirmed',
-              'bg-warning-soft text-dark': getStatusLabel(booking.status) === 'Pending',
+              'bg-success-soft': getStatusLabel(booking.status) === 'Booked',
               'bg-danger-soft': getStatusLabel(booking.status) === 'Cancelled'
             }">
               {{ getStatusLabel(booking.status) }}
             </span>
           </td>
           <td>
-            <button class="btn btn-sm btn-outline-primary me-2" (click)="viewDetails(booking.id)" title="View Details">
-              <i class="fas fa-eye"></i>
-            </button>
+<!-- In your appointments table -->
+<button class="btn btn-sm btn-outline-primary me-2"
+        (click)="viewDetails(booking)"
+        title="View Details">
+  <i class="fas fa-eye"></i>
+</button>
             <button class="btn btn-sm btn-outline-danger"
-                    (click)="cancelBooking(booking.id)"
-                    [disabled]="booking.status !== 0"
-                    [ngClass]="{'btn-dimmed': booking.status !== 0}"
+                    (click)="cancelBooking(booking.specialtyAppoinment.packageId)"
+                    [disabled]="!booking.canCancel"
+                    [ngClass]="{'btn-dimmed': !booking.canCancel}"
                     title="Cancel Booking">
               <i class="fas fa-times"></i>
             </button>
@@ -350,3 +352,102 @@
     </section>
   </div>
 </div>
+<!-- ADD THIS ENTIRE BLOCK TO YOUR profile.component.html -->
+
+<!-- ADD THIS ENTIRE BLOCK TO YOUR profile.component.html -->
+
+<!-- Booking Details Modal -->
+<div *ngIf="isModalOpen">
+  <!-- Modal Backdrop -->
+  <div class="modal-backdrop" (click)="closeModal()"></div>
+
+  <!-- Modal Content -->
+  <div class="modal-content card">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h5 class="modal-title">
+        <i class="fas fa-file-invoice-dollar me-2"></i>Booking Details
+      </h5>
+      <button type="button" class="btn-close" (click)="closeModal()"></button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body" *ngIf="selectedBookingDetails">
+      <!-- Improved Booking Summary Section -->
+      <div class="booking-summary">
+
+        <div class="summary-item">
+          <div class="summary-icon"><i class="fas fa-calendar-day"></i></div>
+          <div class="summary-text">
+            <span class="summary-label">Booking Date</span>
+            <span class="summary-value">{{ selectedBookingDetails.bookingDate | date:'fullDate' }}</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-icon"><i class="fas fa-dollar-sign"></i></div>
+          <div class="summary-text">
+            <span class="summary-label">Total Amount</span>
+            <span class="summary-value text-success">{{ selectedBookingDetails.totalAmount | currency }}</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-icon"><i class="fas fa-check-circle"></i></div>
+          <div class="summary-text">
+            <span class="summary-label">Status</span>
+            <span class="summary-value">
+              <span class="badge"[ngClass]="{
+              'bg-success-soft': selectedBookingDetails.status=== 'Booked',
+              'bg-danger-soft':selectedBookingDetails.status=== 'Cancelled'
+            }"
+               >{{ selectedBookingDetails.status }}</span>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Doctor Appointment Details -->
+      <div *ngIf="selectedBookingDetails.doctorName" class="service-section">
+        <h6 class="section-title">Doctor Appointment</h6>
+        <div class="service-details">
+          <img [src]="selectedBookingDetails.doctorImageUrl || 'https://placehold.co/100x100'" alt="Doctor" class="service-img">
+          <div class="service-info">
+            <p><strong>Dr. {{ selectedBookingDetails.doctorName }}</strong> ({{ selectedBookingDetails.doctorSpecialtyName }})</p>
+            <p><i class="fas fa-hospital me-2"></i>{{ selectedBookingDetails.hospitalName }}</p>
+            <p><i class="fas fa-calendar-alt me-2"></i>{{ selectedBookingDetails.appointmentDate | date:'longDate' }} at {{ selectedBookingDetails.appointmentExistingTime | slice:0:5 }}</p>
+          </div>
+          <div class="service-price">{{ selectedBookingDetails.appointmentPrice | currency }}</div>
+        </div>
+      </div>
+
+      <!-- Hotel Booking Details -->
+      <div *ngIf="selectedBookingDetails.hotelName" class="service-section">
+        <h6 class="section-title">Hotel Stay</h6>
+        <div class="service-details">
+          <img [src]="selectedBookingDetails.roomImageUrl || 'https://placehold.co/100x100'" alt="Hotel Room" class="service-img">
+          <div class="service-info">
+            <p><strong>{{ selectedBookingDetails.hotelName }}</strong></p>
+            <p><i class="fas fa-door-open me-2"></i>{{ getRoomTypeLabel(selectedBookingDetails.roomType) }} Room, {{ getRoomViewLabel(selectedBookingDetails.roomView) }}</p>
+            <p><i class="fas fa-calendar-alt me-2"></i>{{ selectedBookingDetails.checkInDate | date:'mediumDate' }} - {{ selectedBookingDetails.checkOutDate | date:'mediumDate' }}</p>
+          </div>
+          <div class="service-price">{{ selectedBookingDetails.hotelPrice | currency }}</div>
+        </div>
+      </div>
+
+      <!-- EDITED: Added Car Rental Details Section -->
+      <div *ngIf="selectedBookingDetails.carModel" class="service-section">
+        <h6 class="section-title">Car Rental</h6>
+        <div class="service-details">
+          <img [src]="selectedBookingDetails.carImageUrl || 'https://placehold.co/100x100'" alt="Car" class="service-img">
+          <div class="service-info">
+            <p><strong>{{ selectedBookingDetails.carModel }}</strong></p>
+            <p><i class="fas fa-building me-2"></i>{{ selectedBookingDetails.rentalCompanyName }}</p>
+            <p><i class="fas fa-calendar-alt me-2"></i>{{ selectedBookingDetails.carStartingDate | date:'mediumDate' }} - {{ selectedBookingDetails.endingStartingDate | date:'mediumDate' }}</p>
+          </div>
+          <div class="service-price">{{ selectedBookingDetails.carPrice | currency }}</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+

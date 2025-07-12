@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { faCar, faHospital, faHotel, faListAlt, faShieldAlt, faUser, faUserInjured, faUsersCog } from '@fortawesome/free-solid-svg-icons';
-import { DashboardModule } from "../../../../dashboard/dashboard.module";
+import { DashboardModule } from "../../../../features/Dash-Layout/dashboard.module";
 
 
 import { AuthService } from '../../../../auth/services/auth.service';
@@ -14,7 +14,7 @@ import { AuthService } from '../../../../auth/services/auth.service';
 })
 export class SidebarComponent implements OnInit {
 userName = 'Hospital Service Provider';
-title = 'Hospital Service Provider '; 
+title = 'Hospital Service Provider ';
   userRole = this.userName;
   avatar = 'assets/images/www-avatat.png';
   breadcrumbs = [
@@ -55,11 +55,11 @@ title = 'Hospital Service Provider ';
     }
   ];
 
-  
+
   constructor(@Inject(AuthService) public auth: AuthService, public router: Router) {}
   ngOnInit(): void {
    this.userName = this.auth.getUserName() || 'Hospital Service Provider';
-   
+
   }
 
   onLogout() {
