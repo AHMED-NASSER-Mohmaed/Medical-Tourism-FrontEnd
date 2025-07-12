@@ -1,7 +1,15 @@
-<div class="banner">
-        <h1>Find Car Rentals</h1>
-        <p>Explore our network of accredited car rentals for your medical needs.</p>
+<!-- Banner/Header -->
+<div class="page-banner">
+    <div class="banner-content">
+        <button class="btn-back" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <div class="banner-text">
+            <h2>Find Car Rentals</h2>
+            <p>Explore our network of accredited car rentals for your medical needs.</p>
+        </div>
     </div>
+</div>
 <div class="container-fluid mt-4 animate__animated animate__fadeIn">
   <div class="row">
     <!-- Sidebar Filters -->
@@ -9,17 +17,19 @@
       <app-car-rental-sidebar-filters (filtersChanged)="onFiltersChanged($event)"></app-car-rental-sidebar-filters>
     </div>
     <!-- Car Rentals List -->
-    <div class="col-lg-9">
-      <div *ngIf="loading" class="text-center my-5">
-      </div>
-      <div *ngIf="!loading && carRentals.length === 0" class="alert alert-info animate__animated animate__fadeIn">
+<div class="col-lg-9">
+    <div *ngIf="loading" class="text-center my-5">
+    </div>
+    <div *ngIf="!loading && carRentals.length === 0" class="alert alert-info animate__animated animate__fadeIn">
         No car rentals found. Try adjusting your filters.
-      </div>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4" *ngFor="let carRental of carRentals">
-          <app-car-rental-card [carRental]="carRental"></app-car-rental-card>
-        </div>
-      </div>
+    </div>
+    <!-- Changed to g-2 for minimal spacing -->
+<div class="row g-3 cards-grid">
+    <div class="col-md-6 col-lg-4" *ngFor="let carRental of carRentals">
+        <app-car-rental-card [carRental]="carRental"></app-car-rental-card>
+    </div>
+</div>
+
       <!-- Pagination -->
       <nav *ngIf="!loading && totalPages > 1" class="mt-4">
         <ul class="pagination justify-content-center">

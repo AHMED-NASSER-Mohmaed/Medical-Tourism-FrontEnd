@@ -64,12 +64,32 @@ export class RoomDetailsComponent implements OnInit {
       next: (data) => {
         this.unavailableDates = data.unavailableDates || [];
         this.unavailableDatesSet = new Set(this.unavailableDates);
+        this.checkAndSetPreselectedDates();
       },
       error: () => {
         this.unavailableDates = [];
         this.unavailableDatesSet = new Set();
       }
     });
+  }
+    checkAndSetPreselectedDates(): void {
+    const preselectedRoomApp = this.bookingData?.roomAppointment;
+    if (preselectedRoomApp && preselectedRoomApp.checkInDate && preselectedRoomApp.checkOutDate) {
+      const checkIn = new Date(preselectedRoomApp.checkInDate);
+      const checkOut = new Date(preselectedRoomApp.checkOutDate);
+      if (this.dateFilter(checkIn) && this.dateFilter(checkOut)) {
+        this.checkInDate = checkIn;
+        this.checkOutDate = checkOut;
+        console.log('Pre-selected dates are still available and have been set.');
+      } else {
+        Swal.fire('Dates No Longer Available', 'The dates you previously selected for this room are no longer available. Please choose new dates.', 'warning');
+        const currentData = this.bookingService.getBookingData();
+        delete currentData.roomAppointment;
+        this.bookingService.updateBookingData(currentData);
+         this.checkInDate = null;
+        this.checkOutDate = null;
+      }
+    }
   }
 
   fetchRoomDetails() {
@@ -114,27 +134,14 @@ export class RoomDetailsComponent implements OnInit {
   }
 
 
-  bookRoom() {
-
-   const bookingData = this.bookingService.getBookingData();
-if (!bookingData || !bookingData.specialtiyAppointment) {
-      Swal.fire({
-        icon: 'info',
-        title: 'Booking Step Required',
-        text: 'Please book a doctor\'s appointment before proceeding.',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        this.router.navigate(['/specialists']);
-      });
-      return;
-    }
+ bookRoom() {
     if (!this.checkInDate || !this.checkOutDate) {
       this.showDateError = true;
       return;
     }
-     if (this.checkOutDate <= this.checkInDate) {
-        Swal.fire('Invalid Dates', 'Check-out date must be after the check-in date.', 'error');
-        return;
+    if (this.checkOutDate <= this.checkInDate) {
+      Swal.fire('Invalid Dates', 'Check-out date must be after the check-in date.', 'error');
+      return;
     }
     this.showDateError = false;
 
@@ -144,15 +151,18 @@ if (!bookingData || !bookingData.specialtiyAppointment) {
       roomId: this.room?.id
     };
 
-
     const currentBookingData = this.bookingService.getBookingData();
     const updatedBookingData = {
       ...currentBookingData,
-      roomAppointment: roomAppointment
+      roomAppointment: roomAppointment,
+      navigationIds: {
+        ...currentBookingData.navigationIds,
+        roomId: this.room?.id,
+        hotelId: this.hotelId
+      }
     };
 
     this.bookingService.updateBookingData(updatedBookingData);
-
     this.router.navigate(['/patient/booking-stepper']);
   }
 

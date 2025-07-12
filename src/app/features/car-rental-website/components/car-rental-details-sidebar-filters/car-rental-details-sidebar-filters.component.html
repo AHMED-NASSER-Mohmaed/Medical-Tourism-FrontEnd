@@ -40,8 +40,10 @@
   </aside>
   <section class="car-cards-section">
     <div *ngIf="loading" class="loading-spinner">Loading...</div>
+
     <div class="car-cards-grid">
-      <app-available-car-card *ngFor="let car of availableCars" [car]="car"></app-available-car-card>
+        <app-available-car-card *ngFor="let car of availableCars" [car]="car"></app-available-car-card>
     </div>
+
   </section>
 </div> 

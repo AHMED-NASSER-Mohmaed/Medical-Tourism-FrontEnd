@@ -1,26 +1,33 @@
-<div class="card car-rental-card shadow-lg h-100 animate__animated animate__fadeInUp position-relative">
-  <div class="car-img-wrapper position-relative">
-    <img [src]="carRental.imageURL || carRental.assetImages?.[0]?.imageURL || 'assets/images/cover.png'" class="card-img-top car-img" alt="Car Rental Image">
-    <div class="car-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-2 animate__animated animate__fadeIn">
-      <span *ngIf="carRental.starRating" class="badge bg-dark bg-opacity-75 text-white align-self-end fs-6 animate__animated animate__fadeInDown">
-        <i class="bi bi-star-fill text-warning"></i> {{ carRental.starRating || 'N/A' }}
-      </span>
+<div class="rental-card">
+    <div class="rental-image-wrapper">
+        <img [src]="carRental.imageURL || carRental.assetImages?.[0]?.imageURL || 'assets/images/cover.png'" 
+             class="rental-image" 
+             alt="Car Rental Image">
+        <span class="rating-badge" *ngIf="carRental.starRating">
+            <i class="bi bi-star-fill"></i> {{ carRental.starRating }}
+        </span>
     </div>
-  </div>
-  <div class="card-body d-flex flex-column">
-    <h5 class="card-title mb-2 text-primary fw-bold fs-4 animate__animated animate__fadeInDown">{{ carRental.assetName || carRental.firstName + ' ' + carRental.lastName }}</h5>
-    <p class="card-text mb-2 text-secondary animate__animated animate__fadeInLeft">
-      <i class="bi bi-geo-alt-fill me-1"></i> <span class="fw-semibold">{{ carRental.city }}</span>, {{ carRental.governorateName }}
-    </p>
-    <div class="mb-3 animate__animated animate__fadeInUp">
-      <span *ngIf="carRental.models?.length" class="badge bg-info me-1 px-3 py-2 fs-6"><i class="bi bi-car-front"></i> {{ carRental.models?.join(', ') }}</span>
-      <span *ngIf="carRental.fuelTypes?.length" class="badge bg-success px-3 py-2 fs-6"><i class="bi bi-fuel-pump"></i> {{ getFuelTypes(carRental.fuelTypes) }}</span>
-      <span *ngIf="carRental.transmission !== undefined && carRental.transmission !== null" class="badge bg-warning text-dark px-3 py-2 fs-6"><i class="bi bi-gear"></i> {{ getTransmission(carRental.transmission) }}</span>
+
+    <div class="rental-content">
+        <h3 class="rental-title">{{ carRental.assetName }}</h3>
+        <div class="rental-location">
+            <i class="bi bi-geo-alt-fill"></i>
+            <span class="location-text">{{ carRental.city }}, {{ carRental.governorateName }}</span>
+        </div>
+        <div class="rental-features">
+            <span class="feature-badge" *ngIf="carRental.models?.length">
+                <i class="bi bi-car-front"></i>
+                <span class="badge-text">{{ carRental.models?.join(', ') }}</span>
+            </span>
+            <span class="feature-badge">
+                <i class="bi bi-lightning-charge"></i>
+                <span class="badge-text">Electric</span>
+            </span>
+            <span class="feature-badge">
+                <i class="bi bi-gear"></i>
+                <span class="badge-text">Automatic</span>
+            </span>
+        </div>
+        <a [routerLink]="['/car-rentals/details', carRental.id]" class="view-details-btn">View Details</a>
     </div>
-    <div class="mt-auto">
-      <a [routerLink]="['/car-rentals/details', carRental.id]" class="btn btn-gradient w-100 py-2 fs-5 animate__animated animate__pulse animate__delay-1s">
-        View Details <i class="bi bi-arrow-right"></i>
-      </a>
-    </div>
-  </div>
-</div> 
+</div>

@@ -1,177 +1,234 @@
-<div [style.margin-top.px]="0">
-<div class="car-details-container animate__animated animate__fadeIn">
-    <div class="row g-4 justify-content-center align-items-start w-100 m-0">
-      <!-- Main Card: Images & Info -->
-      <div class="col-lg-8 col-12">
-  <div class="car-details-card glassmorphism shadow-lg p-0 overflow-hidden">
-    <!-- Banner/Header -->
-    <div class="car-banner bg-gradient-primary text-white d-flex align-items-center justify-content-between px-4 py-3 animate__animated animate__fadeInDown">
-      <button class="btn btn-back btn-light me-3 animate__animated animate__fadeInLeft" (click)="goBack()">
-        <i class="bi bi-arrow-left"></i> Back
-      </button>
-      <div class="flex-grow-1 text-center">
-        <h1 class="car-title fw-bold mb-0 fs-2">{{ car?.factoryMake || '-' }} {{ car?.modelName || '-' }} <span class="text-light">({{ car?.modelYear || '-' }})</span></h1>
-        <div class="car-price-badge badge bg-warning text-dark fs-5 px-4 py-2 shadow-lg mt-2 animate__animated animate__pulse animate__delay-1s">
-          <i class="bi bi-cash-coin"></i> EGP {{ car?.pricePerDay || '-' }} <span class="unit">/day</span>
+<div *ngIf="car" class="profile-container">
+    <!-- Banner Header -->
+    <div class="page-banner">
+        <div class="banner-content">
+            <button class="btn-back" (click)="goBack()">
+                <i class="bi bi-arrow-left"></i> Back
+            </button>
+            <div class="banner-text">
+                <h2>Premium Car Rental</h2>
+                <p>Choose your perfect ride with confidence</p>
+            </div>
         </div>
-  </div>
-      <div style="width: 120px;"></div> <!-- Spacer for symmetry -->
     </div>
-    <div class="row g-0 align-items-stretch">
-      <!-- Car Images Section -->
-      <div class="col-md-5 car-images bg-light d-flex flex-column align-items-center justify-content-center p-4 animate__animated animate__fadeInLeft">
-        <div class="main-img-wrapper mb-3 position-relative w-100">
-                <img *ngIf="car && car.carImages && car.carImages.length > 0"
-            [src]="selectedImage || car.carImages[0]?.imageURL || '/assets/images/cover.png'"
-            class="img-fluid rounded main-car-img shadow-lg w-100 animate__animated animate__zoomIn"
-            alt="Car Image"
-                  style="max-height: 320px; object-fit: cover; border-radius: 1.5rem;" />
-          <img *ngIf="car && (!car.carImages || car.carImages.length === 0)" src="/assets/images/cover.png" class="img-fluid rounded main-car-img shadow-lg w-100 animate__animated animate__zoomIn" alt="Car Image" style="max-height: 320px; object-fit: cover; border-radius: 1.5rem;">
-        </div>
-        <div class="car-thumbnails mt-2 d-flex flex-wrap justify-content-center" *ngIf="car && car.carImages && car.carImages.length > 1">
-          <img *ngFor="let img of car.carImages"
-            [src]="img?.imageURL || '/assets/images/cover.png'"
-            class="img-thumbnail car-thumb mx-1 animate__animated animate__fadeInUp"
-            [class.active-thumb]="(selectedImage || car.carImages[0]?.imageURL) === (img?.imageURL || '/assets/images/cover.png')"
-            (click)="img?.imageURL ? selectImage(img.imageURL) : null"
-            alt="Car Thumbnail"
-            style="width: 60px; height: 40px; object-fit: cover; cursor: pointer; border: 2px solid #2563b6; border-radius: 0.5rem; transition: transform 0.2s;"
-                  [ngStyle]="{ transform: (selectedImage || car.carImages[0]?.imageURL) === img?.imageURL ? 'scale(1.1)' : 'scale(1)' }" />
-        </div>
-      </div>
-      <!-- Car Info Section -->
-      <div class="col-md-7 d-flex align-items-center bg-white animate__animated animate__fadeInRight">
-        <div class="card-body w-100 p-4 d-flex flex-column justify-content-between h-100">
-          <div>
-                  <h4 class="section-header mb-3 mt-2 text-primary fw-bold"><i class="bi bi-info-circle"></i> Car Information</h4>
-            <div class="car-badges mb-4 d-flex flex-wrap gap-3 justify-content-start">
-              <span class="badge bg-info px-3 py-2 fs-6 shadow"><i class="bi bi-car-front"></i> {{ getCarType() }}</span>
-              <span class="badge bg-success px-3 py-2 fs-6 shadow"><i class="bi bi-people"></i> {{ car?.capacity || '-' }} Seats</span>
-              <span class="badge bg-warning text-dark px-3 py-2 fs-6 shadow"><i class="bi bi-gear"></i> {{ getTransmission() }}</span>
-              <span class="badge bg-primary px-3 py-2 fs-6 shadow"><i class="bi bi-fuel-pump"></i> {{ getFuelType() }}</span>
-              <span class="badge bg-secondary px-3 py-2 fs-6 shadow"><i class="bi bi-building"></i> {{ car?.carRentalAssetName || '-' }}</span>
-            </div>
-            <div class="car-info-section mb-4 animate__animated animate__fadeInUp">
-              <div class="info-item mb-2"><i class="bi bi-check-circle text-success"></i> <span class="fw-semibold">Status:</span> <span class="badge bg-light text-dark ms-1">{{ car?.status || 'N/A' }}</span></div>
-              <div class="info-item mb-2"><i class="bi bi-activity text-primary"></i> <span class="fw-semibold">Available:</span> <span class="badge" [ngClass]="car?.isAvailable ? 'bg-success' : 'bg-danger'">{{ car?.isAvailable ? 'Yes' : 'No' }}</span></div>
-            </div>
-                  <hr class="my-3" />
-            <div class="car-description animate__animated animate__fadeInUp" *ngIf="car?.description">
-                    <h5 class="section-header mb-2 text-secondary fw-bold"><i class="bi bi-card-text"></i> Description</h5>
-              <span class="ms-2">{{ car?.description }}</span>
-                  </div>
+
+    <!-- Main Content Area -->
+    <div class="content-wrapper">
+        <!-- Left Column: Car Details -->
+        <div class="profile-main-content">
+            <div class="car-intro">
+                <!-- Car Image Gallery -->
+                <div class="car-images">
+                    <div class="main-img-wrapper">
+                        <div class="img-aspect-ratio">
+                            <img *ngIf="car && car.carImages && car.carImages.length > 0"
+                                [src]="selectedImage || car.carImages[0]?.imageURL || '/assets/images/cover.png'"
+                                class="main-car-img animate__animated animate__fadeIn"
+                                alt="Car Image">
+                            <img *ngIf="car && (!car.carImages || car.carImages.length === 0)"
+                                src="/assets/images/cover.png"
+                                class="main-car-img animate__animated animate__fadeIn"
+                                alt="Car Image">
+                        </div>
+                    </div>
+                    <div class="car-thumbnails" *ngIf="car && car.carImages && car.carImages.length > 1">
+                        <img *ngFor="let img of car.carImages"
+                            [src]="img?.imageURL || '/assets/images/cover.png'"
+                            class="car-thumb animate__animated animate__fadeInUp"
+                            [class.active-thumb]="(selectedImage || car.carImages[0]?.imageURL) === (img?.imageURL || '/assets/images/cover.png')"
+                            (click)="img?.imageURL ? selectImage(img.imageURL) : null"
+                            alt="Car Thumbnail">
+                    </div>
                 </div>
-              </div>
+
+                <!-- Car Details -->
+                <div class="car-details">
+                    <h1 class="animate__animated animate__fadeInDown">
+                        {{ car?.factoryMake || '-' }} {{ car?.modelName || '-' }}
+                        <span class="model-year">({{ car?.modelYear || '-' }})</span>
+                    </h1>
+                    <div class="price-tag animate__animated animate__fadeInUp">
+                        <i class="bi bi-cash-coin"></i>
+                        EGP {{ car?.pricePerDay || '-' }}
+                        <span class="unit">/day</span>
+                    </div>
+
+                    <!-- Car Features Badges -->
+                    <div class="car-badges">
+                        <span class="feature-badge">
+                            <i class="bi bi-car-front"></i> {{ getCarType() }}
+                        </span>
+                        <span class="feature-badge">
+                            <i class="bi bi-people"></i> {{ car?.capacity || '-' }} Seats
+                        </span>
+                        <span class="feature-badge">
+                            <i class="bi bi-gear"></i> {{ getTransmission() }}
+                        </span>
+                        <span class="feature-badge">
+                            <i class="bi bi-fuel-pump"></i> {{ getFuelType() }}
+                        </span>
+                    </div>
+
+                    <!-- Detailed Information -->
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="label">Rental Agency</span>
+                            <span class="value">{{ car?.carRentalAssetName || '-' }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Status</span>
+                            <span class="value">
+                                <span class="status-badge" [class.available]="car?.isAvailable">
+                                    {{ car?.isAvailable ? 'Available' : 'Not Available' }}
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            <!-- Car Description -->
+            <div class="about-car" *ngIf="car?.description">
+                <h3><i class="bi bi-info-circle"></i> About This Car</h3>
+                <p>{{ car?.description }}</p>
+            </div>
         </div>
-      </div>
-      <!-- Sidebar: Booking -->
-      <div class="col-lg-4 col-12">
-        <aside class="car-booking-sidebar animate__animated animate__fadeInRight animate__faster" [style.top.px]="navbarHeightPx - 20">
-          <div class="sidebar-card booking-card shadow-lg animate__animated animate__zoomIn animate__faster position-relative">
-            <h3 class="mb-4 animate__animated animate__fadeInDown text-center">BOOK THIS CAR</h3>
-            <!-- Loading Spinner Overlay (sidebar only) -->
-            <div *ngIf="loading" class="loading-overlay-sidebar d-flex justify-content-center align-items-center">
-              <mat-spinner diameter="50"></mat-spinner>
+
+        <!-- Right Column: Booking Form -->
+        <aside class="profile-sidebar">
+            <div class="sidebar-card booking-card">
+                <h3>BOOK THIS CAR</h3>
+
+                <!-- Pre-allocated space for messages -->
+    <div class="message-container">
+        <div class="message-content">
+            <div *ngIf="bookingError" class="alert alert-danger animate__animated animate__fadeIn">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                {{ bookingError }}
             </div>
-            <ng-container *ngIf="car?.isAvailable; else notAvailable">
-              <form (ngSubmit)="bookCar()" #carBookingForm="ngForm" novalidate autocomplete="off">
-                <div class="mb-3">
-                  <div class="row g-2 align-items-center">
-                    <div class="col-7">
-                      <mat-form-field appearance="fill" class="custom-datepicker w-100">
-                        <mat-label>Pick-up Date</mat-label>
-                        <input matInput
-                               [matDatepicker]="pickupPicker"
-                               [(ngModel)]="pickupDateTime"
-                               name="pickupDateTime"
-                               required
-                               readonly
-                               (click)="pickupPicker.open()"
-                               placeholder="Choose pick-up date"
-                               [ngClass]="{'is-invalid': carBookingForm.submitted && !pickupDateTime}"
-                               [matDatepickerFilter]="dateFilter">
-                        <mat-datepicker-toggle matSuffix [for]="pickupPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #pickupPicker></mat-datepicker>
-                      </mat-form-field>
-                    </div>
-                    <div class="col-5">
-                      <label class="form-label mb-1">Pick-up Time</label>
-                      <input type="time" class="form-control animate__animated animate__fadeInUp" [(ngModel)]="pickupTime" name="pickupTime" required [ngClass]="{'is-invalid': carBookingForm.submitted && !pickupTime}">
-                    </div>
-                  </div>
-                  <div *ngIf="carBookingForm.submitted && (!pickupDateTime || !pickupTime)" class="invalid-feedback d-block animate__animated animate__shakeX">Pick-up date and time are required.</div>
+            <div *ngIf="bookingSuccess" class="alert alert-success animate__animated animate__fadeIn">
+                <i class="bi bi-check-circle-fill"></i>
+                {{ bookingSuccess }}
+            </div>
+            <!-- This will show when no errors/success -->
+            <div *ngIf="!bookingError && !bookingSuccess" class="alert alert-info">
+                <i class="bi bi-info-circle-fill"></i>
+                Fill in the details to book your car
+            </div>
+        </div>
+    </div>
+
+                <div *ngIf="loading" class="loading-overlay">
+                    <mat-spinner diameter="50"></mat-spinner>
                 </div>
-                <div class="mb-3">
-                  <div class="row g-2 align-items-center">
-                    <div class="col-7">
-                      <mat-form-field appearance="fill" class="custom-datepicker w-100">
-                        <mat-label>Drop-off Date</mat-label>
-                        <input matInput
-                               [matDatepicker]="dropoffPicker"
-                               [(ngModel)]="dropoffDateTime"
-                               name="dropoffDateTime"
-                               required
-                               readonly
-                               (click)="dropoffPicker.open()"
-                               placeholder="Choose drop-off date"
-                               [ngClass]="{'is-invalid': carBookingForm.submitted && !dropoffDateTime}"
-                               [matDatepickerFilter]="dateFilter">
-                        <mat-datepicker-toggle matSuffix [for]="dropoffPicker"></mat-datepicker-toggle>
-                        <mat-datepicker #dropoffPicker></mat-datepicker>
-                      </mat-form-field>
+
+                <ng-container *ngIf="car?.isAvailable; else notAvailable">
+                    <form (ngSubmit)="bookCar()" #carBookingForm="ngForm" novalidate autocomplete="off">
+                        <!-- Pick-up Date -->
+                        <div class="form-group">
+                            <mat-form-field appearance="fill" class="custom-datepicker">
+                                <mat-label>Pick-up Date</mat-label>
+                                <input matInput
+                                    [matDatepicker]="pickupPicker"
+                                    [(ngModel)]="pickupDateTime"
+                                    name="pickupDateTime"
+                                    [min]="minDate"
+                                    required
+                                    readonly
+                                    (click)="pickupPicker.open()"
+                                    [matDatepickerFilter]="dateFilter">
+                                <mat-datepicker-toggle matSuffix [for]="pickupPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #pickupPicker></mat-datepicker>
+                            </mat-form-field>
+                            <div *ngIf="carBookingForm.submitted && !pickupDateTime" class="validation-error">
+                                Pick-up date is required
+                            </div>
+                        </div>
+
+                        <!-- Drop-off Date -->
+                        <div class="form-group">
+                            <mat-form-field appearance="fill" class="custom-datepicker">
+                                <mat-label>Drop-off Date</mat-label>
+                                <input matInput
+                                    [matDatepicker]="dropoffPicker"
+                                    [(ngModel)]="dropoffDateTime"
+                                    name="dropoffDateTime"
+                                    [min]="minDate"
+                                    required
+                                    readonly
+                                    (click)="dropoffPicker.open()"
+                                    [matDatepickerFilter]="dateFilter">
+                                <mat-datepicker-toggle matSuffix [for]="dropoffPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #dropoffPicker></mat-datepicker>
+                            </mat-form-field>
+                            <div *ngIf="carBookingForm.submitted && !dropoffDateTime" class="validation-error">
+                                Drop-off date is required
+                            </div>
+                        </div>
+
+                        <!-- Location -->
+  <div class="form-group">
+    <label for="locationDescription">Pick-up Location</label>
+    <div class="location-input-wrapper">
+        <input type="text"
+            id="locationDescription"
+            class="form-control"
+            [(ngModel)]="locationDescription"
+            name="locationDescription"
+            required
+            placeholder="Enter location">
+        <div class="location-status" [class.success]="locationAvailable" [class.error]="!locationAvailable">
+            <span class="status-text">
+                <i class="bi" [class.bi-geo-alt-fill]="locationAvailable"
+                   [class.bi-geo-alt-slash]="!locationAvailable"></i>
+                {{ locationAvailable ? 'Location detected' : 'Location not available' }}
+            </span>
+            <button *ngIf="!locationAvailable"
+                    type="button"
+                    class="btn-retry-compact"
+                    (click)="retryGeolocation()"
+                    [disabled]="retryingLocation">
+                <i class="bi bi-arrow-repeat" [class.spinning]="retryingLocation"></i>
+                Retry
+            </button>
+        </div>
+    </div>
+</div>
+
+                        <!-- Fuel Policy -->
+                        <div class="form-group">
+                            <label for="fuelPolicy">Fuel Policy</label>
+                            <select id="fuelPolicy"
+                                    class="form-select"
+                                    [(ngModel)]="fuelPolicy"
+                                    name="fuelPolicy"
+                                    required>
+                                <option [ngValue]="0">Full to Full</option>
+                                <option [ngValue]="1">Full to Empty</option>
+                                <option [ngValue]="2">Empty to Full</option>
+                                <option [ngValue]="3">Empty to Empty</option>
+                            </select>
+                            <div *ngIf="carBookingForm.submitted && fuelPolicy === null" class="validation-error">
+                                Fuel policy is required
+                            </div>
+                        </div>
+
+                        <!-- Book Now Button -->
+                        <button type="submit"
+                                class="booking-button"
+                                [disabled]="loading">
+                            <i class="bi bi-calendar-check"></i> Book Now
+                        </button>
+                    </form>
+                </ng-container>
+
+                <ng-template #notAvailable>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Sorry, this car is not available for booking right now.</strong>
                     </div>
-                    <div class="col-5">
-                      <label class="form-label mb-1">Drop-off Time</label>
-                      <input type="time" class="form-control animate__animated animate__fadeInUp" [(ngModel)]="dropoffTime" name="dropoffTime" required [ngClass]="{'is-invalid': carBookingForm.submitted && !dropoffTime}">
-                    </div>
-                  </div>
-                  <div *ngIf="carBookingForm.submitted && (!dropoffDateTime || !dropoffTime)" class="invalid-feedback d-block animate__animated animate__shakeX">Drop-off date and time are required.</div>
-                </div>
-              <div class="mb-3">
-                <label for="locationDescription" class="form-label">Pick-up Location</label>
-                <input type="text" id="locationDescription" class="form-control animate__animated animate__fadeInUp" [(ngModel)]="locationDescription" name="locationDescription" required placeholder="Enter location" [ngClass]="{'is-invalid': carBookingForm.submitted && !locationDescription}">
-                <div *ngIf="carBookingForm.submitted && !locationDescription" class="invalid-feedback d-block animate__animated animate__shakeX">Location is required.</div>
-                <div *ngIf="locationAvailable; else noLocation" class="text-success mt-1"><i class="bi bi-geo-alt-fill"></i> Location detected</div>
-                <ng-template #noLocation>
-                  <div class="text-warning mt-1 d-flex align-items-center gap-2 animate__animated animate__fadeIn">
-                    <i class="bi bi-geo-alt-slash"></i> Location not available
-                    <button type="button"
-                            class="btn btn-outline-primary btn-sm ms-2 animate__animated animate__pulse animate__infinite"
-                            (click)="retryGeolocation()"
-                            [disabled]="retryingLocation">
-                      <span *ngIf="!retryingLocation"><i class="bi bi-arrow-repeat"></i> Retry</span>
-                      <span *ngIf="retryingLocation" class="spinner-border spinner-border-sm align-middle" role="status" aria-hidden="true"></span>
-                    </button>
-                  </div>
                 </ng-template>
-              </div>
-              <div class="mb-3">
-                <label for="fuelPolicy" class="form-label">Fuel Policy</label>
-                <select id="fuelPolicy" class="form-select animate__animated animate__fadeInUp" [(ngModel)]="fuelPolicy" name="fuelPolicy" required [ngClass]="{'is-invalid': carBookingForm.submitted && fuelPolicy === null}">
-                  <option [ngValue]="0">Full to Full</option>
-                  <option [ngValue]="1">Full to Empty</option>
-                  <option [ngValue]="2">Empty to Full</option>
-                  <option [ngValue]="3">Empty to Empty</option>
-                </select>
-                <div *ngIf="carBookingForm.submitted && fuelPolicy === null" class="invalid-feedback d-block animate__animated animate__shakeX">Fuel policy is required.</div>
-              </div>
-              <div *ngIf="bookingError" class="alert alert-danger mb-2 animate__animated animate__shakeX">{{ bookingError }}</div>
-              <div *ngIf="bookingSuccess" class="alert alert-success mb-2 animate__animated animate__fadeIn">{{ bookingSuccess }}</div>
-              <button type="submit" class="btn btn-gradient btn-lg w-100 mt-2 animate__animated animate__pulse animate__infinite" [disabled]="loading">
-                <i class="bi bi-calendar-check me-2"></i> Book Now
-              </button>
-            </form>
-          </ng-container>
-          <ng-template #notAvailable>
-            <div class="alert alert-warning text-center animate__animated animate__fadeIn">
-              <i class="bi bi-exclamation-triangle-fill me-2"></i>
-              <strong>Sorry, this car is not available for booking right now.</strong>
             </div>
-          </ng-template>
-        </div>
-      </aside>
+        </aside>
     </div>
-  </div>
-</div> 
+</div>
