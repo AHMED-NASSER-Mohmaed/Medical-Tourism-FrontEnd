@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HotelWebsiteService } from '../../services/hotel-website.service';
 import { Room } from '../../models/room.model';
-import { BreadcrumbService } from '../../../../shared/services/BreadcrumbService';
 import Swal from 'sweetalert2';
+import { BookingService } from '../../../patient/services/Booking.service';
 
 @Component({
   selector: 'app-room-details',
@@ -17,7 +17,7 @@ export class RoomDetailsComponent implements OnInit {
   room?: Room;
   loading = false;
   error: string | null = null;
-  selectedImage?: string; 
+  selectedImage?: string;
 
   // Booking sidebar state
   unavailableDates: string[] = [];
@@ -29,30 +29,29 @@ export class RoomDetailsComponent implements OnInit {
   bookingError: string = '';
   bookingSuccess: string = '';
 
-  breadcrumbTrail: any[] = [];
+  bookingData: any = {};
 
   constructor(
     private route: ActivatedRoute,
     private hotelService: HotelWebsiteService,
     private router: Router,
-    private breadcrumbService: BreadcrumbService
+    private bookingService: BookingService
   ) {}
 
   ngOnInit() {
+    this.bookingData = this.bookingService.getBookingData();
+    console.log('Booking data received in RoomDetailsComponent:', this.bookingData);
+
     this.route.paramMap.subscribe(params => {
       this.hotelId = params.get('hotelId')!;
       this.roomId = params.get('roomId')!;
       this.fetchRoomDetails();
       this.fetchUnavailableDates();
       this.setMinDate();
-      // Use pending breadcrumb trail from service if available
-      const pendingTrail = this.breadcrumbService.getPendingBreadcrumbTrail();
-      if (pendingTrail) {
-        this.breadcrumbTrail = pendingTrail;
-        this.breadcrumbService.clearPendingBreadcrumbTrail();
-      }
-      this.setBreadcrumbs();
     });
+
+
+
   }
 
   setMinDate() {
@@ -78,16 +77,12 @@ export class RoomDetailsComponent implements OnInit {
     this.error = null;
     this.hotelService.getHotelRooms(this.hotelId, { PageNumber: 1, PageSize: 100 }).subscribe({
       next: (data) => {
-        console.log('Fetched rooms:', data.items.map(r => r.id));
-        console.log('Looking for roomId:', this.roomId, typeof this.roomId);
         this.room = data.items.find(r => String(r.id) === String(this.roomId));
         if (!this.room) {
           this.error = 'Room not found.';
         }
-        // Reset selectedImage when room changes
-        this.selectedImage = undefined;
+        this.selectedImage = this.room?.roomImages?.[0]?.imageURL;
         this.loading = false;
-        this.setBreadcrumbs();
       },
       error: () => {
         this.error = 'Failed to load room details.';
@@ -118,75 +113,61 @@ export class RoomDetailsComponent implements OnInit {
     return this.room?.roomImages?.[0]?.imageURL || '';
   }
 
-  // Booking logic
+
   bookRoom() {
+
+   const bookingData = this.bookingService.getBookingData();
+if (!bookingData || !bookingData.specialtiyAppointment) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Booking Step Required',
+        text: 'Please book a doctor\'s appointment before proceeding.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.router.navigate(['/specialists']);
+      });
+      return;
+    }
     if (!this.checkInDate || !this.checkOutDate) {
       this.showDateError = true;
       return;
     }
+     if (this.checkOutDate <= this.checkInDate) {
+        Swal.fire('Invalid Dates', 'Check-out date must be after the check-in date.', 'error');
+        return;
+    }
     this.showDateError = false;
-    Swal.fire({
-      title: 'Need a Car Rental?',
-      text: "We can help you find the best car rentals for your stay.",
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#aaa',
-      confirmButtonText: '🚗 Yes, find a car!',
-      cancelButtonText: 'Skip'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.router.navigate(['/car-rentals']);
-      } else {
-        this.router.navigate(['/payment']);
-      }
-    });
-  }
 
-  isDateUnavailable(dateStr: string): boolean {
-    return this.unavailableDatesSet.has(dateStr);
-  }
-
-  parseDate(dateStr: string) {
-    const d = new Date(dateStr);
-    return {
-      year: d.getFullYear(),
-      month: d.getMonth() + 1,
-      day: d.getDate()
+    const roomAppointment = {
+      checkInDate: this.formatDate(this.checkInDate),
+      checkOutDate: this.formatDate(this.checkOutDate),
+      roomId: this.room?.id
     };
+
+
+    const currentBookingData = this.bookingService.getBookingData();
+    const updatedBookingData = {
+      ...currentBookingData,
+      roomAppointment: roomAppointment
+    };
+
+    this.bookingService.updateBookingData(updatedBookingData);
+
+    this.router.navigate(['/patient/booking-stepper']);
   }
 
   formatDate(date: Date | null): string {
     if (!date) return '';
-    // Use UTC to avoid timezone issues
-    const year = date.getUTCFullYear();
-    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
-    const day = date.getUTCDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
     return `${year}-${month}-${day}`;
   }
 
-  setBreadcrumbs() {
-    const url = this.router.url;
-    this.breadcrumbService.setBreadcrumbs([
-      ...this.breadcrumbTrail.map(bc => {
-        if (bc.label === 'Doctor-List') {
-          return { ...bc, url: '/hospitals' };
-        }
-        // Remove 'Room Details' from the incoming trail if present
-        if (bc.label === 'Room Details') {
-          return null;
-        }
-        return bc;
-      }).filter(Boolean),
-      { label: 'Hotels', url: '/hotels' },
-      { label: `Room ${this.room?.roomNumber} - ${this.roomTypeLabel(this.room?.roomType)}`, url }
-    ]);
-  }
 
   dateFilter = (date: Date | null): boolean => {
     if (!date) return true;
     const formatted = this.formatDate(date);
-    console.log('Checking date:', formatted, 'Unavailable:', this.unavailableDatesSet.has(formatted));
     return !this.unavailableDatesSet.has(formatted);
   }
 

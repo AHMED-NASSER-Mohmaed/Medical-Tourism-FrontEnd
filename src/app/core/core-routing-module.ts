@@ -6,9 +6,10 @@ import { FaqComponent } from './layout/faq/faq.component';
 
 
 
+
 const routes: Routes = [
   { path: '', component: HomeComponent },
-  {path:'faq', component:FaqComponent}
+  {path:'faq', component:FaqComponent},
 
 
 

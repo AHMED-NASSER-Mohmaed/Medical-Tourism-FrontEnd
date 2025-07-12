@@ -8,20 +8,18 @@ import { RegisterCarRentalComponent } from './pages/register/service-provider//r
 import { ConfirmEmailComponent } from './pages/confirm-email/confirm-email.component';
 import { PasswordRecoveryComponent } from './pages/password-recovery/password-recovery.component';
 import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { PublicGuard } from './guards/public.guard';
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'register/patient', component: RegisterPatientComponent },
-  { path: 'register/hotel', component: RegisterHotelComponent },
-  { path: 'register/hospital', component: RegisterHospitalComponent },
-  { path: 'register/car', component: RegisterCarRentalComponent },
+{ path: 'login', component: LoginComponent, canActivate: [PublicGuard] },
+  { path: 'register/patient', component: RegisterPatientComponent, canActivate: [PublicGuard] },
+  { path: 'register/hotel', component: RegisterHotelComponent, canActivate: [PublicGuard] },
+  { path: 'register/hospital', component: RegisterHospitalComponent, canActivate: [PublicGuard] },
+  { path: 'register/car', component: RegisterCarRentalComponent, canActivate: [PublicGuard] },
 { path: 'confirm-email', component: ConfirmEmailComponent },
 { path: 'confirm-new-email', component: ConfirmEmailComponent },
 
-  {path: 'recover', component: PasswordRecoveryComponent},
-  {
-  path: 'reset-password',
-  component: ResetPasswordComponent
-}
+  { path: 'recover', component: PasswordRecoveryComponent, canActivate: [PublicGuard] },
+  { path: 'reset-password', component: ResetPasswordComponent, canActivate: [PublicGuard] }
 
 ];
 

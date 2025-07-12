@@ -189,7 +189,6 @@ export class AddHotelProviderComponent implements OnInit {
         countryId: Number(formValue.countryId),
         countryName: country?.countryName,
         dateOfBirth: new Date(formValue.dateOfBirth).toISOString(),
-
         // Asset fields
         assetName: formValue.assetName,
         assetDescription: formValue.assetDescription,
@@ -210,10 +209,10 @@ export class AddHotelProviderComponent implements OnInit {
         hasPool: formValue.hasPool,
         hasRestaurant: formValue.hasRestaurant
       };
-
       this.superAdminService.addHotelProvider(payload).subscribe({
         next: (newHotel) => {
           this.isLoading = false;
+          // SweetAlert2 toast is already shown by the service
           if (newHotel?.id) {
             this.router.navigate(['/super-admin/providers/hotels', newHotel.id]);
           } else {
@@ -222,12 +221,8 @@ export class AddHotelProviderComponent implements OnInit {
         },
         error: (err) => {
           this.isLoading = false;
-          console.error('Error adding hotel:', err);
-          if (err.status === 400) {
-            this.apiError = 'Validation failed: ' + (err.error?.technicalMessage || 'Please check all required fields');
-          } else {
-            this.apiError = err.userMessage || 'Failed to create hotel provider';
-          }
+          // SweetAlert2 toast is already shown by the service
+          this.apiError = err.userMessage || 'Failed to create hotel provider';
         }
       });
     } else {

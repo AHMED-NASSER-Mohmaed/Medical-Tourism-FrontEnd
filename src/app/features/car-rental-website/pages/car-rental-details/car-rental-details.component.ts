@@ -103,4 +103,4 @@ export class CarRentalDetailsComponent implements OnInit {
   goBack() {
     this.router.navigate(['/car-rentals']);
   }
-} 
+}

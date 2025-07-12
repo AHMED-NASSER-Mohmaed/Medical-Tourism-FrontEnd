@@ -23,10 +23,12 @@ constructor(
   private authService: AuthService,
     private router: Router,
 ) {
+    this.authService.checkTokenAndLogoutIfExpired();
 
 
 }
 ngOnInit(): void {
+    // this.handleInitialRedirect();
 
     this.authService.loginStatus$.subscribe(() => {
       const role = this.authService.getUserRole();
@@ -44,6 +46,26 @@ ngOnInit(): void {
     this.checkRouteVisibility();
 
 }
+
+// private handleInitialRedirect(): void {
+
+//     this.authService.loginStatus$.pipe(take(1)).subscribe(isLoggedIn => {
+
+//       if (isLoggedIn && this.router.url === '/') {
+//         const role = this.authService.getUserRole();
+//         console.log(`User is already logged in with role: ${role}. Redirecting...`);
+
+
+//         if (role === 'SuperAdmin') {
+//           this.router.navigate(['/super-admin']);
+//         } else if (role === 'Patient') {
+//           this.router.navigate(['/profile']);
+//         } else if (role === 'HospitalServiceProvider') {
+//           this.router.navigate(['/hospitalProvider/specialists']);
+//         }
+//       }
+//     });
+//   }
 checkRouteVisibility(): void {
   const currentRoute = this.router.url;
 

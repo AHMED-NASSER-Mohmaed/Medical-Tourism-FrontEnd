@@ -90,4 +90,20 @@ getHospitals(
     return this.http.get<any[]>(url);
   }
 
+    getAppointmentHistory(pageNumber: number, pageSize: number): Observable<any> {
+    const url = `${environment.apiUrl}/patient/profile/history?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+    return this.http.get<any>(url);
+  }
+    getBookingDetails(packageId: string): Observable<any> {
+    const url = `${environment.apiUrl}/patient/profile/history/details?packageId=${packageId}`;
+    return this.http.post<any>(url,{});
+  }
+
+
+
+  cancelBooking(bookingId: string): Observable<any> {
+    const url = `${environment.apiUrl}/patient/profile/history?packageId=${bookingId}`;
+    return this.http.post(url, {});
+  }
+
 }

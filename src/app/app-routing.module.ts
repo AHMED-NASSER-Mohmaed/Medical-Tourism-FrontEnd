@@ -1,40 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DisplayAllHospitalsComponent } from './features/patient/pages/Hospitals/display-all-hospitals/display-all-hospitals.component';
-
-import { DashBoardComponent } from './features/hospitalServiceProvider/Pages/dash-board/dash-board.component';
-import { SpecialistsListComponent } from './features/hospitalServiceProvider/Pages/Specialists/specialists-list/specialists-list.component';
-import { DoctorsListComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-list/doctors-list.component';
-import { SidebarComponent } from './features/hospitalServiceProvider/components/sidebar/sidebar.component';
-import { AppointmentsListComponent } from './features/hospitalServiceProvider/Pages/appointments/appointments-list/appointments-list.component';
-import { DoctorsFormComponent } from './features/hospitalServiceProvider/Pages/doctors/doctors-form/doctors-form.component';
-import { AppointmentFormComponent } from './features/hospitalServiceProvider/Pages/appointments/appointment-form/appointment-form.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
-
-
-import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
-import { DisbursementDetailsComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement-details/disbursement-details.component';
-
+import { LockComponent } from './shared/components/lock/lock.component';
+import { UnauthComponent } from './shared/components/unauth/unauth.component';
 
 
 const routes: Routes = [
-  {
-    path: 'hospitalProvider',component: SidebarComponent,
-    children: [
-      { path: 'dashboard', component: DashBoardComponent },
-      { path: 'specialists', component: SpecialistsListComponent },
-      { path: 'doctors', component: DoctorsListComponent },
-      { path: 'appointments', component: AppointmentsListComponent },
-      {path: 'doctor/add', component: DoctorsFormComponent},
-      {path: 'doctors/edit/:id', component: DoctorsFormComponent},
-      {path: 'schedule/add', component: AppointmentFormComponent},
-      {path: 'schedule/edit/:id', component: AppointmentFormComponent},
-      { path: 'disbursements' , component:DisbursementComponent},
-      {path: 'disbursement/:id', component: DisbursementDetailsComponent},
-    ]
-  },
-  { path: 'hospitals', component: DisplayAllHospitalsComponent },
-  
+{
+  path: 'hospitalProvider',
+  loadChildren: () => import('../app/features/hospitalServiceProvider/hospitalSrvProv.module').then(m => m.HospitalServiceProviderModule)
+},
+
 
   {
     path: 'super-admin',
@@ -78,6 +54,9 @@ const routes: Routes = [
   },
 
   { path: 'hotels', loadChildren: () => import('./features/hotel-website/hotel-website.module').then(m => m.HotelWebsiteModule) },
+
+ {path:'lock' ,component:LockComponent,data: { hideNavFooter: true }},
+   {path:'unauth' ,component:UnauthComponent,data: { hideNavFooter: true }},
 
 
 

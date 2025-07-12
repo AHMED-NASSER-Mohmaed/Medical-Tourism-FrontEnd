@@ -5,7 +5,6 @@ import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ToastrModule } from 'ngx-toastr';
 import { SuperAdminRoutingModule } from './super-admin-routing.module';
-import { DashboardModule } from '../../dashboard/dashboard.module';
 import { SharedModule } from '../../shared/shared.module';
 import { ManageProvidersComponent } from './pages/manage-providers/manage-providers.component';
 import { AddHospitalProviderComponent } from './pages/providers/add-hospital-provider/add-hospital-provider.component';
@@ -25,6 +24,8 @@ import { HospitalsAccountsComponent } from './pages/manage-accounts/hospitals-ac
 import { HotelsAccountsComponent } from './pages/manage-accounts/hotels-accounts/hotels-accounts.component';
 import { CarRentalsAccountsComponent } from './pages/manage-accounts/car-rentals-accounts/car-rentals-accounts.component';
 import { AddPatientProviderComponent } from './pages/providers/add-patient-provider/add-patient-provider.component';
+import { DashboardModule } from '../Dash-Layout/dashboard.module';
+
 
 @NgModule({
   declarations: [
@@ -42,21 +43,24 @@ import { AddPatientProviderComponent } from './pages/providers/add-patient-provi
     HospitalsAccountsComponent,
     HotelsAccountsComponent,
     CarRentalsAccountsComponent,
-    AddPatientProviderComponent
+    AddPatientProviderComponent,
+
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    DashboardModule,
     FontAwesomeModule,
     SuperAdminRoutingModule,
-    DashboardModule,
     RouterModule,
-    SharedModule,
+    StatusLabelPipe,
+
     ToastrModule.forRoot({
-      positionClass: 'toast-bottom-right',
-      preventDuplicates: true
-    })
-  ]
+        positionClass: 'toast-bottom-right',
+        preventDuplicates: true
+    }),
+    SharedModule
+]
 })
 export class SuperAdminModule { }

@@ -2,13 +2,6 @@
 @import "leaflet/dist/leaflet.css";
 
 
-
-
-@import "leaflet/dist/leaflet.css";
-
-/* You can add global styles to this file, and also import other style files */
-/* Import Bootstrap */
-@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height: 100vh;
   display: flex;
@@ -18,6 +11,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; min-height:
 
  .navbar + * { margin-top: 0 !important; }
 
+.cdk-overlay-container, .cdk-overlay-pane {
+  z-index: 5000 !important;
+}
 
 .app-root, app-root {
   display: flex;

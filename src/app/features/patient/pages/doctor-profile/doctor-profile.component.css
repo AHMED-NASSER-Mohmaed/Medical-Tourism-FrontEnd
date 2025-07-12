@@ -1,220 +1,206 @@
-
-        /* Main Layout Container */
-        .profile-container {
-            display: grid;
-            grid-template-columns: 1fr; /* Single column on mobile */
-            gap: 2rem;
-            max-width: 1280px;
-            margin: auto;
-            padding: 2rem;
-            margin-top: 5px;
-        }
-
-        /* Two-column layout on larger screens */
-        @media (min-width: 1024px) {
-            .profile-container {
-                grid-template-columns: 2fr 1fr;
-            }
-        }
-
-        /* Left and Right Columns */
-        .profile-main-content {
-            background-color: #fff;
-            padding: 2rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-
-        .profile-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Doctor Intro Section */
-        .doctor-intro {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        @media (min-width: 768px) {
-            .doctor-intro {
-                grid-template-columns: 1fr 2fr;
-            }
-        }
-
-        .doctor-intro img {
-            border-radius: 0.5rem;
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-
-        .doctor-details h1 {
-            font-size: 2.25rem;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .doctor-details .specialty {
-            font-size: 1.125rem;
-            color: #4b5563;
-            margin-bottom: 1.5rem;
-        }
-
-        .details-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .detail-item {
-            display: flex;
-            align-items: baseline;
-        }
-
-        .detail-item .label {
-            font-weight: 600;
-            color: #1f2937;
-            width: 128px;
-            flex-shrink: 0;
-        }
-
-        .detail-item .value {
-            color: #4b5563;
-        }
-
-        /* About Doctor Section */
-        .about-doctor h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #111827;
-            margin-bottom: 0.75rem;
-        }
-
-        .about-doctor p {
-            color: #4b5563;
-            line-height: 1.75;
-        }
-
-        /* Sidebar Cards */
-        .sidebar-card {
-            padding: 1.5rem;
-            border-radius: 0.75rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
-        }
-
-        .schedule-card {
-            background-color: #4338ca; /* A nice indigo color */
-            color: white;
-        }
-
-        .schedule-card h3, .booking-card h3 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            margin: 0 0 1rem 0;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .booking-card h3 {
-            color: #111827;
-            border-bottom-color: #e5e7eb;
-        }
-
-        .schedule-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.875rem;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        .schedule-item:last-child {
-            border-bottom: none;
-        }
-        .schedule-item .price {
-            font-weight: 700;
-            font-size: 1.125rem;
-        }
-
-        .booking-card {
-            background-color: #fff;
-        }
-
-        .booking-card form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .booking-card input, .booking-card textarea {
-            width: 100%;
-            padding: 0.75rem;
-            background-color: #f3f4f6;
-            border-radius: 0.375rem;
-            border: 1px solid #d1d5db;
-            box-sizing: border-box;
-        }
-        .booking-card input:focus, .booking-card textarea:focus {
-            outline: 2px solid #ec4899; /* pink-500 */
-            border-color: transparent;
-        }
-
-        .booking-card button {
-            width: 100%;
-            background-color: #ec4899;
-            color: white;
-            font-weight: 700;
-            padding: 0.75rem;
-            border-radius: 0.375rem;
-            border: none;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .booking-card button:hover {
-            background-color: #db2777;
-        }
-
-        /* EDITED: Custom styles for the Material Datepicker */
-:host ::ng-deep .custom-datepicker {
-    width: 100%; /* Make the form field take full width */
+/* Main Layout Container */
+.profile-container {
+    display: grid;
+    grid-template-columns: 1fr; /* Single column on mobile */
+    gap: 2rem;
+    max-width: 1280px;
+    margin: auto;
+    margin-top: 7rem;
+    padding: 2rem;
 }
 
-:host ::ng-deep .custom-datepicker .mat-form-field-wrapper {
+/* Two-column layout on larger screens */
+@media (min-width: 1024px) {
+    .profile-container {
+        grid-template-columns: 2fr 1fr;
+    }
+}
+
+/* Left and Right Columns */
+.profile-main-content {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.profile-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Doctor Intro Section */
+.doctor-intro {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+@media (min-width: 768px) {
+    .doctor-intro {
+        grid-template-columns: 1fr 2fr;
+    }
+}
+
+.doctor-intro img {
+    border-radius: 0.5rem;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.doctor-details h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.doctor-details .specialty {
+    font-size: 1.125rem;
+    color: #4b5563;
+    margin-bottom: 1.5rem;
+}
+
+.details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.detail-item {
+    display: flex;
+    align-items: baseline;
+}
+
+.detail-item .label {
+    font-weight: 600;
+    color: #1f2937;
+    width: 128px;
+    flex-shrink: 0;
+}
+
+.detail-item .value {
+    color: #4b5563;
+}
+
+/* About Doctor Section */
+.about-doctor h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 0.75rem;
+}
+
+.about-doctor p {
+    color: #4b5563;
+    line-height: 1.75;
+}
+
+/* Sidebar Cards */
+.sidebar-card {
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+.schedule-card {
+    background-color: #4338ca;
+    color: white;
+}
+
+.schedule-card h3, .booking-card h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.booking-card h3 {
+    color: #111827;
+    border-bottom-color: #e5e7eb;
+}
+
+/* EDITED: New styles for the grouped schedule display */
+.daily-schedule {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.daily-schedule:last-child {
+    border-bottom: none;
     padding-bottom: 0;
 }
+.day-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+    color: #c7d2fe; /* A lighter color for the day name */
+}
+.schedule-slot {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.875rem;
+    padding: 0.25rem 0;
+}
+.schedule-slot .price {
+    font-weight: 700;
+}
 
-:host ::ng-deep .custom-datepicker .mat-form-field-flex {
-    background-color: #f3f4f6;
+
+.booking-card {
+    background-color: #fff;
+}
+
+.booking-button {
+    width: 100%;
+    background-color: #ec4899;
+    color: white;
+    font-weight: 700;
+    padding: 0.75rem;
     border-radius: 0.375rem;
-    padding: 0.5em 0.5em 0 0.75em;
-    border: 1px solid #d1d5db;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.booking-button:hover {
+    background-color: #db2777;
 }
 
-:host ::ng-deep .custom-datepicker .mat-form-field-underline {
-    display: none;
+/* Final styles for the Material Datepicker */
+.custom-datepicker {
+    width: 100%;
 }
 
-:host ::ng-deep .custom-datepicker .mat-form-field-infix {
-    padding: 0.5em 0;
-    border-top: 0;
+:host ::ng-deep .custom-datepicker .mat-mdc-form-field-flex {
+    background-color: #f3f4f6 !important;
+    cursor: pointer !important;
+    border-radius: 0.375rem !important;
+    border: 1px solid #d1d5db !important;
+    padding: 0 0.75em !important;
+    align-items: center;
 }
 
-:host ::ng-deep .custom-datepicker .mat-form-field-label {
-    color: #6b7280;
-    top: 1.3em;
-    left: 0.25em;
-}
-
-:host ::ng-deep .custom-datepicker.mat-form-field-should-float .mat-form-field-label {
-    transform: translateY(-0.8em) scale(0.75);
+:host ::ng-deep .custom-datepicker .mat-mdc-form-field-underline {
+    display: none !important;
 }
 
 :host ::ng-deep .custom-datepicker input.mat-mdc-input-element {
     cursor: pointer !important;
+    background-color: transparent !important;
 }
+
+:host ::ng-deep .custom-datepicker .mat-mdc-form-field-infix {
+    padding: 0.75em 0 !important;
+    border-top: none !important;
+}
+
+:host ::ng-deep .custom-datepicker .mat-mdc-input-element::placeholder {
+  color: #6b7280;
+  opacity: 1;
+}
+
 .validation-error {
   color: #D32F2F;
   font-size: 12px;

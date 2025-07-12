@@ -71,14 +71,67 @@
   color: var(--primary);
 }
 
+.appointments-container {
+    animation: fadeIn 0.6s ease;
+}
+
+.table {
+    --bs-table-hover-bg: #f8f9fa; /* A light gray for row hover */
+}
+
+.table th {
+    font-weight: 600;
+    color: #495057;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+}
+
+.table td {
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
 .badge {
-  font-size: 0.65rem;
+    padding: 0.4em 0.8em;
+    font-weight: 600;
+    font-size: 0.75rem;
+    border-radius: 50px;
 }
 
-.table-responsive {
-  overflow-x: auto;
+/* Custom soft background colors for badges */
+.bg-primary-soft {
+    background-color: rgba(13, 110, 253, 0.1);
+    color: #0d6efd;
 }
 
+.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+}
+
+.bg-warning-soft {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.bg-danger-soft {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.no-appointments {
+    color: #6c757d;
+}
+
+.no-appointments .empty-icon {
+    font-size: 3rem;
+    color: #ced4da;
+}
+.btn-dimmed {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -140,4 +193,259 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   border-radius: 0.25rem;
   box-shadow: none;
 }
+.spinner-border {
+  display: inline-block;
+  width: 2rem; /* Or any size you prefer */
+  height: 2rem; /* Or any size you prefer */
+  vertical-align: -0.125em;
+  border: 0.25em solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  -webkit-animation: 0.75s linear infinite spinner-border;
+  animation: 0.75s linear infinite spinner-border;
+}
+
+.text-primary {
+    color: #0d6efd; /* This is Bootstrap's default primary color */
+}
+
+@keyframes spinner-border {
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* Add these styles to the bottom of your profile.component.css */
+
+/* Modal Backdrop: The dark, semi-transparent background behind the modal. */
+/* Add these styles to the bottom of your profile.component.css */
+
+/* Modal Backdrop: The dark, semi-transparent background behind the modal. */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050; /* Ensures it's on top of other content */
+  animation: fadeIn 0.3s ease;
+}
+
+/* Modal Content: The main pop-up window. */
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1055; /* Ensures it's on top of the backdrop */
+  width: 90%;
+  max-width: 800px; /* Prevents the modal from being too wide on large screens */
+  max-height: 90vh; /* Allows for scrolling on small screens */
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.4s ease-out;
+}
+
+/* Modal Header: Contains the title and close button. */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #343a40;
+}
+
+.btn-close {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  width: 1.5em;
+  height: 1.5em;
+  position: relative;
+  opacity: 0.5;
+  transition: opacity 0.2s ease;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+.btn-close::before, .btn-close::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background-color: #000;
+}
+
+.btn-close::before {
+    transform: rotate(45deg);
+}
+
+.btn-close::after {
+    transform: rotate(-45deg);
+}
+
+
+/* Modal Body: The main scrollable content area. */
+.modal-body {
+  padding: 1.5rem;
+  overflow-y: auto; /* Enables scrolling if content is too long */
+}
+
+/* New styles for the improved booking summary section */
+.booking-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e9ecef;
+}
+
+.summary-icon {
+  font-size: 1.5rem;
+  color: #0d6efd; /* Bootstrap primary blue */
+  flex-shrink: 0;
+}
+
+.summary-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-label {
+  font-size: 0.8rem;
+  color: #6c757d;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.summary-value {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #212529;
+}
+
+.summary-value .badge {
+    font-size: 0.8rem;
+}
+
+/* EDITED: Added styles for the custom tooltip */
+
+/* Service Section: Container for each service (Doctor, Hotel, etc.). */
+.service-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.section-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0d6efd;
+  margin-bottom: 1rem;
+}
+
+.service-details {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.service-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  flex-shrink: 0;
+}
+
+.service-info {
+  flex-grow: 1;
+}
+
+.service-info p {
+  margin: 0 0 0.5rem 0;
+  color: #495057;
+  display: flex;
+  align-items: center;
+}
+
+.service-info p i {
+  color: #6c757d;
+  width: 20px;
+  text-align: center;
+}
+
+.service-price {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e3d72;
+}
+
+.badge {
+  padding: 0.4em 0.8em;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-radius: 50px;
+}
+
+.bg-success-soft {
+    background-color: rgba(25, 135, 84, 0.1);
+    color: #198754;
+}
+
+.bg-warning-soft {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ffc107;
+}
+
+.bg-danger-soft {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.bg-secondary-soft {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+/* Keyframe Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
 

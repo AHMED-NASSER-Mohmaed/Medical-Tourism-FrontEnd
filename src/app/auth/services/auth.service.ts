@@ -25,26 +25,50 @@ export class AuthService {
   private loginStatusSubject: BehaviorSubject<boolean>;
   loginStatus$: Observable<boolean>;
 
+
   constructor(private http: HttpClient, private cookieService: CookieService) {
     const tokenExists = this.cookieService.check('auth_token');
     this.loginStatusSubject = new BehaviorSubject<boolean>(tokenExists);
     this.loginStatus$ = this.loginStatusSubject.asObservable();
   }
 
+ public checkTokenAndLogoutIfExpired(): void {
+    const token = this.cookieService.get('auth_token');
+    if (!token) {
+      return;
+    }
 
+    try {
+      const decodedToken: any = jwtDecode(token);
+      const expirationDate = decodedToken.exp * 1000;
+      const now = Date.now();
+
+      if (expirationDate < now) {
+
+        console.warn('AuthService: Token has expired. Logging out.');
+        this.logout();
+      }
+    } catch (error) {
+      console.error('AuthService: Error decoding token. Logging out.', error);
+      this.logout();
+    }
+  }
 
 
 
   login(data: LoginRequest): Observable<LoginResponse> {
-    const headers = this.getAuthHeaders();
-    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data, { headers }).pipe(
+    return this.http.post<LoginResponse>(`${this.baseUrl}/auth/login`, data).pipe(
+      tap(response => {
+        if (response && response.token) {
+          this.cookieService.set('auth_token', response.token, { path: '/' });
+          this.setLoggedIn(true);
+        }
+      }),
       catchError((err) => {
-        // Handle backend errors here
-        return throwError(err); // Rethrow the error to be caught in the component
+        return throwError(err);
       })
     );
   }
-
 logout(): void {
 
   this.cookieService.delete('auth_token', '/');
@@ -194,7 +218,7 @@ getUserName(): string | null {
     const decodedToken: any = jwtDecode(token);
     console.log('Decoded Token:', decodedToken);
 
-    
+
   const firstname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname']
   const lastname=decodedToken['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname']
   console.log('First Name:', firstname);

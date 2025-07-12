@@ -12,6 +12,14 @@ import { FormsModule } from '@angular/forms';
 import { AvailableCarCardComponent } from './components/available-car-card/available-car-card.component';
 import { CarRentalDetailsSidebarFiltersComponent } from './components/car-rental-details-sidebar-filters/car-rental-details-sidebar-filters.component';
 import { CarDetailsComponent } from './pages/car-details/car-details.component';
+// Angular Material modules
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 // Components will be added here as created
 
 @NgModule({
@@ -28,7 +36,14 @@ import { CarDetailsComponent } from './pages/car-details/car-details.component';
     CommonModule,
     SharedModule,
     CarRentalWebsiteRoutingModule,
-    FormsModule
+    FormsModule,
+    MatDatepickerModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatNativeDateModule,
+    MatProgressSpinnerModule
   ]
 })
 export class CarRentalWebsiteModule { } 

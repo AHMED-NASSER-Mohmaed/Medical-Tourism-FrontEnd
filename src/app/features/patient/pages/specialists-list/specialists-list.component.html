@@ -31,13 +31,12 @@
         <main class="content-area">
             <!-- Specialists Grid -->
             <section class="specialists-grid">
-                <!-- This is where your Angular loop goes -->
+
                 <div *ngFor="let specialist of specialists" class="specialist-card">
-                    <img src="../../../../../../assets/images/spec.jpg" alt="{{ specialist.name }} Image">
+                   <img [src]="specialist.imageURL || '../../../../../../assets/images/spec.jpg'" [alt]="specialist.name">
                     <div class="content">
                         <h3>{{ specialist.name }}</h3>
                         <p>{{ specialist.description }}</p>
-                        <!-- Conditional Links -->
                         <a *ngIf="hospitalId; else showDoctors" class="details-link" [routerLink]="['/doctors', specialist.id, hospitalId ]">
                             View Doctors <i class="fa-solid fa-arrow-right"></i>
                         </a>

@@ -35,7 +35,7 @@ map(res => {
   }
 
   this.authService.setLoggedIn(true);
-  this.router.navigate(['/']);
+  //this.router.navigate(['/']);
   return AuthActions.loginSuccess({ response: res });
             }),
             catchError(err => of(AuthActions.loginFailure({ error: err })))
