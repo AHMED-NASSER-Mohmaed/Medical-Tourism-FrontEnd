@@ -1,10 +1,13 @@
 .card {
   border: none;
-  border-radius: 1.25rem;
+  border-radius: 1.1rem;
   background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
+  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.08);
   transition: transform 0.2s, box-shadow 0.2s;
   overflow: hidden;
+  padding: 0.7rem 1rem 0.6rem 1rem;
+  min-width: 180px;
+  max-width: 240px;
 }
 
 .card:hover {
@@ -13,20 +16,21 @@
 }
 
 .card-body {
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  padding: 0.7rem 0.7rem 0.5rem 0.7rem;
 }
 
 h6 {
-  font-size: 1rem;
-  letter-spacing: 1.5px;
+  font-size: 0.92rem;
+  letter-spacing: 1.1px;
   font-weight: 600;
+  margin-bottom: 0.1rem;
 }
 
 h3 {
-  font-size: 2.5rem;
+  font-size: 1.7rem;
   font-weight: 800;
   color: #22223b;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.12rem;
 }
 
 .bg-soft-primary {
@@ -47,14 +51,11 @@ h3 {
 }
 
 .p-2.rounded-circle {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-  border: 2px solid rgba(255,255,255,0.6);
-  width: 3.5rem;
-  height: 3.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 0.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border: 2px solid rgba(255,255,255,0.5);
+  width: 2.1rem;
+  height: 2.1rem;
+  margin-left: 0.3rem;
 }
 
 .fa-icon {
@@ -63,10 +64,10 @@ h3 {
 }
 
 .badge {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  padding: 0.5em 1.1em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 0.25em 0.7em;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
   border: none;
   animation: popIn 0.5s;
 }
@@ -87,32 +88,60 @@ h3 {
   100% { transform: translateY(-4px); }
 }
 
-@media (max-width: 991.98px) {
-  .card-body {
-    padding: 1.2rem 1rem 1rem 1rem;
+/* --- Enhanced Responsive Design --- */
+@media (max-width: 1200px) {
+  .dashboard-card {
+    padding: 1.2rem 0.7rem;
   }
-  h3 {
+}
+@media (max-width: 991.98px) {
+  .dashboard-card {
+    padding: 1rem 0.5rem;
+    min-width: 0;
+  }
+  .dashboard-card-title {
+    font-size: 1rem;
+  }
+  .dashboard-card-value {
+    font-size: 1.5rem;
+  }
+  .dashboard-card-icon {
+    font-size: 2rem;
+  }
+}
+@media (max-width: 767.98px) {
+  .dashboard-card {
+    width: 100%;
+    padding: 0.7rem 0.3rem;
+    margin-bottom: 0.7rem;
+  }
+  .dashboard-card-title {
+    font-size: 0.95rem;
+  }
+  .dashboard-card-value {
+    font-size: 1.2rem;
+  }
+  .dashboard-card-icon {
     font-size: 1.5rem;
   }
 }
-
 @media (max-width: 575.98px) {
-  .card-body {
-    padding: 0.8rem 0.5rem 0.5rem 0.5rem;
+  .dashboard-card {
+    padding: 0.4rem 0.1rem;
+    border-radius: 0.5rem;
   }
-  h6 {
+  .dashboard-card-title {
     font-size: 0.85rem;
   }
-  h3 {
+  .dashboard-card-value {
+    font-size: 1rem;
+  }
+  .dashboard-card-icon {
     font-size: 1.1rem;
   }
-  .p-2.rounded-circle {
-    width: 2.2rem;
-    height: 2.2rem;
-    margin-left: 0.2rem;
-  }
-  .badge {
-    font-size: 0.92rem;
-    padding: 0.35em 0.8em;
+}
+@media (max-width: 400px) {
+  .dashboard-card-title, .dashboard-card-value {
+    font-size: 0.75rem;
   }
 }

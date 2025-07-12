@@ -15,36 +15,57 @@
           <div class="form-floating">
             <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
             <label for="firstName">First Name</label>
+            <div *ngIf="hospitalForm.get('firstName')?.invalid && (hospitalForm.get('firstName')?.touched || hospitalForm.get('firstName')?.dirty)" class="form-text text-danger ms-1">
+              First name is required (2-100 characters)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
             <label for="lastName">Last Name</label>
+            <div *ngIf="hospitalForm.get('lastName')?.invalid && (hospitalForm.get('lastName')?.touched || hospitalForm.get('lastName')?.dirty)" class="form-text text-danger ms-1">
+              Last name is required (2-100 characters)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
             <label for="phone">Phone</label>
+            <div *ngIf="hospitalForm.get('phone')?.invalid && (hospitalForm.get('phone')?.touched || hospitalForm.get('phone')?.dirty)" class="form-text text-danger ms-1">
+              Phone is required
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="email" class="form-control" id="email" formControlName="email" placeholder="User Email">
             <label for="email">User Email</label>
+            <div *ngIf="hospitalForm.get('email')?.errors?.['required'] && (hospitalForm.get('email')?.touched || hospitalForm.get('email')?.dirty)" class="form-text text-danger ms-1">
+              Email is required
+            </div>
+            <div *ngIf="hospitalForm.get('email')?.errors?.['email'] && (hospitalForm.get('email')?.touched || hospitalForm.get('email')?.dirty)" class="form-text text-danger ms-1">
+              Please enter a valid email
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
             <label for="password">Password</label>
+            <div *ngIf="hospitalForm.get('password')?.invalid && (hospitalForm.get('password')?.touched || hospitalForm.get('password')?.dirty)" class="form-text text-danger ms-1">
+              Password is required (min 6 characters)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
             <label for="confirmPassword">Confirm Password</label>
+            <div *ngIf="hospitalForm.errors?.['passwordMismatch'] && (hospitalForm.get('confirmPassword')?.touched || hospitalForm.get('confirmPassword')?.dirty)" class="form-text text-danger ms-1">
+              Passwords must match
+            </div>
           </div>
         </div>
 
@@ -55,24 +76,36 @@
             <option [value]="0">Male</option>
             <option [value]="1">Female</option>
           </select>
+          <div *ngIf="hospitalForm.get('gender')?.invalid && (hospitalForm.get('gender')?.touched || hospitalForm.get('gender')?.dirty)" class="form-text text-danger ms-1">
+            Gender is required
+          </div>
         </div>
 
         <!-- Date of Birth -->
         <div class="col-md-6">
           <label class="form-label">Date of Birth</label>
           <input type="date" class="form-control" formControlName="dateOfBirth">
+          <div *ngIf="hospitalForm.get('dateOfBirth')?.invalid && (hospitalForm.get('dateOfBirth')?.touched || hospitalForm.get('dateOfBirth')?.dirty)" class="form-text text-danger ms-1">
+            Date of birth is required
+          </div>
         </div>
 
         <div class="col-md-6">
           <div class="form-floating">
             <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
             <label for="address">Address</label>
+            <div *ngIf="hospitalForm.get('address')?.invalid && (hospitalForm.get('address')?.touched || hospitalForm.get('address')?.dirty)" class="form-text text-danger ms-1">
+              Address is required
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
             <label for="city">City</label>
+            <div *ngIf="hospitalForm.get('city')?.invalid && (hospitalForm.get('city')?.touched || hospitalForm.get('city')?.dirty)" class="form-text text-danger ms-1">
+              City is required
+            </div>
           </div>
         </div>
 
@@ -85,7 +118,7 @@
             </select>
             <label for="countryId"><i class="fas fa-globe-africa me-1 text-primary"></i> Country</label>
             <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
-            <div *ngIf="hospitalForm.get('countryId')?.invalid && hospitalForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+            <div *ngIf="hospitalForm.get('countryId')?.invalid && (hospitalForm.get('countryId')?.touched || hospitalForm.get('countryId')?.dirty)" class="form-text text-danger ms-1">
               Country is required
             </div>
             <div *ngIf="!isLoading && countries.length === 0" class="form-text text-warning ms-1">
@@ -102,11 +135,25 @@
             </select>
             <label for="governorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Governorate</label>
             <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
-            <div *ngIf="hospitalForm.get('governorateId')?.invalid && hospitalForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+            <div *ngIf="hospitalForm.get('governorateId')?.invalid && (hospitalForm.get('governorateId')?.touched || hospitalForm.get('governorateId')?.dirty)" class="form-text text-danger ms-1">
               Governorate is required
             </div>
             <div *ngIf="!isLoading && governorates.length === 0 && hospitalForm.get('countryId')?.value" class="form-text text-warning ms-1">
               No governorates available for this country
+            </div>
+          </div>
+        </div>
+
+        <!-- Asset Governorate (Egypt) -->
+        <div class="col-md-6">
+          <div class="form-floating position-relative">
+            <select class="form-select" id="assetGovernorateId" formControlName="assetGovernorateId">
+              <option value="">Select Asset Governorate (Egypt)</option>
+              <option *ngFor="let gov of egyptGovernorates" [value]="gov.governateId">{{ gov.governateName }}</option>
+            </select>
+            <label for="assetGovernorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Asset Governorate (Egypt)</label>
+            <div *ngIf="hospitalForm.get('assetGovernorateId')?.invalid && (hospitalForm.get('assetGovernorateId')?.touched || hospitalForm.get('assetGovernorateId')?.dirty)" class="form-text text-danger ms-1">
+              Asset Governorate is required
             </div>
           </div>
         </div>
@@ -116,54 +163,70 @@
           <div class="form-floating">
             <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Hospital Name">
             <label for="assetName">Hospital Name</label>
+            <div *ngIf="hospitalForm.get('assetName')?.invalid && (hospitalForm.get('assetName')?.touched || hospitalForm.get('assetName')?.dirty)" class="form-text text-danger ms-1">
+              Hospital name is required (3-250 characters)
+            </div>
           </div>
         </div>
         <div class="col-md-12">
           <div class="form-floating">
             <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 90px"></textarea>
             <label for="assetDescription">Description</label>
+            <div *ngIf="hospitalForm.get('assetDescription')?.invalid && (hospitalForm.get('assetDescription')?.touched || hospitalForm.get('assetDescription')?.dirty)" class="form-text text-danger ms-1">
+              Description is required (10-1000 characters)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="contact@hospital.com">
             <label for="assetEmail">Asset Email</label>
+            <div *ngIf="hospitalForm.get('assetEmail')?.errors?.['required'] && (hospitalForm.get('assetEmail')?.touched || hospitalForm.get('assetEmail')?.dirty)" class="form-text text-danger ms-1">
+              Asset email is required
+            </div>
+            <div *ngIf="hospitalForm.get('assetEmail')?.errors?.['email'] && (hospitalForm.get('assetEmail')?.touched || hospitalForm.get('assetEmail')?.dirty)" class="form-text text-danger ms-1">
+              Please enter a valid asset email
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Full physical address">
             <label for="locationDescription">Location Description</label>
+            <div *ngIf="hospitalForm.get('locationDescription')?.invalid && (hospitalForm.get('locationDescription')?.touched || hospitalForm.get('locationDescription')?.dirty)" class="form-text text-danger ms-1">
+              Location description is required
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
             <label for="latitude">Latitude</label>
+            <div *ngIf="hospitalForm.get('latitude')?.invalid && (hospitalForm.get('latitude')?.touched || hospitalForm.get('latitude')?.dirty)" class="form-text text-danger ms-1">
+              Latitude is required (-90 to 90)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
             <label for="longitude">Longitude</label>
+            <div *ngIf="hospitalForm.get('longitude')?.invalid && (hospitalForm.get('longitude')?.touched || hospitalForm.get('longitude')?.dirty)" class="form-text text-danger ms-1">
+              Longitude is required (-180 to 180)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-floating">
             <input type="number" class="form-control" id="numberOfDepartments" formControlName="numberOfDepartments" min="1" placeholder="Number of Departments">
             <label for="numberOfDepartments">Number of Departments</label>
+            <div *ngIf="hospitalForm.get('numberOfDepartments')?.invalid && (hospitalForm.get('numberOfDepartments')?.touched || hospitalForm.get('numberOfDepartments')?.dirty)" class="form-text text-danger ms-1">
+              Number of departments is required (min 1)
+            </div>
           </div>
         </div>
         <div class="col-md-6">
           <label class="form-label fw-semibold text-primary mb-2">Facility Type</label>
-          <div class="form-check mb-1">
-            <input class="form-check-input" type="checkbox" formControlName="hasEmergencyRoom" id="hasEmergencyRoom">
-            <label class="form-check-label" for="hasEmergencyRoom">Has Emergency Room</label>
-          </div>
-          <div class="form-check mb-1">
-            <input class="form-check-input" type="checkbox" formControlName="isTeachingHospital" id="isTeachingHospital">
-            <label class="form-check-label" for="isTeachingHospital">Teaching Hospital</label>
-          </div>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" formControlName="emergencyServices" id="emergencyServices">
             <label class="form-check-label" for="emergencyServices">24/7 Emergency Services</label>
@@ -178,6 +241,9 @@
             <button type="button" class="btn btn-outline-danger" (click)="removeFacility(i)" [disabled]="facilities.length === 1">Remove</button>
           </div>
           <button type="button" class="btn btn-outline-primary btn-sm" (click)="addFacility()">Add Facility</button>
+          <div *ngIf="facilities.invalid && (facilities.touched || facilities.dirty)" class="form-text text-danger ms-1">
+            At least one facility is required
+          </div>
         </div>
 
         <!-- Languages Supported (checkboxes) -->
@@ -187,31 +253,39 @@
             <input class="form-check-input" type="checkbox" [id]="'lang-' + lang.id" (change)="onLanguageChange($event, lang.id)">
             <label class="form-check-label" [for]="'lang-' + lang.id">{{ lang.name }}</label>
           </div>
+          <div *ngIf="languagesSupported.invalid && (languagesSupported.touched || languagesSupported.dirty)" class="form-text text-danger ms-1">
+            At least one language is required
+          </div>
         </div>
 
         <!-- Opening and Closing Time -->
-<div class="col-md-6" formGroupName="openingTime">
-          <label class="form-label fw-semibold text-primary mb-2">Opening Time</label>
-          <div class="row g-2">
-            <div class="col-6">
-              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="Hour">
+          <!-- Opening Time -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Opening Time <span class="text-danger">*</span></label>
+            <div class="d-flex gap-2" formGroupName="openingTime">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+              <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
             </div>
-            <div class="col-6">
-              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="Minute">
-            </div>
-          </div>
-        </div>
-<div class="col-md-6" formGroupName="closingTime">
-          <label class="form-label fw-semibold text-primary mb-2">Closing Time</label>
-          <div class="row g-2">
-            <div class="col-6">
-              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="Hour">
-            </div>
-            <div class="col-6">
-              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="Minute">
+            <div *ngIf="hospitalForm.get('openingTime')?.invalid && hospitalForm.get('openingTime')?.touched" class="form-text text-danger ms-1">
+              Valid opening time is required
             </div>
           </div>
-        </div>
+          <!-- Closing Time -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Closing Time <span class="text-danger">*</span></label>
+            <div class="d-flex gap-2" formGroupName="closingTime">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+              <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+            </div>
+            <div *ngIf="hospitalForm.get('closingTime')?.invalid && hospitalForm.get('closingTime')?.touched" class="form-text text-danger ms-1">
+              Valid closing time is required
+            </div>
+            <div *ngIf="hospitalForm.errors?.['closingBeforeOpening'] && (hospitalForm.get('closingTime')?.touched || hospitalForm.get('closingTime')?.dirty)" class="form-text text-danger ms-1">
+              Closing time must be after opening time
+            </div>
+          </div>
 
         <!-- Verification Notes -->
         <div class="col-md-12">

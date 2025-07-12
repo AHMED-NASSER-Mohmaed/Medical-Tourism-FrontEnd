@@ -553,3 +553,126 @@
     max-width: 98vw;
   }
 }
+
+/* --- Enhanced Responsive Design --- */
+@media (max-width: 1200px) {
+  .providers-management-container {
+    padding: 1rem;
+  }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1rem 0.7rem 1rem;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .providers-management-container {
+    padding: 0.7rem;
+  }
+  .card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.7rem 0.7rem 0.4rem 0.7rem;
+  }
+  th, td {
+    font-size: 0.95rem;
+    padding: 0.6rem 0.3rem;
+  }
+  .view-toggle {
+    margin-top: 0.7rem;
+  }
+  .provider-avatar, .avatar-container {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .providers-management-container {
+    padding: 0.4rem;
+  }
+  .card-header {
+    padding: 0.5rem 0.5rem 0.2rem 0.5rem;
+  }
+  .header-title {
+    font-size: 1.1rem;
+  }
+  .header-subtitle {
+    font-size: 0.9rem;
+  }
+  .input-group-lg .form-control, .input-group-lg .btn, .form-select-lg {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.6rem;
+  }
+  .btn-view-toggle {
+    padding: 0.4rem 0.7rem;
+    font-size: 0.9rem;
+  }
+  .table th, .table td {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.2rem;
+  }
+  .avatar-container, .provider-avatar {
+    width: 28px;
+    height: 28px;
+  }
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .btn, .form-control, .form-select {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .providers-management-container {
+    padding: 0.2rem;
+  }
+  .card-header {
+    padding: 0.3rem 0.3rem 0.1rem 0.3rem;
+  }
+  .header-title {
+    font-size: 1rem;
+  }
+  .header-subtitle {
+    font-size: 0.85rem;
+  }
+  .table th, .table td {
+    font-size: 0.85rem;
+    padding: 0.3rem 0.1rem;
+  }
+  .avatar-container, .provider-avatar {
+    width: 22px;
+    height: 22px;
+  }
+}
+
+@media (max-width: 400px) {
+  .header-title, .header-subtitle {
+    font-size: 0.8rem;
+  }
+  .table th, .table td {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.05rem;
+  }
+}
+
+/* Ensure .table-responsive is always used for tables */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Make buttons, inputs, selects full-width on mobile */
+@media (max-width: 575.98px) {
+  .btn, .form-control, .form-select {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+}

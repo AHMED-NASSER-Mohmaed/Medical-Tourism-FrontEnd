@@ -54,6 +54,7 @@ export class AddCarRentalProviderComponent implements OnInit {
   ];
   countries: { id: number; name: string }[] = [];
   governorates: { id: number; name: string }[] = [];
+  egyptGovernorates: { governateId: number; governateName: string }[] = [];
   private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
 
   constructor(
@@ -62,36 +63,46 @@ export class AddCarRentalProviderComponent implements OnInit {
     private router: Router
   ) {
     this.carRentalForm = this.fb.group({
-      // User Account Information
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phone: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      phone: ['', [Validators.required]],
       gender: [Gender.UNSPECIFIED, Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
       governorateId: [null, Validators.required],
       countryId: [null, Validators.required],
       dateOfBirth: ['', Validators.required],
-
-      // Asset Information
-      assetName: ['', Validators.required],
-      assetDescription: ['', Validators.required],
+      assetName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(250)]],
+      assetDescription: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       assetEmail: ['', [Validators.required, Validators.email]],
       locationDescription: ['', Validators.required],
-      latitude: [0, Validators.required],
-      longitude: [0, Validators.required],
-      facilities: this.fb.array([], { validators: Validators.required }),
-      fuelTypes: this.fb.array([], { validators: Validators.required }),
-      models: this.fb.array([], { validators: Validators.required }),
+      assetGovernorateId: [null, Validators.required],
+      latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+      facilities: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      fuelTypes: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      models: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
       transmission: [TransmissionType.MANUAL, Validators.required],
-      rentalPolicies: this.fb.array([], { validators: Validators.required }),
-      languagesSupported: this.fb.array([], { validators: Validators.required }),
-      verificationNotes: ['Added via admin portal'],
-    }, { 
-      validators: [this.passwordMatchValidator] 
+      rentalPolicies: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      languagesSupported: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      verificationNotes: [''],
+      assetType: [ProviderType.CAR_RENTAL, Validators.required],
+      openingTime: this.fb.group({
+        hour: [8, [Validators.required, Validators.min(0), Validators.max(23)]],
+        minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+        second: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+      }),
+      closingTime: this.fb.group({
+        hour: [20, [Validators.required, Validators.min(0), Validators.max(23)]],
+        minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+        second: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+      }),
+      starRating: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
+    }, {
+      validators: [this.passwordMatchValidator, this.openingClosingTimeValidator]
     });
 
     // Initialize with default values to prevent empty arrays
@@ -103,6 +114,9 @@ export class AddCarRentalProviderComponent implements OnInit {
       next: (response: CountriesGovernatesResponse) => {
         this.countriesMap = response.data;
         this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+        // Egypt is countryId: 1
+        const egypt = this.countriesMap[1];
+        this.egyptGovernorates = egypt ? Object.values(egypt.governates) : [];
       },
       error: () => {
         this.apiError = 'Failed to load countries and governates.';
@@ -144,6 +158,20 @@ export class AddCarRentalProviderComponent implements OnInit {
     return password.value === confirmPassword.value 
       ? null 
       : { passwordMismatch: true };
+  }
+
+  private openingClosingTimeValidator(form: FormGroup) {
+    const opening = form.get('openingTime')?.value;
+    const closing = form.get('closingTime')?.value;
+    if (!opening || !closing) return null;
+    const openingMinutes = opening.hour * 60 + opening.minute;
+    const closingMinutes = closing.hour * 60 + closing.minute;
+    return closingMinutes > openingMinutes ? null : { closingBeforeOpening: true };
+  }
+
+  // Helper to convert time object to 'HH:mm:ss' string
+  private toTimeString(time: { hour: number, minute: number, second: number }): string {
+    return `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}:${String(time.second).padStart(2, '0')}`;
   }
 
   // Getter methods for form arrays
@@ -191,12 +219,18 @@ export class AddCarRentalProviderComponent implements OnInit {
         verificationStatus: AssetStatus.PENDING,
         languagesSupported: formValue.languagesSupported || [],
         assetType: ProviderType.CAR_RENTAL,
-        openingTime: { hour: 8, minute: 0, second: 0 } as TimeObject,
-        closingTime: { hour: 18, minute: 0, second: 0 } as TimeObject,
+        openingTime: this.toTimeString(formValue.openingTime),
+        closingTime: this.toTimeString(formValue.closingTime),
         fuelTypes: formValue.fuelTypes || [],
         models: formValue.models || [],
         transmission: Number(formValue.transmission),
         rentalPolicies: formValue.rentalPolicies || [],
+        assetGovernorateId: Number(formValue.assetGovernorateId),
+        assetGovernateName: governate?.governateName,
+        countryId: Number(formValue.countryId),
+        countryName: country?.countryName,
+        assetImages: [],
+        starRating: formValue.starRating
       };
       const fullPayload = {
         email: formValue.email,
@@ -208,10 +242,6 @@ export class AddCarRentalProviderComponent implements OnInit {
         gender: Number(formValue.gender),
         address: formValue.address,
         city: formValue.city,
-        governorateId: Number(formValue.governorateId),
-        governorateName: governate?.governateName,
-        countryId: Number(formValue.countryId),
-        countryName: country?.countryName,
         dateOfBirth: new Date(formValue.dateOfBirth).toISOString(),
         ...providerData
       };

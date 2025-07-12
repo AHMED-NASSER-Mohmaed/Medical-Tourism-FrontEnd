@@ -157,7 +157,8 @@ export class PatientsAccountsComponent implements OnInit {
     });
   }
   async viewAccount(account: Patient): Promise<void> {
-    this.selectedAccount = await this.superAdminService.enrichCountryAndGovernorate(account);
+    // Only enrich if it's a patient (not a provider)
+    this.selectedAccount = await this.superAdminService.enrichCountryAndGovernorate({ ...account });
     this.showAccountModal = true;
   }
   closeAccountModal(): void {

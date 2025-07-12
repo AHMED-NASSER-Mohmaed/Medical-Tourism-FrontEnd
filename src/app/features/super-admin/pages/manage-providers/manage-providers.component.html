@@ -73,7 +73,7 @@
             <thead class="table-light">
               <tr>
                 <th scope="col">Provider</th>
-                <th scope="col">Type</th>
+                <th scope="col">Governorate</th>
                 <th scope="col">Status</th>
                 <th scope="col">Registered</th>
                 <th scope="col">Contact</th>
@@ -111,7 +111,9 @@
                 <td>
                   <div class="d-flex align-items-center gap-3">
                     <div class="avatar-container position-relative me-3">
-                      <img [src]="provider.imageURL || 'assets/images/default-provider.png'"
+                      <img [src]="(provider.assetImages && provider.assetImages.length > 0) 
+                                ? provider.assetImages[0].imageURL 
+                                : (provider.imageURL || 'assets/images/default-provider.png')"
                           alt="{{ provider.assetName }} logo"
                           class="provider-avatar rounded-circle">
                       <span class="status-badge"
@@ -129,7 +131,7 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ getProviderType(provider) }}</td>
+                <td>{{ provider.assetGovernateName }}</td>
                 <td>
                   <app-status-badge
                     [status]="getAssetStatus(provider.status) | statusLabel"
@@ -215,7 +217,9 @@
   <div class="modal-dialog modal-xl provider-modal-dialog">
     <div class="modal-content provider-modal-content">
       <div class="modal-header provider-modal-header">
-        <img [src]="selectedProvider?.imageURL || 'assets/images/default-provider.png'" 
+        <img [src]="(selectedProvider?.assetImages?.length ?? 0) > 0 
+                  ? selectedProvider?.assetImages?.[0]?.imageURL 
+                  : (selectedProvider?.imageURL ?? 'assets/images/default-provider.png')" 
              alt="Provider image" 
              class="provider-modal-avatar">
         <div>

@@ -28,6 +28,7 @@ export class AddHospitalProviderComponent implements OnInit {
   apiError: string | null = null;
 
   private countriesMap: { [countryId: string]: CountryWithGovernates } = {};
+  egyptGovernorates: { governateId: number; governateName: string }[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -35,46 +36,43 @@ export class AddHospitalProviderComponent implements OnInit {
     private router: Router
   ) {
     this.hospitalForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required]],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      phone: ['', [Validators.required]],
       gender: [0, Validators.required],
-      dateOfBirth: ['', Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
-      countryId: [null, Validators.required],
       governorateId: [null, Validators.required],
-
-      assetName: ['', Validators.required],
-      assetDescription: ['', Validators.required],
+      countryId: [null, Validators.required],
+      dateOfBirth: ['', Validators.required],
+      assetName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(250)]],
+      assetDescription: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       assetEmail: ['', [Validators.required, Validators.email]],
       locationDescription: ['', Validators.required],
-      latitude: ['', Validators.required],
-      longitude: ['', Validators.required],
+      assetGovernorateId: [null, Validators.required],
+      latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
       numberOfDepartments: [1, [Validators.required, Validators.min(1)]],
       emergencyServices: [false, Validators.required],
-      facilities: this.fb.array([this.fb.control('', Validators.required)]),
-      verificationNotes: ['', Validators.required],
-      languagesSupported: this.fb.array([], Validators.required),
-
-      hasEmergencyRoom: [false],
-      isTeachingHospital: [false],
-
+      facilities: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      verificationNotes: [''],
+      languagesSupported: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      assetType: [1, Validators.required],
       openingTime: this.fb.group({
         hour: [8, [Validators.required, Validators.min(0), Validators.max(23)]],
         minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-        second: [0],
-        millisecond: [0]
+        second: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
       }),
       closingTime: this.fb.group({
         hour: [20, [Validators.required, Validators.min(0), Validators.max(23)]],
         minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
-        second: [0],
-        millisecond: [0]
-      })
+        second: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
+      }),
+    }, {
+      validators: [this.passwordMatchValidator, this.openingClosingTimeValidator]
     });
   }
 
@@ -83,12 +81,14 @@ export class AddHospitalProviderComponent implements OnInit {
       next: (response: CountriesGovernatesResponse) => {
         this.countriesMap = response.data;
         this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+        // Egypt is countryId: 1
+        const egypt = this.countriesMap[1];
+        this.egyptGovernorates = egypt ? Object.values(egypt.governates) : [];
       },
       error: () => {
-        // Optionally handle error
+        this.apiError = 'Failed to load countries and governates.';
       }
     });
-
     this.hospitalForm.get('countryId')?.valueChanges.subscribe((countryId: number) => {
       this.updateGovernorates(countryId);
     });
@@ -136,6 +136,26 @@ export class AddHospitalProviderComponent implements OnInit {
     this.router.navigate(['/super-admin/manage-accounts']);
   }
 
+  // Helper to convert time object to 'HH:mm:ss' string
+  private toTimeString(time: { hour: number, minute: number, second: number }): string {
+    return `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}:${String(time.second).padStart(2, '0')}`;
+  }
+
+  private passwordMatchValidator(form: FormGroup) {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { passwordMismatch: true };
+  }
+
+  private openingClosingTimeValidator(form: FormGroup) {
+    const opening = form.get('openingTime')?.value;
+    const closing = form.get('closingTime')?.value;
+    if (!opening || !closing) return null;
+    const openingMinutes = opening.hour * 60 + opening.minute;
+    const closingMinutes = closing.hour * 60 + closing.minute;
+    return closingMinutes > openingMinutes ? null : { closingBeforeOpening: true };
+  }
+
   onSubmit(): void {
     if (this.hospitalForm.valid) {
       const formValue = this.hospitalForm.value;
@@ -153,8 +173,6 @@ export class AddHospitalProviderComponent implements OnInit {
         city: formValue.city,
         countryId: formValue.countryId,
         countryName: country?.countryName,
-        governorateId: formValue.governorateId,
-        governorateName: governate?.governateName,
         dateOfBirth: formValue.dateOfBirth,
         assetName: formValue.assetName,
         assetDescription: formValue.assetDescription,
@@ -168,9 +186,12 @@ export class AddHospitalProviderComponent implements OnInit {
         verificationNotes: formValue.verificationNotes,
         languagesSupported: formValue.languagesSupported,
         assetType: 0,
-        openingTime: formValue.openingTime,
-        closingTime: formValue.closingTime,
-        verificationStatus:  AssetStatus.APPROVED
+        openingTime: this.toTimeString(formValue.openingTime),
+        closingTime: this.toTimeString(formValue.closingTime),
+        verificationStatus:  AssetStatus.APPROVED,
+        assetGovernorateId: Number(formValue.assetGovernorateId),
+        assetGovernateName: governate?.governateName,
+        assetImages: []
       };
       this.superAdminService.addHospitalProvider(payload).subscribe({
         next: (newHospital) => {
