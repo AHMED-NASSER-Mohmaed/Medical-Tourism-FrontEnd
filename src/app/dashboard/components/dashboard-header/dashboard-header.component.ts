@@ -26,4 +26,5 @@ export class DashboardHeaderComponent implements OnInit {
     this.logout.emit();
     
   }
+  onAvatarClick() {}
 }

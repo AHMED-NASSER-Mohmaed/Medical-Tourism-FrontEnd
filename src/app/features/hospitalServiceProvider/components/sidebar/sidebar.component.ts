@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { faCar, faHospital, faHotel, faListAlt, faShieldAlt, faUser, faUserInjured, faUsersCog } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faCar, faHospital, faHotel, faListAlt, faListUl, faShieldAlt, faUser, faUserInjured, faUsersCog } from '@fortawesome/free-solid-svg-icons';
 import { DashboardModule } from "../../../../dashboard/dashboard.module";
 
 
@@ -37,22 +37,22 @@ title = 'Hospital Service Provider ';
     },
     {
       label: 'Appointments',
-      icon: faUser,
+      icon: faListUl,
       link: '/hospitalProvider/appointments',
       isExpanded: false
-     } ,
+     },
      {
       label: 'Disbursements',
-      icon: faUser,
+      icon: faBook, // faListUl is commonly used for schedule/list
       link: '/hospitalProvider/disbursements',
       isExpanded: false
-    },
-    {
-      label: 'Profile',
-      icon: faUser,
-      link: '/hospitalProvider/profile',
-      isExpanded: false
     }
+    // {
+    //   label: 'Profile',
+    //   icon: faUser,
+    //   link: '/hospitalProvider/profile',
+    //   isExpanded: false
+    // }
   ];
 
   

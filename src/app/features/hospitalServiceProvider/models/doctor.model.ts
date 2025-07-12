@@ -106,3 +106,34 @@ export interface ApiResponse<T> {
   success: boolean;
   statusCode: number;
 }
+export interface DoctorProfile {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  gender: number; // 0 = Male, 1 = Female (based on your usage)
+  dateOfBirth: string; // ISO date string e.g., "1985-04-12T00:00:00"
+  address: string;
+
+  bio: string;
+  qualification: string;
+  yearsOfExperience: number;
+
+  specialtyId: number;
+  specialtyName: string;
+
+  hospitalId: string;
+  hospitalName: string;
+
+  countryId: number;
+  countryName: string;
+  governorateId: number;
+  governorateName: string;
+
+  medicalLicenseNumber: string; // seems to be URL to license image
+  imageURL: string;             // profile photo
+
+  status: number; // e.g., 1 = active
+
+}

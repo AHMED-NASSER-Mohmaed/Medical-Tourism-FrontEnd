@@ -79,6 +79,7 @@ import { SharedModule } from './shared/shared.module';
 import { SuperAdminModule } from './features/super-admin/super-admin.module';
 import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DisbursementDetailsComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement-details/disbursement-details.component';
 
 
 
@@ -95,7 +96,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     AppointmentsListComponent,
     AppointmentFormComponent,
     TruncatePipe,
-    DisbursementComponent
+    DisbursementComponent,
+    DisbursementDetailsComponent
     ],
 
 

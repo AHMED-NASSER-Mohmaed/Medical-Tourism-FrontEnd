@@ -13,6 +13,7 @@ import { NotFoundComponent } from './shared/components/not-found/not-found.compo
 
 
 import { DisbursementComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement.component';
+import { DisbursementDetailsComponent } from './features/hospitalServiceProvider/Pages/Disbursement/disbursement-details/disbursement-details.component';
 
 
 
@@ -25,10 +26,11 @@ const routes: Routes = [
       { path: 'doctors', component: DoctorsListComponent },
       { path: 'appointments', component: AppointmentsListComponent },
       {path: 'doctor/add', component: DoctorsFormComponent},
-      {path: 'doctor/edit/:id', component: DoctorsFormComponent},
+      {path: 'doctors/edit/:id', component: DoctorsFormComponent},
       {path: 'schedule/add', component: AppointmentFormComponent},
       {path: 'schedule/edit/:id', component: AppointmentFormComponent},
       { path: 'disbursements' , component:DisbursementComponent},
+      {path: 'disbursement/:id', component: DisbursementDetailsComponent},
     ]
   },
   { path: 'hospitals', component: DisplayAllHospitalsComponent },

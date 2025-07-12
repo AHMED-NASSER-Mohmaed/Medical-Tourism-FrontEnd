@@ -1,78 +1,152 @@
-<div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Appointments Management</h1>
+<div class="appointments-container">
 
-  <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-      <h6 class="m-0 font-weight-bold text-primary">Appointments List</h6>
-      <input type="text" class="form-control mr-2" style="width: 250px; display: inline-block;" placeholder="Search appointments..." [(ngModel)]="searchTerm" (input)="startSearch()">
-      <button class="btn btn-primary" routerLink="/hospitalProvider/schedule/add">
-        <i class="fas fa-plus"></i> Add Appointment
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <div>
+        <h1 class="page-title">
+          <i class="fas fa-calendar-alt"></i>
+          Appointments Management
+        </h1>
+        <p class="page-subtitle">Manage and monitor all appointment schedules</p>
+      </div>
+      <button class="btn-primary" routerLink="/hospitalProvider/schedule/add">
+        <i class="fas fa-plus"></i> Add New Appointment
       </button>
     </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-          <thead>
-            <tr>
-              
-              <th>Doctor</th>
-              <th>Specialty</th>
-              <th>Hospital</th>
-              <!-- <th>Day</th> -->
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Slot Size (min)</th>
-              <th>Price</th>
-              <th>Max Capacity</th>
-              <th>Available Slots</th>
-             
-              <th>Active</th>
-            </tr>
-          </thead>
-            <tbody>
-            <tr *ngFor="let schedule of appointments.items">
-             
-              <td>{{schedule.doctorName}}</td>
-              <td>{{schedule.specialty}}</td>
-              <td>{{schedule.hospital}}</td>
-              <!-- <td>{{schedule.dayOfWeek.name}}</td> -->
-              <td>{{schedule.startTime}}</td>
-              <td>{{schedule.endTime}}</td>
-              <td>{{schedule.timeSlotSize}}</td>
-              <td>{{schedule.price | currency}}</td>
-              <td>{{schedule.maxCapacity}}</td>
-              <td>{{schedule.availableSlots}}</td>
-              
-              <td>
-              <span class="badge btn" [ngClass]="{'badge-success': schedule.isActive, 'badge-danger': !schedule.isActive}" (click)="ChangeStatus(schedule.id, !schedule.isActive)">
-                {{schedule.isActive ? 'Active' : 'Inactive'}}
-              </span>
-              </td>
-            </tr>
-            </tbody>
-           <tfoot *ngIf="appointments.totalCount! > 1">
-            <tr>
-              <td colspan="14">
-                <nav>
-                  <ul class="pagination justify-content-center mb-0">
-                    <li class="page-item" [class.disabled]="appointments.pageNumber === 1">
-                      <a class="page-link" (click)="goToPage(appointments.pageNumber! - 1)" style="cursor:pointer;">Previous</a>
-                    </li>
-                    <li class="page-item"
-                        *ngFor="let page of [].constructor(appointments.totalCount); let i = index"
-                        [class.active]="appointments.pageNumber === (i + 1)">
-                      <a class="page-link" (click)="goToPage(i + 1)" style="cursor:pointer;">{{i + 1}}</a>
-                    </li>
-                    <li class="page-item" [class.disabled]="appointments.pageNumber === appointments.totalCount">
-                      <a class="page-link" (click)="goToPage(appointments.pageNumber! + 1)" style="cursor:pointer;">Next</a>
-                    </li>
-                  </ul>
-                </nav>
-              </td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-section">
+    <div class="search-input-wrapper" style="flex:1; display:flex; align-items:center; position:relative;">
+      <i class="fas fa-search search-icon" style="position:absolute; left:10px; color:#aaa;"></i>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search..." 
+        style="padding-left:2rem;" 
+        [(ngModel)]="searchTerm" 
+        (input)="startSearch()">
+      <button 
+        *ngIf="searchTerm" 
+        class="clear-search-btn" 
+        (click)="searchTerm = ''; startSearch()"
+        style="position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#aaa;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <button class="filter-toggle-btn" (click)="toggleFilters()">
+      <i class="fas fa-filter"></i> Filters
+    </button>
+  </div>
+
+  <!-- Filter Section -->
+  <div class="filter-section" *ngIf="showFilters" 
+       style="max-width:1200px; margin:auto; padding:0 1rem; margin-bottom:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
+    <select class="filter-select" 
+            [(ngModel)]="selectedFilter" 
+            (change)="onFilterChange()"
+            style="padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;">
+      <option *ngFor="let option of filterOptions" [value]="option.value">{{ option.label }}</option>
+    </select>
+    <button class="btn-secondary" 
+            (click)="clearFilters()"
+            style="border:1px solid #ddd; background:#fff; padding:0.5rem 1rem; border-radius:4px; cursor:pointer;">
+      <i class="fas fa-times"></i> Clear Filters
+    </button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-section">
+    <div class="stat-card">
+      <h3>{{ appointments.items.length  }}</h3>
+      <p>Total Appointments</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ activeAppointmentsCount }}</h3>
+      <p>Active Schedules</p>
+    </div>
+    <div class="stat-card">
+      <h3>{{ inactiveAppointmentsCount }}</h3>
+      <p>Inactive Schedules</p>
     </div>
   </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="appointments-table">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Specialty</th>
+          <th>Hospital</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let schedule of appointments.items">
+          <td>{{ schedule.doctorName }}</td>
+          <td>{{ schedule.specialty }}</td>
+          <td>{{ schedule.hospital }}</td>
+          <td>{{ schedule.startTime }} - {{ schedule.endTime }}</td>
+          <td>
+            <button 
+              class="status-toggle" 
+              [class.active]="schedule.isActive" 
+              [class.inactive]="!schedule.isActive"
+              (click)="changeStatus(schedule.id, !schedule.isActive)">
+              <i class="fas" [class.fa-toggle-on]="schedule.isActive" [class.fa-toggle-off]="!schedule.isActive"></i>
+              {{ schedule.isActive ? 'Active' : 'Inactive' }}
+            </button>
+          </td>
+          <td>
+            <button class="btn-action edit" title="Edit">
+              <i class="fas fa-edit"></i>
+            </button>
+            <!-- <button class="btn-action delete" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Empty state -->
+  <div *ngIf="!loading && appointments.items.length === 0" class="empty-state">
+    <div class="empty-icon">
+      <i class="fas fa-calendar-times"></i>
+    </div>
+    <h3 class="empty-title">No appointments found</h3>
+    <p class="empty-message">Get started by adding your first appointment.</p>
+    <button class="btn-primary" routerLink="/hospitalProvider/schedule/add">
+      <i class="fas fa-plus"></i> Add First Appointment
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="loading-container" style="text-align:center; padding:2rem;">
+    <i class="fas fa-spinner fa-spin"></i>
+    <p>Loading appointments...</p>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="getTotalPages() > 1">
+    <button class="pagination-btn" [disabled]="appointments.pageNumber === 1" (click)="goToPage(appointments.pageNumber! - 1)">
+      Prev
+    </button>
+    <button 
+      *ngFor="let page of [].constructor(getTotalPages()); let i = index"
+      class="page-btn" 
+      [class.active]="appointments.pageNumber === (i + 1)" 
+      (click)="goToPage(i + 1)">
+      {{ i + 1 }}
+    </button>
+    <button class="pagination-btn" [disabled]="appointments.pageNumber === getTotalPages()" (click)="goToPage(appointments.pageNumber! + 1)">
+      Next
+    </button>
+  </div>
+
 </div>

@@ -16,8 +16,8 @@ export class DisbursementComponent implements OnInit {
 
   disbursements:Disbursement[] = [];
   filteredDisbursements: Disbursement[] = []; 
-   paymentMethods: string[] = ['Cash', 'Bank Transfer', 'Credit Card', 'Other'];
-  
+   paymentMethods: string[] = ['CASH', 'Bank Transfer', 'Credit Card', 'Other'];
+    Math = Math;
   // Filter variables
   searchText: string = '';
   selectedPaymentMethod: string = '';
@@ -183,6 +183,24 @@ export class DisbursementComponent implements OnInit {
     this.selectedPaymentMethod = '';
     this.selectedMonth = '';
     this.applyFilters();
+  }
+
+   printDisbursement(id:number) 
+   {
+     this.disbursementService.PrintDisbursement(id).subscribe({
+        next: (blob) => {
+          console.log('Disbursement printed successfully', blob);
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `DisbursementReport.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          console.error('Error printing disbursement', error);
+        }
+   });
   }
 }
 

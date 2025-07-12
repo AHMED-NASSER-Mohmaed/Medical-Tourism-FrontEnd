@@ -19,14 +19,15 @@ export class DoctorsFormComponent {
   isEditMode = false;
   LiscenseFile: File | null = null;
   imageFile: File | null = null;
-
+  doctorId: string | null = null; // To hold the doctor ID in edit mode
   
   // These should be populated from your API
   hospitalSpecialties: Specialty[] = [];
   countriesData: { [key: number]: CountryGovernoratesDTO } = {};
   governorates: GovernorateDTO[] = [];
   countries: { id: number; name: string }[] = [];
-
+  image:string = '';
+  license:string = ''; 
   constructor(
     private fb: FormBuilder,
     private doctorService: DoctorService,
@@ -57,7 +58,62 @@ export class DoctorsFormComponent {
 
   ngOnInit(): void {
     
-   this.locationService.getCountriesWithGovernorates().subscribe({
+    if (this.router.url.includes('edit')) 
+      {
+      this.isEditMode = true;
+     this.doctorId = this.router.url.split('/').pop()!;
+      console.log('Edit mode for doctor ID:', this.doctorId);
+      this.doctorService.getDoctorById(this.doctorId!).subscribe({
+        next: (doctor) => {
+          this.doctorForm.patchValue({ 
+            email: doctor.email,
+            firstName: doctor.firstName,    
+            lastName: doctor.lastName,
+            phone: doctor.phone,
+            gender: doctor.gender,
+            address: doctor.address, 
+            governorateId: doctor.governorateId,
+            countryId: doctor.countryId,
+            dateOfBirth: doctor.dateOfBirth.split('T')[0], // Convert to date string
+            medicalLicenseNumber: doctor.medicalLicenseNumber,
+            yearsOfExperience: doctor.yearsOfExperience,
+            bio: doctor.bio,
+            qualification: doctor.qualification,
+            hospitalSpecialtyId: doctor.specialtyId
+
+          });
+          this.image = doctor.imageURL || '';
+          this.license = doctor.medicalLicenseNumber || '';
+          console.log('Doctor data loaded:', doctor);
+        },
+        error: (err) => { 
+          console.error('Error loading doctor data', err);
+        }
+      });}
+          
+   
+
+
+
+    this.specialtyService.getAllSpecialists().subscribe({
+      next: (specialties) => {
+      this.hospitalSpecialties = specialties.items.filter((specialty: Specialty) => specialty.status === 1);
+      console.log('Specialties loaded:', this.hospitalSpecialties);
+      },
+      error: (err) => {
+      console.error('Error loading specialties', err);
+      }
+    });
+    }
+
+    passwordMatchValidator(form: FormGroup) {
+    return form.get('password')?.value === form.get('confirmPassword')?.value 
+      ? null : { mismatch: true };
+  }
+
+
+  getCountries() {
+    this.locationService.getCountriesWithGovernorates().subscribe({
     next: (response) => {
       // 1. Safely store the original data
       this.countriesData = response?.data || {};
@@ -84,24 +140,7 @@ export class DoctorsFormComponent {
       // Consider showing user feedback here
     }
   });
-
-
-
-    this.specialtyService.getAllSpecialists().subscribe({
-      next: (specialties) => {
-      this.hospitalSpecialties = specialties.items.filter((specialty: Specialty) => specialty.status === 1);
-      console.log('Specialties loaded:', this.hospitalSpecialties);
-      },
-      error: (err) => {
-      console.error('Error loading specialties', err);
-      }
-    });
-    }
-
-    passwordMatchValidator(form: FormGroup) {
-    return form.get('password')?.value === form.get('confirmPassword')?.value 
-      ? null : { mismatch: true };
-  }
+}
   getgovernorates() {
   const countryId = this.doctorForm.get('countryId')?.value;
   
@@ -130,8 +169,33 @@ export class DoctorsFormComponent {
       this.imageFile = event.target.files[0];
     }
   }
+  updateDoctor(): void {
+          const formData = new FormData();
+        
+          Object.entries(this.doctorForm.value).forEach(([key, value]) => {
+        formData.append(key, value as any);
+      });
+          formData.append('licenseDocumentFile', this.LiscenseFile!);
+          formData.append('profileImageFile', this.imageFile!);
+
+          console.log(this.doctorForm)
+          for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+    this.doctorService.updateDoctor(this.doctorId!,formData).subscribe({
+      next: (response) => { 
+
+      },
+      error: (error) => {
+        console.error('Error updating doctor', error);
+      }
+      });
+    }
 
   onSubmit(): void {
+   if( this.isEditMode) {
+      this.updateDoctor();
+    } else {
     if (this.doctorForm.invalid || !this.LiscenseFile || !this.imageFile) {
       return;
     }
@@ -159,5 +223,6 @@ export class DoctorsFormComponent {
         console.error('Error creating doctor', error);
       }
     });
+  }
   }
 }

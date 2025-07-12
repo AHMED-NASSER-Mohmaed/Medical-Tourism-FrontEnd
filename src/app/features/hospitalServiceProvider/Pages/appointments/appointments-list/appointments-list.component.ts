@@ -11,25 +11,33 @@ import { ScheduleListResponse } from '../../../models/schedule.model';
 })
 export class AppointmentsListComponent {
 appointments: ScheduleListResponse = {
-  items: [],
-  totalCount: 0,
-  pageNumber: 1,
-  pageSize: 4
-};
-OrgAppointments :ScheduleListResponse = {
-  items: [],
-  totalCount: 0,
-  pageNumber: 1,
-  pageSize: 4
-};;
+    items: [],
+    totalCount: 0,
+    pageNumber: 1,
+    pageSize: 3
+  };
+  
+  orgAppointments: ScheduleListResponse = {
+    items: [],
+    totalCount: 0,
+    pageNumber: 1,
+    pageSize: 6
+  };
+  
   loading: boolean = true;
   searchTerm: string = '';
+  selectedFilter: string = 'all';
+  showFilters: boolean = false;
+  
+  filterOptions = [
+    { value: 'all', label: 'All Appointments' },
+    { value: 'active', label: 'Active' },
+    { value: 'inactive', label: 'Inactive' }
+  ];
 
   constructor(
     private appointmentService: ScheduleService,
-    private router: Router,
-    // private confirmationService: ConfirmationService,
-    // private messageService: MessageService
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -40,9 +48,9 @@ OrgAppointments :ScheduleListResponse = {
     this.loading = true;
     this.appointmentService.getSchedules().subscribe({
       next: (data) => {
-        this.OrgAppointments = data;
-        this.appointments ={...this.OrgAppointments ,  pageNumber: 1}
-        this.paginateAppointments();
+        this.orgAppointments = data;
+        this.appointments = { ...this.orgAppointments, pageNumber: 1 };
+        this.applyFilters();
         this.loading = false;
         console.log('Appointments loaded successfully', this.appointments);
       },
@@ -53,45 +61,46 @@ OrgAppointments :ScheduleListResponse = {
     });
   }
 
-  deleteAppointment(id: number) {
-    // this.confirmationService.confirm({
-    //   message: 'Are you sure you want to delete this appointment?',
-    //   header: 'Confirm',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-    //     this.appointmentService.deleteAppointment(id).subscribe({
-    //       next: () => {
-    //         this.messageService.add({severity:'success', summary:'Success', detail:'Appointment deleted successfully'});
-    //         this.loadAppointments();
-    //       },
-    //       error: (err) => {
-    //         this.messageService.add({severity:'error', summary:'Error', detail:'Failed to delete appointment'});
-    //       }
-    //     });
-    //   }
-    // });
-  }
   startSearch() {
     console.log('Search term:', this.searchTerm);
-  if (this.searchTerm.trim() === '') {
-    this.appointments = { ...this.OrgAppointments };
     this.appointments.pageNumber = 1;
-    this.paginateAppointments();
+    this.applyFilters();
+  }
 
-  } else {
-    const filteredItems = this.OrgAppointments.items.filter(item => 
-       item.doctorName.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-    );
+  onFilterChange() {
+    this.appointments.pageNumber = 1;
+    this.applyFilters();
+  }
+
+  applyFilters() {
+    let filteredItems = [...this.orgAppointments.items];
+
+    // Apply search filter
+    if (this.searchTerm.trim() !== '') {
+      filteredItems = filteredItems.filter(item => 
+        item.doctorName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.hospital.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply status filter
+    if (this.selectedFilter !== 'all') {
+      filteredItems = filteredItems.filter(item => 
+        this.selectedFilter === 'active' ? item.isActive : !item.isActive
+      );
+    }
+
     this.appointments = {
-      ...this.OrgAppointments,
+      ...this.orgAppointments,
       items: filteredItems,
       totalCount: filteredItems.length
     };
-    this.appointments.pageNumber = 1;
+    
     this.paginateAppointments();
   }
-  }
-  ChangeStatus(scheduleId: number, status: boolean) {
+
+  changeStatus(scheduleId: number, status: boolean) {
     this.appointmentService.ChangeSpecialtyStatus(scheduleId, status).subscribe({
       next: (response) => {
         console.log('Status changed successfully', response);
@@ -102,6 +111,7 @@ OrgAppointments :ScheduleListResponse = {
       }
     });
   }
+
   goToPage(page: number) {
     if (page < 1 || page > this.getTotalPages()) {
       return;
@@ -113,25 +123,77 @@ OrgAppointments :ScheduleListResponse = {
   paginateAppointments() {
     const startIndex = (this.appointments.pageNumber! - 1) * this.appointments.pageSize!;
     const endIndex = startIndex + this.appointments.pageSize!;
-    const items = this.searchTerm.trim() === ''
-      ? this.OrgAppointments.items
-      : this.OrgAppointments.items.filter(item =>
-          item.doctorName.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
+    
+    let items = [...this.orgAppointments.items];
+
+    // Apply search filter
+    if (this.searchTerm.trim() !== '') {
+      items = items.filter(item => 
+        item.doctorName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.hospital.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply status filter
+    if (this.selectedFilter !== 'all') {
+      items = items.filter(item => 
+        this.selectedFilter === 'active' ? item.isActive : !item.isActive
+      );
+    }
+
     this.appointments.items = items.slice(startIndex, endIndex);
     this.appointments.totalCount = Math.ceil(items.length / this.appointments.pageSize!);
   }
 
   getTotalPages(): number {
-    const items = this.searchTerm.trim() === ''
-      ? this.OrgAppointments.items
-      : this.OrgAppointments.items.filter(item =>
-          item.doctorName.toString().toLowerCase().includes(this.searchTerm.toLowerCase())
-        );
+    let items = [...this.orgAppointments.items];
+
+    // Apply search filter
+    if (this.searchTerm.trim() !== '') {
+      items = items.filter(item => 
+        item.doctorName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
+        item.hospital.toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    // Apply status filter
+    if (this.selectedFilter !== 'all') {
+      items = items.filter(item => 
+        this.selectedFilter === 'active' ? item.isActive : !item.isActive
+      );
+    }
+
     return Math.max(1, Math.ceil(items.length / this.appointments.pageSize!));
   }
 
+  toggleFilters() {
+    this.showFilters = !this.showFilters;
+  }
 
+  clearFilters() {
+    this.searchTerm = '';
+    this.selectedFilter = 'all';
+    this.appointments.pageNumber = 1;
+    this.applyFilters();
+  }
 
+  getAvailabilityPercentage(schedule: any): number {
+    if (schedule.maxCapacity === 0) return 0;
+    return Math.round((schedule.availableSlots / schedule.maxCapacity) * 100);
+  }
 
+  getAvailabilityClass(percentage: number): string {
+    if (percentage >= 70) return 'availability-high';
+    if (percentage >= 40) return 'availability-medium';
+    return 'availability-low';
+  }
+  get activeAppointmentsCount(): number {
+    return this.orgAppointments.items?.filter(item => item.isActive).length || 0;
+  }
+
+  get inactiveAppointmentsCount(): number {
+    return this.orgAppointments.items?.filter(item => !item.isActive).length || 0;
+  }
 }

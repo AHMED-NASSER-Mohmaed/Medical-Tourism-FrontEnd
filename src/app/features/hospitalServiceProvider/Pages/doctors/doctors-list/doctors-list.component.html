@@ -1,98 +1,128 @@
-<div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Doctors Management</h1>
-  <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-      <h6 class="m-0 font-weight-bold text-primary">Doctors List</h6>
-      <input type="text" class="form-control mr-2" style="width: 250px; display: inline-block;" placeholder="Search doctors..." [(ngModel)]="searchTerm" (ngModelChange)="onSearchChange()" />
-      <select class="form-control mr-2" style="width: 180px; display: inline-block;" [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChange()">
-        <option value="">All Statuses</option>
-        <option value= "1">Active</option>
-        <option value= "0">Inactive</option>
-      </select>
-      <button class="btn btn-primary" [routerLink]="['/hospitalProvider/doctor/add']">
+<div class="doctors-container">
+
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <div>
+        <h1 class="page-title">
+          <i class="fas fa-user-md"></i> Doctors Management
+        </h1>
+        <p class="page-subtitle">Manage, search, and add new doctors easily</p>
+      </div>
+      <button class="btn-primary" [routerLink]="['/hospitalProvider/doctor/add']">
         <i class="fas fa-plus"></i> Add Doctor
       </button>
     </div>
-    <div class="card-body">
-      <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-          <thead>
-            <tr>
-              
-              <th>Image</th>
-              <th>Name</th>
-              <th>Gender</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Date of Birth</th>
-              <th>Status</th>
-              <th>Specialty</th>
-              <th>Hospital</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-            <tbody>
-            <tr *ngFor="let doctor of doctors?.items">
-              <td>
-              <img [src]="doctor.imageURL ? doctor.imageURL : 'https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper.png'" alt="Doctor Image" width="40" height="40" class="rounded-circle" />
-              </td>
-              <td>{{doctor.firstName}} {{doctor.lastName}}</td>
-             <td class="text-capitalize">
-              <span *ngIf="doctor.gender === 0">Male</span>
-              <span *ngIf="doctor.gender === 1">Female</span>
-              <span *ngIf="doctor.gender === 2">Other</span>
-              </td>
-              <td>{{doctor.email}}</td>
-              <td>{{doctor.phone}}</td>
-              <td>{{doctor.dateOfBirth ? (doctor.dateOfBirth | date:'yyyy-MM-dd') : 'N/A'}}</td>
-              <td>
-              <span class="badge" 
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-section">
+    <div class="search-input-wrapper" style="flex:1; display:flex; align-items:center; position:relative;">
+      <i class="fas fa-search" style="position:absolute; left:10px; color:#aaa;"></i>
+      <input 
+        type="text" 
+        class="search-input" 
+        placeholder="Search doctors..." 
+        style="padding-left:2rem;" 
+        [(ngModel)]="searchTerm" 
+        (ngModelChange)="onSearchChange()">
+      <button *ngIf="searchTerm" 
+              (click)="searchTerm=''; onSearchChange()"
+              style="position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#aaa;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <select class="filter-select" 
+            style="min-width:160px; padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;"
+            [(ngModel)]="statusFilter" 
+            (ngModelChange)="onStatusFilterChange()">
+      <option value="">All Statuses</option>
+      <option value="1">Active</option>
+      <option value="0">Inactive</option>
+      <option value="2">Suspended</option>
+      <option value="3">Pending</option>
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="appointments-table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Name</th>
+          <th>Gender</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Date of Birth</th>
+          <th>Status</th>
+          <th>Specialty</th>
+          <th>Hospital</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let doctor of doctors?.items">
+          <td>
+            <img [src]="doctor.imageURL ? doctor.imageURL : 'https://e7.pngegg.com/pngimages/84/165/png-clipart-united-states-avatar-organization-information-user-avatar-service-computer-wallpaper.png'" 
+                 alt="Doctor Image" 
+                 width="40" height="40" 
+                 class="rounded-circle">
+          </td>
+          <td>{{ doctor.firstName }} {{ doctor.lastName }}</td>
+          <td class="text-capitalize">
+            <span *ngIf="doctor.gender === 0">Male</span>
+            <span *ngIf="doctor.gender === 1">Female</span>
+            <span *ngIf="doctor.gender === 2">Other</span>
+          </td>
+          <td>{{ doctor.email }}</td>
+          <td>{{ doctor.phone }}</td>
+          <td>{{ doctor.dateOfBirth ? (doctor.dateOfBirth | date:'yyyy-MM-dd') : 'N/A' }}</td>
+          <td>
+            <span class="badge"
                   [ngClass]="{
-                  'badge-success': doctor.status === 1,
-                  'badge-danger': doctor.status === 0,
-                  'badge-warning': doctor.status === 2,
-                  'badge-secondary': doctor.status === 3
+                    'badge-success': doctor.status === 1,
+                    'badge-danger': doctor.status === 0,
+                    'badge-warning': doctor.status === 2,
+                    'badge-secondary': doctor.status === 3
                   }">
-                <ng-container [ngSwitch]="doctor.status">
+              <ng-container [ngSwitch]="doctor.status">
                 <span *ngSwitchCase="1">Active</span>
                 <span *ngSwitchCase="0">Inactive</span>
                 <span *ngSwitchCase="2">Suspended</span>
                 <span *ngSwitchCase="3">Pending</span>
-                <span *ngSwitchDefault>Unknown ({{doctor.status}})</span>
-                </ng-container>
-              </span>
-              </td>
-              <td>{{doctor.specialtyName}}</td>
-              <td>{{doctor.hospitalName}}</td>
-              <td>
-              <button class="btn btn-info btn-sm" [routerLink]="['/doctors/edit', doctor.id]">
-                <i class="fas fa-edit ">Edit</i>
-              </button>
-              </td>
-            </tr>
-            </tbody>
-            <tfoot *ngIf="totalPages > 1">
-            <tr>
-              <td colspan="11">
-              <nav>
-                <ul class="pagination justify-content-center mb-0">
-                <li class="page-item" [class.disabled]="currentPage === 1">
-                  <button class="page-link" (click)="changePage(currentPage - 1)" [disabled]="currentPage === 1">Previous</button>
-                </li>
-                <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === (i + 1)">
-                  <button class="page-link" (click)="changePage(i + 1)">{{ i + 1 }}</button>
-                </li>
-                <li class="page-item" [class.disabled]="currentPage === totalPages">
-                  <button class="page-link" (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages">Next</button>
-                </li>
-                </ul>
-              </nav>
-              </td>
-            </tr>
-            </tfoot>
-        </table>
-      </div>
-    </div>
+                <span *ngSwitchDefault>Unknown ({{ doctor.status }})</span>
+              </ng-container>
+            </span>
+          </td>
+          <td>{{ doctor.specialtyName }}</td>
+          <td>{{ doctor.hospitalName }}</td>
+          <td>
+            <button class="btn-action edit" title="Edit" [routerLink]="['edit', doctor.id]">
+              <i class="fas fa-edit"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="totalPages > 1">
+    <button class="pagination-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+      Prev
+    </button>
+    <button 
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      class="page-btn" 
+      [class.active]="currentPage === (i + 1)"
+      (click)="changePage(i + 1)">
+      {{ i + 1 }}
+    </button>
+    <button class="pagination-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+      Next
+    </button>
+  </div>
+
 </div>
 <router-outlet></router-outlet>

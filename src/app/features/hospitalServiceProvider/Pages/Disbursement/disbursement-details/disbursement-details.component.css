@@ -1,0 +1,203 @@
+/* Professional Disbursement Details Styles */
+
+.container-fluid {
+ width: 100% !important;
+  background-color: #f8f9fa;
+  height: 50px;
+  min-height: 100vh;
+}
+
+.card {
+  
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-header {
+  border-radius: 12px 12px 0 0 !important;
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+}
+
+.card-title {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.info-item {
+  margin-bottom: 1rem;
+}
+
+.info-item label {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Compact card styles */
+.compact-card {
+  min-height: auto;
+  max-height: 120px;
+}
+
+.compact-card .card-body {
+  padding: 0.75rem 1rem;
+}
+
+.info-group.compact {
+  margin-bottom: 0;
+}
+
+.info-group.compact label {
+  font-size: 0.65rem;
+  margin-bottom: 0.1rem;
+}
+
+.info-group.compact p {
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.info-group {
+  margin-bottom: 0.5rem;
+}
+
+.info-group label {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
+}
+
+.section-header {
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+.appointment-details {
+  position: relative;
+}
+
+.specialty-info {
+  border: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.doctor-info {
+  background-color: #fff;
+  padding: 0.5rem;
+  border-radius: 6px;
+  margin-top: 0.25rem;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.badge-sm {
+  font-size: 0.65rem;
+  padding: 0.2rem 0.4rem;
+}
+
+.alert {
+  border-radius: 6px;
+  font-size: 0.8rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* Card hover effects */
+.card .card-body {
+  transition: transform 0.2s ease;
+}
+
+.card:hover .card-body {
+  transform: translateY(-2px);
+}
+
+/* Status badge colors */
+.badge.bg-success {
+  background-color: #28a745 !important;
+}
+
+.badge.bg-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
+
+.badge.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+.badge.bg-info {
+  background-color: #17a2b8 !important;
+}
+
+.badge.bg-secondary {
+  background-color: #6c757d !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding: 1rem 0.5rem;
+  }
+  
+  .card-header {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  .card-title {
+    font-size: 1.25rem;
+  }
+}
+
+/* Custom scrollbar for better UX */
+.card-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.card-body::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Print styles */
+@media print {
+  .container-fluid {
+    background-color: white;
+    padding: 0;
+  }
+  
+  .card {
+    border: 1px solid #000;
+    box-shadow: none;
+  }
+  
+  .card-header {
+    background: white !important;
+    border-bottom: 1px solid #000;
+  }
+}

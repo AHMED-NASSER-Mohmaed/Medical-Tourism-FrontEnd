@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ApiResponse, DoctorCreateDto, DoctorListResponse, DoctorRegistrationDto, Status } from '../models/doctor.model';
+import { ApiResponse, DoctorCreateDto, DoctorListResponse, DoctorProfile, DoctorRegistrationDto, Status } from '../models/doctor.model';
 
 export interface Doctor {
     id: number;
@@ -40,8 +40,8 @@ export class DoctorService {
     return this.http.get<DoctorListResponse>(`${this.apiUrl}/hospital-Doctors`, { params });
   }
 
-    getDoctorById(id: number): Observable<Doctor> {
-        return this.http.get<Doctor>(`${this.apiUrl}/${id}`);
+    getDoctorById(id: string): Observable<DoctorProfile> {
+        return this.http.get<DoctorProfile>(`${this.apiUrl}/${id}`);
     }
 
    createDoctor(doctorData: FormData): Observable<ApiResponse<any>> {
@@ -63,7 +63,7 @@ export class DoctorService {
     );
   }
 
-    updateDoctor(id: number, doctor: Doctor): Observable<Doctor> {
+    updateDoctor(id: string, doctor: FormData): Observable<Doctor> {
         return this.http.put<Doctor>(`${this.apiUrl}/${id}`, doctor);
     }
 
