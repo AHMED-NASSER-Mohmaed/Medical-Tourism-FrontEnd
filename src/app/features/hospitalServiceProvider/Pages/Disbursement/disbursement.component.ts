@@ -16,8 +16,8 @@ export class DisbursementComponent implements OnInit {
 
   disbursements:Disbursement[] = [];
   filteredDisbursements: Disbursement[] = []; 
-   paymentMethods: string[] = ['Cash', 'Bank Transfer', 'Credit Card', 'Other'];
-  
+   paymentMethods: string[] = ['CASH', 'Bank Transfer', 'Credit Card', 'Other'];
+    Math = Math;
   // Filter variables
   searchText: string = '';
   selectedPaymentMethod: string = '';
@@ -67,15 +67,15 @@ export class DisbursementComponent implements OnInit {
   }
 
   gerDisbursementDetails(id: number): void 
-  {
-    this.disbursementService.getDisbursementById(1).subscribe({
-          next: (data) => { 
-            console.log('Disbursement with ID 1:', data);
-          },
-          error: (err) => { 
-            console.error('Error fetching disbursement with ID 1:', err);
-          }
-      });
+   {
+  //   this.disbursementService.getDisbursementById(1).subscribe({
+  //         next: (data) => { 
+  //           console.log('Disbursement with ID 1:', data);
+  //         },
+  //         error: (err) => { 
+  //           console.error('Error fetching disbursement with ID 1:', err);
+  //         }
+  //     });
   }
   applyFilters(): void {
     this.filteredDisbursements = this.disbursements.filter(disbursement => {
@@ -161,17 +161,17 @@ export class DisbursementComponent implements OnInit {
     return this.config.currentPage;
   }
 
-  viewDetails(id: number): void {
-    // Implement navigation to detail view
-    this.disbursementService.getDisbursementById(1).subscribe({
-      next: (data) => { 
-        console.log('Disbursement with ID 1:', data);
-      },
-      error: (err) => { 
-        console.error('Error fetching disbursement with ID 1:', err);
-      }
-    });
-  }
+  // viewDetails(id: number): void {
+  //   // Implement navigation to detail view
+  //   this.disbursementService.getDisbursementById(1).subscribe({
+  //     next: (data) => { 
+  //       console.log('Disbursement with ID 1:', data);
+  //     },
+  //     error: (err) => { 
+  //       console.error('Error fetching disbursement with ID 1:', err);
+  //     }
+  //   });
+  // }
 
   editDisbursement(id: number): void {
     // Implement navigation to edit form
@@ -183,6 +183,24 @@ export class DisbursementComponent implements OnInit {
     this.selectedPaymentMethod = '';
     this.selectedMonth = '';
     this.applyFilters();
+  }
+
+   printDisbursement(id:number) 
+   {
+     this.disbursementService.PrintDisbursement(id).subscribe({
+        next: (blob) => {
+          console.log('Disbursement printed successfully', blob);
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `DisbursementReport.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (error) => {
+          console.error('Error printing disbursement', error);
+        }
+   });
   }
 }
 

@@ -4,8 +4,9 @@ import { CarRentalWebsiteService } from '../../services/car-rental-website.servi
 import { AvailableCar } from '../../models/available-car.model';
 import { CarTypeMap, FuelTypeMap, TransmissionTypeMap } from '../../utils/car-enums.utils';
 import { Location } from '@angular/common';
-import { BookingService } from '../../../patient/services/Booking.service';
+
 import Swal from 'sweetalert2';
+import { BookingService } from '../../../patient/services/Booking.service';
 interface UnavailableDateRange {
   startingDate: string;
   endingDate: string;

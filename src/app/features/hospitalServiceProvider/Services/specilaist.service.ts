@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PaginatedSpecialtiesResponse } from '../models/specialist.model';
 export interface Specialist {
@@ -17,8 +17,13 @@ export class SpecialistService {
     private apiUrl = 'https://localhost:7078/api/Specialties/'; // Replace with your API endpoint
     constructor(private http: HttpClient) {}
 
-    getAllSpecialists(): Observable<PaginatedSpecialtiesResponse> {
-        return this.http.get<PaginatedSpecialtiesResponse>(`${this.apiUrl}HospitalAdmin`);
+    getAllSpecialists(pageNumber:number=1,pagesize:number=10,isActive?:boolean): Observable<PaginatedSpecialtiesResponse> {
+         let params = new HttpParams()
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pagesize.toString())
+      .set('isActive',isActive ? isActive : '');
+
+        return this.http.get<PaginatedSpecialtiesResponse>(`${this.apiUrl}HospitalAdmin`, { params });
     }
 
     getSpecialistById(id: number): Observable<Specialist> {

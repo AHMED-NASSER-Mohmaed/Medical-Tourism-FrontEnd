@@ -1,74 +1,140 @@
-<div class="container-fluid">
-  <h1 class="h3 mb-2 text-gray-800">Specialists Management</h1>
+<div class="specialists-container">
 
-  <div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-      <h6 class="m-0 font-weight-bold text-primary">Specialists List</h6>
-      <input type="text" class="form-control mr-2" style="width: 250px; display: inline-block;" placeholder="Search specialists..." [(ngModel)]="searchTerm" (ngModelChange)="filterSpecialists()" />
-      <button class="btn btn-primary" (click)="openAddSpecialistPopup()">
+  <!-- Header -->
+  <div class="header-section">
+    <div class="header-content">
+      <div>
+        <h1 class="page-title">
+          <i class="fas fa-stethoscope"></i> Specialists Management
+        </h1>
+        <p class="page-subtitle">Manage and add medical specialties easily</p>
+      </div>
+      <button class="btn-primary" (click)="openAddSpecialistPopup()">
         <i class="fas fa-plus"></i> Add Specialist
       </button>
     </div>
-    <div class="card-body">
-      <div class="table-responsive">
-      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-        <thead>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-section">
+    <div class="search-input-wrapper" style="flex:1; display:flex; align-items:center; position:relative;">
+      <i class="fas fa-search" style="position:absolute; left:10px; color:#aaa;"></i>
+      <input 
+        type="text" 
+        class="search-input" 
+        style="padding-left:2rem;" 
+        placeholder="Search specialists..." 
+        [(ngModel)]="searchTerm" 
+        (ngModelChange)="filterSpecialists()">
+      <button *ngIf="searchTerm" 
+              (click)="searchTerm=''; filterSpecialists()"
+              style="position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#aaa;">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <select class="filter-select" 
+            style="min-width:160px; padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;"
+            [(ngModel)]="statusFilter" 
+            (ngModelChange)="onStatusFilterChange()">
+      <option value=''>All Statuses</option>
+      <option value=true>Active</option>
+      <option value=false>Inactive</option>
+     
+    </select>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+    <table class="appointments-table">
+      <thead>
         <tr>
-          <th>Speciality Name</th>
+          <th>Specialty Name</th>
           <th>Description</th>
           <th>Status</th>
-          
         </tr>
-        </thead>
-        <tbody>
+      </thead>
+      <tbody>
         <tr *ngFor="let specialty of specialists">
-          <td>{{specialty.specialtyName}}</td>
-          <td>{{specialty.specialtyDesc | truncate:50}}</td>
+          <td>{{ specialty.specialtyName }}</td>
+          <td>{{ specialty.specialtyDesc | truncate:50 }}</td>
           <td>
-          <span (click)="ChangeSpecialtyStatus(specialty.specialtyId,!specialty.status)" class="badge btn" [ngClass]="{
-            'badge-success': specialty.status === 1,
-            'badge-danger': specialty.status !== 1
-          }">
-            {{ specialty.status === 1 ? 'Active' : 'Inactive' }}
-          </span>
+            <span 
+              class="badge btn" 
+              [ngClass]="{
+                'badge-success': specialty.status === 1,
+                'badge-danger': specialty.status !== 1
+              }"
+              (click)="ChangeSpecialtyStatus(specialty.specialtyId,!specialty.status)">
+              {{ specialty.status === 1 ? 'Active' : 'Inactive' }}
+            </span>
           </td>
-          
         </tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
+      </tbody>
+    </table>
   </div>
 
   <!-- Add Specialist Popup -->
-  <div class="modal fade show" tabindex="-1" style="display: block; background: rgba(0,0,0,0.5);" *ngIf="showAddSpecialistPopup">
+  <div class="modal fade show" tabindex="-1" style="display:block; background:rgba(0,0,0,0.5);" *ngIf="showAddSpecialistPopup">
     <div class="modal-dialog">
       <div class="modal-content">
         <form (ngSubmit)="addSpecialist()" #addSpecialistForm="ngForm">
           <div class="modal-header">
             <h5 class="modal-title">Add Specialist</h5>
-            <!-- <button type="button" class="close" (click)="showAddSpecialistPopup = false">
-              <span>&times;</span>
-            </button> -->
           </div>
-         <div class="modal-body">
-          <div class="form-group">
-            <label for="availableSpecialist">Available Specialists</label>
-            <select class="form-control" id="availableSpecialist" required [(ngModel)]="selectedSpecialistId" name="availableSpecialist">
-              <option value="" disabled selected hidden>Please select the specialist</option>
-              <option *ngFor="let specialist of availableSpecialists" [value]="specialist.id">
-                {{ specialist.name }} -   {{" "}}{{ specialist.description ? specialist.description : 'No Description' }}
-              </option>
-            </select>
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="availableSpecialist">Available Specialists</label>
+              <select 
+                id="availableSpecialist" 
+                class="form-control" 
+                required 
+                [(ngModel)]="selectedSpecialistId" 
+                name="availableSpecialist">
+                <option value="" disabled selected hidden>Please select the specialist</option>
+                <option *ngFor="let specialist of availableSpecialists" [value]="specialist.id">
+                  {{ specialist.name }} - {{ specialist.description ? specialist.description : 'No Description' }}
+                </option>
+              </select>
+            </div>
           </div>
-         </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" (click)="showAddSpecialistPopup = false">Cancel</button>
-            <button type="submit" class="btn btn-primary" [disabled]="!selectedSpecialistId">Add</button>
+            <button type="button" class="btn-secondary btn" (click)="showAddSpecialistPopup = false">Cancel</button>
+            <button type="submit" class="btn-primary" [disabled]="!selectedSpecialistId">Add</button>
           </div>
         </form>
       </div>
     </div>
   </div>
   <!-- End Popup -->
+
 </div>
+<router-outlet></router-outlet>
+
+<!-- Error Modal (pure Angular, doesn't depend on bootstrap.js) -->
+<div class="custom-modal-backdrop" *ngIf="isfailed">
+  <div class="custom-modal">
+    <div class="modal-header bg-danger text-white">
+      <h5 class="modal-title">An Error Occurred</h5>
+      <button type="button" class="btn-close btn-close-white" (click)="closeError()"></button>
+    </div>
+    <div class="modal-body text-center">
+      <i class="bi bi-exclamation-triangle fs-2 text-danger mb-2"></i>
+      <p>{{ messageError }}</p>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn btn-danger" (click)="closeError()">Close</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="isSuccess">
+</div>
+<div class="custom-toast" *ngIf="isSuccess">
+  <i class="bi bi-check-circle-fill me-2"></i>
+  {{ successMessage }}
+</div>
+<div class="loading-overlay" *ngIf="isLoading">
+  
+  <div class="spinner"></div>
+  Please Wait...
+</div>
+

@@ -1,0 +1,120 @@
+/* Table container enhancements */
+.card {
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 60, 255, 0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+  background: #fff;
+  overflow-x: auto;
+}
+
+.card-header {
+  background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+  color: #fff;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: #fff;
+  font-size: 1rem;
+}
+
+.table thead th {
+  background: #f1f5fb;
+  color: #1e3a8a;
+  font-weight: 700;
+  text-align: center;
+  padding: 14px 10px;
+  border-bottom: 2px solid #2563eb;
+}
+
+.table tbody tr {
+  transition: background 0.2s;
+}
+
+.table tbody tr:nth-child(even) {
+  background: #f6faff;
+}
+
+.table tbody tr:hover {
+  background: #e0e7ff;
+}
+
+.table td {
+  padding: 12px 10px;
+  text-align: center;
+  vertical-align: middle;
+  color: #222;
+}
+
+.table td:last-child, .table th:last-child {
+  white-space: nowrap;
+}
+
+/* Highlight important columns */
+.table td:nth-child(5), /* Time */
+.table td:nth-child(7), /* Slot Size */
+.table td:nth-child(8)  /* Price */
+{
+  font-weight: 600;
+  color: #2563eb;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .table thead {
+    display: none;
+  }
+  .table, .table tbody, .table tr, .table td {
+    display: block;
+    width: 100%;
+  }
+  .table tr {
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(37,99,235,0.06);
+  }
+  .table td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+  .table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 10px;
+    top: 12px;
+    font-weight: 700;
+    color: #1e3a8a;
+    text-align: left;
+  }
+}
+
+/* Pagination styling */
+.pagination .page-link {
+  color: #2563eb;
+  border: none;
+  background: transparent;
+  font-weight: 600;
+}
+.pagination .page-item.active .page-link {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 6px;
+}
+.pagination .page-link:hover {
+  background: #e0e7ff;
+  color: #1e40af;
+}
+
+/* Center the no-slots message */
+.text-center.text-muted {
+  color: #64748b;
+  font-size: 1.1rem;
+  padding: 2rem 0;
+}

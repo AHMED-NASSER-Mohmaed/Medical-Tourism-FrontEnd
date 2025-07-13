@@ -16,9 +16,11 @@ import { DisbursementComponent } from './Pages/Disbursement/disbursement.compone
 // Import your guards
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RoleGuard } from '../../shared/guards/role.guard';
+import { DisbursementDetailsComponent } from './Pages/Disbursement/disbursement-details/disbursement-details.component';
+import { ScheduleFormComponent } from './Pages/appointments/schedule-form/schedule-form.component';
+
 const routes: Routes = [
   {
-
     path: '',
     component: SidebarComponent,
     canActivate: [AuthGuard, RoleGuard],
@@ -31,10 +33,11 @@ const routes: Routes = [
       { path: 'doctors', component: DoctorsListComponent },
       { path: 'appointments', component: AppointmentsListComponent },
       { path: 'doctor/add', component: DoctorsFormComponent },
-      { path: 'doctor/edit/:id', component: DoctorsFormComponent },
-      { path: 'schedule/add', component: AppointmentFormComponent },
-      { path: 'schedule/edit/:id', component: AppointmentFormComponent },
+      { path: 'doctors/:id', component: DoctorsFormComponent },
+      { path: 'schedule/add', component: ScheduleFormComponent },
+      { path: 'schedule/:id/:day', component: AppointmentFormComponent },
       { path: 'disbursements' , component:DisbursementComponent},
+      {path: 'disbursement/:id', component: DisbursementDetailsComponent},
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

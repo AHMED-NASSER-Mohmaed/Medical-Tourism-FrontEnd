@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadChildren, Router } from '@angular/router';
-import { BookingService } from '../../services/Booking.service';
-import { PaymentService } from '../../services/Payment.service';
+
 import Swal from 'sweetalert2';
 import { LoadingService } from '../../../../shared/services/loading.service';
 import { HospitalService } from '../../services/Hospital.service';
+import { BookingService } from '../../services/Booking.service';
+import { PaymentService } from '../../services/Payment.service';
 
 @Component({
   selector: 'app-booking-stepper',

@@ -25,6 +25,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SharedModule } from './shared/shared.module';
+import { ProfileComponent } from './features/doctor-dashboard/Pages/profile/profile.component';
+import { AppointementsComponent } from './features/doctor-dashboard/Pages/appointements/appointements.component';
 
 
 
@@ -43,6 +45,8 @@ export function HttpLoaderFactory(http: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
+    ProfileComponent,
+    AppointementsComponent,
     ],
 
   imports: [

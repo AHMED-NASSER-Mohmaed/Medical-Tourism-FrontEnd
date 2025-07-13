@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { DisbursementListResponse } from '../models/disbursement';
+import { DisbursementHospitalDTO, DisbursementListResponse } from '../models/disbursement';
 
 @Injectable({
     providedIn: 'root'
@@ -15,9 +15,9 @@ export class DisbursementService {
         return this.http.get<DisbursementListResponse>(this.apiUrl);
     }
 
-    getDisbursementById(id: number): Observable<any> {
+    getDisbursementById(id: string): Observable<DisbursementHospitalDTO> {
         console.log(`${this.apiUrl}/${id}`)
-        return this.http.get<any>(`${this.apiUrl}/${id}`);
+        return this.http.get<DisbursementHospitalDTO>(`${this.apiUrl}/${id}`);
     }
 
     createDisbursement(data: any): Observable<any> {
@@ -30,5 +30,10 @@ export class DisbursementService {
 
     deleteDisbursement(id: number): Observable<any> {
         return this.http.delete<any>(`${this.apiUrl}/${id}`);
+    }
+    PrintDisbursement(id: number): Observable<any> {
+       
+        return this.http.get(`${this.apiUrl}/Report/${id}`,{
+  responseType: 'blob'});
     }
 }

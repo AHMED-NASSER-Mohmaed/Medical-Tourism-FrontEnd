@@ -10,6 +10,10 @@ const routes: Routes = [
   path: 'hospitalProvider',
   loadChildren: () => import('../app/features/hospitalServiceProvider/hospitalSrvProv.module').then(m => m.HospitalServiceProviderModule)
 },
+{
+  path:'doctor',
+  loadChildren :()=>import('../app/features/doctor-dashboard/doctorDashboard.module').then(m => m.doctorDashboardModule)
+},
 
 
   {

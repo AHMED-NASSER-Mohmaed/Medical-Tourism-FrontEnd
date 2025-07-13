@@ -22,12 +22,15 @@ export class DashboardHeaderComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.auth.getUserName() || 'Guest';
   }
+
   onAvatarClick() {
     this.router.navigate(['/super-admin/profile']);
   }
+
 
   onLogout() {
     this.logout.emit();
 
   }
+
 }

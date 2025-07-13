@@ -14,6 +14,12 @@ export class SpecialistsListComponent {
 specialists: any[] = [] ;
   loading: boolean = true;
  searchTerm: string = '';
+ statusFilter: boolean =true; 
+ isSuccess:boolean=false;
+ isfailed:boolean=false;
+ isLoading: boolean = false;
+ messageError:string='';
+  successMessage:string='';
   constructor(
    private specilaistservice: SpecialistService,
     private router: Router,
@@ -42,24 +48,7 @@ specialists: any[] = [] ;
     });
   }
 
-  deleteSpecialist(id: number) {
-    // this.confirmationService.confirm({
-    //   message: 'Are you sure you want to delete this specialist?',
-    //   header: 'Confirm',
-    //   icon: 'pi pi-exclamation-triangle',
-    //   accept: () => {
-    //     this.specialistService.deleteSpecialist(id).subscribe({
-    //       next: () => {
-    //         this.messageService.add({severity:'success', summary:'Success', detail:'Specialist deleted successfully'});
-    //         this.loadSpecialists();
-    //       },
-    //       error: (err) => {
-    //         this.messageService.add({severity:'error', summary:'Error', detail:'Failed to delete specialist'});
-    //       }
-    //     });
-    //   }
-    // });
-  }
+  
 
  
 
@@ -99,13 +88,21 @@ specialists: any[] = [] ;
   addSpecialist() {
     if (!this.selectedSpecialistId) return;
     console.log('Adding specialist with ID:', this.selectedSpecialistId);
+    this.isLoading = true;
     this.specilaistservice.addSpecialistToList(this.selectedSpecialistId).subscribe({
       next: () => {
+        this.isLoading = false;
+        this.isSuccess = true;
+        this.successMessage = 'Specialist added successfully';
         this.showAddSpecialistPopup = false;
         this.selectedSpecialistId = null;
         this.loadSpecialists();
+        
       },
       error: (err) => {
+        this.isLoading = false;
+        this.isfailed = true;
+        this.messageError = 'Failed to add specialist';
         console.error('Failed to add specialist', err);
       }
     });
@@ -120,5 +117,28 @@ specialists: any[] = [] ;
         console.error('Failed to change specialty status', err);
       }
     });
+  }
+
+    onStatusFilterChange() {
+    console.log('Status filter changed:', this.statusFilter);
+    this.loading = true;
+    this.specilaistservice.getAllSpecialists( 1,10,this.statusFilter ).subscribe({
+      next: (data) => {
+        this.specialists = data.items;
+      
+        
+        
+        this.loading = false;
+       
+      },
+      error: (err) => {
+        console.error('Failed to filter doctors by status', err);
+        this.loading = false;
+      }
+    });
+  }
+   closeError()
+  {
+    this.isfailed=false;
   }
 }
