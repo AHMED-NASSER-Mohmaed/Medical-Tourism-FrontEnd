@@ -1,0 +1,111 @@
+<button type="button" class="btn btn-outline-secondary mt-3" (click)="goBack()">
+  <i class="fas fa-arrow-left me-1"></i>
+  Back
+</button>
+<div class="card shadow-sm rounded p-4 bg-white">
+  <h5 class="mb-4 text-primary">
+    <i class="fas fa-calendar-plus me-2"></i>
+    Create New Schedule
+  </h5>
+
+  <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+    <div class="row g-3">
+
+     
+
+      <div class="col-md-6">
+  <label class="form-label">Specialty</label>
+  <select formControlName="hospitalSpecialtyId" class="form-select" (change)="onSpecialtyChange($event)">
+    <option value="">Select Specialty</option>
+    <option *ngFor="let specialty of hospitalSpecialties" [value]="specialty.id">
+      {{ specialty.specialtyName }}
+    </option>
+  </select>
+</div>
+
+<div class="col-md-6">
+  <label class="form-label">Doctor</label>
+  <select formControlName="doctorId" class="form-select">
+    <option value="">Select Doctor</option>
+    <option *ngFor="let doctor of AvailableDoctors" [value]="doctor.id">
+      {{ doctor.firstName }} {{ doctor.lastName }}
+    </option>
+  </select>
+</div>
+
+
+      <div class="col-md-6">
+        <label class="form-label">Day of Week</label>
+        <select formControlName="dayOfWeekId" class="form-select">
+          <option value="">Select Day</option>
+          <option *ngFor="let day of daysOfWeek" [value]="day.id">{{ day.name }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Start Time</label>
+        <input type="time" formControlName="startTime" class="form-control" (input)="onTimeChange($event, 'startTime')">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">End Time</label>
+        <input type="time" formControlName="endTime" class="form-control" (input)="onTimeChange($event, 'endTime')">
+      </div>
+
+     <div class="col-md-4">
+  <label class="form-label">Time Slot Size (HH:mm:ss)</label>
+  <input 
+    type="text" 
+    formControlName="timeSlotSize" 
+    class="form-control" 
+    placeholder="00:15:00">
+  <div *ngIf="scheduleForm.get('timeSlotSize')?.invalid && scheduleForm.get('timeSlotSize')?.touched" class="text-danger small">
+    Please enter time in format HH:mm:ss (e.g., 00:15:00)
+  </div>
+</div>
+
+      <div class="col-md-4">
+        <label class="form-label">Max Capacity</label>
+        <input type="number" formControlName="maxCapacity" class="form-control" placeholder="e.g. 10">
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Price</label>
+        <input type="number" formControlName="price" class="form-control" placeholder="e.g. 100">
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end gap-2 mt-4">
+      <button type="button" class="btn btn-outline-secondary" (click)="onReset()">Reset</button>
+      <button type="submit" class="btn btn-primary">Create Schedule</button>
+    </div>
+  </form>
+</div>
+<!-- Error Modal (pure Angular, doesn't depend on bootstrap.js) -->
+<div class="custom-modal-backdrop" *ngIf="isfailed">
+  <div class="custom-modal">
+    <div class="modal-header bg-danger text-white">
+      <h5 class="modal-title">An Error Occurred</h5>
+      <button type="button" class="btn-close btn-close-white" (click)="closeError()"></button>
+    </div>
+    <div class="modal-body text-center">
+      <i class="bi bi-exclamation-triangle fs-2 text-danger mb-2"></i>
+      <p>{{ messageError }}</p>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn btn-danger" (click)="closeError()">Close</button>
+    </div>
+  </div>
+</div>
+
+<div class="custom-toast" *ngIf="isSuccess">
+  <i class="bi bi-check-circle-fill me-2"></i>
+  {{ successMessage }}
+</div>
+<div class="loading-overlay" *ngIf="isLoading">
+  
+  <div class="spinner"></div>
+  Please Wait...
+</div>
+
+

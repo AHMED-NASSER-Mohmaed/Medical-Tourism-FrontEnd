@@ -1,3 +1,7 @@
+<button type="button" class="btn btn-outline-secondary mt-3" (click)="goBack()">
+  <i class="fas fa-arrow-left me-1"></i>
+  Back
+</button>
 <div class="container-fluid">
   <div class="row justify-content-center">
     <div class="col-12 col-lg-10 col-xl-8">
@@ -28,25 +32,27 @@
               <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Disbursement ID</label>
-                  <p class="fs-6 fw-semibold text-dark">{{ disbursement.id }}</p>
+                  <p class="fs-6 fw-semibold text-dark">{{ disbursement?.id }}</p>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Total Amount</label>
-                  <p class="fs-5 fw-bold text-success">{{ disbursement.totalAmount | currency }}</p>
+                  <p class="fs-5 fw-bold text-success">{{ disbursement?.totalAmount | currency }}</p>
                 </div>
               </div>
                <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Date of Month</label>
-                  <p class="fs-5 fw-bold text-secondary">{{ disbursement.disbursementDateMonth}}</p>
+                  <p class="fs-5 fw-bold text-secondary">{{ disbursement?.disbursementDateMonth}}</p>
                 </div>
               </div>
                <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Generate At</label>
-                  <p class="fs-5 fw-bold text-secondary">{{ disbursement.generatedAt.split("T")[0] }} At {{ disbursement.generatedAt.split("T")[1]   }}</p>
+                 <p class="fw-bold text-secondary">
+                    {{ disbursementDate }} At {{ disbursementTime }}
+                  </p>
                 </div>
               </div>
             </div>

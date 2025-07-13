@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { DoctorListResponse, Status } from '../../../models/doctor.model';
+import { DoctorListResponse, DoctorDto } from '../../../models/doctor.model';
 import { DoctorService } from '../../../Services/Doctor.service';
 
 @Component({
@@ -10,14 +10,14 @@ import { DoctorService } from '../../../Services/Doctor.service';
   styleUrl: './doctors-list.component.css'
 })
 export class DoctorsListComponent {
- doctors: DoctorListResponse | null = null;
- OrgDoctors: DoctorListResponse | null = null;
+  OrgDoctors: DoctorDto[] = [];          // الأصلية
+  displayedDoctors: DoctorDto[] = [];    // التي تُعرض بعد البحث/الفلترة/pagination
   Showlistdoctors: boolean = true;
   loading: boolean = true;
   searchTerm: string = '';
-   currentPage: number = 1;
+  currentPage: number = 1;
   pageSize: number = 4;
-  statusFilter: string =""; 
+  statusFilter: string = "";
 
   constructor(
     private doctorService: DoctorService,
@@ -34,22 +34,71 @@ export class DoctorsListComponent {
   loadDoctors() {
     this.loading = true;
     console.log('Loading doctors...');
-    this.doctorService.getDoctors(1,10,this.statusFilter).subscribe({
+    this.doctorService.getDoctors(1, 1000, this.statusFilter).subscribe({
       next: (data) => {
         console.log('Doctors loaded successfully', data);
-        this.OrgDoctors= data;
+        this.OrgDoctors = data.items ?? [];
+        this.currentPage = 1;
+        this.applyFilters();
         this.loading = false;
-        this.doctors ={ ...this.OrgDoctors};
-         this.currentPage = 1;
-        this.paginateDoctors();
-        console.log('Original doctors:', this.OrgDoctors.items);
-        
       },
       error: (err) => {
         console.error('Failed to load doctors', err);
         this.loading = false;
       }
     });
+  }
+
+  applyFilters() {
+    let filtered = this.OrgDoctors;
+
+    // فلترة بالبحث
+    if (this.searchTerm.trim() !== '') {
+      filtered = filtered.filter(doc =>
+        (doc.firstName + ' ' + doc.lastName).toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    // فلترة بالحالة
+    if (this.statusFilter !== '') {
+      filtered = filtered.filter(doc => doc.status?.toString() === this.statusFilter);
+    }
+
+    const start = (this.currentPage - 1) * this.pageSize;
+    this.displayedDoctors = filtered.slice(start, start + this.pageSize);
+  }
+
+  get totalPages(): number {
+    let filtered = this.OrgDoctors;
+
+    if (this.searchTerm.trim() !== '') {
+      filtered = filtered.filter(doc =>
+        (doc.firstName + ' ' + doc.lastName).toLowerCase().includes(this.searchTerm.toLowerCase())
+      );
+    }
+
+    if (this.statusFilter !== '') {
+      filtered = filtered.filter(doc => doc.status?.toString() === this.statusFilter);
+    }
+
+    return Math.max(1, Math.ceil(filtered.length / this.pageSize));
+  }
+
+  changePage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.applyFilters();
+  }
+
+  onSearchChange() {
+    this.currentPage = 1;
+    this.applyFilters();
+  }
+
+  onStatusFilterChange() {
+    console.log('Status filter changed:', this.statusFilter);
+    this.currentPage = 1;
+    this.applyFilters();
   }
 
   deleteDoctor(id: number) {
@@ -69,66 +118,5 @@ export class DoctorsListComponent {
   //       });
   //     }
   //   });
-  }
-
- 
-  get totalPages(): number {
-    return this.doctors ? Math.ceil(this.doctors.totalCount / this.pageSize) : 1;
-  }
-
-  changePage(page: number) {
-    if (page < 1 || (this.doctors && page > this.totalPages)) return;
-    this.currentPage = page;
-    this.paginateDoctors();
-  }
-
-  paginateDoctors() {
-    if (!this.OrgDoctors) return;
-    const start = (this.currentPage - 1) * this.pageSize;
-    const end = start + this.pageSize;
-    this.doctors = {
-      ...this.OrgDoctors,
-      items: this.OrgDoctors.items.slice(start, end),
-      pageNumber: this.currentPage,
-      pageSize: this.pageSize
-    };
-  }
-
-
- 
-  onSearchChange() {
-    // Reset pagination or any other logic if needed
-    if( this.searchTerm.trim() === '') {
-     this.doctors = this.OrgDoctors
-       ? { ...this.OrgDoctors, items: this.OrgDoctors.items ?? [] }
-       : { items: [], totalCount: 0, pageNumber: 1, pageSize: 10 }; 
-      }else if (this.doctors && this.OrgDoctors) {
-      this.doctors.items = this.OrgDoctors.items.filter((doctor) => doctor.firstName.toLowerCase().includes(this.searchTerm.toLowerCase()) );
-    }
-    
-  }
-
-  // Default status filter
-
-  onStatusFilterChange() {
-    console.log('Status filter changed:', this.statusFilter);
-    this.loading = true;
-    this.doctorService.getDoctors( 1,10,"",this.statusFilter ).subscribe({
-      next: (data) => {
-        this.OrgDoctors = data;
-        this.doctors = { ...data };
-        this.currentPage = 1;
-        this.paginateDoctors();
-        this.onSearchChange()
-        
-        
-        this.loading = false;
-        console.log('Doctors after status filter:', this.doctors.items);
-      },
-      error: (err) => {
-        console.error('Failed to filter doctors by status', err);
-        this.loading = false;
-      }
-    });
   }
 }

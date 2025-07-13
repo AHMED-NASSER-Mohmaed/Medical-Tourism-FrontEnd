@@ -18,6 +18,8 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpLoaderFactory } from '../../app.module';
 import { HttpClient } from '@angular/common/http';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { DisbursementDetailsComponent } from './Pages/Disbursement/disbursement-details/disbursement-details.component';
+import { ScheduleFormComponent } from './Pages/appointments/schedule-form/schedule-form.component';
 
 
 
@@ -25,13 +27,15 @@ import { NgxPaginationModule } from 'ngx-pagination';
   declarations: [
 
     DisbursementComponent,
+    DisbursementDetailsComponent,
     SpecialistsListComponent,
     SpecialistsFormComponent,
     DoctorsListComponent,
     DoctorsFormComponent,
     AppointmentsListComponent,
     AppointmentFormComponent,
-    TruncatePipe
+    TruncatePipe,
+    ScheduleFormComponent
   ],
   imports: [
 

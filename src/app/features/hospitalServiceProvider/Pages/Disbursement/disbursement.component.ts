@@ -67,15 +67,15 @@ export class DisbursementComponent implements OnInit {
   }
 
   gerDisbursementDetails(id: number): void 
-  {
-    this.disbursementService.getDisbursementById(1).subscribe({
-          next: (data) => { 
-            console.log('Disbursement with ID 1:', data);
-          },
-          error: (err) => { 
-            console.error('Error fetching disbursement with ID 1:', err);
-          }
-      });
+   {
+  //   this.disbursementService.getDisbursementById(1).subscribe({
+  //         next: (data) => { 
+  //           console.log('Disbursement with ID 1:', data);
+  //         },
+  //         error: (err) => { 
+  //           console.error('Error fetching disbursement with ID 1:', err);
+  //         }
+  //     });
   }
   applyFilters(): void {
     this.filteredDisbursements = this.disbursements.filter(disbursement => {
@@ -161,17 +161,17 @@ export class DisbursementComponent implements OnInit {
     return this.config.currentPage;
   }
 
-  viewDetails(id: number): void {
-    // Implement navigation to detail view
-    this.disbursementService.getDisbursementById(1).subscribe({
-      next: (data) => { 
-        console.log('Disbursement with ID 1:', data);
-      },
-      error: (err) => { 
-        console.error('Error fetching disbursement with ID 1:', err);
-      }
-    });
-  }
+  // viewDetails(id: number): void {
+  //   // Implement navigation to detail view
+  //   this.disbursementService.getDisbursementById(1).subscribe({
+  //     next: (data) => { 
+  //       console.log('Disbursement with ID 1:', data);
+  //     },
+  //     error: (err) => { 
+  //       console.error('Error fetching disbursement with ID 1:', err);
+  //     }
+  //   });
+  // }
 
   editDisbursement(id: number): void {
     // Implement navigation to edit form

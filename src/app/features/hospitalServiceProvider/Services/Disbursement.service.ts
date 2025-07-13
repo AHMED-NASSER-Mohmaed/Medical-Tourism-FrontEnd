@@ -15,7 +15,7 @@ export class DisbursementService {
         return this.http.get<DisbursementListResponse>(this.apiUrl);
     }
 
-    getDisbursementById(id: number): Observable<DisbursementHospitalDTO> {
+    getDisbursementById(id: string): Observable<DisbursementHospitalDTO> {
         console.log(`${this.apiUrl}/${id}`)
         return this.http.get<DisbursementHospitalDTO>(`${this.apiUrl}/${id}`);
     }

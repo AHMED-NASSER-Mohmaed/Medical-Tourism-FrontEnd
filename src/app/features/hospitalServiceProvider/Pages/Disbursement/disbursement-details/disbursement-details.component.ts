@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { DisbursementService } from '../../../Services/Disbursement.service';
 import { ActivatedRoute } from '@angular/router';
 import { DisbursementHospitalDTO } from '../../../models/disbursement';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-disbursement-details',
@@ -16,12 +17,13 @@ export class DisbursementDetailsComponent {
 
   constructor(
     private disbursementService: DisbursementService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.disbursementService.getDisbursementById(id).subscribe({
+       const id = this.route.snapshot.paramMap.get('id') || ''; 
+      this.disbursementService.getDisbursementById(id).subscribe({
       next: (data) => {
         this.disbursement = data;
         this.isLoading = false;
@@ -61,4 +63,14 @@ export class DisbursementDetailsComponent {
       });
     }
   }
+  get disbursementDate(): string {
+  return this.disbursement?.generatedAt?.split('T')[0] ?? '';
+}
+
+get disbursementTime(): string {
+  return this.disbursement?.generatedAt?.split('T')[1] ?? '';
+}
+goBack(): void {
+  this.location.back();
+}
 }

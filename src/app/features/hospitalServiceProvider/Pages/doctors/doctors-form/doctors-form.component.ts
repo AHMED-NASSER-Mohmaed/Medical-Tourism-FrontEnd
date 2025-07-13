@@ -7,6 +7,7 @@ import { CountryGovernoratesDTO, GovernorateDTO } from '../../../models/location
 import { Specialty } from '../../../models/specialist.model';
 import { LocationService } from '../../../Services/location.service';
 import { SpecialistService } from '../../../Services/specilaist.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-doctors-form',
@@ -41,6 +42,7 @@ export class DoctorsFormComponent {
     private locationService: LocationService,
     private specialtyService: SpecialistService,
     private router: Router,
+    private location: Location,
   ) {
     this.doctorForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -280,5 +282,7 @@ export class DoctorsFormComponent {
     this.isSuccess=false;
    this.router.navigate(['/hospitalProvider/doctors']);
   }
-  
+  goBack(): void {
+  this.location.back();
+}
 }
