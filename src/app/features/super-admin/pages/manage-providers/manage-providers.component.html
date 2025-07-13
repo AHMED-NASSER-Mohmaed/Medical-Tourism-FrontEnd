@@ -108,7 +108,7 @@
 
               <!-- Providers List -->
               <tr *ngFor="let provider of providers; trackBy: trackByProviderId">
-                <td>
+                <td data-label="Provider">
                   <div class="d-flex align-items-center gap-3">
                     <div class="avatar-container position-relative me-3">
                       <img [src]="(provider.assetImages && provider.assetImages.length > 0) 
@@ -131,27 +131,33 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ provider.assetGovernateName }}</td>
-                <td>
+                <td data-label="Governorate">{{ provider.assetGovernateName }}</td>
+                <td data-label="Status">
                   <app-status-badge
                     [status]="getAssetStatus(provider.status) | statusLabel"
                     [statusValue]="getAssetStatus(provider.status)">
                   </app-status-badge>
                 </td>
-                <td>{{ provider.acquisitionDate | date:'mediumDate' }}</td>
-                <td>
+                <td data-label="Registered">{{ provider.acquisitionDate | date:'mediumDate' }}</td>
+                <td data-label="Contact">
                   <div class="d-flex flex-column">
-                    <a href="mailto:{{ provider.assetEmail }}" class="text-truncate" aria-label="Email provider">
+                    <!-- <a href="mailto:{{ provider.assetEmail }}" class="text-truncate" aria-label="Email provider">
                       {{ provider.assetEmail }}
-                    </a>
+                    </a> -->
                     <a href="tel:{{ provider.phone }}" class="text-muted small" aria-label="Call provider">
                       {{ provider.phone }}
                     </a>
                   </div>
                 </td>
-                <td class="text-end">
+                <td data-label="Actions" class="text-end">
                   <div class="btn-group" role="group">
-                    <!-- Removed view details (eye icon) button -->
+                    <button type="button" 
+                            class="btn btn-sm btn-outline-info me-1"
+                            (click)="viewProviderDetails(provider)"
+                            [disabled]="isLoading"
+                            title="View provider details" aria-label="View provider details">
+                      <fa-icon [icon]="icons.view"></fa-icon>
+                    </button>
                     <button type="button" 
                             *ngIf="getAssetStatus(provider.status) !== AssetStatus.APPROVED"
                             class="btn btn-sm btn-outline-success"
@@ -207,61 +213,8 @@
 </div>
 
 <!-- Provider Details Modal -->
-<div class="modal-backdrop-custom" *ngIf="showProviderModal">
-  <div class="modal-dialog modal-xl provider-modal-dialog">
-    <div class="modal-content provider-modal-content">
-      <div class="modal-header provider-modal-header">
-        <img [src]="(selectedProvider?.assetImages?.length ?? 0) > 0 
-                  ? selectedProvider?.assetImages?.[0]?.imageURL 
-                  : (selectedProvider?.imageURL ?? 'assets/images/default-provider.png')" 
-             alt="Provider image" 
-             class="provider-modal-avatar">
-        <div>
-          <div class="provider-modal-title">{{ selectedProvider?.assetName }}</div>
-          <div class="provider-modal-badges">
-            <span class="badge provider-type-badge">{{ getProviderType(selectedProvider!) }}</span>
-            <span class="badge"
-                  [ngClass]="{
-                    'badge-approved': getAssetStatus(selectedProvider!.status) === AssetStatus.APPROVED,
-                    'badge-pending': getAssetStatus(selectedProvider!.status) === AssetStatus.PENDING,
-                    'badge-under-review': getAssetStatus(selectedProvider!.status) === AssetStatus.UNDER_REVIEW,
-                    'badge-rejected': getAssetStatus(selectedProvider!.status) === AssetStatus.REJECTED
-                  }">
-              {{ getAssetStatus(selectedProvider!.status) | statusLabel }}
-            </span>
-          </div>
-        </div>
-        <button type="button" class="btn-close ms-auto" aria-label="Close" (click)="closeProviderModal()"></button>
-      </div>
-      <div class="modal-body provider-modal-body">
-        <div class="section-title">Provider Information</div>
-        <div class="row">
-          <div class="col-md-6 mb-2">
-            <strong>Email:</strong> {{ selectedProvider?.assetEmail }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>Phone:</strong> {{ selectedProvider?.phone }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>Contact Person:</strong> {{ selectedProvider?.firstName }} {{ selectedProvider?.lastName }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>Registered:</strong> {{ selectedProvider?.acquisitionDate | date:'mediumDate' }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>Address:</strong> {{ selectedProvider?.address || 'N/A' }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>City:</strong> {{ selectedProvider?.city || 'N/A' }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>Governorate:</strong> {{ selectedProvider?.governorate || 'N/A' }}
-          </div>
-          <div class="col-md-6 mb-2">
-            <strong>Country:</strong> {{ selectedProvider?.country || 'N/A' }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<app-provider-details 
+  *ngIf="showProviderModal && selectedProvider"
+  [provider]="selectedProvider"
+  (close)="closeProviderModal()">
+</app-provider-details>

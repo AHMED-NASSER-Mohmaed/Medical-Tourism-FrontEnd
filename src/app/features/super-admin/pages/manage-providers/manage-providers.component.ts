@@ -253,8 +253,9 @@ export class ManageProvidersComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewProviderDetails(providerId: string): void {
-    this.router.navigate(['/super-admin/providers', providerId]);
+  viewProviderDetails(provider: UIProvider): void {
+    this.selectedProvider = provider;
+    this.showProviderModal = true;
   }
 
   closeProviderModal(): void {

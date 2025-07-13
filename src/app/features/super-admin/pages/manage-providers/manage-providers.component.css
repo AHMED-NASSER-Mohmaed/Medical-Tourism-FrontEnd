@@ -6,6 +6,8 @@
 
   .stats-overview {
     margin-bottom: 2.5rem;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
 
     .stat-card {
       background: #fff;
@@ -453,106 +455,7 @@
   }
 }
 
-.provider-modal-content {
-  border-radius: 1.5rem;
-  overflow: hidden;
-  background: #fff;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.10);
-}
 
-.provider-modal-header {
-  background: linear-gradient(90deg, #3b82f6 0%, #06b6d4 100%);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 2rem 2rem 1.2rem 2rem;
-  border-bottom: none;
-}
-
-.provider-modal-avatar {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 4px solid #fff;
-  box-shadow: 0 2px 8px rgba(31, 38, 135, 0.10);
-  margin-right: 1.5rem;
-}
-
-.provider-modal-title {
-  font-size: 2rem;
-  font-weight: 800;
-  margin-bottom: 0.2rem;
-  color: #fff;
-}
-
-.provider-modal-badges .badge {
-  font-size: 1rem;
-  margin-right: 0.5rem;
-  padding: 0.4em 1em;
-  border-radius: 0.7rem;
-  font-weight: 600;
-}
-
-.provider-type-badge {
-  background: #fff;
-  color: #3b82f6;
-}
-
-.provider-modal-body {
-  padding: 2rem;
-}
-
-.section-title {
-  font-weight: 700;
-  color: #3b82f6;
-  margin-bottom: 1.2rem;
-  font-size: 1.2rem;
-}
-
-@media (max-width: 767.98px) {
-  .provider-modal-header,
-  .provider-modal-body {
-    padding: 1rem;
-  }
-  .provider-modal-avatar {
-    width: 48px;
-    height: 48px;
-  }
-  .provider-modal-title {
-    font-size: 1.2rem;
-  }
-}
-
-/* Modal backdrop and centering */
-.modal-backdrop-custom {
-  position: fixed;
-  inset: 0;
-  z-index: 1050;
-  background: rgba(30, 41, 59, 0.25);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  animation: fadeIn 0.2s;
-}
-
-/* Remove margin override, set max width for modal */
-.provider-modal-dialog {
-  margin: 0;
-  max-width: 900px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Responsive: shrink modal on small screens */
-@media (max-width: 991.98px) {
-  .provider-modal-dialog {
-    max-width: 98vw;
-  }
-}
 
 /* --- Enhanced Responsive Design --- */
 @media (max-width: 1200px) {
@@ -667,6 +570,11 @@
   width: 100%;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.04);
+  border-radius: 0.8rem;
+}
+.providers-table {
+  min-width: 0;
 }
 
 /* Make buttons, inputs, selects full-width on mobile */
@@ -674,5 +582,141 @@
   .btn, .form-control, .form-select {
     width: 100%;
     margin-bottom: 0.5rem;
+  }
+}
+
+/* --- Table Container & Shadow --- */
+.table-container {
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 24px rgba(30,41,59,0.07);
+  overflow: hidden;
+  background: #fff;
+  margin-bottom: 2rem;
+}
+
+/* --- Table --- */
+.providers-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  background: #fff;
+  font-size: 1rem;
+}
+
+.providers-table thead th {
+  position: sticky;
+  top: 0;
+  background: #f1f5f9;
+  z-index: 2;
+  font-weight: 700;
+  padding: 1.1rem 0.75rem;
+  border-bottom: 2px solid #e2e8f0;
+  text-align: left;
+}
+
+.providers-table tbody tr {
+  transition: box-shadow 0.18s, background 0.18s;
+}
+
+.providers-table tbody tr:hover {
+  background: #f8fafc;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.07);
+}
+
+.providers-table td {
+  padding: 1rem 0.75rem;
+  vertical-align: middle;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* --- Avatar & Provider Info --- */
+.provider-avatar {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 2px 8px rgba(59,130,246,0.08);
+  transition: border-color 0.2s;
+}
+.providers-table tr:hover .provider-avatar {
+  border-color: #2563eb;
+}
+
+/* --- Action Buttons --- */
+.btn-group .btn {
+  margin-right: 0.4rem;
+  transition: transform 0.1s, background 0.2s;
+  border-radius: 0.6rem !important;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.07);
+}
+.btn-group .btn:last-child {
+  margin-right: 0;
+}
+.btn-group .btn:hover {
+  transform: scale(1.08);
+  z-index: 1;
+}
+
+/* --- Status Badge --- */
+app-status-badge .badge,
+.providers-table .badge {
+  border-radius: 1.2rem;
+  font-size: 0.98rem;
+  font-weight: 600;
+  padding: 0.45em 1.1em;
+  letter-spacing: 0.01em;
+  box-shadow: 0 1px 4px rgba(59,130,246,0.07);
+  transition: background 0.2s, color 0.2s;
+}
+
+/* --- Responsive Table --- */
+@media (max-width: 991.98px) {
+  .providers-table thead {
+    display: none;
+  }
+  .providers-table, .providers-table tbody, .providers-table tr, .providers-table td {
+    display: block;
+    width: 100%;
+  }
+  .providers-table tr {
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(59,130,246,0.07);
+    border-radius: 1rem;
+    background: #fff;
+    padding: 1rem 0.5rem;
+  }
+  .providers-table td {
+    padding: 0.7rem 0.5rem;
+    border: none;
+    position: relative;
+  }
+  .providers-table td:before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: #64748b;
+    display: block;
+    margin-bottom: 0.3rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Center the main management card and ensure symmetrical padding */
+.providers-management-container {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+.management-card {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1200px;
+  width: 100%;
+  min-width: 320px;
+}
+
+@media (max-width: 991.98px) {
+  .providers-management-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .management-card {
+    max-width: 100%;
   }
 }

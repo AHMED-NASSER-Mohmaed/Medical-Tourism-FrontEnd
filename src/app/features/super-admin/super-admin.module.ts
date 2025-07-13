@@ -25,6 +25,7 @@ import { HospitalsAccountsComponent } from './pages/manage-accounts/hospitals-ac
 import { HotelsAccountsComponent } from './pages/manage-accounts/hotels-accounts/hotels-accounts.component';
 import { CarRentalsAccountsComponent } from './pages/manage-accounts/car-rentals-accounts/car-rentals-accounts.component';
 import { AddPatientProviderComponent } from './pages/providers/add-patient-provider/add-patient-provider.component';
+import { ProviderDetailsComponent } from './pages/provider-details/provider-details.component';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,9 @@ import { AddPatientProviderComponent } from './pages/providers/add-patient-provi
     HospitalsAccountsComponent,
     HotelsAccountsComponent,
     CarRentalsAccountsComponent,
-    AddPatientProviderComponent
+    AddPatientProviderComponent,
+    ProviderDetailsComponent
+    
   ],
   imports: [
     CommonModule,

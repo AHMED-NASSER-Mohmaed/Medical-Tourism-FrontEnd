@@ -1,147 +1,75 @@
-.card {
-  border: none;
-  border-radius: 1.1rem;
-  background: linear-gradient(135deg, #f8fafc 0%, #e0e7ef 100%);
-  box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
-  overflow: hidden;
-  padding: 0.7rem 1rem 0.6rem 1rem;
-  min-width: 180px;
-  max-width: 240px;
+.dashboard-card {
+  background: #fff;
+  border-radius: 1.25rem;
+  box-shadow: 0 6px 32px rgba(31, 38, 135, 0.10);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  min-width: 0;
+  min-height: 120px;
+  transition: transform 0.18s, box-shadow 0.18s;
+  margin-bottom: 1.5rem;
 }
 
-.card:hover {
-  transform: translateY(-6px) scale(1.03);
-  box-shadow: 0 16px 40px 0 rgba(31, 38, 135, 0.18);
+.dashboard-card:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.16);
 }
 
-.card-body {
-  padding: 0.7rem 0.7rem 0.5rem 0.7rem;
-}
-
-h6 {
-  font-size: 0.92rem;
-  letter-spacing: 1.1px;
+.dashboard-card .card-title {
+  font-size: 1.1rem;
   font-weight: 600;
-  margin-bottom: 0.1rem;
+  color: #1a1a2e;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
 }
 
-h3 {
-  font-size: 1.7rem;
-  font-weight: 800;
-  color: #22223b;
-  margin-bottom: 0.12rem;
+.dashboard-card .card-value {
+  font-size: 2.1rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 0.2rem;
 }
 
-.bg-soft-primary {
-  background: rgba(59, 130, 246, 0.15);
-  backdrop-filter: blur(4px);
-}
-.bg-soft-success {
-  background: rgba(16, 185, 129, 0.15);
-  backdrop-filter: blur(4px);
-}
-.bg-soft-warning {
-  background: rgba(251, 191, 36, 0.15);
-  backdrop-filter: blur(4px);
-}
-.bg-soft-danger {
-  background: rgba(239, 68, 68, 0.15);
-  backdrop-filter: blur(4px);
+.dashboard-card .card-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.7rem;
+  color: #3b82f6;
 }
 
-.p-2.rounded-circle {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  border: 2px solid rgba(255,255,255,0.5);
-  width: 2.1rem;
-  height: 2.1rem;
-  margin-left: 0.3rem;
-}
-
-.fa-icon {
-  font-size: 2rem;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.10));
-}
-
-.badge {
-  font-size: 0.95rem;
-  font-weight: 600;
-  padding: 0.25em 0.7em;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  border: none;
-  animation: popIn 0.5s;
-}
-
-@keyframes popIn {
-  0% { transform: scale(0.8); opacity: 0; }
-  80% { transform: scale(1.05); opacity: 1; }
-  100% { transform: scale(1); }
-}
-
-.fa-arrow-up, .fa-arrow-down {
-  margin-right: 0.4em;
-  animation: arrowMove 1s infinite alternate;
-}
-
-@keyframes arrowMove {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-4px); }
-}
-
-/* --- Enhanced Responsive Design --- */
-@media (max-width: 1200px) {
-  .dashboard-card {
-    padding: 1.2rem 0.7rem;
-  }
-}
 @media (max-width: 991.98px) {
   .dashboard-card {
-    padding: 1rem 0.5rem;
-    min-width: 0;
+    padding: 1.2rem 1rem;
+    min-height: 90px;
+    margin-bottom: 1rem;
   }
-  .dashboard-card-title {
+  .dashboard-card .card-title {
     font-size: 1rem;
   }
-  .dashboard-card-value {
+  .dashboard-card .card-value {
     font-size: 1.5rem;
   }
-  .dashboard-card-icon {
-    font-size: 2rem;
-  }
-}
-@media (max-width: 767.98px) {
-  .dashboard-card {
-    width: 100%;
-    padding: 0.7rem 0.3rem;
-    margin-bottom: 0.7rem;
-  }
-  .dashboard-card-title {
-    font-size: 0.95rem;
-  }
-  .dashboard-card-value {
-    font-size: 1.2rem;
-  }
-  .dashboard-card-icon {
+  .dashboard-card .card-icon {
     font-size: 1.5rem;
   }
 }
+
 @media (max-width: 575.98px) {
   .dashboard-card {
-    padding: 0.4rem 0.1rem;
-    border-radius: 0.5rem;
+    padding: 0.8rem 0.5rem;
+    min-height: 70px;
+    margin-bottom: 0.7rem;
+    border-radius: 0.9rem;
   }
-  .dashboard-card-title {
-    font-size: 0.85rem;
+  .dashboard-card .card-title {
+    font-size: 0.95rem;
   }
-  .dashboard-card-value {
-    font-size: 1rem;
-  }
-  .dashboard-card-icon {
+  .dashboard-card .card-value {
     font-size: 1.1rem;
   }
-}
-@media (max-width: 400px) {
-  .dashboard-card-title, .dashboard-card-value {
-    font-size: 0.75rem;
+  .dashboard-card .card-icon {
+    font-size: 1.1rem;
   }
 }
