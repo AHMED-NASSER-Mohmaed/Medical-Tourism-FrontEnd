@@ -15,7 +15,9 @@
       </button>
     </div>
   </div>
-<div class="controls-section">
+
+  <!-- Controls -->
+  <div class="controls-section">
     <div class="search-input-wrapper" style="flex:1; display:flex; align-items:center; position:relative;">
       <i class="fas fa-search" style="position:absolute; left:10px; color:#aaa;"></i>
       <input 
@@ -31,37 +33,26 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <select 
-        class="filter-select" 
-        [(ngModel)]="selectedDayId" 
-        (ngModelChange)="onDayChange()">
-        <option [ngValue]="null">Select Day</option>
-        <option *ngFor="let day of daysOfWeek" [ngValue]="day.id">
-          {{ day.name }}
-        </option>
-      </select>
-    <select class="filter-select" 
-            style="min-width:160px; padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;"
-            [(ngModel)]="statusFilter" 
-            (ngModelChange)="onStatusFilterChange()">
+    <select class="filter-select" [(ngModel)]="selectedDayId" (ngModelChange)="onDayChange()">
+      <option [ngValue]="null">Select Day</option>
+      <option *ngFor="let day of daysOfWeek" [ngValue]="day.id">{{ day.name }}</option>
+    </select>
+    <select class="filter-select" style="min-width:160px; padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;"
+            [(ngModel)]="statusFilter" (ngModelChange)="onStatusFilterChange()">
       <option value="">All Statuses</option>
-      <option value="1">Active</option>
-      <option value="0">Inactive</option>
-    
+      <option value="Active">Active</option>
+      <option value="inactive">Inactive</option>
     </select>
   </div>
 
   <!-- Filter Section -->
   <div class="filter-section" *ngIf="showFilters" 
        style="max-width:1200px; margin:auto; padding:0 1rem; margin-bottom:1rem; display:flex; gap:1rem; flex-wrap:wrap;">
-    <select class="filter-select" 
-            [(ngModel)]="selectedFilter" 
-            (change)="onFilterChange()"
+    <select class="filter-select" [(ngModel)]="selectedFilter" (change)="onFilterChange()"
             style="padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;">
       <option *ngFor="let option of filterOptions" [value]="option.value">{{ option.label }}</option>
     </select>
-    <button class="btn-secondary" 
-            (click)="clearFilters()"
+    <button class="btn-secondary" (click)="clearFilters()"
             style="border:1px solid #ddd; background:#fff; padding:0.5rem 1rem; border-radius:4px; cursor:pointer;">
       <i class="fas fa-times"></i> Clear Filters
     </button>
@@ -70,7 +61,7 @@
   <!-- Stats -->
   <div class="stats-section">
     <div class="stat-card">
-      <h3>{{ appointments.items.length  }}</h3>
+      <h3>{{ appointments.items.length }}</h3>
       <p>Total Appointments</p>
     </div>
     <div class="stat-card">
@@ -100,25 +91,22 @@
         <tr *ngFor="let schedule of appointments.items">
           <td>{{ schedule.doctorName }}</td>
           <td>{{ schedule.specialty }}</td>
-          <td>{{getDayName(schedule.dayOfWeekId)}}</td>
+          <td>{{ getDayName(schedule.dayOfWeekId) }}</td>
           <td>{{ schedule.startTime }} - {{ schedule.endTime }}</td>
           <td>
-            <button 
-              class="status-toggle" 
-              [class.active]="schedule.isActive" 
-              [class.inactive]="!schedule.isActive"
-              (click)="changeStatus(schedule.id, !schedule.isActive)">
+            <button class="status-toggle" [class.active]="schedule.isActive" [class.inactive]="!schedule.isActive"
+                    (click)="changeStatus(schedule.id, !schedule.isActive)">
               <i class="fas" [class.fa-toggle-on]="schedule.isActive" [class.fa-toggle-off]="!schedule.isActive"></i>
               {{ schedule.isActive ? 'Active' : 'Inactive' }}
             </button>
           </td>
-        <td>
-  <button class="btn btn-sm btn-primary d-flex align-items-center gap-1" title="View" 
-          [routerLink]="['/hospitalProvider/schedule', schedule.id,schedule.dayOfWeekId]">
-    <i class="fas fa-eye"></i> <!-- استخدم fa-eye بدلاً من fa-show لأنها الأيقونة الصحيحة -->
-    <span class="d-none d-md-inline">View</span>
-  </button>
-</td>
+          <td>
+            <button class="btn btn-sm btn-primary d-flex align-items-center gap-1" title="View" 
+                    [routerLink]="['/hospitalProvider/schedule', schedule.id, schedule.dayOfWeekId]">
+              <i class="fas fa-eye"></i>
+              <span class="d-none d-md-inline">View</span>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -143,18 +131,16 @@
   </div>
 
   <!-- Pagination -->
-  <div class="pagination" *ngIf="getTotalPages() > 1">
+ <div class="pagination" *ngIf="totalPages > 1">
     <button class="pagination-btn" [disabled]="appointments.pageNumber === 1" (click)="goToPage(appointments.pageNumber! - 1)">
       Prev
     </button>
-    <button 
-      *ngFor="let page of [].constructor(getTotalPages()); let i = index"
-      class="page-btn" 
-      [class.active]="appointments.pageNumber === (i + 1)" 
-      (click)="goToPage(i + 1)">
+    <button *ngFor="let page of [].constructor(totalPages); let i = index"
+            class="page-btn" [class.active]="appointments.pageNumber === (i + 1)" 
+            (click)="goToPage(i + 1)">
       {{ i + 1 }}
     </button>
-    <button class="pagination-btn" [disabled]="appointments.pageNumber === getTotalPages()" (click)="goToPage(appointments.pageNumber! + 1)">
+    <button class="pagination-btn" [disabled]="appointments.pageNumber === totalPages" (click)="goToPage(appointments.pageNumber! + 1)">
       Next
     </button>
   </div>

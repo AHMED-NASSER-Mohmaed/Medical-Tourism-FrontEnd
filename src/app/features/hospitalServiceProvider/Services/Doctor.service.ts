@@ -40,6 +40,28 @@ export class DoctorService {
     return this.http.get<DoctorListResponse>(`${this.apiUrl}/hospital-Doctors`, { params });
   }
 
+  getDoctorsHospitalSpecialty(
+    hospitalSpecialty:number,
+    pageNumber: number = 1,
+    pageSize: number = 10,
+    searchTerm?: string,
+    status?: string
+  ): Observable<DoctorListResponse> {
+    // Set up headers with bearer token
+    
+
+    // Build query parameters
+    let params = new HttpParams()
+      .set('hospitalSpecialtyId',hospitalSpecialty.toString())
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString())
+      .set('UserStatus',status ? status : '');
+
+       console.log("status",status);
+
+    return this.http.get<DoctorListResponse>(`${this.apiUrl}/website/${hospitalSpecialty}`, { params });
+  }
+
     getDoctorById(id: string): Observable<DoctorProfile> {
         return this.http.get<DoctorProfile>(`${this.apiUrl}/hosital-admin/${id}`);
     }

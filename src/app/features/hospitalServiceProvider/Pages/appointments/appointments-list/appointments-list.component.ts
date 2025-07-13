@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ScheduleService } from '../../../Services/Schedule.service';
-import { ScheduleListResponse } from '../../../models/schedule.model';
+import { ScheduleListResponse, ScheduleResponseDto } from '../../../models/schedule.model';
 
 @Component({
   selector: 'app-appointments-list',
@@ -10,40 +10,38 @@ import { ScheduleListResponse } from '../../../models/schedule.model';
   styleUrl: './appointments-list.component.css'
 })
 export class AppointmentsListComponent {
-appointments: ScheduleListResponse = {
-    items: [],
-    totalCount: 0,
-    pageNumber: 1,
-    pageSize: 3
-  };
-  
-  orgAppointments: ScheduleListResponse = {
+  appointments: ScheduleListResponse = {
     items: [],
     totalCount: 0,
     pageNumber: 1,
     pageSize: 6
   };
-  
+
+  orgAppointments: ScheduleResponseDto[] = []; // البيانات الأصلية
+  filteredItems: ScheduleResponseDto[] = [];   // نتائج بعد الفلترة
+
   loading: boolean = true;
   searchTerm: string = '';
   selectedFilter: string = 'all';
   showFilters: boolean = false;
-  statusFilter: string = 'All Status ';
+  statusFilter: string = '';
   selectedDayId: number | null = null;
+
   filterOptions = [
     { value: 'all', label: 'All Appointments' },
     { value: 'active', label: 'Active' },
     { value: 'inactive', label: 'Inactive' }
   ];
+
   daysOfWeek = [
-  { id: 1, name: 'Sunday' },
-  { id: 2, name: 'Monday' },
-  { id: 3, name: 'Tuesday' },
-  { id: 4, name: 'Wednesday' },
-  { id: 5, name: 'Thursday' },
-  { id: 6, name: 'Friday' },
-  { id: 7, name: 'Saturday' }
-];
+    { id: 1, name: 'Sunday' },
+    { id: 2, name: 'Monday' },
+    { id: 3, name: 'Tuesday' },
+    { id: 4, name: 'Wednesday' },
+    { id: 5, name: 'Thursday' },
+    { id: 6, name: 'Friday' },
+    { id: 7, name: 'Saturday' }
+  ];
 
   constructor(
     private appointmentService: ScheduleService,
@@ -56,13 +54,14 @@ appointments: ScheduleListResponse = {
 
   loadAppointments() {
     this.loading = true;
-    this.appointmentService.getSchedules().subscribe({
+    this.appointmentService.getSchedulesWithFilter(this.searchTerm,this.statusFilter,this.selectedDayId!).subscribe({
       next: (data) => {
-        this.orgAppointments = data;
-        this.appointments = { ...this.orgAppointments, pageNumber: 1 };
-        this.applyFilters();
+        this.orgAppointments = data.items;
+        this.filteredItems = [...this.orgAppointments];
+        this.appointments.pageNumber = 1;
+        this.appointments.totalCount = this.filteredItems.length;
+        this.paginateAppointments();
         this.loading = false;
-        console.log('Appointments loaded successfully', this.appointments);
       },
       error: (err) => {
         console.error('Failed to load appointments', err);
@@ -71,111 +70,40 @@ appointments: ScheduleListResponse = {
     });
   }
 
-  startSearch() {
-    console.log('Search term:', this.searchTerm);
-    this.appointments.pageNumber = 1;
-    this.applyFilters();
+  // pagination logic
+  get totalPages(): number {
+    return Math.max(1, Math.ceil(this.filteredItems.length / this.appointments.pageSize!));
   }
 
-  onFilterChange() {
-    this.appointments.pageNumber = 1;
-    this.applyFilters();
-  }
-
-  applyFilters() {
-    let filteredItems = [...this.orgAppointments.items];
-
-    // Apply search filter
-    if (this.searchTerm.trim() !== '') {
-      filteredItems = filteredItems.filter(item => 
-        item.doctorName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.hospital.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply status filter
-    if (this.selectedFilter !== 'all') {
-      filteredItems = filteredItems.filter(item => 
-        this.selectedFilter === 'active' ? item.isActive : !item.isActive
-      );
-    }
-
-    this.appointments = {
-      ...this.orgAppointments,
-      items: filteredItems,
-      totalCount: filteredItems.length
-    };
-    
-    this.paginateAppointments();
-  }
-
-  changeStatus(scheduleId: number, status: boolean) {
-    this.appointmentService.ChangeSpecialtyStatus(scheduleId, status).subscribe({
-      next: (response) => {
-        console.log('Status changed successfully', response);
-        this.loadAppointments();
-      },
-      error: (err) => {
-        console.error('Failed to change status', err);
-      }
-    });
+  paginateAppointments() {
+    const start = (this.appointments.pageNumber! - 1) * this.appointments.pageSize!;
+    const end = start + this.appointments.pageSize!;
+    this.appointments.items = this.filteredItems.slice(start, end);
   }
 
   goToPage(page: number) {
-    if (page < 1 || page > this.getTotalPages()) {
-      return;
-    }
+    if (page < 1 || page > this.totalPages) return;
     this.appointments.pageNumber = page;
     this.paginateAppointments();
   }
 
-  paginateAppointments() {
-    const startIndex = (this.appointments.pageNumber! - 1) * this.appointments.pageSize!;
-    const endIndex = startIndex + this.appointments.pageSize!;
+  applyFilters() {
     
-    let items = [...this.orgAppointments.items];
 
-    // Apply search filter
-    if (this.searchTerm.trim() !== '') {
-      items = items.filter(item => 
-        item.doctorName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.hospital.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply status filter
-    if (this.selectedFilter !== 'all') {
-      items = items.filter(item => 
-        this.selectedFilter === 'active' ? item.isActive : !item.isActive
-      );
-    }
-
-    this.appointments.items = items.slice(startIndex, endIndex);
-    this.appointments.totalCount = Math.ceil(items.length / this.appointments.pageSize!);
+    this.loadAppointments();
+    console.log(this.filteredItems)
+ 
+    this.appointments.pageNumber = 1;
+    this.appointments.totalCount = this.filteredItems.length;
+    this.paginateAppointments();
   }
 
-  getTotalPages(): number {
-    let items = [...this.orgAppointments.items];
+  onSearchChange() {
+    this.applyFilters();
+  }
 
-    // Apply search filter
-    if (this.searchTerm.trim() !== '') {
-      items = items.filter(item => 
-        item.doctorName.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.specialty.toLowerCase().includes(this.searchTerm.toLowerCase()) ||
-        item.hospital.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply status filter
-    if (this.selectedFilter !== 'all') {
-      items = items.filter(item => 
-        this.selectedFilter === 'active' ? item.isActive : !item.isActive
-      );
-    }
-
-    return Math.max(1, Math.ceil(items.length / this.appointments.pageSize!));
+  onFilterChange() {
+    this.applyFilters();
   }
 
   toggleFilters() {
@@ -189,6 +117,26 @@ appointments: ScheduleListResponse = {
     this.applyFilters();
   }
 
+  changeStatus(scheduleId: number, status: boolean) {
+    this.appointmentService.ChangeSpecialtyStatus(scheduleId, status).subscribe({
+      next: () => this.loadAppointments(),
+      error: (err) => console.error('Failed to change status', err)
+    });
+  }
+
+  get activeAppointmentsCount(): number {
+    return this.orgAppointments.filter(item => item.isActive).length;
+  }
+
+  get inactiveAppointmentsCount(): number {
+    return this.orgAppointments.filter(item => !item.isActive).length;
+  }
+
+  getDayName(id: number): string {
+    const day = this.daysOfWeek.find(d => d.id === id);
+    return day ? day.name : '';
+  }
+
   getAvailabilityPercentage(schedule: any): number {
     if (schedule.maxCapacity === 0) return 0;
     return Math.round((schedule.availableSlots / schedule.maxCapacity) * 100);
@@ -199,48 +147,11 @@ appointments: ScheduleListResponse = {
     if (percentage >= 40) return 'availability-medium';
     return 'availability-low';
   }
-  get activeAppointmentsCount(): number {
-    return this.orgAppointments.items?.filter(item => item.isActive).length || 0;
-  }
-
-  get inactiveAppointmentsCount(): number {
-    return this.orgAppointments.items?.filter(item => !item.isActive).length || 0;
-  }
-  getDayName(id: number): string {
-  const day = this.daysOfWeek.find(d => d.id === id);
-  return day ? day.name : '';
-}
-onSearchChange() 
-{
-  this.loadSchedulesWithFilter()
-}
-onStatusFilterChange()
-{
-
-  this.loadSchedulesWithFilter()
-}
-onDayChange() 
-{
-  this.loadSchedulesWithFilter()
-}
-loadSchedulesWithFilter() 
-{
-    this.loading = true;
-  this.appointmentService.getSchedulesWithFilter(this.searchTerm, this.statusFilter,this.selectedDayId!).subscribe({
-    next: (data) => {
-      console.log('Filtered appointments:', data);
-
-      this.orgAppointments = data;
-      this.appointments = { ...data, pageNumber: 1 };
-      this.loading = false;
-
-
-    },
-    error: (err) => {
-      console.error('Failed to load appointments', err);
-      this.loading = false;
-    }
-  });
+  onDayChange() {
+  this.applyFilters();
 }
 
+onStatusFilterChange() {
+  this.applyFilters();
+}
 }

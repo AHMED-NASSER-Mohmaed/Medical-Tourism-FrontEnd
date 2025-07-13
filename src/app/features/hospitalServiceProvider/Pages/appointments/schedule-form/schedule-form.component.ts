@@ -70,6 +70,7 @@ isfailed:boolean=false;
   onSpecialtyChange(event: Event): void {
   const target = event.target as HTMLSelectElement;
   const specialtyId = Number(target.value);
+  console.log("specialty id",specialtyId)
   if (specialtyId) {
     this.loadAvailableDoctors(specialtyId);
   } else {
@@ -80,9 +81,10 @@ isfailed:boolean=false;
 
   loadAvailableDoctors(specialtyId: number): void
    {
-     this.DoctorService.getDoctors().subscribe({
+     this.DoctorService.getDoctorsHospitalSpecialty(specialtyId).subscribe({
          next: (doctors) => {
-          this.AvailableDoctors = doctors.items.filter((doctor: any) => doctor.status === 1 && doctor.specialtyId === specialtyId );
+          console.log(doctors);
+          this.AvailableDoctors = doctors.items 
           console.log('Doctors loaded:', this.AvailableDoctors);
          },
           error: (err) => {
@@ -92,12 +94,15 @@ isfailed:boolean=false;
   
 
   onSubmit(): void {
-    this.isLoading=true;
+    
     if (this.scheduleForm.invalid) {
+      this.isfailed=true;
+      this.messageError="Enter a valid data"
       console.error('Form is invalid');
     console.log('Form submitted:', this.scheduleForm.value); 
       
       return;}
+      this.isLoading=true;
       const formValue = { ...this.scheduleForm.value };
        const minutes = Number(formValue.timeSlotSize);
       const formattedSlotSize = `00:${minutes.toString().padStart(2, '0')}:00`;
