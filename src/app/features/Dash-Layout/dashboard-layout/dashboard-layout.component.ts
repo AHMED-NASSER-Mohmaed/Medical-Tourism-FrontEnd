@@ -17,9 +17,18 @@ export class DashboardLayoutComponent {
   @Output() logout = new EventEmitter<void>();
   
   isSidebarCollapsed = false;
+  isSidebarMobileOpen = false;
 
   toggleSidebar(): void {
-    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    if (window.innerWidth < 992) {
+      this.isSidebarMobileOpen = !this.isSidebarMobileOpen;
+    } else {
+      this.isSidebarCollapsed = !this.isSidebarCollapsed;
+    }
+  }
+
+  closeSidebarMobile(): void {
+    this.isSidebarMobileOpen = false;
   }
 
   onLogout() {

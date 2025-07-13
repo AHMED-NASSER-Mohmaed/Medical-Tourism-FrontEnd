@@ -5,9 +5,7 @@
     <!-- Modal Header -->
     <div class="modal-header">
       <div class="user-profile-header">
-        <img [src]="account?.imageURL || 'assets/images/default-avatar.png'" 
-             class="user-avatar" 
-             alt="User avatar">
+        <!-- Removed user avatar image from modal header -->
         <div class="user-info">
           <h2>{{ account?.firstName }} {{ account?.lastName }}</h2>
           <div class="user-badges">
@@ -83,13 +81,13 @@
           <!-- Row 5 -->
           <div class="info-label">Governorate</div>
           <div class="info-value">
-            {{ getDisplayGovernorate(enrichedAccount) }}
+            {{ getDisplayGovernorate(account) }}
           </div>
           
           <!-- Row 6 -->
           <div class="info-label">Country</div>
           <div class="info-value">
-            {{ getDisplayCountry(enrichedAccount) }}
+            {{ getDisplayCountry(account) }}
           </div>
         </div>
       </div>
@@ -137,37 +135,24 @@
       </ng-container>
 
       <ng-container *ngIf="isProviderAccount()">
-        <div class="info-section">
-          <h3 class="section-title">Provider Details</h3>
-          <div class="info-grid">
-            <div class="info-label">Provider Name</div>
-            <div class="info-value">{{ getAssetName() || 'N/A' }}</div>
-            
-            <div class="info-label">Verification Status</div>
-            <div class="info-value">{{ getVerificationStatusLabel(getVerificationStatus()!) }}</div>
-            
-            <div class="info-label">Location</div>
-            <div class="info-value">{{ getLocationDescription() || 'N/A' }}</div>
-            
-            <div *ngIf="getVerificationNotes()" class="info-label">Verification Notes</div>
-            <div *ngIf="getVerificationNotes()" class="info-value notes-value">{{ getVerificationNotes() }}</div>
-          </div>
-        </div>
-
         <!-- Hotel Specific -->
-        <div class="info-section" *ngIf="getHotelProvider()">
+        <!-- <div class="info-section" *ngIf="getHotelProvider()">
           <h4 class="section-subtitle">Hotel Details</h4>
           <div class="info-grid">
             <div class="info-label">Star Rating</div>
             <div class="info-value">{{ getHotelProvider()?.starRating || 'N/A' }}</div>
-            
             <div class="info-label">Facilities</div>
             <div class="info-value">
+              <ng-container *ngIf="getHotelProvider()?.facilities?.length">
+                <span *ngFor="let facility of getHotelProvider()?.facilities" class="facility-badge">
+                  {{ facility }}
+                </span>
+              </ng-container>
               <span *ngIf="getHotelProvider()?.hasPool" class="facility-badge">Pool</span>
               <span *ngIf="getHotelProvider()?.hasRestaurant" class="facility-badge">Restaurant</span>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Hospital Specific -->
         <div class="info-section" *ngIf="getHospitalProvider()">

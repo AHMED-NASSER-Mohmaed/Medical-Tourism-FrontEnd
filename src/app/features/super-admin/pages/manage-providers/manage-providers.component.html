@@ -73,7 +73,7 @@
             <thead class="table-light">
               <tr>
                 <th scope="col">Provider</th>
-                <th scope="col">Type</th>
+                <th scope="col">Governorate</th>
                 <th scope="col">Status</th>
                 <th scope="col">Registered</th>
                 <th scope="col">Contact</th>
@@ -108,10 +108,12 @@
 
               <!-- Providers List -->
               <tr *ngFor="let provider of providers; trackBy: trackByProviderId">
-                <td>
+                <td data-label="Provider">
                   <div class="d-flex align-items-center gap-3">
                     <div class="avatar-container position-relative me-3">
-                      <img [src]="provider.imageURL || 'assets/images/default-provider.png'"
+                      <img [src]="(provider.assetImages && provider.assetImages.length > 0) 
+                                ? provider.assetImages[0].imageURL 
+                                : (provider.imageURL || 'assets/images/default-provider.png')"
                           alt="{{ provider.assetName }} logo"
                           class="provider-avatar rounded-circle">
                       <span class="status-badge"
@@ -129,31 +131,39 @@
                     </div>
                   </div>
                 </td>
-                <td>{{ getProviderType(provider) }}</td>
-                <td>
+                <td data-label="Governorate">{{ provider.assetGovernateName }}</td>
+                <td data-label="Status">
                   <app-status-badge
                     [status]="getAssetStatus(provider.status) | statusLabel"
                     [statusValue]="getAssetStatus(provider.status)">
                   </app-status-badge>
                 </td>
-                <td>{{ provider.acquisitionDate | date:'mediumDate' }}</td>
-                <td>
+                <td data-label="Registered">{{ provider.acquisitionDate | date:'mediumDate' }}</td>
+                <td data-label="Contact">
                   <div class="d-flex flex-column">
-                    <a href="mailto:{{ provider.assetEmail }}" class="text-truncate" aria-label="Email provider">
+                    <!-- <a href="mailto:{{ provider.assetEmail }}" class="text-truncate" aria-label="Email provider">
                       {{ provider.assetEmail }}
-                    </a>
+                    </a> -->
                     <a href="tel:{{ provider.phone }}" class="text-muted small" aria-label="Call provider">
                       {{ provider.phone }}
                     </a>
                   </div>
                 </td>
-                <td class="text-end">
+                <td data-label="Actions" class="text-end">
                   <div class="btn-group" role="group">
+<<<<<<< HEAD
                     <button type="button"
                             class="btn btn-sm btn-outline-primary"
                             (click)="viewProviderDetails(provider.id)"
                             [disabled]="isLoading || provider.isStatusChanging"
                             title="View details" aria-label="View details">
+=======
+                    <button type="button" 
+                            class="btn btn-sm btn-outline-info me-1"
+                            (click)="viewProviderDetails(provider)"
+                            [disabled]="isLoading"
+                            title="View provider details" aria-label="View provider details">
+>>>>>>> Test
                       <fa-icon [icon]="icons.view"></fa-icon>
                     </button>
                     <button type="button"
@@ -211,6 +221,7 @@
 </div>
 
 <!-- Provider Details Modal -->
+<<<<<<< HEAD
 <div class="modal-backdrop-custom" *ngIf="showProviderModal">
   <div class="modal-dialog modal-xl provider-modal-dialog">
     <div class="modal-content provider-modal-content">
@@ -267,3 +278,10 @@
     </div>
   </div>
 </div>
+=======
+<app-provider-details 
+  *ngIf="showProviderModal && selectedProvider"
+  [provider]="selectedProvider"
+  (close)="closeProviderModal()">
+</app-provider-details>
+>>>>>>> Test

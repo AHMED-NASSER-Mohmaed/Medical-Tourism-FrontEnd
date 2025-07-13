@@ -25,7 +25,7 @@
             <div class="form-floating">
               <input type="text" class="form-control" id="firstName" formControlName="firstName" placeholder="First Name">
               <label for="firstName">First Name</label>
-              <div *ngIf="carRentalForm.get('firstName')?.invalid && carRentalForm.get('firstName')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('firstName')?.invalid && (carRentalForm.get('firstName')?.touched || carRentalForm.get('firstName')?.dirty)" class="form-text text-danger ms-1">
                 First name is required
               </div>
             </div>
@@ -35,7 +35,7 @@
             <div class="form-floating">
               <input type="text" class="form-control" id="lastName" formControlName="lastName" placeholder="Last Name">
               <label for="lastName">Last Name</label>
-              <div *ngIf="carRentalForm.get('lastName')?.invalid && carRentalForm.get('lastName')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('lastName')?.invalid && (carRentalForm.get('lastName')?.touched || carRentalForm.get('lastName')?.dirty)" class="form-text text-danger ms-1">
                 Last name is required
               </div>
             </div>
@@ -45,10 +45,10 @@
             <div class="form-floating">
               <input type="email" class="form-control" id="email" formControlName="email" placeholder="Email">
               <label for="email">Email</label>
-              <div *ngIf="carRentalForm.get('email')?.errors?.['required']" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('email')?.errors?.['required'] && (carRentalForm.get('email')?.touched || carRentalForm.get('email')?.dirty)" class="form-text text-danger ms-1">
                 Email is required
               </div>
-              <div *ngIf="carRentalForm.get('email')?.errors?.['email']" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('email')?.errors?.['email'] && (carRentalForm.get('email')?.touched || carRentalForm.get('email')?.dirty)" class="form-text text-danger ms-1">
                 Please enter a valid email
               </div>
             </div>
@@ -58,7 +58,7 @@
             <div class="form-floating">
               <input type="tel" class="form-control" id="phone" formControlName="phone" placeholder="Phone">
               <label for="phone">Phone</label>
-              <div *ngIf="carRentalForm.get('phone')?.invalid && carRentalForm.get('phone')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('phone')?.invalid && (carRentalForm.get('phone')?.touched || carRentalForm.get('phone')?.dirty)" class="form-text text-danger ms-1">
                 Phone is required
               </div>
             </div>
@@ -68,7 +68,7 @@
             <div class="form-floating">
               <input type="password" class="form-control" id="password" formControlName="password" placeholder="Password">
               <label for="password">Password</label>
-              <div *ngIf="carRentalForm.get('password')?.invalid && carRentalForm.get('password')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('password')?.invalid && (carRentalForm.get('password')?.touched || carRentalForm.get('password')?.dirty)" class="form-text text-danger ms-1">
                 Password must be at least 8 characters
               </div>
             </div>
@@ -78,7 +78,7 @@
             <div class="form-floating">
               <input type="password" class="form-control" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
               <label for="confirmPassword">Confirm Password</label>
-              <div *ngIf="carRentalForm.errors?.['passwordMismatch'] && carRentalForm.get('confirmPassword')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.errors?.['passwordMismatch'] && (carRentalForm.get('confirmPassword')?.touched || carRentalForm.get('confirmPassword')?.dirty)" class="form-text text-danger ms-1">
                 Passwords must match
               </div>
             </div>
@@ -92,7 +92,7 @@
                 <option [value]="Gender.FEMALE">Female</option>
               </select>
               <label for="gender">Gender</label>
-              <div *ngIf="carRentalForm.get('gender')?.invalid && carRentalForm.get('gender')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('gender')?.invalid && (carRentalForm.get('gender')?.touched || carRentalForm.get('gender')?.dirty)" class="form-text text-danger ms-1">
                 Gender is required
               </div>
             </div>
@@ -102,7 +102,7 @@
             <div class="form-floating">
               <input type="date" class="form-control" id="dateOfBirth" formControlName="dateOfBirth" placeholder="Date of Birth">
               <label for="dateOfBirth">Date of Birth</label>
-              <div *ngIf="carRentalForm.get('dateOfBirth')?.invalid && carRentalForm.get('dateOfBirth')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('dateOfBirth')?.invalid && (carRentalForm.get('dateOfBirth')?.touched || carRentalForm.get('dateOfBirth')?.dirty)" class="form-text text-danger ms-1">
                 Date of birth is required
               </div>
             </div>
@@ -112,7 +112,7 @@
             <div class="form-floating">
               <input type="text" class="form-control" id="city" formControlName="city" placeholder="City">
               <label for="city">City</label>
-              <div *ngIf="carRentalForm.get('city')?.invalid && carRentalForm.get('city')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('city')?.invalid && (carRentalForm.get('city')?.touched || carRentalForm.get('city')?.dirty)" class="form-text text-danger ms-1">
                 City is required
               </div>
             </div>
@@ -126,7 +126,7 @@
               </select>
               <label for="countryId"><i class="fas fa-globe-africa me-1 text-primary"></i> Country</label>
               <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
-              <div *ngIf="carRentalForm.get('countryId')?.invalid && carRentalForm.get('countryId')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('countryId')?.invalid && (carRentalForm.get('countryId')?.touched || carRentalForm.get('countryId')?.dirty)" class="form-text text-danger ms-1">
                 Country is required
               </div>
               <div *ngIf="!isLoading && countries.length === 0" class="form-text text-warning ms-1">
@@ -142,7 +142,7 @@
               </select>
               <label for="governorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Governorate</label>
               <div *ngIf="isLoading" class="position-absolute top-50 end-0 translate-middle-y me-3 spinner-border spinner-border-sm text-primary" role="status"></div>
-              <div *ngIf="carRentalForm.get('governorateId')?.invalid && carRentalForm.get('governorateId')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('governorateId')?.invalid && (carRentalForm.get('governorateId')?.touched || carRentalForm.get('governorateId')?.dirty)" class="form-text text-danger ms-1">
                 Governorate is required
               </div>
               <div *ngIf="!isLoading && governorates.length === 0 && carRentalForm.get('countryId')?.value" class="form-text text-warning ms-1">
@@ -155,7 +155,7 @@
             <div class="form-floating">
               <input type="text" class="form-control" id="address" formControlName="address" placeholder="Address">
               <label for="address">Address</label>
-              <div *ngIf="carRentalForm.get('address')?.invalid && carRentalForm.get('address')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('address')?.invalid && (carRentalForm.get('address')?.touched || carRentalForm.get('address')?.dirty)" class="form-text text-danger ms-1">
                 Address is required
               </div>
             </div>
@@ -176,7 +176,7 @@
             <div class="form-floating">
               <input type="text" class="form-control" id="assetName" formControlName="assetName" placeholder="Company Name">
               <label for="assetName">Company Name</label>
-              <div *ngIf="carRentalForm.get('assetName')?.invalid && carRentalForm.get('assetName')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('assetName')?.invalid && (carRentalForm.get('assetName')?.touched || carRentalForm.get('assetName')?.dirty)" class="form-text text-danger ms-1">
                 Company name is required
               </div>
             </div>
@@ -186,7 +186,7 @@
             <div class="form-floating">
               <textarea class="form-control" id="assetDescription" formControlName="assetDescription" placeholder="Description" style="height: 100px"></textarea>
               <label for="assetDescription">Description</label>
-              <div *ngIf="carRentalForm.get('assetDescription')?.invalid && carRentalForm.get('assetDescription')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('assetDescription')?.invalid && (carRentalForm.get('assetDescription')?.touched || carRentalForm.get('assetDescription')?.dirty)" class="form-text text-danger ms-1">
                 Description is required
               </div>
             </div>
@@ -197,10 +197,10 @@
             <div class="form-floating">
               <input type="email" class="form-control" id="assetEmail" formControlName="assetEmail" placeholder="Business Email">
               <label for="assetEmail">Business Email</label>
-              <div *ngIf="carRentalForm.get('assetEmail')?.errors?.['required']" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('assetEmail')?.errors?.['required'] && (carRentalForm.get('assetEmail')?.touched || carRentalForm.get('assetEmail')?.dirty)" class="form-text text-danger ms-1">
                 Email is required
               </div>
-              <div *ngIf="carRentalForm.get('assetEmail')?.errors?.['email']" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('assetEmail')?.errors?.['email'] && (carRentalForm.get('assetEmail')?.touched || carRentalForm.get('assetEmail')?.dirty)" class="form-text text-danger ms-1">
                 Please enter a valid email
               </div>
             </div>
@@ -210,28 +210,22 @@
             <div class="form-floating">
               <input type="text" class="form-control" id="locationDescription" formControlName="locationDescription" placeholder="Location Description">
               <label for="locationDescription">Location Description</label>
-              <div *ngIf="carRentalForm.get('locationDescription')?.invalid && carRentalForm.get('locationDescription')?.touched" class="form-text text-danger ms-1">
+              <div *ngIf="carRentalForm.get('locationDescription')?.invalid && (carRentalForm.get('locationDescription')?.touched || carRentalForm.get('locationDescription')?.dirty)" class="form-text text-danger ms-1">
                 Location description is required
               </div>
             </div>
           </div>
 
+          <!-- Asset Governorate (Egypt) -->
           <div class="col-md-6">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="latitude" formControlName="latitude" step="0.000001" placeholder="Latitude">
-              <label for="latitude">Latitude</label>
-              <div *ngIf="carRentalForm.get('latitude')?.invalid && carRentalForm.get('latitude')?.touched" class="form-text text-danger ms-1">
-                Latitude is required
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="form-floating">
-              <input type="number" class="form-control" id="longitude" formControlName="longitude" step="0.000001" placeholder="Longitude">
-              <label for="longitude">Longitude</label>
-              <div *ngIf="carRentalForm.get('longitude')?.invalid && carRentalForm.get('longitude')?.touched" class="form-text text-danger ms-1">
-                Longitude is required
+            <div class="form-floating position-relative">
+              <select class="form-select" id="assetGovernorateId" formControlName="assetGovernorateId">
+                <option value="">Select Asset Governorate (Egypt)</option>
+                <option *ngFor="let gov of egyptGovernorates" [value]="gov.governateId">{{ gov.governateName }}</option>
+              </select>
+              <label for="assetGovernorateId"><i class="fas fa-map-marker-alt me-1 text-primary"></i> Asset Governorate (Egypt)</label>
+              <div *ngIf="carRentalForm.get('assetGovernorateId')?.invalid && (carRentalForm.get('assetGovernorateId')?.touched || carRentalForm.get('assetGovernorateId')?.dirty)" class="form-text text-danger ms-1">
+                Asset Governorate is required
               </div>
             </div>
           </div>
@@ -324,6 +318,31 @@
             </div>
             <div *ngIf="languagesSupportedArray.invalid && languagesSupportedArray.touched" class="form-text text-danger ms-1">
               At least one language is required
+            </div>
+          </div>
+
+          <!-- Opening Time -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Opening Time <span class="text-danger">*</span></label>
+            <div class="d-flex gap-2" formGroupName="openingTime">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+              <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+            </div>
+            <div *ngIf="carRentalForm.get('openingTime')?.invalid && carRentalForm.get('openingTime')?.touched" class="form-text text-danger ms-1">
+              Valid opening time is required
+            </div>
+          </div>
+          <!-- Closing Time -->
+          <div class="col-md-3">
+            <label class="form-label fw-semibold text-primary mb-2">Closing Time <span class="text-danger">*</span></label>
+            <div class="d-flex gap-2" formGroupName="closingTime">
+              <input type="number" class="form-control" min="0" max="23" formControlName="hour" placeholder="HH">
+              <input type="number" class="form-control" min="0" max="59" formControlName="minute" placeholder="MM">
+              <input type="number" class="form-control" min="0" max="59" formControlName="second" placeholder="SS">
+            </div>
+            <div *ngIf="carRentalForm.get('closingTime')?.invalid && carRentalForm.get('closingTime')?.touched" class="form-text text-danger ms-1">
+              Valid closing time is required
             </div>
           </div>
 

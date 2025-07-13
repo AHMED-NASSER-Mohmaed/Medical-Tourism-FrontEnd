@@ -108,7 +108,6 @@ export class ManageProvidersComponent implements OnInit, OnDestroy {
     this.providers = response.items.map(item => ({
       ...item,
       verificationStatus: item.verificationStatus ?? item.verificationStatus,
-      type: this.currentView,
       isStatusChanging: false
     })) as UIProvider[];
     this.pagination = {
@@ -254,8 +253,9 @@ export class ManageProvidersComponent implements OnInit, OnDestroy {
     }
   }
 
-  viewProviderDetails(providerId: string): void {
-    this.router.navigate(['/super-admin/providers', providerId]);
+  viewProviderDetails(provider: UIProvider): void {
+    this.selectedProvider = provider;
+    this.showProviderModal = true;
   }
 
   closeProviderModal(): void {

@@ -17,28 +17,26 @@ export class DashboardShellComponent {
   title = 'Elagy Admin';
   userRole = 'Super Admin';
   avatar = 'assets/images/www-avatat.png';
-  breadcrumbs = [
-    { label: 'Home', link: '/super-admin/manage-accounts/patients' },
-    { label: 'Dashboard' }
-  ];
+
+  ;
 
   menuItems = [
-    {
-      label: 'Dashboard',
-      icon: faShieldAlt,
-      link: '/super-admin/dashboard',
-      isExpanded: false
-    },
+    // {
+    //   label: 'Dashboard',
+    //   icon: faShieldAlt,
+    //   link: '/super-admin/manage-accounts/hospitals',
+    //   isExpanded: false
+    // },
     {
       label: 'User Management',
       icon: faUsersCog,
       link: '/super-admin/manage-accounts',
       isExpanded: false,
       children: [
-        { label: 'Patients', icon: faUserInjured, link: '/super-admin/manage-accounts/patients' },
         { label: 'Hospitals', icon: faHospital, link: '/super-admin/manage-accounts/hospitals' },
         { label: 'Hotels', icon: faHotel, link: '/super-admin/manage-accounts/hotels' },
-        { label: 'Car Rentals', icon: faCar, link: '/super-admin/manage-accounts/car-rentals' }
+        { label: 'Car Rentals', icon: faCar, link: '/super-admin/manage-accounts/car-rentals' },
+        { label: 'Patients', icon: faUserInjured, link: '/super-admin/manage-accounts/patients' },
       ]
     },
     {
@@ -61,12 +59,12 @@ export class DashboardShellComponent {
        
       ]
     },
-    {
-      label: 'Profile',
-      icon: faUser,
-      link: '/super-admin/profile',
-      isExpanded: false
-    }
+    // {
+    //   label: 'Profile',
+    //   icon: faUser,
+    //   link: '/super-admin/profile',
+    //   isExpanded: false
+    // }
   ];
 
   constructor(@Inject(AuthService) public auth: AuthService, public router: Router) {}

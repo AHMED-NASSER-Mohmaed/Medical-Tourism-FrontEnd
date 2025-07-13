@@ -59,7 +59,9 @@
             <tr *ngFor="let account of accounts">
               <td>
                 <div class="d-flex align-items-center gap-2">
-                  <img [src]="account.imageURL || 'assets/images/default-avatar.png'" class="rounded-circle" width="40" height="40" alt="avatar">
+                  <img [src]="(account.assetImages?.length ?? 0) > 0 
+                            ? account.assetImages[0].imageURL 
+                            : (account.imageURL ?? 'assets/images/default-avatar.png')" class="rounded-circle" width="40" height="40" alt="avatar">
                   <span>{{ account.firstName }} {{ account.lastName }}</span>
                 </div>
               </td>
