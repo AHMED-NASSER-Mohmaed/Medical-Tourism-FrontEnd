@@ -120,10 +120,13 @@
                 <!-- Pre-allocated space for messages -->
                 <div class="message-container">
                     <div class="message-content">
-                        <div *ngIf="bookingError" class="alert alert-danger animate__animated animate__fadeIn">
-                            <i class="bi bi-exclamation-triangle-fill"></i>
-                            {{ bookingError }}
-                        </div>
+               <!-- ... other form fields ... -->
+               <div *ngIf="bookingError" class="alert alert-danger animate__animated animate__fadeIn booking-error-message">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+             {{ bookingError }}
+              </div>
+
+                         <!-- ... booking button ... -->
                         <div *ngIf="bookingSuccess" class="alert alert-success animate__animated animate__fadeIn">
                             <i class="bi bi-check-circle-fill"></i>
                             {{ bookingSuccess }}

@@ -165,11 +165,15 @@ fetchUnavailableDates() {
     }
 
     if (!this.checkInDate || !this.checkOutDate) {
-      this.showDateError = true;
+     this.bookingError = 'Please fill in all required fields.';
       return;
     }
     if (this.checkOutDate <= this.checkInDate) {
-      Swal.fire('Invalid Dates', 'Check-out date must be after the check-in date.', 'error');
+      this.bookingError = 'Check-out date must be after the check-in date.';
+      return;
+    }
+        if (!this.isDateRangeAvailable(this.checkInDate, this.checkOutDate)) {
+      this.bookingError = 'The selected date range includes unavailable dates.';
       return;
     }
     this.showDateError = false;

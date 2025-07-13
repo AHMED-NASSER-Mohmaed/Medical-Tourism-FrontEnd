@@ -542,3 +542,7 @@
         font-size: 1.5rem;
     }
 }
+.booking-error-message {
+  margin-top: -0.5rem; /* Adjust this value as needed */
+  margin-bottom: 1rem; /* Ensures space before the button below */
+}
