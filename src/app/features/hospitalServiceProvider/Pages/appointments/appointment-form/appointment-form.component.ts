@@ -6,6 +6,7 @@ import { SpecialistService } from '../../../Services/specilaist.service';
 import { DoctorService } from '../../../Services/Doctor.service';
 import { ScheduleService } from '../../../Services/Schedule.service';
 import { HospitalAppointmentDto } from '../../../models/Appointment.model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-appointment-form',
@@ -21,20 +22,22 @@ selectedStatus: string = '1'; // string لإرسال للقائمة
 loading: boolean = true;
 scheduleId: string = '';
 selectedDate:string='';
-constructor(private appointementService:ScheduleService,private route: ActivatedRoute, private router: Router) { }
+Dayofweek:number=0;
+constructor(private appointementService:ScheduleService,private route: ActivatedRoute, private router: Router,private location:Location) { }
 
 ngOnInit() {
   this.scheduleId = this.route.snapshot.paramMap.get('id') || '';
-  const dayId = this.route.snapshot.paramMap.get('day');
-  if (dayId) {
+  this.Dayofweek = parseInt(this.route.snapshot.paramMap.get('day')!);
+  if (this.Dayofweek) {
 
-  this.selectedDate = this.getDateOfNextWeekDay(parseInt(dayId))
+  this.selectedDate = this.getDateOfNextWeekDay(this.Dayofweek)
   console.log('Selected Date:', this.selectedDate);
 }
   this.loadAppointments();
 }
 
 loadAppointments() {
+  console.log(this.scheduleId);
   this.loading = true;
   // استدعاء السيرفيس:
   this.appointementService.getAppointments(this.scheduleId,this.selectedDate,this.selectedStatus).subscribe({
@@ -59,8 +62,15 @@ loadAppointments() {
 pageNumber: number = 1;
 pageSize: number = 5; // عدد العناصر في الصفحة
 totalPages: number = 1;
-
+selectedDates:Date|null=null;
 filterAppointments() {
+if (this.selectedDate) {
+    const year = this.selectedDates!.getFullYear();
+    const month = (this.selectedDates!.getMonth() + 1).toString().padStart(2, '0');
+    const day = this.selectedDates?.getDate().toString().padStart(2, '0');
+    this.selectedDate = `${year}/${month}/${day}`;
+    console.log('Formatted date:', this.selectedDate);
+  }
  this.loadAppointments();
 
   this.totalPages = Math.ceil(this.filteredAppointments.length / this.pageSize);
@@ -156,7 +166,11 @@ resetFilters() {
 }
 
 
-
-
+onlyAllowedDay = (date: Date | null): boolean => {
+  return date ? date.getDay() === this.Dayofweek-1 : false;
+};
+  goBack(): void {
+  this.location.back();
+}
 
 }

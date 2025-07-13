@@ -53,10 +53,10 @@
           <th>Gender</th>
           <th>Email</th>
           <th>Phone</th>
-          <th>Date of Birth</th>
+         
           <th>Status</th>
           <th>Specialty</th>
-          <th>Hospital</th>
+         
           <th>Actions</th>
         </tr>
       </thead>
@@ -74,7 +74,7 @@
           </td>
           <td>{{ doctor.email }}</td>
           <td>{{ doctor.phone }}</td>
-          <td>{{ doctor.dateOfBirth ? (doctor.dateOfBirth | date:'yyyy-MM-dd') : 'N/A' }}</td>
+          <!-- <td>{{ doctor.dateOfBirth ? (doctor.dateOfBirth | date:'yyyy-MM-dd') : 'N/A' }}</td> -->
           <td>
             <span class="badge"
                   [ngClass]="{
@@ -93,7 +93,7 @@
             </span>
           </td>
           <td>{{ doctor.specialtyName }}</td>
-          <td>{{ doctor.hospitalName }}</td>
+          
           <td>
             <button class="btn-action edit" title="Edit" [routerLink]="[ doctor.id ]">
               <i class="fas fa-edit"></i>

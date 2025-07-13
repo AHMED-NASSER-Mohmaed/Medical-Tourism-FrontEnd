@@ -1,3 +1,7 @@
+<button type="button" class="btn btn-outline-secondary mt-3" (click)="goBack()">
+  <i class="fas fa-arrow-left me-1"></i>
+  Back
+</button>
 <div class="appointments-container card shadow-sm p-3">
 
   <!-- Header -->
@@ -37,14 +41,15 @@
       <option value="2">Cancelled</option>
   </select>
   </div>
-  <div class="d-flex gap-2">
-     <input 
-      type="date" 
-      class="form-control"
-      style="min-width: 180px;"
-      [(ngModel)]="selectedDate"
-      (change)="filterAppointments()">
-  </div>
+ <mat-form-field>
+  <input matInput 
+         [matDatepicker]="picker"
+         [matDatepickerFilter]="onlyAllowedDay"
+         [(ngModel)]="selectedDates"
+         (dateChange)="filterAppointments()">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</mat-form-field>
 
 
    
