@@ -2,12 +2,19 @@
     background: white;
     border-radius: 0.75rem;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 6px 32px rgba(40,97,197,0.1), 0 1.5px 8px rgba(40,97,197,0.05);
     width: 100%;
     max-width: 340px;
-    height: 340px; /* Increased height to accommodate content */
+    height: 370px;
     display: flex;
     flex-direction: column;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+    border: none;
+}
+
+.rental-card:hover {
+    box-shadow: 0 12px 32px rgba(40,97,197,0.15), 0 4px 12px rgba(40,97,197,0.1);
+    transform: translateY(-5px) scale(1.01);
 }
 
 .rental-image-wrapper {
@@ -15,45 +22,53 @@
     width: 100%;
     height: 150px;
     flex-shrink: 0;
+    overflow: hidden;
+    background: #f8f9fa;
 }
 
 .rental-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.25s ease;
+}
+
+.rental-card:hover .rental-image {
+    transform: scale(1.04);
 }
 
 .rating-badge {
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    background: rgba(0, 0, 0, 0.7);
+    background: linear-gradient(90deg, #2563b6 0%, #1e88e5 100%);
     color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.375rem;
-    font-size: 0.8rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 0.25rem;
+    box-shadow: 0 2px 8px rgba(40,97,197,0.18);
 }
 
 .rating-badge i {
     color: #fbbf24;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
 }
 
 .rental-content {
     padding: 0.75rem;
-    padding-bottom: 1rem; /* Added padding at bottom */
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
 .rental-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #1e293b;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #2563b6;
     margin: 0 0 0.375rem 0;
     white-space: nowrap;
     overflow: hidden;
@@ -66,8 +81,8 @@
     align-items: center;
     gap: 0.25rem;
     color: #64748b;
-    font-size: 0.8rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
 }
 
 .location-text {
@@ -78,36 +93,34 @@
 
 .rental-location i {
     color: #3b82f6;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     flex-shrink: 0;
 }
 
 .rental-features {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.375rem;
-    margin-bottom: 1rem; /* Increased margin */
+    gap: 0.5rem;
+    margin-bottom: 1rem;
     width: 100%;
-    min-height: 60px; /* Adjusted for two lines of content */
 }
 
 .feature-badge {
     background: #f1f5f9;
     color: #64748b;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.75rem;
-    font-size: 0.75rem;
+    padding: 0.375rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
     display: inline-flex;
-    align-items: flex-start; /* Changed to flex-start for better text wrapping */
-    gap: 0.25rem;
-    max-width: 100%;
+    align-items: center;
+    gap: 0.375rem;
 }
 
 .feature-badge i {
     color: #3b82f6;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
     flex-shrink: 0;
-    margin-top: 0.125rem; /* Align icon with first line of text */
 }
 
 .badge-text {
@@ -121,7 +134,7 @@
     background: linear-gradient(90deg, #2563b6 0%, #1e88e5 100%);
     color: white;
     text-align: center;
-    padding: 0.5rem;
+    padding: 0.625rem;
     border-radius: 0.5rem;
     text-decoration: none;
     font-weight: 600;

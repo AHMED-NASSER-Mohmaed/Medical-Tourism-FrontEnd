@@ -23,6 +23,7 @@
     padding: 1.5rem;
     height: fit-content;
     margin-left: 1rem;
+    margin-right: 2rem;
 
 }
 
@@ -180,7 +181,7 @@
     opacity: 1;
     transform: none;
   }
-} 
+}
 
 .price-range-slider {
   width: 100%;
@@ -281,7 +282,7 @@
 }
 .price-range-slider input[type=range]:focus::-ms-thumb {
   border: 2px solid #1e88e5;
-} 
+}
 
 .occupancy-range-slider {
   width: 100%;
@@ -382,4 +383,4 @@
 }
 .occupancy-range-slider input[type=range]:focus::-ms-thumb {
   border: 2px solid #1e88e5;
-} 
+}

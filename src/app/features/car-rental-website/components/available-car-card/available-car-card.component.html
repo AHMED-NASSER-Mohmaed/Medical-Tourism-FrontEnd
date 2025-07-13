@@ -1,8 +1,8 @@
 <div class="rental-card animate__animated animate__fadeInUp">
     <div class="rental-image-wrapper">
-        <img [src]="car.carImages[0]?.imageURL || 'assets/images/cover.png'" 
-             class="rental-image" 
-             alt="Car Image" 
+        <img [src]="car.carImages[0]?.imageURL || 'assets/images/hospitall.jpg'"
+             class="rental-image"
+             alt="Car Image"
              loading="lazy">
         <span class="rating-badge" *ngIf="car.pricePerDay">
             <i class="bi bi-cash-coin"></i> EGP {{ car.pricePerDay }}/day
@@ -29,8 +29,8 @@
                 <span class="badge-text">{{ getFuelType() }}</span>
             </span>
         </div>
-        <a [routerLink]="['/car-rentals/car-details', car.id]" 
-           [queryParams]="{ rentalId: car.carRentalAssetId }" 
+        <a [routerLink]="['/car-rentals/car-details', car.id]"
+           [queryParams]="{ rentalId: car.carRentalAssetId }"
            class="view-details-btn">
             View Car <i class="bi bi-arrow-right"></i>
         </a>

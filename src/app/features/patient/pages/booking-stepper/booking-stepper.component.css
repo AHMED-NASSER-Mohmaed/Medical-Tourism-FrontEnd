@@ -183,3 +183,10 @@
 .btn-secondary:hover {
     background-color: #d1d5db;
 }
+/* EDITED: New style to show original icon for skipped steps */
+.step.skipped .step-icon::before {
+    content: none; /* Remove the checkmark */
+}
+.step.skipped .step-icon i {
+    display: inline-block !important; /* Show the original icon (hotel, car) */
+}

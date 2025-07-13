@@ -69,7 +69,6 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     if (carRentalId && carId) {
       this.carService.getAvailableCarById(carRentalId, +carId).subscribe(car => {
         this.car = car;
-        // No loading spinner for initial load
         if (car) {
           this.fetchUnavailableDates(car.id);
         }
@@ -91,10 +90,9 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
       );
     }
   }
- // EDITED: This method now uses the corrected interface
+
   fetchUnavailableDates(carId: number) {
-    // We cast the response to 'any' to bypass the incorrect service typing,
-    // then handle it as the correct interface inside the 'next' block.
+
     this.carService.getCarUnavailableDates(carId).subscribe({
       next: (data: any) => {
         const response = data as UnavailableDatesResponse;
@@ -119,35 +117,45 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  checkAndSetPreselectedDates(): void {
-    const preselectedCarApp = this.bookingData?.carAppointment;
-    if (preselectedCarApp && preselectedCarApp.startingDate && preselectedCarApp.endingDate) {
-      const pickup = new Date(preselectedCarApp.startingDate);
-      const dropoff = new Date(preselectedCarApp.endingDate);
+ checkAndSetPreselectedDates(): void {
+  const preselectedCarApp = this.bookingData?.carAppointment;
 
-      if (this.dateFilter(pickup) && this.dateFilter(dropoff)) {
-        this.pickupDateTime = pickup;
-        this.dropoffDateTime = dropoff;
-      } else {
-        Swal.fire('Dates No Longer Available', 'The dates you previously selected for this car are no longer available. Please choose new dates.', 'warning');
-        const currentData = this.bookingService.getBookingData();
-        delete currentData.carAppointment;
-        this.bookingService.updateBookingData(currentData);
-        this.pickupDateTime = null;
-        this.dropoffDateTime = null;
-      }
+  if (preselectedCarApp && preselectedCarApp.startingDate && preselectedCarApp.endingDate) {
+    const pickup = new Date(preselectedCarApp.startingDate);
+    const dropoff = new Date(preselectedCarApp.endingDate);
+
+
+    if (this.isDateRangeAvailable(pickup, dropoff)) {
+      this.pickupDateTime = pickup;
+      this.dropoffDateTime = dropoff;
+
+
+      this.locationDescription = preselectedCarApp.locationDescription || '';
+      this.fuelPolicy = preselectedCarApp.fuelPolicy ?? 0;
+
+    } else {
+
+      Swal.fire('Dates No Longer Available', 'The dates you previously selected for this car are no longer available. Please choose new dates.', 'warning');
+      const currentData = this.bookingService.getBookingData();
+      delete currentData.carAppointment;
+      this.bookingService.updateBookingData(currentData);
+
+
+      this.pickupDateTime = null;
+      this.dropoffDateTime = null;
+      this.locationDescription = '';
+      this.fuelPolicy = 0;
     }
   }
+}
 
 
 
 
   ngAfterViewInit() {
-    // Find the navbar element and get its height
     const navbar = document.querySelector('.navbar');
     if (navbar) {
       this.navbarHeightPx = (navbar as HTMLElement).offsetHeight;
-      // Set as a style variable on the root element for this component
       if (this.carDetailsRoot && this.carDetailsRoot.nativeElement) {
         this.carDetailsRoot.nativeElement.style.setProperty('--local-navbar-height', this.navbarHeightPx + 'px');
       }
@@ -171,8 +179,22 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
 
-   // EDITED: Updated booking logic with new validation
+
   bookCar() {
+
+        const bookingData = this.bookingService.getBookingData();
+
+    if (!bookingData || !bookingData.specialtiyAppointment) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Booking Step Required',
+        text: 'Please book a doctor\'s appointment before proceeding.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.router.navigate(['/specialists']);
+      });
+      return;
+    }
     this.bookingError = '';
     const now = new Date();
 
@@ -188,7 +210,6 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // EDITED: New validation check for the date range
     if (!this.isDateRangeAvailable(this.pickupDateTime, this.dropoffDateTime)) {
         this.bookingError = 'The selected date range includes unavailable dates. Please choose a different range.';
         return;
@@ -220,16 +241,16 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/patient/booking-stepper']);
   }
 
-  // EDITED: New helper function to check if a date range is available
+
   isDateRangeAvailable(start: Date, end: Date): boolean {
     let currentDate = new Date(start);
     while (currentDate <= end) {
       if (this.unavailableDatesSet.has(this.formatDate(currentDate))) {
-        return false; // Found an unavailable date in the range
+        return false;
       }
       currentDate.setDate(currentDate.getDate() + 1);
     }
-    return true; // No unavailable dates found in the range
+    return true;
   }
 
   formatDate(date: Date | null): string {

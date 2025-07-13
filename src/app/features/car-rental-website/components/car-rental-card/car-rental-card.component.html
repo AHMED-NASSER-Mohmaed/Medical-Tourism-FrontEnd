@@ -1,8 +1,9 @@
-<div class="rental-card">
+<div class="rental-card animate__animated animate__fadeInUp">
     <div class="rental-image-wrapper">
-        <img [src]="carRental.imageURL || carRental.assetImages?.[0]?.imageURL || 'assets/images/cover.png'" 
-             class="rental-image" 
-             alt="Car Rental Image">
+        <img [src]="carRental.imageURL || carRental.assetImages?.[0]?.imageURL || 'assets/images/cover.png'"
+             class="rental-image"
+             alt="Car Rental Image"
+             loading="lazy">
         <span class="rating-badge" *ngIf="carRental.starRating">
             <i class="bi bi-star-fill"></i> {{ carRental.starRating }}
         </span>
@@ -28,6 +29,8 @@
                 <span class="badge-text">Automatic</span>
             </span>
         </div>
-        <a [routerLink]="['/car-rentals/details', carRental.id]" class="view-details-btn">View Details</a>
+        <a [routerLink]="['/car-rentals/details', carRental.id]" class="view-details-btn">
+            View Details <i class="bi bi-arrow-right"></i>
+        </a>
     </div>
 </div>

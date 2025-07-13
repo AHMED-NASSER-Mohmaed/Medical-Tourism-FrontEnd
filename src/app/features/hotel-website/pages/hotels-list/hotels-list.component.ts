@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HotelWebsiteService } from '../../services/hotel-website.service';
 import { Hotel } from '../../models/hotel.model';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-hotels-list',
   standalone: false,
@@ -12,11 +12,11 @@ export class HotelsListComponent implements OnInit {
   hotels: Hotel[] = [];
   loading = false;
   currentPage = 1;
-  pageSize = 10;
+  pageSize = 8;
   totalPages = 1;
   filters: any = {};
 
-  constructor(private hotelService: HotelWebsiteService) {}
+  constructor(private hotelService: HotelWebsiteService,   private location: Location,) {}
 
   ngOnInit() {
     this.fetchHotels();
@@ -66,4 +66,8 @@ export class HotelsListComponent implements OnInit {
   getEmptySlots() {
     return Array(Math.max(0, 10 - this.hotels.length));
   }
+     goBack(): void {
+    this.location.back();
+  }
+
 }

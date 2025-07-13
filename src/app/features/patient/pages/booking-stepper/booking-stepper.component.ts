@@ -18,6 +18,7 @@ export class BookingStepperComponent implements OnInit {
   bookingDetails: any = {};
   isProcessingPayment = false; // To show a loading state
 
+
   constructor(
     private router: Router,
     private bookingService: BookingService,

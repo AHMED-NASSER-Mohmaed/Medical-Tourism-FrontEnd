@@ -20,34 +20,6 @@
             <img src="../../../../assets/images/grc.png" alt="Doctor">
         </div>
     </section>
-     <div class="container py-5">
-        <div class="row g-4">
-            <div class="col-md-3 col-6">
-                <div class="text-center">
-                    <h2 class="display-4 fw-bold text-primary">5,000+</h2>
-                    <p class="text-muted">Happy Patients</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="text-center">
-                    <h2 class="display-4 fw-bold text-primary">150+</h2>
-                    <p class="text-muted">Medical Centers</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="text-center">
-                    <h2 class="display-4 fw-bold text-primary">50+</h2>
-                    <p class="text-muted">Partner Hotels</p>
-                </div>
-            </div>
-            <div class="col-md-3 col-6">
-                <div class="text-center">
-                    <h2 class="display-4 fw-bold text-primary">98%</h2>
-                    <p class="text-muted">Satisfaction Rate</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
 <section id="treatments" class="section bg-light">
   <div class="container">
@@ -145,89 +117,44 @@
 
 
 
-    <section id="transport" class="section bg-light">
-        <div class="container">
-            <div class="section-title">
-                <h2>Transportation Services</h2>
-                <p>Comfortable and reliable transportation options for your medical journey</p>
-            </div>
+<section id="top-cars" class="section bg-light">
+    <div class="container">
+        <div class="section-title">
+            <h2>Top Rented Cars</h2>
+            <p>Find the perfect vehicle from our most popular selections.</p>
+        </div>
 
-            <div class="row g-4">
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Luxury Sedan">
-                        <div class="card-body">
-                            <h5 class="card-title">Luxury Sedan Service</h5>
-                            <div class="mb-3">
-                                <span class="text-warning">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="text-muted ms-2">4.9 (845 reviews)</span>
-                            </div>
-                            <p class="card-text">Premium vehicles with professional drivers for airport transfers and medical appointments.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $50/day</span>
-                                <a href="CarRental_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6" *ngFor="let car of topCars | slice:0:3">
+                <div class="service-card">
+                    <img [src]="car.imageUrl || 'https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=800&q=80'" class="card-img-top" [alt]="car.make + ' ' + car.model">
+
+                    <div class="card-body">
+                        <h5 class="card-title">{{ car.make }} {{ car.model }} ({{ car.year }})</h5>
+
+                        <div class="mb-3" *ngIf="car.starRating">
+                            <span class="text-muted ms-2">({{ car.rentalCount }} rentals)</span>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1547036967-23d11aacaee0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Medical Van">
-                        <div class="card-body">
-                            <h5 class="card-title">Medical Transport Van</h5>
-                            <div class="mb-3">
-                                <span class="text-warning">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                </span>
-                                <span class="text-muted ms-2">4.8 (723 reviews)</span>
-                            </div>
-                            <p class="card-text">Wheelchair accessible vehicles with trained medical attendants.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $75/day</span>
-                                <a href="CarRental_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        <p class="card-text">
+                            Available at: <strong>{{ car.carRentalName }}</strong>
+                        </p>
 
-                <div class="col-lg-4 col-md-6">
-                    <div class="service-card">
-                        <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" class="card-img-top" alt="Self Drive">
-                        <div class="card-body">
-                            <h5 class="card-title">Self-Drive Rental Cars</h5>
-                            <div class="mb-3">
-                                <span class="text-warning">
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star"></i>
-                                    <i class="fas fa-star-half-alt"></i>
-                                </span>
-                                <span class="text-muted ms-2">4.7 (1,102 reviews)</span>
-                            </div>
-                            <p class="card-text">Flexible rental options from economy to premium vehicles.</p>
-                            <div class="d-flex justify-content-between align-items-center">
-                                <span class="price">From $35/day</span>
-                                <a href="CarRental_Page.html" class="btn btn-details">Review Now</a>
-                            </div>
+                        <div class="d-flex justify-content-center align-items-center">
+
+
+                           <a [routerLink]="['/car-rentals/car-details', car.carId]"
+                         [queryParams]="{ rentalId: car.carRentalId }"
+                         class="btn btn-details">
+                      View Details
+                        </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
+    </div>
+</section>
     <section id="why-us" class="section">
         <div class="container">
             <div class="section-title">

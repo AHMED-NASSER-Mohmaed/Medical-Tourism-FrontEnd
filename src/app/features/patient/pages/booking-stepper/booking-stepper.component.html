@@ -16,6 +16,7 @@
          [class.active]="currentStep === 'hotel'"
          [class.completed]="currentStep === 'car' || currentStep === 'payment'"
          [class.clickable]="currentStep === 'car' || currentStep === 'payment'"
+         [class.skipped]="(currentStep === 'car' || currentStep === 'payment') && !bookingDetails.roomAppointment"
          (click)="navigateToStep('hotel')"
          title="Edit Hotel Booking">
       <div class="step-icon"><i class="fas fa-hotel"></i></div>
@@ -27,10 +28,11 @@
     <div class="step-connector"></div>
 
     <!-- Car Rental Step -->
-   <div class="step"
+    <div class="step"
          [class.active]="currentStep === 'car'"
          [class.completed]="currentStep === 'payment'"
          [class.clickable]="currentStep === 'payment'"
+         [class.skipped]="currentStep === 'payment' && !bookingDetails.carAppointment"
          (click)="navigateToStep('car')"
          title="Edit Car Rental">
       <div class="step-icon"><i class="fas fa-car"></i></div>

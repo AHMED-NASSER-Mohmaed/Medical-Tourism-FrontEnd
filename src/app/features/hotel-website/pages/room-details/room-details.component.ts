@@ -28,15 +28,17 @@ export class RoomDetailsComponent implements OnInit {
   showDateError: boolean = false;
   bookingError: string = '';
   bookingSuccess: string = '';
-
+  minnDate: Date;
   bookingData: any = {};
-
+dateErrorMessage: string = '';
   constructor(
     private route: ActivatedRoute,
     private hotelService: HotelWebsiteService,
     private router: Router,
     private bookingService: BookingService
-  ) {}
+  ) {
+    this.minnDate=new Date();
+  }
 
   ngOnInit() {
     this.bookingData = this.bookingService.getBookingData();
@@ -59,19 +61,33 @@ export class RoomDetailsComponent implements OnInit {
     this.minDate = today.toISOString().split('T')[0];
   }
 
-  fetchUnavailableDates() {
-    this.hotelService.getRoomUnavailableDates(this.roomId).subscribe({
-      next: (data) => {
-        this.unavailableDates = data.unavailableDates || [];
-        this.unavailableDatesSet = new Set(this.unavailableDates);
-        this.checkAndSetPreselectedDates();
-      },
-      error: () => {
-        this.unavailableDates = [];
-        this.unavailableDatesSet = new Set();
+fetchUnavailableDates() {
+  this.hotelService.getRoomUnavailableDates(this.roomId).subscribe({
+    next: (data) => {
+      const allBlockedDates: string[] = [];
+      const dateRanges = data.unavailableDates || [];
+
+      // Loop through each date range object.
+      // CHANGED: Added 'as any[]' to treat each 'range' as an object
+      for (const range of dateRanges as any[]) {
+
+        let currentDate = new Date(range.startingDate );
+        const endDate = new Date(range.endingDate );
+
+        while (currentDate <= endDate) {
+          allBlockedDates.push(this.formatDate(currentDate));
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
       }
-    });
-  }
+
+      this.unavailableDatesSet = new Set(allBlockedDates);
+      this.checkAndSetPreselectedDates();
+    },
+    error: () => {
+      this.unavailableDatesSet = new Set();
+    }
+  });
+}
     checkAndSetPreselectedDates(): void {
     const preselectedRoomApp = this.bookingData?.roomAppointment;
     if (preselectedRoomApp && preselectedRoomApp.checkInDate && preselectedRoomApp.checkOutDate) {
@@ -134,7 +150,20 @@ export class RoomDetailsComponent implements OnInit {
   }
 
 
- bookRoom() {
+  bookRoom() {
+    const bookingData = this.bookingService.getBookingData();
+    if (!bookingData || !bookingData.specialtiyAppointment) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Booking Step Required',
+        text: 'Please book a doctor\'s appointment before proceeding.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.router.navigate(['/specialists']);
+      });
+      return;
+    }
+
     if (!this.checkInDate || !this.checkOutDate) {
       this.showDateError = true;
       return;
@@ -154,17 +183,25 @@ export class RoomDetailsComponent implements OnInit {
     const currentBookingData = this.bookingService.getBookingData();
     const updatedBookingData = {
       ...currentBookingData,
-      roomAppointment: roomAppointment,
-      navigationIds: {
-        ...currentBookingData.navigationIds,
-        roomId: this.room?.id,
-        hotelId: this.hotelId
-      }
+      roomAppointment: roomAppointment
     };
 
     this.bookingService.updateBookingData(updatedBookingData);
     this.router.navigate(['/patient/booking-stepper']);
   }
+
+isDateRangeAvailable(start: Date, end: Date): boolean {
+  let currentDate = new Date(start);
+
+  while (currentDate < end) {
+    if (this.unavailableDatesSet.has(this.formatDate(currentDate))) {
+      return false;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return true;
+}
 
   formatDate(date: Date | null): string {
     if (!date) return '';
