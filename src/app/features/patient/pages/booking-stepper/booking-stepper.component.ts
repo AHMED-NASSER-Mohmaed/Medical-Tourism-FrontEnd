@@ -38,14 +38,14 @@ export class BookingStepperComponent implements OnInit {
     }
 
   if (this.bookingDetails.carAppointment) {
-      // If a car has been booked, go directly to the payment step.
+
       this.currentStep = 'payment';
 
     } else if (this.bookingDetails.roomAppointment) {
-      // If a room has been booked, the next step is the car rental.
+
       this.currentStep = 'car';
     } else {
-      // Otherwise, the first step is to ask about the hotel.
+
       this.currentStep = 'hotel';
     }
   }

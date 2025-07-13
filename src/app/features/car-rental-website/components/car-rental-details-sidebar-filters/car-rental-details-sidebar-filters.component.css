@@ -11,7 +11,7 @@
   height: fit-content;
   margin-left: 1rem;
   margin-top: 2rem;
-  margin-bottom : 2rem 
+  margin-bottom : 2rem
 }
 .sidebar-title {
   display: flex;
@@ -204,7 +204,7 @@
   .car-cards-grid {
     grid-template-columns: 1fr;
   }
-} 
+}
 .car-cards-container {
     position: relative;
     min-height: 100vh;

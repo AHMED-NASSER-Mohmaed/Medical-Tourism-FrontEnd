@@ -183,7 +183,12 @@ fetchUnavailableDates() {
     const currentBookingData = this.bookingService.getBookingData();
     const updatedBookingData = {
       ...currentBookingData,
-      roomAppointment: roomAppointment
+      roomAppointment: roomAppointment,
+      navigationIds: {
+        ...currentBookingData.navigationIds,
+        roomId: this.room?.id,
+        hotelId: this.room?.hotelAssetId
+      }
     };
 
     this.bookingService.updateBookingData(updatedBookingData);

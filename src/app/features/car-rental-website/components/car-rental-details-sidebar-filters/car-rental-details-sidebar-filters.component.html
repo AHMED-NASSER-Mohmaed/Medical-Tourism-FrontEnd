@@ -6,11 +6,11 @@
     </div>
     <div class="filter-item">
       <label>Search by Car Name</label>
-      <input type="text" class="form-control" placeholder="e.g., Corolla" [(ngModel)]="filters.searchTerm" name="searchTerm">
+      <input type="text" class="form-control" placeholder="e.g., Corolla" [(ngModel)]="filters.searchTerm" name="searchTerm" (ngModelChange)="applyFilters()">
     </div>
     <div class="filter-item">
       <label>Car Type</label>
-      <select class="form-select" [(ngModel)]="filters.carType" name="carType">
+      <select class="form-select" [(ngModel)]="filters.carType" name="carType" (ngModelChange)="applyFilters()">
         <option value="">All Types</option>
         <option *ngFor="let type of carTypes" [value]="type[0]">{{ type[1] }}</option>
       </select>
@@ -39,11 +39,34 @@
     </div>
   </aside>
   <section class="car-cards-section">
-    <div *ngIf="loading" class="loading-spinner">Loading...</div>
+    <!-- Loading State -->
+    <div *ngIf="loading || carsLoading" class="loading-spinner">Loading...</div>
 
-    <div class="car-cards-grid">
-        <app-available-car-card *ngFor="let car of availableCars" [car]="car"></app-available-car-card>
+    <!-- Cars Grid -->
+    <div *ngIf="!loading && !carsLoading" class="car-cards-grid">
+      <app-available-car-card *ngFor="let car of availableCars" [car]="car"></app-available-car-card>
     </div>
 
+    <!-- No Results Message -->
+    <div *ngIf="!loading && !carsLoading && availableCars.length === 0" class="no-results">
+      No cars found matching your criteria.
+    </div>
+
+    <!-- Pagination -->
+    <nav *ngIf="!carsLoading && carTotalPages > 1" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="carPage === 1">
+          <a class="page-link" (click)="goToCarPage(carPage - 1)" tabindex="-1">Previous</a>
+        </li>
+        <li class="page-item"
+            *ngFor="let page of [].constructor(carTotalPages); let i = index"
+            [class.active]="carPage === i + 1">
+          <a class="page-link" (click)="goToCarPage(i + 1)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="carPage === carTotalPages">
+          <a class="page-link" (click)="goToCarPage(carPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
   </section>
-</div> 
+</div>
