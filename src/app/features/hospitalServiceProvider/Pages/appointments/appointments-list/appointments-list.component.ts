@@ -28,12 +28,22 @@ appointments: ScheduleListResponse = {
   searchTerm: string = '';
   selectedFilter: string = 'all';
   showFilters: boolean = false;
-  
+  statusFilter: string = 'All Status ';
+  selectedDayId: number | null = null;
   filterOptions = [
     { value: 'all', label: 'All Appointments' },
     { value: 'active', label: 'Active' },
     { value: 'inactive', label: 'Inactive' }
   ];
+  daysOfWeek = [
+  { id: 1, name: 'Sunday' },
+  { id: 2, name: 'Monday' },
+  { id: 3, name: 'Tuesday' },
+  { id: 4, name: 'Wednesday' },
+  { id: 5, name: 'Thursday' },
+  { id: 6, name: 'Friday' },
+  { id: 7, name: 'Saturday' }
+];
 
   constructor(
     private appointmentService: ScheduleService,
@@ -196,4 +206,41 @@ appointments: ScheduleListResponse = {
   get inactiveAppointmentsCount(): number {
     return this.orgAppointments.items?.filter(item => !item.isActive).length || 0;
   }
+  getDayName(id: number): string {
+  const day = this.daysOfWeek.find(d => d.id === id);
+  return day ? day.name : '';
+}
+onSearchChange() 
+{
+  this.loadSchedulesWithFilter()
+}
+onStatusFilterChange()
+{
+
+  this.loadSchedulesWithFilter()
+}
+onDayChange() 
+{
+  this.loadSchedulesWithFilter()
+}
+loadSchedulesWithFilter() 
+{
+    this.loading = true;
+  this.appointmentService.getSchedulesWithFilter(this.searchTerm, this.statusFilter,this.selectedDayId!).subscribe({
+    next: (data) => {
+      console.log('Filtered appointments:', data);
+
+      this.orgAppointments = data;
+      this.appointments = { ...data, pageNumber: 1 };
+      this.loading = false;
+
+
+    },
+    error: (err) => {
+      console.error('Failed to load appointments', err);
+      this.loading = false;
+    }
+  });
+}
+
 }

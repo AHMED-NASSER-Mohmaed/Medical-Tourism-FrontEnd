@@ -27,8 +27,8 @@ export class appointementService {
     getDoctorschedules(): Observable<PagedSlotsResponse>{
         return this.http.get<PagedSlotsResponse>(`${this.apiUrl}/Doctor-Schedules`);
     }
-     getDoctorappointment(): Observable<DoctorAppointmentDto[]>{
-        return this.http.get<DoctorAppointmentDto[]>(`${this.apiUrl}/Doctor-Schedules`);
+     getDoctorappointment(): Observable<any>{
+        return this.http.get<any>(`${this.apiUrl}/doctor-appointments`);
     }
     
 

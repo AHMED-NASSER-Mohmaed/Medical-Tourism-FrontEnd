@@ -6,7 +6,7 @@ export interface ScheduleResponseDto {
   hospital: string;
   hospitalAssetId: string;
   hospitalSpecialtyId: number;
-  dayOfWeek: DayOfWeekDto;
+  dayOfWeekId: number;
   startTime: string;  // or Date if you prefer
   endTime: string;    // or Date if you prefer
   timeSlotSize: number;

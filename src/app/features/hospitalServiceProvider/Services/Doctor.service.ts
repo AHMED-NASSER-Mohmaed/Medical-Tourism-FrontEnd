@@ -41,7 +41,7 @@ export class DoctorService {
   }
 
     getDoctorById(id: string): Observable<DoctorProfile> {
-        return this.http.get<DoctorProfile>(`${this.apiUrl}/${id}`);
+        return this.http.get<DoctorProfile>(`${this.apiUrl}/hosital-admin/${id}`);
     }
 
    createDoctor(doctorData: FormData): Observable<ApiResponse<any>> {

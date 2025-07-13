@@ -20,14 +20,21 @@ export class DoctorsFormComponent {
   LiscenseFile: File | null = null;
   imageFile: File | null = null;
   doctorId: string | null = null; // To hold the doctor ID in edit mode
-  
+  isLoading:boolean=false;
   // These should be populated from your API
   hospitalSpecialties: Specialty[] = [];
   countriesData: { [key: number]: CountryGovernoratesDTO } = {};
   governorates: GovernorateDTO[] = [];
   countries: { id: number; name: string }[] = [];
   image:string = '';
-  license:string = ''; 
+  license:string = '';
+  isfailed:boolean=false;
+  isSuccess:boolean=false; 
+  messageError:string="";
+  successMessage:string="";
+  
+
+
   constructor(
     private fb: FormBuilder,
     private doctorService: DoctorService,
@@ -58,11 +65,41 @@ export class DoctorsFormComponent {
 
   ngOnInit(): void {
     
-    if (this.router.url.includes('edit')) 
+    if (!this.router.url.includes('add')) 
       {
-      this.isEditMode = true;
+         this.isLoading = true;
+         this.loadDoctor()
+      }
+          
+   
+
+
+
+    this.specialtyService.getAllSpecialists().subscribe({
+      next: (specialties) => {
+      this.hospitalSpecialties = specialties.items.filter((specialty: Specialty) => specialty.status === 1);
+      console.log('Specialties loaded:', this.hospitalSpecialties);
+      },
+      error: (err) => {
+      console.error('Error loading specialties', err);
+      }
+    });
+    this.getCountries();
+    }
+
+    passwordMatchValidator(form: FormGroup) {
+    return form.get('password')?.value === form.get('confirmPassword')?.value 
+      ? null : { mismatch: true };
+  }
+
+  loadDoctor()
+  {
+   
+       
+       this.isEditMode = true;
      this.doctorId = this.router.url.split('/').pop()!;
       console.log('Edit mode for doctor ID:', this.doctorId);
+      
       this.doctorService.getDoctorById(this.doctorId!).subscribe({
         next: (doctor) => {
           this.doctorForm.patchValue({ 
@@ -89,29 +126,9 @@ export class DoctorsFormComponent {
         error: (err) => { 
           console.error('Error loading doctor data', err);
         }
-      });}
-          
-   
-
-
-
-    this.specialtyService.getAllSpecialists().subscribe({
-      next: (specialties) => {
-      this.hospitalSpecialties = specialties.items.filter((specialty: Specialty) => specialty.status === 1);
-      console.log('Specialties loaded:', this.hospitalSpecialties);
-      },
-      error: (err) => {
-      console.error('Error loading specialties', err);
-      }
-    });
-    this.getCountries();
-    }
-
-    passwordMatchValidator(form: FormGroup) {
-    return form.get('password')?.value === form.get('confirmPassword')?.value 
-      ? null : { mismatch: true };
+      });
+      this.isLoading=false
   }
-
 
   getCountries() {
     console.log('Loading countries...');
@@ -172,6 +189,7 @@ export class DoctorsFormComponent {
     }
   }
   updateDoctor(): void {
+    this.isLoading=true
           const formData = new FormData();
         
           Object.entries(this.doctorForm.value).forEach(([key, value]) => {
@@ -184,24 +202,36 @@ export class DoctorsFormComponent {
           for (let [key, value] of formData.entries()) {
         console.log(key, value);
       }
+      this.isLoading=true
     this.doctorService.updateDoctor(this.doctorId!,formData).subscribe({
       next: (response) => { 
+        this.isLoading=false
+        this.isSuccess=true;
 
+        console.log(this.isSuccess)
+        this.successMessage="doctor Created Succefully"
       },
       error: (error) => {
+        this.isfailed=true;
+        this.isLoading=false
+        this.messageError="please enter a valid data"
+        console.log(this.messageError)
         console.error('Error updating doctor', error);
       }
       });
+      this.isLoading=false
     }
 
   onSubmit(): void {
+
    if( this.isEditMode) {
       this.updateDoctor();
+      return;
     } else {
     if (this.doctorForm.invalid || !this.LiscenseFile || !this.imageFile) {
       return;
     }
-
+    
     const formData = new FormData();
    
     Object.entries(this.doctorForm.value).forEach(([key, value]) => {
@@ -214,17 +244,41 @@ export class DoctorsFormComponent {
     for (let [key, value] of formData.entries()) {
   console.log(key, value);
 }
+     this.isSuccess=false;
+     this.isLoading=true;
     this.doctorService.createDoctor(formData).subscribe({
       next: (response) => {
+        this.isLoading=false
+        this.isSuccess=true;
+
+        console.log(this.isSuccess)
+        this.successMessage="doctor Created Succefully"
+        
         // Handle success
-        this.router.navigate(['/hospitalProvider/doctors']);
+        
         console.log('Doctor created successfully', response);
       },
       error: (error) => {
         // Handle error
+        this.isLoading=false
+        this.isfailed=true;
+
+        this.messageError=error;
         console.error('Error creating doctor', error);
       }
     });
+   
   }
+
   }
+  closeError()
+  {
+    this.isfailed=false;
+  }
+  CloseSuccessCreaate()
+  {
+    this.isSuccess=false;
+   this.router.navigate(['/hospitalProvider/doctors']);
+  }
+  
 }

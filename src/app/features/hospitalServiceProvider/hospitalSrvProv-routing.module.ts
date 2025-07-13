@@ -31,9 +31,9 @@ const routes: Routes = [
       { path: 'doctors', component: DoctorsListComponent },
       { path: 'appointments', component: AppointmentsListComponent },
       { path: 'doctor/add', component: DoctorsFormComponent },
-      { path: 'doctor/edit/:id', component: DoctorsFormComponent },
+      { path: 'doctors/:id', component: DoctorsFormComponent },
       { path: 'schedule/add', component: AppointmentFormComponent },
-      { path: 'schedule/edit/:id', component: AppointmentFormComponent },
+      { path: 'schedule/:id/:day', component: AppointmentFormComponent },
       { path: 'disbursements' , component:DisbursementComponent},
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

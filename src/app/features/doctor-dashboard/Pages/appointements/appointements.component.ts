@@ -21,6 +21,7 @@ export class AppointementsComponent implements OnInit {
     this.appointmentService.getDoctorschedules().subscribe({
       next:(data)=>
       {
+        console.log("appointemn data:" +data);
         this.schedulesResp=data;
        console.log(this.schedulesResp)
        this.schedules=this.schedulesResp.items;

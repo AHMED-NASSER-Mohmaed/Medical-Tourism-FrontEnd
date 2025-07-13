@@ -32,6 +32,15 @@
         <i class="fas fa-times"></i>
       </button>
     </div>
+    <select class="filter-select" 
+            style="min-width:160px; padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;"
+            [(ngModel)]="statusFilter" 
+            (ngModelChange)="onStatusFilterChange()">
+      <option value=''>All Statuses</option>
+      <option value=true>Active</option>
+      <option value=false>Inactive</option>
+     
+    </select>
   </div>
 
   <!-- Table -->
@@ -89,7 +98,7 @@
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn-secondary" (click)="showAddSpecialistPopup = false">Cancel</button>
+            <button type="button" class="btn-secondary btn" (click)="showAddSpecialistPopup = false">Cancel</button>
             <button type="submit" class="btn-primary" [disabled]="!selectedSpecialistId">Add</button>
           </div>
         </form>
@@ -100,3 +109,32 @@
 
 </div>
 <router-outlet></router-outlet>
+
+<!-- Error Modal (pure Angular, doesn't depend on bootstrap.js) -->
+<div class="custom-modal-backdrop" *ngIf="isfailed">
+  <div class="custom-modal">
+    <div class="modal-header bg-danger text-white">
+      <h5 class="modal-title">An Error Occurred</h5>
+      <button type="button" class="btn-close btn-close-white" (click)="closeError()"></button>
+    </div>
+    <div class="modal-body text-center">
+      <i class="bi bi-exclamation-triangle fs-2 text-danger mb-2"></i>
+      <p>{{ messageError }}</p>
+    </div>
+    <div class="modal-footer justify-content-center">
+      <button type="button" class="btn btn-danger" (click)="closeError()">Close</button>
+    </div>
+  </div>
+</div>
+<div *ngIf="isSuccess">
+</div>
+<div class="custom-toast" *ngIf="isSuccess">
+  <i class="bi bi-check-circle-fill me-2"></i>
+  {{ successMessage }}
+</div>
+<div class="loading-overlay" *ngIf="isLoading">
+  
+  <div class="spinner"></div>
+  Please Wait...
+</div>
+

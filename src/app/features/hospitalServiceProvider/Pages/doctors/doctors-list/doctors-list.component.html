@@ -39,7 +39,7 @@
       <option value="">All Statuses</option>
       <option value="1">Active</option>
       <option value="0">Inactive</option>
-      <option value="2">Suspended</option>
+     ]
       <option value="3">Pending</option>
     </select>
   </div>
@@ -98,7 +98,7 @@
           <td>{{ doctor.specialtyName }}</td>
           <td>{{ doctor.hospitalName }}</td>
           <td>
-            <button class="btn-action edit" title="Edit" [routerLink]="['edit', doctor.id]">
+            <button class="btn-action edit" title="Edit" [routerLink]="[ doctor.id]">
               <i class="fas fa-edit"></i>
             </button>
           </td>

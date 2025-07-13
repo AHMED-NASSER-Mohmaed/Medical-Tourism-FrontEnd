@@ -5,13 +5,11 @@
     <div class="header-content">
       <div>
         <h1 class="page-title">
-          <i class="fas fa-user-md"></i> Doctors Management
+          <i class="fas fa-user-md"></i> Disbursement Management
         </h1>
         <p class="page-subtitle"></p>
       </div>
-      <button class="btn-primary" [routerLink]="['/hospitalProvider/doctor/add']">
-        <i class="fas fa-plus"></i> New Disbursement
-      </button>
+     
     </div>
   </div>
 
@@ -30,32 +28,8 @@
         Active records
       </div>
     </div>
-    <div class="stat-card">
-      <div class="stat-header">
-        <div class="stat-title">Total Amount</div>
-        <div class="stat-icon amount">
-          <i class="fas fa-dollar-sign"></i>
-        </div>
-      </div>
-      <div class="stat-value">{{ totalAmount | currency }}</div>
-      <div class="stat-change positive">
-        <i class="fas fa-arrow-up"></i>
-        All disbursements
-      </div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-header">
-        <div class="stat-title">Average Amount</div>
-        <div class="stat-icon average">
-          <i class="fas fa-chart-line"></i>
-        </div>
-      </div>
-      <div class="stat-value">{{ averageAmount | currency }}</div>
-      <div class="stat-change">
-        <i class="fas fa-calculator"></i>
-        Per transaction
-      </div>
-    </div>
+    
+   
   </div>
 
   <!-- Filters Section -->
@@ -125,10 +99,7 @@
           </select>
           <span>entries</span>
         </div>
-        <button class="btn btn-sm btn-outline">
-          <i class="fas fa-download"></i>
-          Export
-        </button>
+       
       </div>
     </div>
     

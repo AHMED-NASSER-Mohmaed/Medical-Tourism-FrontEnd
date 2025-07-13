@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ScheduleListResponse, ScheduleRequestDto, ScheduleResponseDto } from '../models/schedule.model';
+import { HospitalAppointmentDto, HospitalAppointmentRespone } from '../models/Appointment.model';
 
 @Injectable({
     providedIn: 'root'
@@ -51,4 +52,26 @@ export class ScheduleService {
      ChangeSpecialtyStatus(scheduleID: number,status:boolean): Observable<any> {
         return this.http.put(`${this.apiUrl}schedule/status/${scheduleID}`, status);
     }
+    getSchedulesWithFilter(searchTerm: string, statusFilter: string,filterDayOfWeekId?:number): Observable<ScheduleListResponse> {
+let params = new HttpParams()
+      .set('PageNumber', "1")
+      .set('PageSize', "10");
+
+    if (searchTerm) params = params.set('SearchTerm', searchTerm);
+    if (filterDayOfWeekId) params = params.set('FilterDayOfWeekId', filterDayOfWeekId.toString());
+    if (statusFilter !== undefined) params = params.set('FilterIsActive', statusFilter === 'active' ? 'true' : statusFilter === 'inactive' ? 'false' : '');
+
+  return this.http.get<ScheduleListResponse>(`${this.apiUrl}Hospital-Schedules`, { params });
+}
+    getAppointments(ScheduleId:string,date?:any,status?:string): Observable<HospitalAppointmentRespone> {
+
+      let params = new HttpParams()
+      .set('ScheduleId', ScheduleId);
+      if (date) params = params.set('Date', date);
+      if (status !== undefined) params = params.set('appointmentStatus', status.toString());
+
+      console.log("Fetching appointments with params:", params.toString());
+
+        return this.http.get<HospitalAppointmentRespone>(`${this.apiUrl}hospital-appointments`,{params});
+    } 
 }

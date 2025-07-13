@@ -23,7 +23,10 @@ export class SchedulesComponent {
     this.appointmentService.getDoctorappointment().subscribe({
       next:(data)=>
         {
-          this.appointments=data;
+          console.log("appointments data:" +data);
+          this.appointments=data.items;
+          console.log(this.appointments);
+          this.updatePagedItems();
         },
         error:(error)=>
         {

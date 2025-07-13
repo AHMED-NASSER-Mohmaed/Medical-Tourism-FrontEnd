@@ -15,29 +15,40 @@
       </button>
     </div>
   </div>
-
-  <!-- Controls -->
-  <div class="controls-section">
+<div class="controls-section">
     <div class="search-input-wrapper" style="flex:1; display:flex; align-items:center; position:relative;">
-      <i class="fas fa-search search-icon" style="position:absolute; left:10px; color:#aaa;"></i>
+      <i class="fas fa-search" style="position:absolute; left:10px; color:#aaa;"></i>
       <input 
         type="text" 
         class="search-input" 
-        placeholder="Search..." 
+        placeholder="Search doctors..." 
         style="padding-left:2rem;" 
         [(ngModel)]="searchTerm" 
-        (input)="startSearch()">
-      <button 
-        *ngIf="searchTerm" 
-        class="clear-search-btn" 
-        (click)="searchTerm = ''; startSearch()"
-        style="position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#aaa;">
+        (ngModelChange)="onSearchChange()">
+      <button *ngIf="searchTerm" 
+              (click)="searchTerm=''; onSearchChange()"
+              style="position:absolute; right:10px; background:none; border:none; cursor:pointer; color:#aaa;">
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <button class="filter-toggle-btn" (click)="toggleFilters()">
-      <i class="fas fa-filter"></i> Filters
-    </button>
+    <select 
+        class="filter-select" 
+        [(ngModel)]="selectedDayId" 
+        (ngModelChange)="onDayChange()">
+        <option [ngValue]="null">Select Day</option>
+        <option *ngFor="let day of daysOfWeek" [ngValue]="day.id">
+          {{ day.name }}
+        </option>
+      </select>
+    <select class="filter-select" 
+            style="min-width:160px; padding:0.5rem 1rem; border:1px solid #ddd; border-radius:4px;"
+            [(ngModel)]="statusFilter" 
+            (ngModelChange)="onStatusFilterChange()">
+      <option value="">All Statuses</option>
+      <option value="1">Active</option>
+      <option value="0">Inactive</option>
+    
+    </select>
   </div>
 
   <!-- Filter Section -->
@@ -79,17 +90,17 @@
         <tr>
           <th>Doctor</th>
           <th>Specialty</th>
-          <th>Hospital</th>
+          <th>Day Of Weak</th>
           <th>Time</th>
           <th>Status</th>
-          <th>Actions</th>
+          <th></th> 
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let schedule of appointments.items">
           <td>{{ schedule.doctorName }}</td>
           <td>{{ schedule.specialty }}</td>
-          <td>{{ schedule.hospital }}</td>
+          <td>{{getDayName(schedule.dayOfWeekId)}}</td>
           <td>{{ schedule.startTime }} - {{ schedule.endTime }}</td>
           <td>
             <button 
@@ -101,14 +112,13 @@
               {{ schedule.isActive ? 'Active' : 'Inactive' }}
             </button>
           </td>
-          <td>
-            <button class="btn-action edit" title="Edit">
-              <i class="fas fa-edit"></i>
-            </button>
-            <!-- <button class="btn-action delete" title="Delete">
-              <i class="fas fa-trash"></i>
-            </button> -->
-          </td>
+        <td>
+  <button class="btn btn-sm btn-primary d-flex align-items-center gap-1" title="View" 
+          [routerLink]="['/hospitalProvider/schedule', schedule.id,schedule.dayOfWeekId]">
+    <i class="fas fa-eye"></i> <!-- استخدم fa-eye بدلاً من fa-show لأنها الأيقونة الصحيحة -->
+    <span class="d-none d-md-inline">View</span>
+  </button>
+</td>
         </tr>
       </tbody>
     </table>

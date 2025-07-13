@@ -37,7 +37,7 @@ title = 'Hospital Service Provider ';
       isExpanded: false,
     },
     {
-      label: 'Appointments',
+      label: 'Schedules',
       icon: faListUl,
       link: '/hospitalProvider/appointments',
       isExpanded: false

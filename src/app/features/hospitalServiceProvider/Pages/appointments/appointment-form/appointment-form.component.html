@@ -1,119 +1,128 @@
-<div class="container mt-4">
-  <h3 class="mb-4 text-gray-800">{{ isEditMode ? 'Edit' : 'Add' }} Doctor Schedule</h3>
+<div class="appointments-container card shadow-sm p-3">
 
-  <form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
-    <!-- Basic Info -->
-    <div class="row">
-       <!-- Specialty -->
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Specialty <span class="text-danger">*</span></label>
-          <select class="form-control" id="hospitalSpecialtyId" formControlName="hospitalSpecialtyId" (change)="loadDoctors()">
-            <option value="">Select Specialty</option>
-            <option *ngFor="let specialty of specialties" [value]="specialty.id">{{ specialty.specialtyName }}</option>
-          </select>
-          <div *ngIf="getFormControl('hospitalSpecialtyId').invalid && (getFormControl('hospitalSpecialtyId').dirty || getFormControl('hospitalSpecialtyId').touched)" class="text-danger">
-            <div *ngIf="getFormControl('hospitalSpecialtyId').errors?.['required']">
-              Specialty is required
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Doctor -->
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Doctor <span class="text-danger">*</span></label>
-          <select class="form-control" id="doctorId" formControlName="doctorId">
-            <option value="">Select Doctor</option>
-            <option *ngFor="let doctor of doctors" [value]="doctor.id">{{ doctor.firstName}} {{ doctor.lastName }}</option>
-          </select>
-          <div *ngIf="getFormControl('doctorId').invalid && (getFormControl('doctorId').dirty || getFormControl('doctorId').touched)" class="text-danger">
-            <div *ngIf="getFormControl('doctorId').errors?.['required']">
-              Doctor is required
-            </div>
-          </div>
-        </div>
-      </div>
-
-     
-    </div>
-
-    <!-- Day & Time -->
-    <div class="row">
-      <!-- Day of Week -->
-      <div class="col-md-6">
-        <div class="form-group">
-          <label>Day of Week <span class="text-danger">*</span></label>
-          <select class="form-control" id="dayOfWeekId" formControlName="dayOfWeekId">
-            <option value="">Select Day</option>
-            <option *ngFor="let day of daysOfWeek" [value]="day.id">{{ day.name }}</option>
-          </select>
-          <div *ngIf="getFormControl('dayOfWeekId').invalid && (getFormControl('dayOfWeekId').dirty || getFormControl('dayOfWeekId').touched)" class="text-danger">
-            <div *ngIf="getFormControl('dayOfWeekId').errors?.['required']">
-              Day is required
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Start Time -->
-      <div class="col-md-3">
-        <div class="form-group">
-          <label>Start Time</label>
-          <div class="input-group input-group-sm">
-            <input type="number" class="form-control" placeholder="HH" min="0" max="23"
-                   [formControl]="getFormControl('startTime.hour')">
-            <input type="number" class="form-control" placeholder="MM" min="0" max="59"
-                   [formControl]="getFormControl('startTime.minute')">
-          </div>
-        </div>
-      </div>
-
-      <!-- End Time -->
-      <div class="col-md-3">
-        <div class="form-group">
-          <label>End Time</label>
-          <div class="input-group input-group-sm">
-            <input type="number" class="form-control" placeholder="HH" min="0" max="23"
-                   [formControl]="getFormControl('endTime.hour')">
-            <input type="number" class="form-control" placeholder="MM" min="0" max="59"
-                   [formControl]="getFormControl('endTime.minute')">
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Slot Size | Max Capacity | Price -->
-    <div class="row">
-      <div class="col-md-3">
-        <div class="form-group">
-          <label>time Slot Size</label>
-          <div class="input-group input-group-sm">
-            <input type="number" class="form-control" placeholder="HH" min="0" max="23"
-                   [formControl]="getFormControl('timeSlotSize.hour')">
-            <input type="number" class="form-control" placeholder="MM" min="0" max="59"
-                   [formControl]="getFormControl('timeSlotSize.minute')">
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label>Max Capacity</label>
-          <input type="number" class="form-control" id="maxCapacity" formControlName="maxCapacity" min="1">
-        </div>
-      </div>
-      <div class="col-md-4">
-        <div class="form-group">
-          <label>Price</label>
-          <input type="number" class="form-control" id="price" formControlName="price" min="0">
-        </div>
-      </div>
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary" [disabled]="scheduleForm.invalid">
-      {{ isEditMode ? 'Update' : 'Save' }}
+  <!-- Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 p-2 rounded shadow-sm bg-white">
+  <div class="d-flex align-items-center">
+    <i class="fas fa-calendar-check text-primary me-2 fs-4"></i>
+    <h4 class="mb-0">Appointments List</h4>
+  </div>
+  <div class="d-flex align-items-center gap-2">
+    <span class="badge bg-secondary">{{ appointments.length }} total</span>
+    <button type="button" class="btn btn-outline-secondary btn-sm" (click)="resetFilters()">
+      <i class="fas fa-sync-alt me-1"></i> Reset Filters
     </button>
-  </form>
+  </div>
+</div>
+
+ <!-- Search & Filter -->
+<div class="d-flex flex-wrap gap-2 mb-3 align-items-center">
+  <div class="flex-grow-1 position-relative">
+    <i class="fas fa-search position-absolute" style="top: 50%; transform: translateY(-50%); left: 12px; color: #aaa;"></i>
+    <input 
+      type="text" 
+      class="form-control ps-4" 
+      placeholder="Search by patient or doctor..."
+      [(ngModel)]="searchTerm" 
+      (input)="filterAppointments()">
+  </div>
+
+  <div class="d-flex gap-2 flex-wrap">
+    <select 
+      class="form-select" 
+      style="min-width: 150px;"
+      [(ngModel)]="selectedStatus" 
+      (change)="filterAppointments()">
+      <option value="">All Statuses</option>
+      <option value="1">Confirmed</option>
+      <option value="2">Cancelled</option>
+  </select>
+  </div>
+  <div class="d-flex gap-2">
+     <input 
+      type="date" 
+      class="form-control"
+      style="min-width: 180px;"
+      [(ngModel)]="selectedDate"
+      (change)="filterAppointments()">
+  </div>
+
+
+   
+</div>
+
+  
+
+  <!-- Loading -->
+  <div *ngIf="loading" class="text-center my-4">
+    <i class="fas fa-spinner fa-spin fa-2x text-primary"></i>
+    <p class="mt-2">Loading appointments...</p>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="!loading && filteredAppointments.length > 0" class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th>Patient</th>
+          <th>Doctor</th>
+          <th>Specialty</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Day</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let appointment of filteredAppointments">
+          <td>
+            <div class="fw-semibold">{{ appointment.patientName || '-' }}</div>
+            <small class="text-muted">{{ appointment.patientPhone || 'No Phone.no' }} </small>
+          </td>
+          <td>{{ appointment.doctorName || '-' }}</td>
+          <td>{{ appointment.specialty || '-' }}</td>
+          <td>{{ appointment.date }}</td>
+          <td>{{ appointment.time.slice(0,5) }}</td>
+          <td>{{ getDayName(appointment.dayOfWeekId) }}</td>
+          <td>
+            <span [ngClass]="getStatusBadgeClass(appointment.status)">
+              {{ getStatusText(appointment.status) }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="filteredAppointments.length > 0">
+      <tr>
+         <!-- Pagination -->
+            <div *ngIf="totalPages > 1" class="d-flex justify-content-center mt-3">
+              <nav>
+                <ul class="pagination mb-0">
+                  <li class="page-item" [class.disabled]="pageNumber === 1">
+                    <button class="page-link" (click)="goToPage(pageNumber - 1)">Prev</button>
+                  </li>
+
+                  <li 
+                    *ngFor="let page of [].constructor(totalPages); let i = index" 
+                    class="page-item" 
+                    [class.active]="pageNumber === (i + 1)">
+                    <button class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</button>
+                  </li>
+
+                  <li class="page-item" [class.disabled]="pageNumber === totalPages">
+                    <button class="page-link" (click)="goToPage(pageNumber + 1)">Next</button>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && filteredAppointments.length === 0" class="text-center text-muted py-4">
+    <i class="fas fa-calendar-times fa-2x mb-2"></i>
+    <p class="mb-0">No appointments found</p>
+  </div>
+
 </div>
