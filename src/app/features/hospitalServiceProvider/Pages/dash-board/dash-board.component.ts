@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-dash-board',
   standalone: true,
-  imports: [SidebarComponent, CommonModule],
+  imports: [CommonModule],
   templateUrl: './dash-board.component.html',
   styleUrl: './dash-board.component.css'
 })

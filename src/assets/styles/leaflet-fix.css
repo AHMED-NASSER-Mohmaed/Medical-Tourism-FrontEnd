@@ -1,0 +1,16 @@
+/* Fix Leaflet image paths for build system */
+.leaflet-control-layers-toggle {
+  background-image: url('/assets/images/leaflet/layers.png') !important;
+}
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-image: url('/assets/images/leaflet/layers-2x.png') !important;
+}
+
+.leaflet-default-icon-path {
+  background-image: url('/assets/images/leaflet/marker-icon.png') !important;
+}
+
+.leaflet-default-shadow-path {
+  background-image: url('/assets/images/leaflet/marker-shadow.png') !important;
+}

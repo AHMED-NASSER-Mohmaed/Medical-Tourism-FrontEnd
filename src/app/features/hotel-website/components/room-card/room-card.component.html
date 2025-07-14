@@ -1,6 +1,6 @@
 <div class="card room-card shadow-lg h-100 animate__animated animate__fadeInUp position-relative">
   <div class="room-img-wrapper position-relative">
-    <img [src]="room.roomImages?.[0]?.imageURL || 'assets/images/cover.png'" class="card-img-top room-img" alt="Room Image">
+    <img [src]="room.roomImages[0].imageURL || 'assets/images/cover.png'" class="card-img-top room-img" alt="Room Image">
     <div class="room-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-2 animate__animated animate__fadeIn">
       <span class="badge bg-dark bg-opacity-75 text-white align-self-end fs-6 animate__animated animate__fadeInDown">
         <i class="bi bi-currency-dollar"></i> {{ room.price | number:'1.0-2' }}
@@ -21,4 +21,4 @@
       </a>
     </div>
   </div>
-</div> 
+</div>

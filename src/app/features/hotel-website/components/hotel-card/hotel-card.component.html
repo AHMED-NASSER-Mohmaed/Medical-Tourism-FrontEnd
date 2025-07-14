@@ -1,6 +1,6 @@
 <div class="hotel-card">
   <div class="hotel-img-wrapper">
-    <img [src]="hotel.assetImages[0]?.imageURL || 'assets/images/cover.png'" class="hotel-img" alt="Hotel Image">
+    <img [src]="hotel.assetImages[0].imageURL || 'assets/images/cover.png'" class="hotel-img" alt="Hotel Image">
     <div class="rating-badge">
       <i class="bi bi-star-fill"></i> {{ hotel.starRating || 'N/A' }}
     </div>
