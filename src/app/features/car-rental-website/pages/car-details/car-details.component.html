@@ -22,7 +22,7 @@
                     <div class="main-img-wrapper">
                         <div class="img-aspect-ratio">
                             <img *ngIf="car && car.carImages && car.carImages.length > 0"
-                                [src]="selectedImage || car.carImages[0]?.imageURL || '/assets/images/cover.png'"
+                                [src]="selectedImage || car.carImages[0].imageURL || '/assets/images/cover.png'"
                                 class="main-car-img animate__animated animate__fadeIn"
                                 alt="Car Image">
                             <img *ngIf="car && (!car.carImages || car.carImages.length === 0)"
@@ -35,7 +35,7 @@
                         <img *ngFor="let img of car.carImages"
                             [src]="img?.imageURL || '/assets/images/cover.png'"
                             class="car-thumb animate__animated animate__fadeInUp"
-                            [class.active-thumb]="(selectedImage || car.carImages[0]?.imageURL) === (img?.imageURL || '/assets/images/cover.png')"
+                            [class.active-thumb]="(selectedImage || car.carImages[0].imageURL) === (img?.imageURL || '/assets/images/cover.png')"
                             (click)="img?.imageURL ? selectImage(img.imageURL) : null"
                             alt="Car Thumbnail">
                     </div>
@@ -44,12 +44,12 @@
                 <!-- Car Details -->
                 <div class="car-details">
                     <h1 class="animate__animated animate__fadeInDown">
-                        {{ car?.factoryMake || '-' }} {{ car?.modelName || '-' }}
-                        <span class="model-year">({{ car?.modelYear || '-' }})</span>
+                        {{ car.factoryMake || '-' }} {{ car.modelName || '-' }}
+                        <span class="model-year">({{ car.modelYear || '-' }})</span>
                     </h1>
                     <div class="price-tag animate__animated animate__fadeInUp">
                         <i class="bi bi-cash-coin"></i>
-                        EGP {{ car?.pricePerDay || '-' }}
+                        EGP {{ car.pricePerDay || '-' }}
                         <span class="unit">/day</span>
                     </div>
 
@@ -59,7 +59,7 @@
                             <i class="bi bi-car-front"></i> {{ getCarType() }}
                         </span>
                         <span class="feature-badge">
-                            <i class="bi bi-people"></i> {{ car?.capacity || '-' }} Seats
+                            <i class="bi bi-people"></i> {{ car.capacity || '-' }} Seats
                         </span>
                         <span class="feature-badge">
                             <i class="bi bi-gear"></i> {{ getTransmission() }}
@@ -73,13 +73,13 @@
                     <div class="details-grid">
                         <div class="detail-item">
                             <span class="label">Rental Agency</span>
-                            <span class="value">{{ car?.carRentalAssetName || '-' }}</span>
+                            <span class="value">{{ car.carRentalAssetName || '-' }}</span>
                         </div>
                         <div class="detail-item">
                             <span class="label">Status</span>
                             <span class="value">
-                                <span class="status-badge" [class.available]="car?.isAvailable">
-                                    {{ car?.isAvailable ? 'Available' : 'Not Available' }}
+                                <span class="status-badge" [class.available]="car.isAvailable">
+                                    {{ car.isAvailable ? 'Available' : 'Not Available' }}
                                 </span>
                             </span>
                         </div>
@@ -88,9 +88,9 @@
             </div>
 
             <!-- Car Description -->
-            <div class="about-car" *ngIf="car?.description">
+            <div class="about-car" *ngIf="car.description">
                 <h3><i class="bi bi-info-circle"></i> About This Car</h3>
-                <p>{{ car?.description }}</p>
+                <p>{{ car.description }}</p>
             </div>
         </div>
 
@@ -122,7 +122,7 @@
                     <mat-spinner diameter="50"></mat-spinner>
                 </div>
 
-                <ng-container *ngIf="car?.isAvailable; else notAvailable">
+                <ng-container *ngIf="car.isAvailable; else notAvailable">
                     <form (ngSubmit)="bookCar()" #carBookingForm="ngForm" novalidate autocomplete="off">
                         <!-- Pick-up Date -->
                         <div class="form-group">
