@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { PaginatedSpecialtiesResponse } from '../models/specialist.model';
 export interface Specialist {
     id: number;
@@ -14,7 +15,7 @@ export interface Specialist {
     providedIn: 'root'
 })
 export class SpecialistService {
-    private apiUrl = 'https://localhost:7078/api/Specialties/'; // Replace with your API endpoint
+    private apiUrl = `${environment.apiUrl}/Specialties/`;
     constructor(private http: HttpClient) {}
 
     getAllSpecialists(pageNumber:number=1,pagesize:number=10,isActive?:boolean): Observable<PaginatedSpecialtiesResponse> {
@@ -42,7 +43,7 @@ export class SpecialistService {
         return this.http.delete<void>(`${this.apiUrl}/${id}`);
     }
     getAvailableSpecialists(): Observable<PaginatedSpecialtiesResponse> {
-       
+
         return this.http.get<PaginatedSpecialtiesResponse>(`${this.apiUrl}available-for-linking/my-hospital`);
     }
     addSpecialistToList(specialistId: number): Observable<Specialist> {

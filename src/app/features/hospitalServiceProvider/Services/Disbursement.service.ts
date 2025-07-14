@@ -1,17 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { DisbursementHospitalDTO, DisbursementListResponse } from '../models/disbursement';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DisbursementService {
-    private apiUrl = ' https://localhost:7078/api/HospitalProvider/disbursement';
+    private apiUrl = `${environment.apiUrl}/HospitalProvider/disbursement`;
     constructor(private http: HttpClient) {}
 
     getAllDisbursements(): Observable<DisbursementListResponse> {
-       
+
         return this.http.get<DisbursementListResponse>(this.apiUrl);
     }
 
@@ -32,7 +33,7 @@ export class DisbursementService {
         return this.http.delete<any>(`${this.apiUrl}/${id}`);
     }
     PrintDisbursement(id: number): Observable<any> {
-       
+
         return this.http.get(`${this.apiUrl}/Report/${id}`,{
   responseType: 'blob'});
     }

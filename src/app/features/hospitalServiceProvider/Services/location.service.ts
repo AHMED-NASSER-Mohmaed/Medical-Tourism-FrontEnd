@@ -2,13 +2,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { CountriesGovernoratesDTO } from '../models/location.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocationService {
-  private apiUrl = 'https://localhost:7078/api/Country/'; // Replace with your actual API endpoint
+  private apiUrl = `${environment.apiUrl}/Country/`;
 
   constructor(private http: HttpClient) { }
 

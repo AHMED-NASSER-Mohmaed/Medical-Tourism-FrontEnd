@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError, of } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { DoctorProfileDto } from '../models/Doctor.model';
 import { PagedSlotsResponse } from '../models/appointment.model';
 import { DoctorAppointmentDto } from '../models/schedules.model';
@@ -18,7 +19,7 @@ export interface Doctor {
     providedIn: 'root'
 })
 export class appointementService {
-    private apiUrl = 'https://localhost:7078/api/Doctors'; // Replace with your actual API endpoint
+    private apiUrl = `${environment.apiUrl}/Doctors`;
 
     constructor(private http: HttpClient) {}
 
@@ -30,7 +31,7 @@ export class appointementService {
      getDoctorappointment(): Observable<any>{
         return this.http.get<any>(`${this.apiUrl}/doctor-appointments`);
     }
-    
+
     getDoctorappointmentFiltered(appointmetnDate: string, dayofWeekId: string): Observable<any> {
         // Mocked data for specific date and dayofWeekId combinations
         const mockData = [
@@ -77,7 +78,7 @@ export class appointementService {
 
 
 
-   
 
-   
+
+
 }
