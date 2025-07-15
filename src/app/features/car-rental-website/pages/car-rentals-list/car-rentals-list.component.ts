@@ -3,6 +3,7 @@ import { CarRentalWebsiteService } from '../../services/car-rental-website.servi
 import { CarRental } from '../../models/car-rental.model';
 import { CarRentalStateService } from '../../services/car-rental-state.service';
 import { Location } from '@angular/common';
+import { LoadingService } from '../../../../shared/services/loading.service';
 @Component({
   selector: 'app-car-rentals-list',
   templateUrl: './car-rentals-list.component.html',
@@ -21,6 +22,7 @@ export class CarRentalsListComponent implements OnInit {
     private carRentalService: CarRentalWebsiteService,
     private carRentalState: CarRentalStateService,
     private location: Location,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit() {
@@ -41,6 +43,7 @@ export class CarRentalsListComponent implements OnInit {
 
   fetchCarRentals() {
     this.loading = true;
+    this.loadingService.show();
     const params: any = {
       pageNumber: this.currentPage,
       pageSize: this.pageSize,
@@ -55,11 +58,13 @@ export class CarRentalsListComponent implements OnInit {
         this.carRentalState.setCarRentals(this.carRentals);
         this.totalPages = data.totalPages || 1;
         this.loading = false;
+        this.loadingService.hide();
       },
       error: () => {
         this.carRentals = [];
         this.carRentalState.setCarRentals([]);
         this.loading = false;
+        this.loadingService.hide();
       }
     });
   }

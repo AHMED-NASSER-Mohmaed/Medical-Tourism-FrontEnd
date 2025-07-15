@@ -23,7 +23,7 @@
 .cards-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 0rem 1.5rem; /* Reduced vertical gap from 2rem to 1rem */
+    gap: 1.5rem 1.5rem; /* Increased vertical gap to 1.5rem */
     justify-content: center;
     width: 100%;
     margin: 0 0 2rem 0;

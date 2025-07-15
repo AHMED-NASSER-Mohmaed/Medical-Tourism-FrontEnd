@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HotelWebsiteService } from '../../services/hotel-website.service';
 import { Hotel } from '../../models/hotel.model';
 import { Location } from '@angular/common';
+import { LoadingService } from '../../../../shared/services/loading.service';
 @Component({
   selector: 'app-hotels-list',
   standalone: false,
@@ -16,7 +17,7 @@ export class HotelsListComponent implements OnInit {
   totalPages = 1;
   filters: any = {};
 
-  constructor(private hotelService: HotelWebsiteService,   private location: Location,) {}
+  constructor(private hotelService: HotelWebsiteService,   private location: Location,private loadingService: LoadingService) {}
 
   ngOnInit() {
     this.fetchHotels();
@@ -36,6 +37,7 @@ export class HotelsListComponent implements OnInit {
 
   fetchHotels() {
     this.loading = true;
+    this.loadingService.show();
     const params: any = {
       PageNumber: this.currentPage,
       PageSize: this.pageSize,
@@ -49,6 +51,7 @@ export class HotelsListComponent implements OnInit {
         this.hotels = data.items || data || [];
         this.totalPages = data.totalPages || 1;
         this.loading = false;
+        this.loadingService.hide();
         console.log(this.hotels, 'Hotels fetched successfully');
       this.hotels.forEach(element => {
           element.assetImages.forEach(image => {
@@ -59,6 +62,7 @@ export class HotelsListComponent implements OnInit {
       error: () => {
         this.hotels = [];
         this.loading = false;
+        this.loadingService.hide();
       }
     });
   }

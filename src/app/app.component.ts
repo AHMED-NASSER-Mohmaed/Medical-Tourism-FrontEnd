@@ -73,7 +73,7 @@ checkRouteVisibility(): void {
   this.showNavFooter = !(
     currentRoute.includes('confirm') ||
     hideNavFooter ||
-    currentRoute.startsWith('/doctor') || // Hide for doctor-dashboard
+    this.authService.getUserRole() === 'Doctor' || // Hide for doctor-dashboard
     this.authService.getUserRole() === 'ServiceProvider' ||
     this.authService.getUserRole() === 'SuperAdmin' ||
     this.authService.getUserRole() === 'HospitalServiceProvider'

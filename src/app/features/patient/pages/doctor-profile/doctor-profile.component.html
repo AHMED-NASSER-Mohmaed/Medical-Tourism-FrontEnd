@@ -1,113 +1,123 @@
-
 <!-- Banner Header -->
 <div class="page-banner">
-    <div class="banner-content">
-        <button class="btn-back" (click)="goBack()">
-            <i class="bi bi-arrow-left"></i> Back
-        </button>
-        <div class="banner-text">
-            <h2>Premium Car Rental</h2>
-            <p>Choose your perfect ride with confidence</p>
-        </div>
-    </div>
+  <div class="banner-content">
+      <button class="btn-back" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i> Back
+      </button>
+      <div class="banner-text">
+          <h2>Doctor Profile</h2>
+          <p>View the doctor's qualifications and schedule your appointment.</p>
+      </div>
+  </div>
 </div>
 
 
-<div *ngIf="doctor" class="profile-container">
-
-    <!-- Left Column: Car Details -->
-    <div class="profile-main-content">
-        <div class="car-intro">
-            <!-- Car Image Gallery -->
-            <div class="car-images">
-                <div class="main-img-wrapper">
-                    <img [src]="doctor.imageURL || 'https://placehold.co/370x340'" class="main-car-img" [alt]="doctor.firstName">
-                </div>
-            </div>
-
-            <!-- Car Details -->
-            <div class="car-details">
-                <h1>Dr. {{doctor.firstName}} {{doctor.lastName}}</h1>
-                <div class="price-tag">
-                    <i class="bi bi-cash-coin"></i>
-                    {{doctor.specialtyName}}
-                </div>
-
-                <!-- Feature Badges -->
-                <div class="feature-badges">
-                    <span class="feature-badge">
-                        <i class="bi bi-award"></i> {{doctor.qualification}}
-                    </span>
-                    <span class="feature-badge">
-                        <i class="bi bi-clock-history"></i> {{doctor.yearsOfExperience}} years
-                    </span>
-                    <span class="feature-badge">
-                        <i class="bi bi-hospital"></i> {{doctor.hospitalName}}
-                    </span>
-                </div>
-
-                <!-- Details Grid -->
-                <div class="details-grid">
-                    <div class="detail-item">
-                        <span class="label">Location</span>
-                        <span class="value">{{doctor.address}}, {{doctor.city}}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="label">Contact</span>
-                        <span class="value">{{doctor.phone}}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- About Section -->
-        <div class="about-section">
-            <h3><i class="bi bi-info-circle"></i> About Dr. {{doctor.lastName}}</h3>
-            <p>{{doctor.bio}}</p>
-        </div>
-    </div>
-
-    <!-- Right Column: Booking -->
-    <aside class="profile-sidebar">
-        <div class="sidebar-card booking-card">
-            <h3>BOOK AN APPOINTMENT</h3>
-
-            <!-- Message Container -->
-            <div class="message-container">
-                <div class="message-content">
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle-fill"></i>
-                        Select your appointment date
-                    </div>
-                </div>
-            </div>
-
-            <!-- Booking Form -->
-            <form>
-                <div class="form-group">
-                    <mat-form-field appearance="fill" class="custom-datepicker">
-                        <mat-label>Select Date</mat-label>
-                        <input matInput
-                               [matDatepicker]="picker"
-                               [(ngModel)]="selectedDate"
-                               [matDatepickerFilter]="dateFilter"
-                               name="date"
-                               readonly
-                               (click)="picker.open()"
-                               (dateChange)="showDateError = false">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker #picker></mat-datepicker>
-                    </mat-form-field>
-                </div>
-
-                <div *ngIf="showDateError" class="validation-error">
-                    Please select a date first
-                </div>
-
-                <button type="button" class="booking-button" (click)="startBookingFlow()">
-                    <i class="bi bi-calendar-check"></i> Continue Booking
-                </button>
-            </form>
-        </div>
-    </aside>
+<div *ngIf="doctor" class="profile-page-layout">
+  <div class="profile-main-content">
+      <div class="car-intro">
+          <!-- Car Image Gallery -->
+          <div class="car-images">
+              <div class="main-img-wrapper">
+                  <img [src]="doctor.imageURL || 'https://placehold.co/370x340'" class="main-car-img" [alt]="doctor.firstName">
+              </div>
+          </div>
+          <!-- Car Details -->
+          <div class="car-details">
+              <h1>Dr. {{doctor.firstName}} {{doctor.lastName}}</h1>
+              <div class="price-tag">
+                  <i class="bi bi-cash-coin"></i>
+                  {{doctor.specialtyName}}
+              </div>
+              <!-- Feature Badges -->
+              <div class="feature-badges">
+                  <span class="feature-badge">
+                      <i class="bi bi-award"></i> {{doctor.qualification}}
+                  </span>
+                  <span class="feature-badge">
+                      <i class="bi bi-clock-history"></i> {{doctor.yearsOfExperience}} years
+                  </span>
+                  <span class="feature-badge">
+                      <i class="bi bi-hospital"></i> {{doctor.hospitalName}}
+                  </span>
+              </div>
+              <!-- Details Grid -->
+              <div class="details-grid">
+                  <div class="detail-item">
+                      <span class="label">Location</span>
+                      <span class="value">{{doctor.address}}, {{doctor.city}}</span>
+                  </div>
+                  <div class="detail-item">
+                      <span class="label">Contact</span>
+                      <span class="value">{{doctor.phone}}</span>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <!-- About Section -->
+      <div class="about-section">
+          <h3><i class="bi bi-info-circle"></i> About Dr. {{doctor.lastName}}</h3>
+          <p>{{doctor.bio}}</p>
+      </div>
+  </div>
+  <div class="profile-right-sidebar">
+      <!-- Work Hours Card -->
+      <div class="sidebar-card work-hours-card compact">
+          <h3>WORK HOURS</h3>
+          <div class="work-hours-header-row">
+              <span class="work-hours-header">Working Hours</span>
+              <span class="work-price-header">Price</span>
+          </div>
+          <ul class="work-hours-vertical-list">
+              <ng-container *ngFor="let day of processedSchedule">
+                  <li>
+                      <div class="work-day-bold">{{ day.dayName }}</div>
+                      <div class="work-hours-slots">
+                          <div class="work-slot-row" *ngFor="let slot of day.slots">
+                              <!-- EDITED: Applied the to12Hour pipe to format the time -->
+                              <span class="slot-time">{{ slot.startTime | to12Hour }} - {{ slot.endTime | to12Hour }}</span>
+                              <span class="slot-price">{{ slot.price }} EGP</span>
+                          </div>
+                      </div>
+                  </li>
+              </ng-container>
+          </ul>
+      </div>
+      <!-- Booking Card -->
+      <div class="sidebar-card booking-card">
+          <h3>BOOK AN APPOINTMENT</h3>
+          <!-- Message Container -->
+          <div class="message-container">
+              <div class="message-content">
+                  <div class="alert alert-info">
+                      <i class="bi bi-info-circle-fill"></i>
+                      Select your appointment date
+                  </div>
+              </div>
+          </div>
+          <!-- Booking Form -->
+          <form>
+              <div class="form-group">
+                  <mat-form-field appearance="fill" class="custom-datepicker">
+                      <mat-label>Select Date</mat-label>
+                      <input matInput
+                             [matDatepicker]="picker"
+                             [(ngModel)]="selectedDate"
+                             [matDatepickerFilter]="dateFilter"
+                             name="date"
+                             readonly
+                             (click)="picker.open()"
+                             (dateChange)="showDateError = false">
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+              </div>
+              <div *ngIf="showDateError" class="validation-error text-danger">
+                  Please select a date first
+              </div>
+              <button type="button" class="booking-button" (click)="startBookingFlow()">
+                  <i class="bi bi-calendar-check"></i> Continue Booking
+              </button>
+          </form>
+      </div>
+  </div>
 </div>

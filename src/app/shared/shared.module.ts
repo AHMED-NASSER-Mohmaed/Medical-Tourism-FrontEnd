@@ -19,6 +19,7 @@ import { UnauthComponent } from './components/unauth/unauth.component';
 
 
 
+
 @NgModule({
   declarations: [
     DataTableComponent,
@@ -31,8 +32,7 @@ import { UnauthComponent } from './components/unauth/unauth.component';
     NotFoundComponent,
     LockComponent,
     UnauthComponent,
-
-
+    LoadingComponent,
   ],
   imports: [
     CommonModule,
@@ -40,7 +40,6 @@ import { UnauthComponent } from './components/unauth/unauth.component';
     FontAwesomeModule,
     StatusLabelPipe,
     RouterModule,
-
   ],
   exports: [
     DataTableComponent,
@@ -51,7 +50,6 @@ import { UnauthComponent } from './components/unauth/unauth.component';
     FormsModule,
     StatusLabelPipe,
     LoadingComponent,
-
   ]
 })
 export class SharedModule { }

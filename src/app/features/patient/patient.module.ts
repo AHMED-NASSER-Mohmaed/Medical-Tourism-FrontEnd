@@ -17,7 +17,7 @@ import { BookingStepperComponent } from './pages/booking-stepper/booking-stepper
 
 import { PaymentSuccessComponent } from './pages/payment-success/payment-success.component';
 
-
+import { To12HourPipe } from "../../shared/pipes/format-date.pipe";
 
 
 
@@ -37,16 +37,15 @@ import { PaymentSuccessComponent } from './pages/payment-success/payment-success
   imports: [
     CommonModule,
     FormsModule,
-    PatientRoutingModule
-    ,ReactiveFormsModule
-    ,NgSelectModule,
-     MatDatepickerModule,
+    PatientRoutingModule,
+    ReactiveFormsModule,
+    NgSelectModule,
+    MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
 
-
-
-  ],
+    To12HourPipe
+],
     exports: [
 
 

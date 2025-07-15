@@ -14,7 +14,7 @@ import { AuthService } from '../../../../services/auth.service';
 import * as bootstrap from 'bootstrap';
 
 import * as L from 'leaflet';
-
+import 'leaflet/dist/leaflet.css';
 
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';

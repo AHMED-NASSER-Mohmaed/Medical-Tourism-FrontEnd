@@ -7,7 +7,7 @@ import { AuthService } from '../../../../services/auth.service';
 import * as bootstrap from 'bootstrap';
 import { RegisterHotelRequest } from '../../../../models/auth.model';
 import * as L from 'leaflet';                 // ① Leaflet itself
-
+import 'leaflet/dist/leaflet.css';
 import { Router } from '@angular/router';
 
 import Swal from 'sweetalert2';
