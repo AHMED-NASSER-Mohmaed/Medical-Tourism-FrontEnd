@@ -47,6 +47,12 @@
   letter-spacing: 0.5px;
 }
 
+/* --- Enhanced Responsive Design --- */
+@media (max-width: 1200px) {
+  .profile-card, .profile-info-card {
+    padding: 1rem 0.5rem;
+  }
+}
 @media (max-width: 991.98px) {
   .profile-card, .profile-info-card {
     border-radius: 1rem;
@@ -63,8 +69,7 @@
     right: 5px;
   }
 }
-
-@media (max-width: 575.98px) {
+@media (max-width: 767.98px) {
   .profile-card, .profile-info-card {
     border-radius: 0.7rem;
     padding: 1rem 0.5rem;
@@ -78,5 +83,26 @@
     height: 8px;
     bottom: 2px;
     right: 2px;
+  }
+}
+@media (max-width: 575.98px) {
+  .profile-card, .profile-info-card {
+    border-radius: 0.5rem;
+    padding: 0.5rem 0.2rem;
+  }
+  .profile-avatar, .avatar-ring {
+    width: 36px;
+    height: 36px;
+  }
+  .status-dot {
+    width: 5px;
+    height: 5px;
+    bottom: 1px;
+    right: 1px;
+  }
+}
+@media (max-width: 400px) {
+  .profile-card, .profile-info-card {
+    padding: 0.2rem 0.05rem;
   }
 }

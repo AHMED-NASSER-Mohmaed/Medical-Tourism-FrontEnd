@@ -13,9 +13,8 @@
             <th>Day</th>
             <th>Time</th>
             <th>Capacity</th>
-            <th>Available</th>
+            <th>Slot Size</th>
             <th>Price</th>
-            <th>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -26,18 +25,8 @@
             <td>{{ getDayName(slot.dayOfWeekId) }}</td>
             <td>{{ slot.startTime }} - {{ slot.endTime }}</td>
             <td>{{ slot.maxCapacity }}</td>
-            <td>{{ slot.availableSlots }}</td>
+            <td>{{ slot.timeSlotSize }}</td>
             <td>{{ slot.price | currency:'USD' }}</td>
-            <td>
-              <span 
-                class="badge"
-                [ngClass]="{
-                  'bg-success': slot.isActive,
-                  'bg-secondary': !slot.isActive
-                }">
-                {{ slot.isActive ? 'Active' : 'Inactive' }}
-              </span>
-            </td>
           </tr>
         </tbody>
       </table>

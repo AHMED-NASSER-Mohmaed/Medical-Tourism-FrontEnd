@@ -16,6 +16,7 @@ export class DashboardSidebarComponent {
   @Input() items: DashboardMenuItem[] = [];
   @Input() collapsed = false;
   @Input() userRole = '';
+  @Input() mobileOpen = false;
   @Output() toggleCollapse = new EventEmitter<void>();
 
   icons = {

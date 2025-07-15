@@ -28,15 +28,17 @@ export class RoomDetailsComponent implements OnInit {
   showDateError: boolean = false;
   bookingError: string = '';
   bookingSuccess: string = '';
-
+  minnDate: Date;
   bookingData: any = {};
-
+dateErrorMessage: string = '';
   constructor(
     private route: ActivatedRoute,
     private hotelService: HotelWebsiteService,
     private router: Router,
     private bookingService: BookingService
-  ) {}
+  ) {
+    this.minnDate=new Date();
+  }
 
   ngOnInit() {
     this.bookingData = this.bookingService.getBookingData();
@@ -59,17 +61,51 @@ export class RoomDetailsComponent implements OnInit {
     this.minDate = today.toISOString().split('T')[0];
   }
 
-  fetchUnavailableDates() {
-    this.hotelService.getRoomUnavailableDates(this.roomId).subscribe({
-      next: (data) => {
-        this.unavailableDates = data.unavailableDates || [];
-        this.unavailableDatesSet = new Set(this.unavailableDates);
-      },
-      error: () => {
-        this.unavailableDates = [];
-        this.unavailableDatesSet = new Set();
+fetchUnavailableDates() {
+  this.hotelService.getRoomUnavailableDates(this.roomId).subscribe({
+    next: (data) => {
+      const allBlockedDates: string[] = [];
+      const dateRanges = data.unavailableDates || [];
+
+      // Loop through each date range object.
+      // CHANGED: Added 'as any[]' to treat each 'range' as an object
+      for (const range of dateRanges as any[]) {
+
+        let currentDate = new Date(range.startingDate );
+        const endDate = new Date(range.endingDate );
+
+        while (currentDate <= endDate) {
+          allBlockedDates.push(this.formatDate(currentDate));
+          currentDate.setDate(currentDate.getDate() + 1);
+        }
       }
-    });
+
+      this.unavailableDatesSet = new Set(allBlockedDates);
+      this.checkAndSetPreselectedDates();
+    },
+    error: () => {
+      this.unavailableDatesSet = new Set();
+    }
+  });
+}
+    checkAndSetPreselectedDates(): void {
+    const preselectedRoomApp = this.bookingData?.roomAppointment;
+    if (preselectedRoomApp && preselectedRoomApp.checkInDate && preselectedRoomApp.checkOutDate) {
+      const checkIn = new Date(preselectedRoomApp.checkInDate);
+      const checkOut = new Date(preselectedRoomApp.checkOutDate);
+      if (this.dateFilter(checkIn) && this.dateFilter(checkOut)) {
+        this.checkInDate = checkIn;
+        this.checkOutDate = checkOut;
+        console.log('Pre-selected dates are still available and have been set.');
+      } else {
+        Swal.fire('Dates No Longer Available', 'The dates you previously selected for this room are no longer available. Please choose new dates.', 'warning');
+        const currentData = this.bookingService.getBookingData();
+        delete currentData.roomAppointment;
+        this.bookingService.updateBookingData(currentData);
+         this.checkInDate = null;
+        this.checkOutDate = null;
+      }
+    }
   }
 
   fetchRoomDetails() {
@@ -115,9 +151,8 @@ export class RoomDetailsComponent implements OnInit {
 
 
   bookRoom() {
-
-   const bookingData = this.bookingService.getBookingData();
-if (!bookingData || !bookingData.specialtiyAppointment) {
+    const bookingData = this.bookingService.getBookingData();
+    if (!bookingData || !bookingData.specialtiyAppointment) {
       Swal.fire({
         icon: 'info',
         title: 'Booking Step Required',
@@ -128,13 +163,18 @@ if (!bookingData || !bookingData.specialtiyAppointment) {
       });
       return;
     }
+
     if (!this.checkInDate || !this.checkOutDate) {
-      this.showDateError = true;
+     this.bookingError = 'Please fill in all required fields.';
       return;
     }
-     if (this.checkOutDate <= this.checkInDate) {
-        Swal.fire('Invalid Dates', 'Check-out date must be after the check-in date.', 'error');
-        return;
+    if (this.checkOutDate <= this.checkInDate) {
+      this.bookingError = 'Check-out date must be after the check-in date.';
+      return;
+    }
+        if (!this.isDateRangeAvailable(this.checkInDate, this.checkOutDate)) {
+      this.bookingError = 'The selected date range includes unavailable dates.';
+      return;
     }
     this.showDateError = false;
 
@@ -144,17 +184,33 @@ if (!bookingData || !bookingData.specialtiyAppointment) {
       roomId: this.room?.id
     };
 
-
     const currentBookingData = this.bookingService.getBookingData();
     const updatedBookingData = {
       ...currentBookingData,
-      roomAppointment: roomAppointment
+      roomAppointment: roomAppointment,
+      navigationIds: {
+        ...currentBookingData.navigationIds,
+        roomId: this.room?.id,
+        hotelId: this.room?.hotelAssetId
+      }
     };
 
     this.bookingService.updateBookingData(updatedBookingData);
-
     this.router.navigate(['/patient/booking-stepper']);
   }
+
+isDateRangeAvailable(start: Date, end: Date): boolean {
+  let currentDate = new Date(start);
+
+  while (currentDate < end) {
+    if (this.unavailableDatesSet.has(this.formatDate(currentDate))) {
+      return false;
+    }
+    currentDate.setDate(currentDate.getDate() + 1);
+  }
+
+  return true;
+}
 
   formatDate(date: Date | null): string {
     if (!date) return '';

@@ -4,9 +4,21 @@ import { CarRentalWebsiteService } from '../../services/car-rental-website.servi
 import { AvailableCar } from '../../models/available-car.model';
 import { CarTypeMap, FuelTypeMap, TransmissionTypeMap } from '../../utils/car-enums.utils';
 import { Location } from '@angular/common';
-import { BookingService } from '../../../patient/services/Booking.service';
-import Swal from 'sweetalert2';
 
+import Swal from 'sweetalert2';
+import { BookingService } from '../../../patient/services/Booking.service';
+interface UnavailableDateRange {
+  startingDate: string;
+  endingDate: string;
+}
+
+interface UnavailableDatesResponse {
+  carId: number;
+  carModel: string;
+  carRentalId: string;
+  carRentalName: string;
+  unavailableDates: UnavailableDateRange[];
+}
 @Component({
   selector: 'app-car-details',
   templateUrl: './car-details.component.html',
@@ -21,8 +33,6 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   // Booking sidebar state
   pickupDateTime: Date | null = null;
   dropoffDateTime: Date | null = null;
-  pickupTime: string = '';
-  dropoffTime: string = '';
   locationDescription: string = '';
   fuelPolicy: number = 0;
   bookingError: string = '';
@@ -40,14 +50,17 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   longitude: number = 0;
   locationAvailable: boolean = false;
   retryingLocation: boolean = false;
-
+ minDate: Date;
   constructor(
     private route: ActivatedRoute,
     private carService: CarRentalWebsiteService,
     private location: Location,
      private bookingService: BookingService,
       private router: Router,
-  ) {}
+  ) {
+ this.minDate = new Date();
+
+  }
 
   ngOnInit() {
      this.bookingData = this.bookingService.getBookingData();
@@ -57,7 +70,6 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     if (carRentalId && carId) {
       this.carService.getAvailableCarById(carRentalId, +carId).subscribe(car => {
         this.car = car;
-        // No loading spinner for initial load
         if (car) {
           this.fetchUnavailableDates(car.id);
         }
@@ -81,24 +93,70 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   }
 
   fetchUnavailableDates(carId: number) {
+
     this.carService.getCarUnavailableDates(carId).subscribe({
-      next: (data) => {
-        this.unavailableDates = data.unavailableDates || [];
-        this.unavailableDatesSet = new Set(this.unavailableDates);
+      next: (data: any) => {
+        const response = data as UnavailableDatesResponse;
+        const newUnavailableDatesSet = new Set<string>();
+        if (response && response.unavailableDates) {
+          response.unavailableDates.forEach(range => {
+            let currentDate = new Date(range.startingDate);
+            const endDate = new Date(range.endingDate);
+
+            while (currentDate <= endDate) {
+              newUnavailableDatesSet.add(this.formatDate(new Date(currentDate)));
+              currentDate.setDate(currentDate.getDate() + 1);
+            }
+          });
+        }
+        this.unavailableDatesSet = newUnavailableDatesSet;
+        this.checkAndSetPreselectedDates();
       },
       error: () => {
-        this.unavailableDates = [];
         this.unavailableDatesSet = new Set();
       }
     });
   }
 
+ checkAndSetPreselectedDates(): void {
+  const preselectedCarApp = this.bookingData?.carAppointment;
+
+  if (preselectedCarApp && preselectedCarApp.startingDate && preselectedCarApp.endingDate) {
+    const pickup = new Date(preselectedCarApp.startingDate);
+    const dropoff = new Date(preselectedCarApp.endingDate);
+
+
+    if (this.isDateRangeAvailable(pickup, dropoff)) {
+      this.pickupDateTime = pickup;
+      this.dropoffDateTime = dropoff;
+
+
+      this.locationDescription = preselectedCarApp.locationDescription || '';
+      this.fuelPolicy = preselectedCarApp.fuelPolicy ?? 0;
+
+    } else {
+
+      Swal.fire('Dates No Longer Available', 'The dates you previously selected for this car are no longer available. Please choose new dates.', 'warning');
+      const currentData = this.bookingService.getBookingData();
+      delete currentData.carAppointment;
+      this.bookingService.updateBookingData(currentData);
+
+
+      this.pickupDateTime = null;
+      this.dropoffDateTime = null;
+      this.locationDescription = '';
+      this.fuelPolicy = 0;
+    }
+  }
+}
+
+
+
+
   ngAfterViewInit() {
-    // Find the navbar element and get its height
     const navbar = document.querySelector('.navbar');
     if (navbar) {
       this.navbarHeightPx = (navbar as HTMLElement).offsetHeight;
-      // Set as a style variable on the root element for this component
       if (this.carDetailsRoot && this.carDetailsRoot.nativeElement) {
         this.carDetailsRoot.nativeElement.style.setProperty('--local-navbar-height', this.navbarHeightPx + 'px');
       }
@@ -122,41 +180,43 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     this.location.back();
   }
 
-   bookCar() {
+
+  bookCar() {
+
+        const bookingData = this.bookingService.getBookingData();
+
+    if (!bookingData || !bookingData.specialtiyAppointment) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Booking Step Required',
+        text: 'Please book a doctor\'s appointment before proceeding.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        this.router.navigate(['/specialists']);
+      });
+      return;
+    }
     this.bookingError = '';
-    this.bookingSuccess = '';
     const now = new Date();
 
-    if (!this.pickupDateTime || !this.dropoffDateTime || !this.pickupTime || !this.dropoffTime) {
+    if (!this.pickupDateTime || !this.dropoffDateTime ) {
       this.bookingError = 'Please fill in all required date and time fields.';
-      Swal.fire('Incomplete Information', this.bookingError, 'warning');
       return;
     }
 
-    // Combine date and time for pickup
-    const [pickupHour, pickupMinute] = this.pickupTime.split(':').map(Number);
     const pickupDate = new Date(this.pickupDateTime);
-    pickupDate.setHours(pickupHour, pickupMinute, 0, 0);
-
-    // Combine date and time for dropoff
-    const [dropoffHour, dropoffMinute] = this.dropoffTime.split(':').map(Number);
     const dropoffDate = new Date(this.dropoffDateTime);
-    dropoffDate.setHours(dropoffHour, dropoffMinute, 0, 0);
-
-    if (pickupDate < now) {
-      this.bookingError = 'Pick-up date/time cannot be in the past.';
-      Swal.fire('Invalid Date', this.bookingError, 'error');
-      return;
-    }
-
     if (dropoffDate <= pickupDate) {
       this.bookingError = 'Drop-off date/time must be after pick-up date/time.';
-      Swal.fire('Invalid Dates', this.bookingError, 'error');
       return;
+    }
+
+    if (!this.isDateRangeAvailable(this.pickupDateTime, this.dropoffDateTime)) {
+        this.bookingError = 'The selected date range includes unavailable dates. Please choose a different range.';
+        return;
     }
 
     const carAppointment = {
-
       startingDate: this.formatDate(this.pickupDateTime),
       endingDate: this.formatDate(this.dropoffDateTime),
       latitude: this.latitude,
@@ -169,14 +229,29 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     const currentBookingData = this.bookingService.getBookingData();
     const updatedBookingData = {
       ...currentBookingData,
-      carAppointment: carAppointment
+      carAppointment: carAppointment,
+      navigationIds: {
+        ...currentBookingData.navigationIds,
+        carId: this.car?.id,
+        carRentalId: this.car?.carRentalAssetId
+      }
     };
 
     this.bookingService.updateBookingData(updatedBookingData);
-
     console.log('Final booking data with car:', updatedBookingData);
-
     this.router.navigate(['/patient/booking-stepper']);
+  }
+
+
+  isDateRangeAvailable(start: Date, end: Date): boolean {
+    let currentDate = new Date(start);
+    while (currentDate <= end) {
+      if (this.unavailableDatesSet.has(this.formatDate(currentDate))) {
+        return false;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    return true;
   }
 
   formatDate(date: Date | null): string {

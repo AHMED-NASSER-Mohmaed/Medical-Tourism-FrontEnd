@@ -1,18 +1,14 @@
 
-<!-- Banner -->
-<div class="banner" style="display: flex; flex-direction: row; align-items: center; justify-content: center;">
-  <button class="btn btn-back animate__animated animate__fadeInLeft" (click)="goBack()" style="margin-left: 2rem; margin-right: 2.5rem; margin-bottom: 0; margin-top: 0;">
-    <i class="bi bi-arrow-left"></i> Back to Hotels List
-  </button>
-  <div style="display: flex; flex-direction: column; align-items: center; flex: 1;">
-    <h1 style="margin-bottom: 0;">
-      {{ hotel?.assetName || 'Hotel Details' }}
-    </h1>
-    <p style="margin-top: 0.5rem;">
-      Discover available rooms, compare amenities, and book your stay with confidence.
-    </p>
-  </div>
-  <div style="width: 180px;"></div> <!-- Spacer to balance the button width on the right -->
+<div class="page-banner">
+    <div class="banner-content">
+        <button class="btn-back" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <div class="banner-text">
+            <h2>Find Rooms</h2>
+            <p>Explore our network of accredited Rooms for your medical needs.</p>
+        </div>
+    </div>
 </div>
 <div class="container-fluid mt-4 animate__animated animate__fadeIn">
   <div class="row">
@@ -25,11 +21,11 @@
       <div *ngIf="!loading && rooms.length === 0" class="alert alert-info animate__animated animate__fadeIn">
         No rooms found. Try adjusting your filters.
       </div>
-      <div class="row g-4">
-        <div class="col-md-6 col-lg-4" *ngFor="let room of rooms">
-          <app-room-card [room]="room" [hotelId]="hotelId"></app-room-card>
-        </div>
-      </div>
+<div class="row gx-2 gy-4 mb-5">
+    <div class="col-md-6 col-lg-4" *ngFor="let room of rooms">
+        <app-room-card [room]="room" [hotelId]="hotelId"></app-room-card>
+    </div>
+</div>
       <!-- Pagination -->
       <nav *ngIf="!loading && totalPages > 1" class="mt-4">
         <ul class="pagination justify-content-center">

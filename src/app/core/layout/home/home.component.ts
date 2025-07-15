@@ -15,6 +15,7 @@ export class HomeComponent implements OnInit {
   treatments: any[] = [];
   hotels: any[] = [];
   hospitals: any[] = [];
+    topCars: any[] = [];
 
   constructor(
     private homeService: HomeService,
@@ -26,6 +27,7 @@ export class HomeComponent implements OnInit {
     this.loadTreatments();
     this.loadTopHotels();
     this.loadTopHospitals();
+     this.loadTopCars();
   }
 
   loadTreatments(): void {
@@ -36,6 +38,7 @@ export class HomeComponent implements OnInit {
   }
 
 
+
   viewHospitalsForSpecialty(specialtyId: number): void {
 
     this.router.navigate(['/hospitals', specialtyId]);
@@ -44,6 +47,11 @@ export class HomeComponent implements OnInit {
     loadTopHotels(): void {
     this.homeService.getTopHotels().subscribe(data => {
       this.hotels = data;
+    });
+  }
+    loadTopCars(): void {
+    this.homeService.getTopCars().subscribe(data => {
+      this.topCars = data;
     });
   }
 

@@ -11,7 +11,7 @@ export interface DoctorAppointmentDto {
 
 export enum AppointmentStatus {
   Pending = 'Pending',
-  Confirmed = 'Confirmed',
-  Completed = 'Completed',
-  Cancelled = 'Cancelled'
+  Booked = 'Booked',
+  Cancelled = 'Cancelled',
+  Completed = 'Completed'
 }

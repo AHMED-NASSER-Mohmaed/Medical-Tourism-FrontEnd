@@ -29,20 +29,20 @@ export class AddPatientProviderComponent implements OnInit {
   ) {
     this.patientForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phone: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      phone: ['', [Validators.required]],
       gender: [Gender.UNSPECIFIED, Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
       governorateId: [null, Validators.required],
       countryId: [null, Validators.required],
       dateOfBirth: ['', Validators.required],
-      bloodGroup: ['', Validators.required],
-      height: [null, [Validators.required, Validators.min(30), Validators.max(250)]],
-      weight: [null, [Validators.required, Validators.min(2), Validators.max(300)]],
+      bloodGroup: [''],
+      height: [null, [Validators.min(30), Validators.max(250)]],
+      weight: [null, [Validators.min(2), Validators.max(300)]],
     }, {
       validators: [this.passwordMatchValidator]
     });

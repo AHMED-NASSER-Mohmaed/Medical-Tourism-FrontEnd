@@ -1,7 +1,14 @@
-<div class="banner">
-        <h1>Find Hospitals</h1>
-        <p>Explore our network of accredited hospitals for your medical needs.</p>
+<div class="page-banner">
+    <div class="banner-content">
+        <button class="btn-back" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <div class="banner-text">
+            <h2>Find Hospitals</h2>
+            <p>Explore our network of accredited hospitals for your medical needs.</p>
+        </div>
     </div>
+</div>
 
     <!-- Layout Container -->
     <div class="main-layout">
@@ -49,9 +56,6 @@
                 <button class="btn btn-primary" (click)="applyFilters()">
                     <span class="icon">🔍</span> Apply Filters
                 </button>
-                <button class="btn btn-secondary" (click)="goBack()">
-                    <span class="icon">↩️</span> Back
-                </button>
             </div>
         </aside>
 
@@ -64,7 +68,7 @@
                     <div class="content">
                         <h3>{{ hospital.assetName }}</h3>
                         <p>{{ hospital.description }}</p>
-                        <a class="departments-more" [routerLink]="['/hospital', hospital.id, 'specialists']">
+                        <a class="view-details-btn" [routerLink]="['/hospital', hospital.id, 'specialists']">
                             Specialists <i class="fa-solid fa-arrow-right"></i>
                         </a>
                     </div>

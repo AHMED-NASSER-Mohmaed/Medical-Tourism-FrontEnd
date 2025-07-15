@@ -1,8 +1,14 @@
- <div class="banner">
-        <h1>Find Specialities</h1>
-        <p>Explore our network of accredited specialities for your medical needs.</p>
+<div class="page-banner">
+    <div class="banner-content">
+        <button class="btn-back" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <div class="banner-text">
+            <h2>Find Treatments</h2>
+            <p>Explore our network of accredited treatments for your medical needs.</p>
+        </div>
     </div>
-
+</div>
     <!-- Main Layout -->
     <div class="main-layout">
         <!-- Sidebar for Filters -->
@@ -21,9 +27,6 @@
                 <button class="btn btn-primary" (click)="applyFilters()">
                     <i class="fa-solid fa-filter"></i> Apply Filters
                 </button>
-                <button class="btn btn-secondary" (click)="goBack()">
-                    <i class="fa-solid fa-arrow-left"></i> Back
-                </button>
             </div>
         </aside>
 
@@ -37,11 +40,11 @@
                     <div class="content">
                         <h3>{{ specialist.name }}</h3>
                         <p>{{ specialist.description }}</p>
-                        <a *ngIf="hospitalId; else showDoctors" class="details-link" [routerLink]="['/doctors', specialist.id, hospitalId ]">
+                        <a *ngIf="hospitalId; else showDoctors" class="view-details-btn" [routerLink]="['/doctors', specialist.id, hospitalId ]">
                             View Doctors <i class="fa-solid fa-arrow-right"></i>
                         </a>
                         <ng-template #showDoctors>
-                            <a class="details-link" [routerLink]="['/hospitals', specialist.id]">
+                            <a class="view-details-btn" [routerLink]="['/hospitals', specialist.id]">
                                 View Hospitals <i class="fa-solid fa-arrow-right"></i>
                             </a>
                         </ng-template>

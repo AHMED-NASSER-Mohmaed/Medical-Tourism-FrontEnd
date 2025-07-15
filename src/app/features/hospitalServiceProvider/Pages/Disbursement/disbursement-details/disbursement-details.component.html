@@ -32,19 +32,19 @@
               <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Disbursement ID</label>
-                  <p class="fs-6 fw-semibold text-dark">{{ disbursement?.id }}</p>
+                  <p class="fs-6 fw-semibold text-dark">{{ disbursement.id }}</p>
                 </div>
               </div>
               <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Total Amount</label>
-                  <p class="fs-5 fw-bold text-success">{{ disbursement?.totalAmount | currency }}</p>
+                  <p class="fs-5 fw-bold text-success">{{ disbursement.totalAmount | currency }}</p>
                 </div>
               </div>
                <div class="col-md-3">
                 <div class="info-item">
                   <label class="form-label text-muted small fw-medium">Date of Month</label>
-                  <p class="fs-5 fw-bold text-secondary">{{ disbursement?.disbursementDateMonth}}</p>
+                  <p class="fs-5 fw-bold text-secondary">{{ disbursement.disbursementDateMonth}}</p>
                 </div>
               </div>
                <div class="col-md-3">
@@ -115,7 +115,7 @@
                             <p class="mb-0 small">{{ item.appointment.type }}</p>
                           </div>
                         </div> -->
-                        
+
                         <!-- Specialty & Doctor Info -->
                         <div *ngIf="item.appointment.specialtySchedule" class="col-md-3">
                           <div class="info-group compact">
@@ -128,8 +128,8 @@
                         <div *ngIf="item.appointment?.specialtySchedule?.doctor" class="col-md-2">
                           <div class="info-group compact">
                             <label class="form-label text-muted small fw-medium mb-0">Doctor</label>
-                            <p class="mb-0 fw-medium small">{{ item.appointment?.specialtySchedule?.doctor?.name }}</p>
-                            <p class="mb-0 text-muted" style="font-size: 0.65rem;">ID: {{ item.appointment?.specialtySchedule?.doctor?.id }}</p>
+                            <p class="mb-0 fw-medium small">{{ item.appointment.specialtySchedule?.doctor?.name || 'N/A' }}</p>
+                            <p class="mb-0 text-muted" style="font-size: 0.65rem;">ID: {{ item.appointment.specialtySchedule?.doctor?.id || 'N/A' }}</p>
                           </div>
                         </div>
                       </div>

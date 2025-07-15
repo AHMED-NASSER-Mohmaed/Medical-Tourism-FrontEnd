@@ -2,6 +2,7 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { BreadcrumbItem } from '../dashboard.types';
 import { AuthService } from '../../../auth/services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard-header',
@@ -17,16 +18,19 @@ export class DashboardHeaderComponent implements OnInit {
   @Output() menuToggle = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
 
-  constructor(private auth:AuthService) {}
+  constructor(private auth:AuthService, private router: Router) {}
   ngOnInit(): void {
     this.userRole = this.auth.getUserName() || 'Guest';
   }
-  // onAvatarClick()
-  // {}
+
+  onAvatarClick() {
+    this.router.navigate(['/super-admin/profile']);
+  }
+
 
   onLogout() {
     this.logout.emit();
 
   }
-  onAvatarClick(){}
+
 }

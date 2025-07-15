@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CarRentalWebsiteService } from '../../services/car-rental-website.service';
 import { CarRental } from '../../models/car-rental.model';
 import { CarRentalStateService } from '../../services/car-rental-state.service';
-
+import { Location } from '@angular/common';
 @Component({
   selector: 'app-car-rentals-list',
   templateUrl: './car-rentals-list.component.html',
@@ -13,13 +13,14 @@ export class CarRentalsListComponent implements OnInit {
   carRentals: CarRental[] = [];
   loading = false;
   currentPage = 1;
-  pageSize = 10;
+  pageSize = 6;
   totalPages = 1;
   filters: any = {};
 
   constructor(
     private carRentalService: CarRentalWebsiteService,
-    private carRentalState: CarRentalStateService
+    private carRentalState: CarRentalStateService,
+    private location: Location,
   ) {}
 
   ngOnInit() {
@@ -62,4 +63,8 @@ export class CarRentalsListComponent implements OnInit {
       }
     });
   }
-} 
+   goBack(): void {
+    this.location.back();
+  }
+
+}

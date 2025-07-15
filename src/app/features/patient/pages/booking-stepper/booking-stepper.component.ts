@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { LoadChildren, Router } from '@angular/router';
-import { BookingService } from '../../services/Booking.service';
-import { PaymentService } from '../../services/Payment.service';
+
 import Swal from 'sweetalert2';
 import { LoadingService } from '../../../../shared/services/loading.service';
+import { HospitalService } from '../../services/Hospital.service';
+import { BookingService } from '../../services/Booking.service';
+import { PaymentService } from '../../services/Payment.service';
 
 @Component({
   selector: 'app-booking-stepper',
@@ -17,11 +19,13 @@ export class BookingStepperComponent implements OnInit {
   bookingDetails: any = {};
   isProcessingPayment = false; // To show a loading state
 
+
   constructor(
     private router: Router,
     private bookingService: BookingService,
     private paymentService: PaymentService,
-    private isLoadingSrv:LoadingService
+    private isLoadingSrv:LoadingService,
+    private hospitalService: HospitalService,
   ) {}
 
   ngOnInit(): void {
@@ -35,14 +39,14 @@ export class BookingStepperComponent implements OnInit {
     }
 
   if (this.bookingDetails.carAppointment) {
-      // If a car has been booked, go directly to the payment step.
+
       this.currentStep = 'payment';
-      this.proceedToPayment(); // Automatically trigger payment
+
     } else if (this.bookingDetails.roomAppointment) {
-      // If a room has been booked, the next step is the car rental.
+
       this.currentStep = 'car';
     } else {
-      // Otherwise, the first step is to ask about the hotel.
+
       this.currentStep = 'hotel';
     }
   }
@@ -60,45 +64,90 @@ export class BookingStepperComponent implements OnInit {
 
       this.router.navigate(['/car-rentals']);
     } else {
-      this.proceedToPayment();
+       this.currentStep = 'payment';
     }
   }
 
-  proceedToPayment(): void {
-    this.isLoadingSrv.show();
-    this.currentStep = 'payment';
-    this.isProcessingPayment = true;
+ navigateToStep(step: 'appointment' | 'hotel' | 'car'): void {
+  const { hotelId, roomId } = this.bookingDetails.navigationIds;
+  console.log("hotelid",hotelId);
+  console.log("roomid",roomId);
+    if (step === 'appointment' && this.bookingDetails.navigationIds?.doctorId) {
+      const { doctorId } = this.bookingDetails.navigationIds;
+      this.router.navigate(['/doctor-profile', doctorId]);
+    } else if (step === 'hotel') {
+        if (this.bookingDetails.navigationIds?.hotelId && this.bookingDetails.navigationIds?.roomId) {
+            const { hotelId, roomId } = this.bookingDetails.navigationIds;
+            this.router.navigate(['/hotels/details', hotelId, 'room', roomId]);
+        } else {
+            this.router.navigate(['/hotels']);
+        }
+    } else if (step === 'car') {
+      if (this.bookingDetails.navigationIds?.carId && this.bookingDetails.navigationIds?.carRentalId) {
+        const { carId, carRentalId } = this.bookingDetails.navigationIds;
+        this.router.navigate(['/car-rentals/car-details', carId], { queryParams: { rentalId: carRentalId } });
+      } else {
+        this.router.navigate(['/car-rentals']);
+      }
+    }
+  }
+ proceedToPayment(): void {
 
 
-    const payload: any = {};
+    // Build a summary of the booking for the confirmation dialog
+    let bookingSummaryHtml = '<div style="text-align: left; padding-left: 1rem;">You are about to finalize a booking for:<ul>';
     if (this.bookingDetails.specialtiyAppointment) {
-      payload.specialtiyAppointment = this.bookingDetails.specialtiyAppointment;
+      bookingSummaryHtml += '<li>A doctor\'s appointment</li>';
     }
     if (this.bookingDetails.roomAppointment) {
-      payload.roomAppointment = this.bookingDetails.roomAppointment;
+      bookingSummaryHtml += '<li>A hotel stay</li>';
     }
     if (this.bookingDetails.carAppointment) {
-      payload.carAppointment = this.bookingDetails.carAppointment;
+      bookingSummaryHtml += '<li>A car rental</li>';
     }
+    bookingSummaryHtml += '</ul></div>';
 
-    console.log('Final payload sent to API:', payload);
+    Swal.fire({
+      title: 'Confirm Your Booking',
+      html: bookingSummaryHtml,
+      icon: 'info',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, proceed to payment!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If the user confirms, then call the payment API
+        this.isProcessingPayment = true;
+        this.isLoadingSrv.show();
 
-
-    this.paymentService.createCheckoutSession(payload).subscribe({
-      next: (response) => {
-        this.isLoadingSrv.hide();
-        if (response && response.checkoutSessionUrl) {
-          window.location.href = response.checkoutSessionUrl;
-        } else {
-          Swal.fire('Error', 'Could not retrieve payment URL. Please try again.', 'error');
-          this.isProcessingPayment = false;
+        const payload: any = {};
+        if (this.bookingDetails.specialtiyAppointment) {
+          payload.specialtiyAppointment = this.bookingDetails.specialtiyAppointment;
         }
-      },
-      error: (err) => {
-        this.isLoadingSrv.hide();
-        console.error('Error creating checkout session:', err);
-        Swal.fire('Payment Error', 'There was an issue initiating the payment process. Please contact support.', 'error');
-        this.isProcessingPayment = false;
+        if (this.bookingDetails.roomAppointment) {
+          payload.roomAppointment = this.bookingDetails.roomAppointment;
+        }
+        if (this.bookingDetails.carAppointment) {
+          payload.carAppointment = this.bookingDetails.carAppointment;
+        }
+
+        this.paymentService.createCheckoutSession(payload).subscribe({
+          next: (response) => {
+            this.isLoadingSrv.hide();
+            if (response && response.checkoutSessionUrl) {
+              window.location.href = response.checkoutSessionUrl;
+            } else {
+              Swal.fire('Error', 'Could not retrieve payment URL. Please try again.', 'error');
+              this.isProcessingPayment = false;
+            }
+          },
+          error: (err) => {
+            this.isLoadingSrv.hide();
+            console.error('Error creating checkout session:', err);
+            Swal.fire('Payment Error', 'There was an issue initiating the payment process. Please contact support.', 'error');
+            this.isProcessingPayment = false;
+          }
+        });
       }
     });
   }

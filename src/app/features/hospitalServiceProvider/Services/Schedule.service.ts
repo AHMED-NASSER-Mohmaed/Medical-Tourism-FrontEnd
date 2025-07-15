@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 import { ScheduleListResponse, ScheduleRequestDto, ScheduleResponseDto } from '../models/schedule.model';
 import { HospitalAppointmentDto, HospitalAppointmentRespone } from '../models/Appointment.model';
 
@@ -8,8 +9,8 @@ import { HospitalAppointmentDto, HospitalAppointmentRespone } from '../models/Ap
     providedIn: 'root'
 })
 export class ScheduleService {
-    private apiUrl = 'https://localhost:7078/api/HospitalProvider/'; // Replace with your actual API endpoint
-    
+    private apiUrl = `${environment.apiUrl}/HospitalProvider/`;
+
     constructor(private http: HttpClient) {}
 
    getSchedules(
@@ -20,7 +21,7 @@ export class ScheduleService {
     filterIsActive?: boolean
   ): Observable<ScheduleListResponse> {
     // Set up headers with bearer token
-    
+
 
     // Build query parameters
     let params = new HttpParams()
@@ -73,5 +74,5 @@ let params = new HttpParams()
       console.log("Fetching appointments with params:", params.toString());
 
         return this.http.get<HospitalAppointmentRespone>(`${this.apiUrl}hospital-appointments`,{params});
-    } 
+    }
 }

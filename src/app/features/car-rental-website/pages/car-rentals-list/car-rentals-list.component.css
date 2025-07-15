@@ -1,24 +1,88 @@
-.banner {
-  background: #305cae;
-  color: #fff;
-  text-align: center;
-  padding: 16px 0 8px 0; /* Reduced padding to minimize the height */
-  position: static;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 100;
-  margin-top:80px;
-  box-shadow: 0 2px 12px #0002;
+.page-banner {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin-top: 80px;
+    margin-bottom: 2rem;
 }
 
-.banner h1 {
-  font-size: 2rem; /* Reduced font size for the heading */
-  font-weight: bold;
-  margin-bottom: 6px; /* Reduced margin */
+.banner-content {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
 }
 
-.banner p {
-  font-size: 1rem; /* Reduced font size for the paragraph */
-  opacity: 0.95;
+
+
+.banner-text {
+    flex: 1;
+    text-align: center;
+    color: white;
+}
+
+.banner-text h2 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.banner-text p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .banner-content {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .banner-text {
+        text-align: left;
+    }
+
+    .banner-text h2 {
+        font-size: 1.5rem;
+    }
+
+    .banner-text p {
+        font-size: 1rem;
+    }
+}
+/* Add these styles to adjust the grid spacing */
+.cards-grid {
+    margin-right: -0.5rem;
+    margin-left: -0.5rem;
+}
+
+.cards-grid > [class*="col-"] {
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* If you need to adjust vertical spacing between rows */
+@media (max-width: 768px) {
+    .cards-grid > [class*="col-"] {
+        margin-bottom: 0.75rem;
+    }
+}
+.btn-back {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.5rem;
+    border-radius: 2rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-back:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(-5px);
 }

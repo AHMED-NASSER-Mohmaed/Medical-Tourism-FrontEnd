@@ -1,125 +1,211 @@
-
-
-<!-- Loading and Error States -->
-<div *ngIf="loading" class="text-center p-5">
-  <div class="spinner-border text-primary" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</div>
-<div *ngIf="error" class="alert alert-danger text-center animate__animated animate__fadeIn">
-  {{ error }}
-</div>
-
-
-<div *ngIf="room && !loading" class="profile-container">
-  <!-- Left: Room Details -->
-  <div class="profile-main-content">
-    <div class="card room-details-card glassmorphism shadow-lg mb-4 animate__animated animate__zoomIn mt-4">
-      <div class="row g-0 align-items-center">
-        <div class="col-md-5 room-images position-relative">
-          <div class="main-img-wrapper">
-            <img *ngIf="room.roomImages && room.roomImages.length" [src]="selectedImage || firstImage" class="img-fluid rounded main-room-img animate__animated animate__fadeIn" alt="Room Image">
-            <!-- Fallback image if none are provided -->
-            <img *ngIf="!room.roomImages || !room.roomImages.length" src="/assets/images/room1.jpg" class="img-fluid rounded main-room-img animate__animated animate__fadeIn" alt="Default Room Image">
-          </div>
-          <div class="room-thumbnails mt-3 d-flex flex-wrap justify-content-center" *ngIf="room.roomImages && room.roomImages.length > 1">
-            <img *ngFor="let img of room.roomImages" [src]="img.imageURL" class="img-thumbnail room-thumb animate__animated animate__fadeInUp" [class.active-thumb]="(selectedImage || firstImage) === img.imageURL" (click)="selectImage(img.imageURL)" alt="Room Thumbnail">
-          </div>
+<div *ngIf="room" class="profile-container">
+    <!-- Banner Header -->
+    <div class="page-banner">
+        <div class="banner-content">
+            <button class="btn-back" (click)="goBack()">
+                <i class="bi bi-arrow-left"></i> Back
+            </button>
+            <div class="banner-text">
+                <h2>Premium Hotel Room</h2>
+                <p>Experience comfort and luxury in every stay</p>
+            </div>
         </div>
-        <div class="col-md-7">
-          <div class="card-body animate__animated animate__fadeInRight">
-            <div class="room-details-header animate__animated animate__fadeInDown mb-2">
-              <div>
-                <h2 class="room-title mb-1">Room {{ room.roomNumber }} - {{ roomTypeLabel(room.roomType) }}</h2>
-                <div class="room-badges">
-                  <span class="room-price-badge">${{ room.price }} / night</span>
-                  <span class="availability-badge" [ngClass]="room.isAvailable ? 'available' : 'not-available'">
-                    <i class="bi" [ngClass]="room.isAvailable ? 'bi-check-circle' : 'bi-x-circle'"></i>
-                    {{ room.isAvailable ? 'Available' : 'Not Available' }}
-                  </span>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="content-wrapper">
+        <!-- Left Column: Room Details -->
+        <div class="profile-main-content">
+            <div class="room-intro">
+                <!-- Room Image Gallery -->
+                <div class="room-images">
+                    <div class="main-img-wrapper">
+                        <div class="img-aspect-ratio">
+                            <img *ngIf="room.roomImages && room.roomImages.length"
+                                [src]="selectedImage || firstImage"
+                                class="main-room-img animate__animated animate__fadeIn"
+                                alt="Room Image">
+                            <img *ngIf="!room.roomImages || !room.roomImages.length"
+                                src="/assets/images/room1.jpg"
+                                class="main-room-img animate__animated animate__fadeIn"
+                                alt="Default Room Image">
+                        </div>
+                    </div>
+                    <div class="room-thumbnails" *ngIf="room.roomImages && room.roomImages.length > 1">
+                        <img *ngFor="let img of room.roomImages"
+                            [src]="img.imageURL"
+                            class="room-thumb animate__animated animate__fadeInUp"
+                            [class.active-thumb]="(selectedImage || firstImage) === img.imageURL"
+                            (click)="selectImage(img.imageURL)"
+                            alt="Room Thumbnail">
+                    </div>
                 </div>
+
+                <!-- Room Details -->
+                <div class="room-details">
+                    <h1 class="animate__animated animate__fadeInDown">
+                        Room {{ room.roomNumber }} - {{ roomTypeLabel(room.roomType) }}
+                    </h1>
+                    <div class="price-tag animate__animated animate__fadeInUp">
+                        <i class="bi bi-cash-coin"></i>
+                        ${{ room.price }}
+                        <span class="unit">/night</span>
+                    </div>
+
+                    <!-- Room Features Badges -->
+                    <div class="room-badges">
+                        <span class="feature-badge">
+                            <i class="bi bi-people"></i> {{ room.maxOccupancy }} Guests
+                        </span>
+                        <span class="feature-badge">
+                            <i class="bi bi-building"></i> Floor {{ room.floorNumber }}
+                        </span>
+                        <span class="feature-badge">
+                            <i class="bi bi-eye"></i> {{ viewTypeLabel(room.viewType) }}
+                        </span>
+                        <span class="feature-badge" *ngIf="room.hasBalcony">
+                            <i class="bi bi-flower1"></i> Balcony
+                        </span>
+                        <span class="feature-badge" *ngIf="room.includesBreakfast">
+                            <i class="bi bi-egg-fried"></i> Breakfast
+                        </span>
+                    </div>
+
+                    <!-- Detailed Information -->
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="label">Hotel</span>
+                            <span class="value">{{ room.hotelAssetName }}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Status</span>
+                            <span class="value">
+                                <span class="status-badge" [class.available]="room.isAvailable">
+                                    {{ room.isAvailable ? 'Available' : 'Not Available' }}
+                                </span>
+                            </span>
+                        </div>
+                        <div class="detail-item" *ngIf="room.hotelStarRating">
+                            <span class="label">Hotel Rating</span>
+                            <span class="value">
+                                <i class="bi bi-star-fill text-warning"></i> {{ room.hotelStarRating }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Room Description -->
+            <div class="about-room" *ngIf="room.description">
+                <h3><i class="bi bi-info-circle"></i> About This Room</h3>
+                <p>{{ room.description }}</p>
+            </div>
+
+            <!-- Room Amenities -->
+            <div class="room-amenities" *ngIf="room.amenities && room.amenities.length">
+                <h3><i class="bi bi-check-circle"></i> Room Amenities</h3>
+                <div class="amenities-grid">
+                    <span class="amenity-badge animate__animated animate__pulse" *ngFor="let amenity of room.amenities">
+                        <i class="bi bi-check-circle"></i> {{ amenity }}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Booking Form -->
+        <aside class="profile-sidebar">
+            <div class="sidebar-card booking-card">
+                <h3>BOOK THIS ROOM</h3>
+
+                <!-- Pre-allocated space for messages -->
+                <div class="message-container">
+                    <div class="message-content">
+               <!-- ... other form fields ... -->
+               <div *ngIf="bookingError" class="alert alert-danger animate__animated animate__fadeIn booking-error-message">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+             {{ bookingError }}
               </div>
-            </div>
-            <div class="room-sections animate__animated animate__fadeInUp">
-              <div class="room-info-section">
-                <div class="info-item"><i class="bi bi-people-fill"></i> <span>Max Occupancy:</span> <strong>{{ room.maxOccupancy }}</strong></div>
-                <div class="info-item"><i class="bi bi-building"></i> <span>Floor:</span> <strong>{{ room.floorNumber }}</strong></div>
-                <div class="info-item"><i class="bi bi-eye"></i> <span>View:</span> <strong>{{ viewTypeLabel(room.viewType) }}</strong></div>
-                <div class="info-item"><i class="bi bi-info-circle"></i> <span>Status:</span> <strong>{{ roomStatusLabel(room.status) }}</strong></div>
-                <div class="info-item" *ngIf="room.hasBalcony"><i class="bi bi-flower1"></i> Balcony</div>
-                <div class="info-item" *ngIf="room.includesBreakfast"><i class="bi bi-egg-fried"></i> Breakfast Included</div>
-              </div>
-              <div class="hotel-info-section">
-                <div class="info-item"><i class="bi bi-house"></i> <span>Hotel:</span> <strong>{{ room.hotelAssetName }}</strong></div>
-                <div class="info-item" *ngIf="room.hotelStarRating"><i class="bi bi-star-fill text-warning"></i> <span>Rating:</span> <strong>{{ room.hotelStarRating }}</strong></div>
-              </div>
-            </div>
-            <div class="room-description animate__animated animate__fadeInUp" *ngIf="room.description">
-              <i class="bi bi-info-circle"></i>
-              <span>{{ room.description }}</span>
-            </div>
-            <div class="room-amenities animate__animated animate__fadeInUp" *ngIf="room.amenities && room.amenities.length">
-              <span class="amenity-badge animate__animated animate__pulse" *ngFor="let fac of room.amenities">
-                <i class="bi bi-check-circle"></i> {{ fac }}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- Right: Sidebar for Booking -->
-  <aside class="profile-sidebar">
-    <div class="sidebar-card booking-card">
-      <h3>BOOK THIS ROOM</h3>
-      <form (ngSubmit)="bookRoom()" #bookingForm="ngForm">
-        <div class="mb-3">
-          <mat-form-field appearance="fill" class="custom-datepicker w-100">
-            <mat-label>Check-in Date</mat-label>
-            <input matInput
-                   [matDatepicker]="checkInPicker"
-                   [(ngModel)]="checkInDate"
-                   [matDatepickerFilter]="dateFilter"
-                   (dateChange)="showDateError = false"
-                   placeholder="Choose a date"
-                   name="checkInDate"
-                   required
-                   readonly
-                   (click)="checkInPicker.open()">
-            <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
-            <mat-datepicker #checkInPicker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="mb-3">
-          <mat-form-field appearance="fill" class="custom-datepicker w-100">
-            <mat-label>Check-out Date</mat-label>
-            <input matInput
-                   [matDatepicker]="checkOutPicker"
-                   [(ngModel)]="checkOutDate"
-                   [matDatepickerFilter]="dateFilter"
-                   (dateChange)="showDateError = false"
-                   placeholder="Choose a date"
-                   name="checkOutDate"
-                   required
-                   readonly
-                   (click)="checkOutPicker.open()">
-            <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
-            <mat-datepicker #checkOutPicker></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="mb-2 text-muted" style="font-size: 0.95rem;">
-          <i class="bi bi-info-circle"></i> Unavailable dates are grayed out.
-        </div>
-        <div *ngIf="showDateError" class="validation-error mb-2">Please select both check-in and check-out dates.</div>
-        <div *ngIf="bookingError" class="alert alert-danger mb-2">{{ bookingError }}</div>
-        <div *ngIf="bookingSuccess" class="alert alert-success mb-2">{{ bookingSuccess }}</div>
-        <button type="submit" class="btn btn-primary w-100" [disabled]="loading">Continue Booking</button>
-      </form>
-    </div>
-  </aside>
+
+                         <!-- ... booking button ... -->
+                        <div *ngIf="bookingSuccess" class="alert alert-success animate__animated animate__fadeIn">
+                            <i class="bi bi-check-circle-fill"></i>
+                            {{ bookingSuccess }}
+                        </div>
+                        <div *ngIf="!bookingError && !bookingSuccess" class="alert alert-info">
+                            <i class="bi bi-info-circle-fill"></i>
+                            Select your check-in and check-out dates
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div *ngIf="loading" class="loading-overlay">
+                    <mat-spinner diameter="50"></mat-spinner>
+                </div> -->
+
+                <ng-container *ngIf="room.isAvailable; else notAvailable">
+                    <form (ngSubmit)="bookRoom()" #bookingForm="ngForm">
+                        <!-- Check-in Date -->
+                        <div class="form-group">
+                            <mat-form-field appearance="fill" class="custom-datepicker">
+                                <mat-label>Check-in Date</mat-label>
+                                <input matInput
+                                    [matDatepicker]="checkInPicker"
+                                    [(ngModel)]="checkInDate"
+                                    [matDatepickerFilter]="dateFilter"
+                                    (dateChange)="showDateError = false"
+                                    name="checkInDate"
+                                    [min]="minnDate"
+                                    required
+                                    readonly
+                                    (click)="checkInPicker.open()">
+                                <mat-datepicker-toggle matSuffix [for]="checkInPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #checkInPicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Check-out Date -->
+                        <div class="form-group">
+                            <mat-form-field appearance="fill" class="custom-datepicker">
+                                <mat-label>Check-out Date</mat-label>
+                                <input matInput
+                                    [matDatepicker]="checkOutPicker"
+                                    [(ngModel)]="checkOutDate"
+                                    [matDatepickerFilter]="dateFilter"
+                                    (dateChange)="showDateError = false"
+                                    name="checkOutDate"
+                                    [min]="minnDate"
+                                    required
+                                    readonly
+                                    (click)="checkOutPicker.open()">
+                                <mat-datepicker-toggle matSuffix [for]="checkOutPicker"></mat-datepicker-toggle>
+                                <mat-datepicker #checkOutPicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        <div class="text-muted">
+                            <i class="bi bi-info-circle"></i>
+                            Unavailable dates are grayed out
+                        </div>
+<div *ngIf="showDateError" class="validation-error">
+    {{ dateErrorMessage }}
 </div>
 
-<div *ngIf="error" class="alert alert-danger text-center animate__animated animate__fadeIn">
-  {{ error }}
-</div>
+                        <!-- Book Now Button -->
+                        <button type="submit"
+                                class="booking-button"
+                                [disabled]="loading">
+                            <i class="bi bi-calendar-check"></i> Book Now
+                        </button>
+                    </form>
+                </ng-container>
 
+                <ng-template #notAvailable>
+                    <div class="alert alert-warning">
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+                        <strong>Sorry, this room is not available for booking right now.</strong>
+                    </div>
+                </ng-template>
+            </div>
+        </aside>
+    </div>
+</div>

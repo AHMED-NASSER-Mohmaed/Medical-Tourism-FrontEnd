@@ -25,6 +25,7 @@ export class DoctorProfileComponent implements OnInit {
 
   processedSchedule: { dayName: string, slots: any[] }[] = [];
 
+
   constructor(
     private route: ActivatedRoute,
     private hospitalService: HospitalService,
@@ -36,6 +37,7 @@ export class DoctorProfileComponent implements OnInit {
 
   ngOnInit(): void {
     const doctorId = this.route.snapshot.paramMap.get('doctorId');
+
     if (doctorId) {
       this.loadDoctorData(doctorId);
     }
@@ -50,17 +52,11 @@ export class DoctorProfileComponent implements OnInit {
     if (cachedDoctor) {
       doctorDetails$ = of(cachedDoctor);
     } else {
-      const hospitalId = this.route.snapshot.paramMap.get('hospitalId');
-      const specialtyId = this.route.snapshot.paramMap.get('specialtyId');
-      if (hospitalId && specialtyId) {
-        doctorDetails$ = this.hospitalService.getDoctorsForSpecialty(specialtyId, hospitalId, 1, 100, '').pipe(
-          map(response => response.items.find((doc: any) => doc.id === doctorId))
-        );
-      } else {
+
         console.error('Cannot fetch doctor details: hospitalId or specialtyId is missing.');
         this.loadingSrv.hide();
         return;
-      }
+
     }
 
     forkJoin({
@@ -73,11 +69,10 @@ export class DoctorProfileComponent implements OnInit {
 
         const allBlockedDates = doctorSchedule.flatMap(s => s.blookedDates);
         this.blockedDates = new Set(allBlockedDates);
-
         const workingDayIds = doctorSchedule.map(s => s.dayOfWeekId - 1);
         this.workingDays = new Set(workingDayIds);
-
         this.processScheduleForDisplay(doctorSchedule);
+        this.checkAndSetPreselectedDate();
 
         this.loadingSrv.hide();
       },
@@ -86,6 +81,31 @@ export class DoctorProfileComponent implements OnInit {
         this.loadingSrv.hide();
       }
     });
+  }
+    checkAndSetPreselectedDate(): void {
+    const bookingData = this.bookingService.getBookingData();
+       console.log("bbb",bookingData);
+    console.log("fff",bookingData?.specialtiyAppointment?.appointmentDate);
+    const preselectedDateStr = bookingData?.specialtiyAppointment?.appointmentDate;
+
+    if (preselectedDateStr) {
+      const preselectedDate = new Date(preselectedDateStr);
+      if (this.dateFilter(preselectedDate)) {
+        this.selectedDate = preselectedDate;
+        console.log('Pre-selected date is still available:', this.selectedDate);
+      } else {
+        console.warn('Previously selected date is no longer available.');
+        Swal.fire({
+          icon: 'warning',
+          title: 'Date No Longer Available',
+          text: 'The date you previously selected is no longer available. Please choose a new date.',
+        });
+        const currentData = this.bookingService.getBookingData();
+        delete currentData.specialtyAppointment;
+        this.bookingService.updateBookingData(currentData);
+        this.selectedDate=null;
+      }
+    }
   }
 
   processScheduleForDisplay(schedule: any[]): void {
@@ -141,6 +161,10 @@ export class DoctorProfileComponent implements OnInit {
         isOffline: true,
         appointmentDate: formattedDate
       },
+       navigationIds: {
+        doctorId: this.doctor.id,
+
+      }
     };
 
     this.bookingService.updateBookingData(bookingData);

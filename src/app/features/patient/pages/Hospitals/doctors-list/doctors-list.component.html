@@ -1,8 +1,15 @@
 
- <div class="banner">
-        <h1>Find Doctors</h1>
-        <p>Explore our network of accredited doctors for your medical needs.</p>
+<div class="page-banner">
+    <div class="banner-content">
+        <button class="btn-back" (click)="goBack()">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
+        <div class="banner-text">
+            <h2>Find Doctors</h2>
+            <p>Explore our network of accredited doctors for your medical needs.</p>
+        </div>
     </div>
+</div>
     <div class="main-layout">
 
         <!-- Sidebar for Filters -->
@@ -37,7 +44,7 @@
                         <h3>{{ doctor.firstName }} {{ doctor.lastName }}</h3>
                         <p>{{ doctor.specialtyName }} - {{ doctor.yearsOfExperience }} Years Experience</p>
                         <p>{{ doctor.address }}, {{ doctor.city }}</p>
-<a [routerLink]="['/doctor-profile',doctor.id]" class="details-link">
+<a [routerLink]="['/doctor-profile',doctor.id]" class="view-details-btn">
     View Profile <i class="fa-solid fa-arrow-right"></i>
 </a>
                     </div>

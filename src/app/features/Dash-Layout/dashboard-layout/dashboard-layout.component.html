@@ -2,8 +2,10 @@
   <app-dashboard-sidebar
     [items]="sidebarItems"
     [collapsed]="isSidebarCollapsed"
+    [mobileOpen]="isSidebarMobileOpen"
     [userRole]="userRole"
-    (toggleCollapse)="toggleSidebar()">
+    (toggleCollapse)="toggleSidebar()"
+    [class.sidebar-mobile-open]="isSidebarMobileOpen">
   </app-dashboard-sidebar>
 
   <div class="main-content flex-grow-1 d-flex flex-column" [class.sidebar-collapsed]="isSidebarCollapsed">
@@ -20,4 +22,6 @@
       <ng-content></ng-content>
     </main>
   </div>
+
+  <div *ngIf="isSidebarMobileOpen" class="sidebar-backdrop" (click)="closeSidebarMobile()"></div>
 </div>

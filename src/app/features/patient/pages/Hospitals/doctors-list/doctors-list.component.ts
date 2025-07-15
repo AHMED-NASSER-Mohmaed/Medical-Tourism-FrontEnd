@@ -17,7 +17,7 @@ export class DoctorsListComponent implements OnInit {
   };
   doctors: any[] = [];
   pageNumber: number = 1;
-  pageSize: number = 9;
+  pageSize: number = 8;
   totalPages: number = 1;
 
   constructor(

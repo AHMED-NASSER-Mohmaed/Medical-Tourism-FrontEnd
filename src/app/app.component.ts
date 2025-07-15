@@ -69,10 +69,15 @@ ngOnInit(): void {
 checkRouteVisibility(): void {
   const currentRoute = this.router.url;
 
-
   const hideNavFooter = this.router.routerState.snapshot.root.firstChild?.data?.['hideNavFooter'] || false;
-  this.showNavFooter = !(currentRoute.includes('confirm') || hideNavFooter ||
-    this.authService.getUserRole() === 'ServiceProvider' || this.authService.getUserRole() === 'SuperAdmin'|| this.authService.getUserRole() === 'HospitalServiceProvider');
+  this.showNavFooter = !(
+    currentRoute.includes('confirm') ||
+    hideNavFooter ||
+    currentRoute.startsWith('/doctor') || // Hide for doctor-dashboard
+    this.authService.getUserRole() === 'ServiceProvider' ||
+    this.authService.getUserRole() === 'SuperAdmin' ||
+    this.authService.getUserRole() === 'HospitalServiceProvider'
+  );
 }
 
 

@@ -25,7 +25,7 @@ export class CarRentalDetailsComponent implements OnInit {
   carsLoading = false;
   carFilters: any = {};
   carPage = 1;
-  carPageSize = 10;
+  carPageSize = 8;
   carTotalPages = 1;
 
   constructor(
@@ -103,4 +103,5 @@ export class CarRentalDetailsComponent implements OnInit {
   goBack() {
     this.router.navigate(['/car-rentals']);
   }
+
 }

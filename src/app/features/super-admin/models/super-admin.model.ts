@@ -119,6 +119,10 @@ export interface Patient extends UserBase {
   bloodGroup: string;
   height: number; // in centimeters
   weight: number; // in kilograms
+  governorateId: number;
+  governorateName: string;
+  countryId: number;
+  countryName: string;
 }
 
 /**
@@ -137,8 +141,8 @@ export interface BaseProvider extends UserBase {
   verificationStatus: AssetStatus;
   languagesSupported: number[];
   assetType: ProviderType;
-  openingTime: TimeObject;
-  closingTime: TimeObject;
+  openingTime: string;
+  closingTime: string;
   nationalDocsURL?: string;
   credentialDocURL?: string;
 }
@@ -148,12 +152,26 @@ export interface HotelProvider extends BaseProvider {
   starRating: number; 
   hasPool: boolean;
   hasRestaurant: boolean;
+  assetGovernorateId: number;
+  assetGovernateName: string;
+  countryId: number;
+  countryName: string;
+  assetImages: AssetImage[];
+  openingTime: string;
+  closingTime: string;
 }
 
 
 export interface HospitalProvider extends BaseProvider {
   numberOfDepartments: number;
   emergencyServices: boolean;
+  assetGovernorateId: number;
+  assetGovernateName: string;
+  countryId: number;
+  countryName: string;
+  assetImages: AssetImage[];
+  openingTime: string;
+  closingTime: string;
 }
 
 
@@ -162,6 +180,14 @@ export interface CarRentalProvider extends BaseProvider {
   models: string[];
   transmission: TransmissionType;
   rentalPolicies: string[];
+  starRating: number;
+  assetGovernorateId: number;
+  assetGovernateName: string;
+  countryId: number;
+  countryName: string;
+  assetImages: AssetImage[];
+  openingTime: string;
+  closingTime: string;
 }
 
 export const isHotelProvider = (provider: BaseProvider): provider is HotelProvider =>
@@ -289,4 +315,11 @@ export interface CountriesGovernatesResponse {
   data: {
     [countryId: string]: CountryWithGovernates;
   };
+}
+
+export interface AssetImage {
+  id: number;
+  imageId: string;
+  imageURL: string;
+  assetId: string;
 }

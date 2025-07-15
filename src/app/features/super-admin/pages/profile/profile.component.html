@@ -3,7 +3,7 @@
     <div class="col-lg-4 mb-4 mb-lg-0">
       <div class="card profile-card border-0 shadow-lg rounded-4 text-center p-4">
         <div class="avatar-ring mx-auto mb-3 position-relative">
-          <img [src]="profile.imageURL ? profile.imageURL : 'assets/images/www-avatat.png'" 
+          <img [src]="profile.imageURL ? profile.imageURL : 'assets/images/www-avatat.png'"
                class="rounded-circle profile-avatar" width="120" height="120">
           <span class="status-dot"
                 [ngClass]="{
@@ -17,7 +17,7 @@
         <p class="text-muted mb-3">Super Administrator</p>
       </div>
     </div>
-    
+
     <div class="col-lg-8">
       <div class="card border-0 shadow-lg rounded-4 profile-info-card">
         <div class="card-header bg-white rounded-top-4 border-0 py-3 px-4">
@@ -71,7 +71,7 @@
                       'bg-danger': profile.status === UserStatus.SUSPENDED,
                       'bg-secondary': profile.status === UserStatus.INACTIVE || !profile.status
                     }">
-                {{ getUserStatusText(profile.status ?? UserStatus.INACTIVE) }}
+                {{ getUserStatusText(profile.status) }}
               </span>
             </div>
             <div class="col-md-6">

@@ -1,25 +1,26 @@
-<div class="card hotel-card shadow-lg h-100 animate__animated animate__fadeInUp position-relative">
-  <div class="hotel-img-wrapper position-relative">
-    <img [src]="hotel.assetImages[0]?.imageURL || 'assets/images/cover.png'" class="card-img-top hotel-img" alt="Hotel Image">
-    <div class="hotel-overlay position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-between p-2 animate__animated animate__fadeIn">
-      <span class="badge bg-dark bg-opacity-75 text-white align-self-end fs-6 animate__animated animate__fadeInDown">
-        <i class="bi bi-star-fill text-warning"></i> {{ hotel.starRating || 'N/A' }}
-      </span>
+<div class="hotel-card">
+  <div class="hotel-img-wrapper">
+    <img [src]="hotel.assetImages[0].imageURL || 'assets/images/cover.png'" class="hotel-img" alt="Hotel Image">
+    <div class="rating-badge">
+      <i class="bi bi-star-fill"></i> {{ hotel.starRating || 'N/A' }}
     </div>
   </div>
-  <div class="card-body d-flex flex-column">
-    <h5 class="card-title mb-2 text-primary fw-bold fs-4 animate__animated animate__fadeInDown">{{ hotel.assetName || hotel.firstName + ' ' + hotel.lastName }}</h5>
-    <p class="card-text mb-2 text-secondary animate__animated animate__fadeInLeft">
-      <i class="bi bi-geo-alt-fill me-1"></i> <span class="fw-semibold">{{ hotel.city }}</span>, {{ hotel.governorateName }}
-    </p>
-    <div class="mb-3 animate__animated animate__fadeInUp">
-      <span *ngIf="hotel.hasPool" class="badge bg-info me-1 px-3 py-2 fs-6"><i class="bi bi-water"></i> Pool</span>
-      <span *ngIf="hotel.hasRestaurant" class="badge bg-success px-3 py-2 fs-6"><i class="bi bi-cup-straw"></i> Restaurant</span>
+  <div class="hotel-content">
+    <h3 class="hotel-title">{{ hotel.assetName || hotel.firstName + ' ' + hotel.lastName }}</h3>
+    <div class="hotel-location">
+      <i class="bi bi-geo-alt-fill"></i>
+      <span class="location-text">{{ hotel.city }}, {{ hotel.governorateName }}</span>
     </div>
-    <div class="mt-auto">
-      <a [routerLink]="['/hotels/details', hotel.id]" class="btn btn-gradient w-100 py-2 fs-5 animate__animated animate__pulse animate__delay-1s">
-        View Details <i class="bi bi-arrow-right"></i>
-      </a>
+    <div class="hotel-features">
+      <span *ngIf="hotel.hasPool" class="feature-badge">
+        <i class="bi bi-water"></i> Pool
+      </span>
+      <span *ngIf="hotel.hasRestaurant" class="feature-badge">
+        <i class="bi bi-cup-straw"></i> Restaurant
+      </span>
     </div>
+    <a [routerLink]="['/hotels/details', hotel.id]" class="view-details-btn">
+      View Details <i class="bi bi-arrow-right"></i>
+    </a>
   </div>
 </div>

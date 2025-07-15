@@ -11,7 +11,7 @@
   height: fit-content;
   margin-left: 1rem;
   margin-top: 2rem;
-  margin-bottom : 2rem 
+  margin-bottom : 2rem
 }
 .sidebar-title {
   display: flex;
@@ -204,4 +204,48 @@
   .car-cards-grid {
     grid-template-columns: 1fr;
   }
-} 
+}
+.car-cards-container {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Space for the dark bar */
+}
+
+.car-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.bottom-space {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #1a1a1a; /* Dark background color */
+    z-index: -1;
+}
+.car-cards-container {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 60px; /* Space for the dark bar */
+}
+
+.car-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.bottom-space {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #1a1a1a; /* Dark background color */
+    z-index: -1;
+}

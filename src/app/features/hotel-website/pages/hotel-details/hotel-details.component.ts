@@ -16,7 +16,7 @@ export class HotelDetailsComponent implements OnInit {
   rooms: Room[] = [];
   loading = false;
   currentPage = 1;
-  pageSize = 10;
+  pageSize = 6;
   totalPages = 1;
   filters: any = {};
 

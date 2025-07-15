@@ -22,6 +22,7 @@ export class AddHotelProviderComponent implements OnInit {
   hotelForm: FormGroup;
   isLoading = false;
   apiError: string | null = null;
+  egyptGovernorates: { governateId: number; governateName: string }[] = [];
   
   // Enums
   Gender = Gender;
@@ -44,32 +45,29 @@ export class AddHotelProviderComponent implements OnInit {
     private router: Router
   ) {
     this.hotelForm = this.fb.group({
-      // User Account Information
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]],
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
-      phone: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      lastName: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
+      phone: ['', [Validators.required]],
       gender: [Gender.UNSPECIFIED, Validators.required],
       address: ['', Validators.required],
       city: ['', Validators.required],
       governorateId: [null, Validators.required],
       countryId: [null, Validators.required],
       dateOfBirth: ['', Validators.required],
-
-      // Asset Information
-      assetName: ['', Validators.required],
-      assetDescription: ['', Validators.required],
+      assetName: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(250)]],
+      assetDescription: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(1000)]],
       assetEmail: ['', [Validators.required, Validators.email]],
       locationDescription: ['', Validators.required],
-      latitude: [0, Validators.required],
-      longitude: [0, Validators.required],
-      facilities: this.fb.array([], { validators: Validators.required }),
-      verificationNotes: ['Added via admin portal'],
-      verificationStatus: [AssetStatus.PENDING],
-      languagesSupported: this.fb.array([], { validators: Validators.required }),
-      assetType: [ProviderType.HOTEL],
+      assetGovernorateId: [null, Validators.required],
+      latitude: [null, [Validators.required, Validators.min(-90), Validators.max(90)]],
+      longitude: [null, [Validators.required, Validators.min(-180), Validators.max(180)]],
+      facilities: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      verificationNotes: [''],
+      languagesSupported: this.fb.array([], { validators: [Validators.required, Validators.minLength(1)] }),
+      assetType: [ProviderType.HOTEL, Validators.required],
       openingTime: this.fb.group({
         hour: [8, [Validators.required, Validators.min(0), Validators.max(23)]],
         minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
@@ -80,13 +78,13 @@ export class AddHotelProviderComponent implements OnInit {
         minute: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
         second: [0, [Validators.required, Validators.min(0), Validators.max(59)]],
       }),
-      nationalDocsURL: [''],
-      credentialDocURL: [''],
       starRating: [3, [Validators.required, Validators.min(1), Validators.max(5)]],
       hasPool: [false],
-      hasRestaurant: [false]
+      hasRestaurant: [false],
+      nationalDocsURL: [''],
+      credentialDocURL: [''],
     }, {
-      validators: [this.passwordMatchValidator]
+      validators: [this.passwordMatchValidator, this.openingClosingTimeValidator]
     });
 
     this.addDefaultArrayValues();
@@ -97,15 +95,23 @@ export class AddHotelProviderComponent implements OnInit {
       next: (response: CountriesGovernatesResponse) => {
         this.countriesMap = response.data;
         this.countries = Object.values(this.countriesMap).map(c => ({ id: c.countryId, name: c.countryName }));
+        // Egypt is countryId: 1
+        const egypt = this.countriesMap[1];
+        this.egyptGovernorates = egypt ? Object.values(egypt.governates) : [];
+        this.updateCountryControlState();
       },
       error: () => {
         this.apiError = 'Failed to load countries and governates.';
+        this.updateCountryControlState();
       }
     });
 
     this.hotelForm.get('countryId')?.valueChanges.subscribe((countryId: number) => {
       this.updateGovernorates(countryId);
+      this.updateGovernorateControlState();
     });
+    this.updateCountryControlState();
+    this.updateGovernorateControlState();
   }
 
   private updateGovernorates(countryId: number) {
@@ -128,6 +134,15 @@ export class AddHotelProviderComponent implements OnInit {
     return password.value === confirmPassword.value 
       ? null 
       : { passwordMismatch: true };
+  }
+
+  private openingClosingTimeValidator(form: FormGroup) {
+    const opening = form.get('openingTime')?.value;
+    const closing = form.get('closingTime')?.value;
+    if (!opening || !closing) return null;
+    const openingMinutes = opening.hour * 60 + opening.minute;
+    const closingMinutes = closing.hour * 60 + closing.minute;
+    return closingMinutes > openingMinutes ? null : { closingBeforeOpening: true };
   }
 
   private addDefaultArrayValues() {
@@ -163,6 +178,11 @@ export class AddHotelProviderComponent implements OnInit {
         array.removeAt(index);
       }
     }
+  }
+
+  // Helper to convert time object to 'HH:mm:ss' string
+  private toTimeString(time: { hour: number, minute: number, second: number }): string {
+    return `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}:${String(time.second).padStart(2, '0')}`;
   }
 
   onSubmit() {
@@ -201,13 +221,16 @@ export class AddHotelProviderComponent implements OnInit {
         verificationStatus: formValue.verificationStatus,
         languagesSupported: formValue.languagesSupported || [],
         assetType: formValue.assetType,
-        openingTime: formValue.openingTime,
-        closingTime: formValue.closingTime,
+        openingTime: this.toTimeString(formValue.openingTime),
+        closingTime: this.toTimeString(formValue.closingTime),
         nationalDocsURL: formValue.nationalDocsURL,
         credentialDocURL: formValue.credentialDocURL,
         starRating: formValue.starRating,
         hasPool: formValue.hasPool,
-        hasRestaurant: formValue.hasRestaurant
+        hasRestaurant: formValue.hasRestaurant,
+        assetGovernorateId: Number(formValue.assetGovernorateId),
+        assetGovernateName: governate?.governateName,
+        assetImages: []
       };
       this.superAdminService.addHotelProvider(payload).subscribe({
         next: (newHotel) => {
@@ -245,5 +268,23 @@ export class AddHotelProviderComponent implements OnInit {
         });
       }
     });
+  }
+
+  private updateCountryControlState() {
+    const control = this.hotelForm.get('countryId');
+    if (!this.countries || this.countries.length === 0 || this.isLoading) {
+      control?.disable({ emitEvent: false });
+    } else {
+      control?.enable({ emitEvent: false });
+    }
+  }
+
+  private updateGovernorateControlState() {
+    const control = this.hotelForm.get('governorateId');
+    if (!this.governorates || this.governorates.length === 0 || !this.hotelForm.get('countryId')?.value || this.isLoading) {
+      control?.disable({ emitEvent: false });
+    } else {
+      control?.enable({ emitEvent: false });
+    }
   }
 }

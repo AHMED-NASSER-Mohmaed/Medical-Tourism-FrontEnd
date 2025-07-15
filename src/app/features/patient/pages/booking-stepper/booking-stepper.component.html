@@ -1,21 +1,49 @@
 <div class="stepper-container">
   <!-- Stepper Navigation -->
   <div class="stepper-header">
-    <div class="step" [class.active]="currentStep === 'hotel' || currentStep === 'car' || currentStep === 'payment'" [class.completed]="currentStep === 'car' || currentStep === 'payment'">
+    <!-- Appointment Step -->
+    <div class="step completed clickable" (click)="navigateToStep('appointment')" title="Edit Appointment">
       <div class="step-icon"><i class="fas fa-calendar-check"></i></div>
-      <div class="step-label">Appointment</div>
+      <div class="step-label">
+        Appointment
+        <span class="edit-icon"><i class="fas fa-pencil-alt"></i></span>
+      </div>
     </div>
     <div class="step-connector"></div>
-    <div class="step" [class.active]="currentStep === 'hotel'" [class.completed]="currentStep === 'car' || currentStep === 'payment'">
+
+    <!-- Hotel Step -->
+    <div class="step"
+         [class.active]="currentStep === 'hotel'"
+         [class.completed]="currentStep === 'car' || currentStep === 'payment'"
+         [class.clickable]="currentStep === 'car' || currentStep === 'payment'"
+         [class.skipped]="(currentStep === 'car' || currentStep === 'payment') && !bookingDetails.roomAppointment"
+         (click)="navigateToStep('hotel')"
+         title="Edit Hotel Booking">
       <div class="step-icon"><i class="fas fa-hotel"></i></div>
-      <div class="step-label">Hotel</div>
+      <div class="step-label">
+        Hotel
+        <span *ngIf="currentStep === 'car' || currentStep === 'payment'" class="edit-icon"><i class="fas fa-pencil-alt"></i></span>
+      </div>
     </div>
     <div class="step-connector"></div>
-    <div class="step" [class.active]="currentStep === 'car'" [class.completed]="currentStep === 'payment'">
+
+    <!-- Car Rental Step -->
+    <div class="step"
+         [class.active]="currentStep === 'car'"
+         [class.completed]="currentStep === 'payment'"
+         [class.clickable]="currentStep === 'payment'"
+         [class.skipped]="currentStep === 'payment' && !bookingDetails.carAppointment"
+         (click)="navigateToStep('car')"
+         title="Edit Car Rental">
       <div class="step-icon"><i class="fas fa-car"></i></div>
-      <div class="step-label">Car Rental</div>
+      <div class="step-label">
+        Car Rental
+        <span *ngIf="currentStep === 'payment'" class="edit-icon"><i class="fas fa-pencil-alt"></i></span>
+      </div>
     </div>
     <div class="step-connector"></div>
+
+    <!-- Payment Step -->
     <div class="step" [class.active]="currentStep === 'payment'">
       <div class="step-icon"><i class="fas fa-credit-card"></i></div>
       <div class="step-label">Payment</div>
@@ -54,11 +82,29 @@
       </div>
     </div>
 
-    <!-- Payment Step Content (Placeholder) -->
+    <!-- Payment Step Content -->
      <div *ngIf="currentStep === 'payment'">
         <h2 class="step-title">Final Step: Payment</h2>
-        <p class="step-subtitle">Please complete the payment to finalize your booking.</p>
-         <!-- Payment form or details would go here -->
+        <p class="step-subtitle">Please review your booking and proceed to payment.</p>
+
+        <!-- Show this section when not processing the payment -->
+        <div *ngIf="!isProcessingPayment" class="choice-card">
+            <h3>Ready to Complete Your Booking?</h3>
+            <p>Click the button below to confirm your booking details and proceed to the secure payment gateway.</p>
+            <div class="button-group">
+                <button class="btn btn-primary" (click)="proceedToPayment()">
+                    <i class="fas fa-credit-card me-2"></i> Continue to Payment
+                </button>
+            </div>
+        </div>
+
+        <!-- Show this section while waiting for the payment redirect -->
+        <div *ngIf="isProcessingPayment" class="d-flex justify-content-center align-items-center mt-4">
+            <!-- <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Processing...</span>
+            </div> -->
+            <span class="ms-3 fs-5">Redirecting to payment gateway...</span>
+        </div>
     </div>
 
   </div>

@@ -34,7 +34,7 @@ const routes: Routes = [
           { path: 'hospitals', component: HospitalsAccountsComponent },
           { path: 'hotels', component: HotelsAccountsComponent },
           { path: 'car-rentals', component: CarRentalsAccountsComponent },
-          { path: '', redirectTo: 'patients', pathMatch: 'full' }
+          { path: '', redirectTo: 'hospitals', pathMatch: 'full' }
         ]
       },
       {

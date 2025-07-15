@@ -1,0 +1,204 @@
+<div class="provider-modal-container" *ngIf="provider">
+  <div class="provider-modal-overlay" (click)="closeModal()"></div>
+  
+  <div class="provider-modal-card">
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <div class="provider-profile-header">
+        <div class="provider-avatar-container">
+          <img [src]="(provider.assetImages && provider.assetImages.length > 0) 
+                    ? provider.assetImages[0].imageURL 
+                    : (provider.imageURL || 'assets/images/default-provider.png')"
+               alt="{{ provider.assetName }} logo"
+               class="provider-avatar">
+        </div>
+        <div class="provider-info">
+          <h2>{{ provider.assetName }}</h2>
+          <div class="provider-badges">
+            <span class="badge provider-type-badge">
+              <fa-icon [icon]="getProviderTypeIcon(provider)" class="me-1"></fa-icon>
+              {{ getProviderType(provider) }}
+            </span>
+            <span class="badge status-badge" 
+                  [ngClass]="getStatusClass(getAssetStatus(provider.status))">
+              {{ getStatusLabel(getAssetStatus(provider.status)) }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <button class="close-btn" (click)="closeModal()">&times;</button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <!-- Provider Information Section -->
+      <div class="info-section">
+        <h3 class="section-title">
+          <fa-icon [icon]="icons.building" class="me-2"></fa-icon>
+          Provider Information
+        </h3>
+        
+        <div class="info-grid">
+          <!-- Row 1 -->
+          <div class="info-label">
+            <fa-icon [icon]="icons.envelope" class="me-1"></fa-icon>
+            Email
+          </div>
+          <div class="info-value email-value">
+            <a href="mailto:{{ provider.assetEmail }}" class="text-decoration-none">
+              {{ provider.assetEmail }}
+            </a>
+          </div>
+          
+          <div class="info-label">
+            <fa-icon [icon]="icons.phone" class="me-1"></fa-icon>
+            Phone
+          </div>
+          <div class="info-value">
+            <a href="tel:{{ provider.phone }}" class="text-decoration-none">
+              {{ provider.phone }}
+            </a>
+          </div>
+          
+          <!-- Row 2 -->
+          <div class="info-label">
+            <fa-icon [icon]="icons.user" class="me-1"></fa-icon>
+            Contact Person
+          </div>
+          <div class="info-value">
+            {{ provider.firstName }} {{ provider.lastName }}
+          </div>
+          
+          <div class="info-label">
+            <fa-icon [icon]="icons.calendar" class="me-1"></fa-icon>
+            Registered Date
+          </div>
+          <div class="info-value">
+            {{ provider.acquisitionDate | date:'mediumDate' }}
+          </div>
+          
+          <!-- Row 3 -->
+          <div class="info-label">
+            <fa-icon [icon]="icons.mapMarker" class="me-1"></fa-icon>
+            Address
+          </div>
+          <div class="info-value address-value">
+            {{ provider.address || 'N/A' }}
+          </div>
+          
+          <!-- Row 4 -->
+          <div class="info-label">City</div>
+          <div class="info-value">{{ provider.city || 'N/A' }}</div>
+          
+          <div class="info-label">Governorate</div>
+          <div class="info-value">{{ provider.assetGovernateName || 'N/A' }}</div>
+          
+          <!-- Row 5 -->
+          <!-- <div class="info-label">Country</div>
+          <div class="info-value">{{ provider.country || 'N/A' }}</div> -->
+        </div>
+      </div>
+
+      <!-- Provider Status Section -->
+      <div class="info-section">
+        <h3 class="section-title">
+          <fa-icon [icon]="icons.building" class="me-2"></fa-icon>
+          Provider Status
+        </h3>
+        
+        <div class="status-grid">
+          <div class="status-item">
+            <span class="status-label">Current Status</span>
+            <span class="status-value" [ngClass]="getStatusClass(getAssetStatus(provider.status))">
+              {{ getStatusLabel(getAssetStatus(provider.status)) }}
+            </span>
+          </div>
+          
+          <div class="status-item">
+            <span class="status-label">Provider Type</span>
+            <span class="status-value provider-type">
+              <fa-icon [icon]="getProviderTypeIcon(provider)" class="me-1"></fa-icon>
+              {{ getProviderType(provider) }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provider Documents Section -->
+      <div class="info-section" *ngIf="provider.nationalDocsURL || provider.credentialDocURL">
+        <h3 class="section-title">
+          <fa-icon [icon]="icons.building" class="me-2"></fa-icon>
+          Provider Documents
+        </h3>
+        
+        <div class="documents-grid">
+          <div class="document-item" *ngIf="provider.nationalDocsURL">
+            <div class="document-info">
+              <fa-icon [icon]="icons.document" class="document-icon"></fa-icon>
+              <div class="document-details">
+                <span class="document-title">National Documents</span>
+                <span class="document-description">Official national identification and business documents</span>
+              </div>
+            </div>
+            <a [href]="provider.nationalDocsURL" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="document-link">
+              <fa-icon [icon]="icons.externalLink" class="me-1"></fa-icon>
+              View Document
+            </a>
+          </div>
+          
+          <div class="document-item" *ngIf="provider.credentialDocURL">
+            <div class="document-info">
+              <fa-icon [icon]="icons.document" class="document-icon"></fa-icon>
+              <div class="document-details">
+                <span class="document-title">Credential Documents</span>
+                <span class="document-description">Professional credentials and certifications</span>
+              </div>
+            </div>
+            <a [href]="provider.credentialDocURL" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="document-link">
+              <fa-icon [icon]="icons.externalLink" class="me-1"></fa-icon>
+              View Document
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Provider Images Section -->
+      <div class="info-section" *ngIf="provider.assetImages && provider.assetImages.length > 0">
+        <h3 class="section-title">
+          <fa-icon [icon]="icons.building" class="me-2"></fa-icon>
+          Provider Images
+        </h3>
+        
+        <div class="images-grid">
+          <div class="image-item" *ngFor="let image of provider.assetImages; trackBy: trackByImageId">
+            <img [src]="image.imageURL" 
+                 [alt]="provider.assetName + ' image'"
+                 class="provider-image"
+                 (click)="openImageModal(image.imageURL)">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button class="action-btn secondary" (click)="closeModal()">
+        Close
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Image Modal -->
+<div class="image-modal-backdrop" *ngIf="showImageModal" (click)="closeImageModal()">
+  <div class="image-modal-content" (click)="$event.stopPropagation()">
+    <button class="image-modal-close" (click)="closeImageModal()">&times;</button>
+    <img [src]="selectedImageUrl" alt="Provider image" class="modal-image">
+  </div>
+</div> 
