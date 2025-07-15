@@ -136,6 +136,7 @@ export class BookingStepperComponent implements OnInit {
             this.isLoadingSrv.hide();
             if (response && response.checkoutSessionUrl) {
               window.location.href = response.checkoutSessionUrl;
+              this.bookingService.updateBookingData({});
             } else {
               Swal.fire('Error', 'Could not retrieve payment URL. Please try again.', 'error');
               this.isProcessingPayment = false;
