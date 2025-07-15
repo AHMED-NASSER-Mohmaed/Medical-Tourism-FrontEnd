@@ -18,7 +18,7 @@ export class DisplayAllHospitalsComponent implements OnInit {
     location: 0
   };
   pageNumber: number = 1;
-  pageSize: number = 8;
+  pageSize: number = 6;
   totalPages: number = 1;
   hospitals: any[] = [];
   governorates: any[] = [];

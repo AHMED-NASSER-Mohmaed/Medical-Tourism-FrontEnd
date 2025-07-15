@@ -28,7 +28,7 @@ export class CarRentalDetailsSidebarFiltersComponent implements OnInit {
 
 
   carPage = 1;
-  carPageSize = 8;
+  carPageSize = 6;
   carTotalPages = 1;
   carsLoading = false;
 

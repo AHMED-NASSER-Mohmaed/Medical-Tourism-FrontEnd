@@ -13,7 +13,7 @@ export class HotelsListComponent implements OnInit {
   hotels: Hotel[] = [];
   loading = false;
   currentPage = 1;
-  pageSize = 8;
+  pageSize = 6;
   totalPages = 1;
   filters: any = {};
 

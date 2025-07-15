@@ -26,7 +26,7 @@ export class CarRentalDetailsComponent implements OnInit {
   carsLoading = false;
   carFilters: any = {};
   carPage = 1;
-  carPageSize = 8;
+  carPageSize = 6;
   carTotalPages = 1;
 
   constructor(
