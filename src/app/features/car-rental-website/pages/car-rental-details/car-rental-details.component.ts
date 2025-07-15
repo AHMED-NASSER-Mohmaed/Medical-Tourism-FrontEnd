@@ -5,6 +5,7 @@ import { CarRental } from '../../models/car-rental.model';
 import { CarRentalStateService } from '../../services/car-rental-state.service';
 import { take } from 'rxjs/operators';
 import { FuelTypeMap, TransmissionTypeMap, CarTypeMap } from '../../utils/car-enums.utils';
+import { LoadingService } from '../../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-car-rental-details',
@@ -32,6 +33,7 @@ export class CarRentalDetailsComponent implements OnInit {
     private route: ActivatedRoute,
     private carRentalService: CarRentalWebsiteService,
     private carRentalState: CarRentalStateService,
+    private loadingService: LoadingService,
     private router: Router
   ) {}
 
@@ -44,21 +46,25 @@ export class CarRentalDetailsComponent implements OnInit {
   }
 
   getCarRentalFromStateOrApi() {
+    this.loadingService.show();
     this.loading = true;
     this.carRentalState.getCarRentalById(this.carRentalId).pipe(take(1)).subscribe(carRental => {
       if (carRental) {
         this.carRental = carRental;
         this.loading = false;
+        this.loadingService.hide();
       } else {
         // Fallback: fetch from API (first page, or increase pageSize if needed)
         this.carRentalService.getCarRentals({ pageSize: 100 }).subscribe({
           next: (data: any) => {
             this.carRental = data.items?.find((c: CarRental) => c.id === this.carRentalId);
             this.loading = false;
+            this.loadingService.hide();
           },
           error: () => {
             this.carRental = undefined;
             this.loading = false;
+            this.loadingService.hide();
           }
         });
       }

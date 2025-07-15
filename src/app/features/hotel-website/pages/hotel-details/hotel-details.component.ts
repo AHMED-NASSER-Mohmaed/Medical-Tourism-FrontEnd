@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HotelWebsiteService } from '../../services/hotel-website.service';
 import { Room } from '../../models/room.model';
 import { Hotel } from '../../models/hotel.model';
+import { LoadingService } from '../../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-hotel-details',
@@ -23,6 +24,7 @@ export class HotelDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private hotelService: HotelWebsiteService,
+    private loadingService: LoadingService,
     private router: Router
   ) {}
 
@@ -54,6 +56,7 @@ export class HotelDetailsComponent implements OnInit {
 
   fetchRooms() {
     this.loading = true;
+    this.loadingService.show();
     const params: any = {
       PageNumber: this.currentPage,
       PageSize: this.pageSize,
@@ -70,10 +73,12 @@ export class HotelDetailsComponent implements OnInit {
         this.rooms = data.items || [];
         this.totalPages = data.totalPages || 1;
         this.loading = false;
+        this.loadingService.hide();
       },
       error: () => {
         this.rooms = [];
         this.loading = false;
+        this.loadingService.hide();
       }
     });
   }

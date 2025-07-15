@@ -7,6 +7,7 @@ import { Location } from '@angular/common';
 
 import Swal from 'sweetalert2';
 import { BookingService } from '../../../patient/services/Booking.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 interface UnavailableDateRange {
   startingDate: string;
   endingDate: string;
@@ -56,6 +57,7 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
     private carService: CarRentalWebsiteService,
     private location: Location,
      private bookingService: BookingService,
+     private loadingService: LoadingService,
       private router: Router,
   ) {
  this.minDate = new Date();
@@ -63,6 +65,7 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.loadingService.show();
      this.bookingData = this.bookingService.getBookingData();
     console.log('Booking data received in CarRentalDetailsComponent:', this.bookingData);
     const carRentalId = this.route.snapshot.queryParamMap.get('rentalId');
@@ -73,6 +76,7 @@ export class CarDetailsComponent implements OnInit, AfterViewInit {
         if (car) {
           this.fetchUnavailableDates(car.id);
         }
+        this.loadingService.hide();
       });
     }
     // Geolocation

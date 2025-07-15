@@ -4,6 +4,7 @@ import { HotelWebsiteService } from '../../services/hotel-website.service';
 import { Room } from '../../models/room.model';
 import Swal from 'sweetalert2';
 import { BookingService } from '../../../patient/services/Booking.service';
+import { LoadingService } from '../../../../shared/services/loading.service';
 
 @Component({
   selector: 'app-room-details',
@@ -35,7 +36,8 @@ dateErrorMessage: string = '';
     private route: ActivatedRoute,
     private hotelService: HotelWebsiteService,
     private router: Router,
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private loadingService: LoadingService
   ) {
     this.minnDate=new Date();
   }
@@ -62,8 +64,10 @@ dateErrorMessage: string = '';
   }
 
 fetchUnavailableDates() {
+  this.loadingService.show();
   this.hotelService.getRoomUnavailableDates(this.roomId).subscribe({
     next: (data) => {
+      this.loadingService.hide();
       const allBlockedDates: string[] = [];
       const dateRanges = data.unavailableDates || [];
 
@@ -84,6 +88,7 @@ fetchUnavailableDates() {
       this.checkAndSetPreselectedDates();
     },
     error: () => {
+      this.loadingService.hide();
       this.unavailableDatesSet = new Set();
     }
   });
