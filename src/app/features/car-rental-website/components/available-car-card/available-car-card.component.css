@@ -5,7 +5,7 @@
     box-shadow: 0 8px 32px rgba(40,97,197,0.13), 0 2px 12px rgba(40,97,197,0.07);
     width: 100%;
     max-width: 370px; /* Slightly wider */
-    height: fit-content; /* Let card height grow with content */
+    height: 440px; /* Let card height grow with content */
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.25s ease, transform 0.25s ease;

@@ -17,12 +17,12 @@
 .room-img-wrapper {
   position: relative;
   width: 100%;
-  height: 110px;
+  height: 180px;
   overflow: hidden;
 }
 .room-img {
   object-fit: cover;
-  height: 110px;
+  height: 180px;
   width: 100%;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
@@ -70,4 +70,4 @@
 }
 .card-body {
   padding: 0.8rem 1rem 1rem 1rem;
-} 
+}

@@ -4,8 +4,7 @@
     overflow: hidden;
     box-shadow: 0 6px 32px rgba(40,97,197,0.1), 0 1.5px 8px rgba(40,97,197,0.05);
     width: 100%;
-    max-width: 280px; /* Matching the reduced width we discussed */
-    height: 320px;
+    height: 330px;
     display: flex;
     flex-direction: column;
     transition: box-shadow 0.25s ease, transform 0.25s ease;
@@ -134,6 +133,7 @@
     font-weight: 600;
     font-size: 0.9rem;
     margin-top: auto;
+    margin-bottom: 0.1rem;
     transition: all 0.2s ease;
 }
 

@@ -7,7 +7,7 @@
     padding: 1.5rem;
     height: fit-content;
     margin-left: 1rem;
-    
+
 }
 
 .sidebar-title {
@@ -153,4 +153,40 @@
 }
 .animate__pulse {
   animation-duration: 0.7s;
-} 
+}
+/* ng-select Custom Styles */
+::ng-deep ng-select.custom-bootstrap-style .ng-option {
+  padding: 0.375rem 0.75rem;
+  cursor: pointer;
+  color: #212529;
+  background-color: #fff;
+  transition: background-color 0.2s ease-in-out;
+}
+
+::ng-deep ng-select.custom-bootstrap-style .ng-option:hover {
+  background-color: #e9ecef;
+}
+
+::ng-deep ng-select.custom-bootstrap-style .ng-option-selected {
+  background-color: #dbeafe !important;
+  font-weight: 500;
+}
+
+::ng-deep ng-select.custom-bootstrap-style .ng-value {
+  background-color: transparent !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  font-size: 1rem !important;
+  color: #212529 !important;
+  font-weight: normal !important;
+}
+
+::ng-deep ng-select.custom-bootstrap-style .ng-select-container {
+  min-height: 38px;
+  padding: 0 0.5rem;
+  align-items: center;
+  border: 1px solid #ced4da !important;
+  border-radius: 0.25rem;
+  box-shadow: none;
+}

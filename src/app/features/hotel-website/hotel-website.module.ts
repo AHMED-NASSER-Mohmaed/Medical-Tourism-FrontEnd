@@ -18,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SharedModule } from '../../shared/shared.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { SharedModule } from '../../shared/shared.module';
     MatFormFieldModule,
     MatInputModule,
     MatNativeDateModule,
-    SharedModule
+    SharedModule,
+    NgSelectModule
   ]
 })
 export class HotelWebsiteModule { }

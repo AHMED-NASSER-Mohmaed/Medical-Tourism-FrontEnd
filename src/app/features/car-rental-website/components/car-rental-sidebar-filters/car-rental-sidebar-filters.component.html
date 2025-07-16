@@ -22,10 +22,18 @@
 
   <div class="filter-item">
     <label>Governorate</label>
-    <select class="form-select" [(ngModel)]="filters.governorateId" name="governorateId" [disabled]="governatesLoading">
-      <option value="">All Governorates</option>
-      <option *ngFor="let gov of governates" [value]="gov.governateId">{{ gov.governateName }}</option>
-    </select>
+    <ng-select
+      class="custom-bootstrap-style"
+      [items]="governates"
+      bindLabel="governateName"
+      bindValue="governateId"
+      placeholder="Select Governorate"
+      [(ngModel)]="filters.governorateId"
+      name="governorateId"
+      [searchable]="false"
+      [clearable]="false"
+      [disabled]="governatesLoading">
+    </ng-select>
     <div *ngIf="governatesLoading" class="form-text text-primary"><span class="spinner-border spinner-border-sm"></span> Loading...</div>
   </div>
 
@@ -34,4 +42,4 @@
       <span class="icon">🔍</span> Apply Filters
     </button>
   </div>
-</aside> 
+</aside>

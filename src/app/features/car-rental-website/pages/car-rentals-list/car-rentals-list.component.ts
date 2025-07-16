@@ -49,7 +49,7 @@ export class CarRentalsListComponent implements OnInit {
       pageSize: this.pageSize,
       searchTerm: this.filters.searchTerm || undefined,
       userStatus: this.filters.userStatus !== '' ? this.filters.userStatus : undefined,
-      governerateId: this.filters.governorateId !== '' ? this.filters.governorateId : undefined,
+      governerateId: this.filters.governorateId !== '' ? Number(this.filters.governorateId) : undefined,
       // Add more filters as needed
     };
     this.carRentalService.getCarRentals(params).subscribe({
