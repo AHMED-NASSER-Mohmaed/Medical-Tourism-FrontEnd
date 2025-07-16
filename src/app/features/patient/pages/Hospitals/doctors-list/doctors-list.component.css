@@ -222,10 +222,21 @@
     box-shadow: 0 8px 24px rgba(40, 97, 197, 0.12);
 }
 
-.doctor-card img {
+/* Doctor Image Wrapper for centering and background */
+.doctor-img-wrapper {
     width: 100%;
     height: 180px;
-    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    overflow: hidden;
+}
+
+.doctor-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; /* Show the whole image, not cropped */
 }
 
 /* The .content div is now a left-aligned flex container */
