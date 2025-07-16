@@ -17,6 +17,8 @@ export class NavbarComponent implements OnInit, OnDestroy {
   userName = '';
   userImage: string = '';
   defaultUserImage = '/assets/images/user.png';
+    // EDITED: Added property to control the mobile menu
+    isMobileMenuOpen = false;
 
   dropdownOpen = false;
   profileDropdownOpen = false;
@@ -116,4 +118,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.router.navigate(['/profile'], { queryParams: { tab: 'settings' } });
     this.profileDropdownOpen = false; // Close dropdown after navigation
   }
+    // EDITED: New method to toggle the mobile sidebar
+    toggleMobileMenu(): void {
+      this.isMobileMenuOpen = !this.isMobileMenuOpen;
+    }
+
+
 }

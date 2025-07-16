@@ -4,14 +4,14 @@
     <a class="navbar-brand" routerLink="/">
       <img src="../../../../assets/images/Elagy.webp" alt="Elagy Logo" style="height:28px; width:auto; margin-right:8px; vertical-align:middle;" />
     </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+    <!-- EDITED: The toggler now calls the toggleMobileMenu() function -->
+    <button class="navbar-toggler" type="button" (click)="toggleMobileMenu()">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav mx-auto">
         <li class="nav-item">
-          <!-- The active state is now controlled by the component's logic -->
           <a class="nav-link"
              routerLink="/"
              [class.active]="activeLink === '/' || activeLink === '/home'"
@@ -121,3 +121,22 @@
     </div>
   </div>
 </nav>
+
+<!-- EDITED: Added the Mobile Sidebar Menu -->
+<div class="mobile-sidebar-container" *ngIf="isMobileMenuOpen">
+  <div class="sidebar-backdrop" (click)="toggleMobileMenu()"></div>
+  <div class="mobile-sidebar">
+    <div class="sidebar-header">
+      <h5 class="sidebar-title">Menu</h5>
+      <button class="btn-close" (click)="toggleMobileMenu()"></button>
+    </div>
+    <ul class="sidebar-nav">
+      <li><a class="sidebar-link" routerLink="/" (click)="toggleMobileMenu()">Home</a></li>
+      <li><a class="sidebar-link" routerLink="/specialists" (click)="toggleMobileMenu()">Treatments</a></li>
+      <li><a class="sidebar-link" routerLink="/hospitals" (click)="toggleMobileMenu()">Hospitals</a></li>
+      <li><a class="sidebar-link" routerLink="/hotels" (click)="toggleMobileMenu()">Hotels</a></li>
+      <li><a class="sidebar-link" routerLink="/car-rentals" (click)="toggleMobileMenu()">Car Rentals</a></li>
+      <li><a class="sidebar-link" routerLink="/" fragment="faq-section" (click)="toggleMobileMenu()">FAQ</a></li>
+    </ul>
+  </div>
+</div>
