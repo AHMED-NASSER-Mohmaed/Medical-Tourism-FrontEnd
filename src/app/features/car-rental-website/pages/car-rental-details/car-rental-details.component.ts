@@ -85,6 +85,7 @@ export class CarRentalDetailsComponent implements OnInit {
 
   fetchCars() {
     this.carsLoading = true;
+    this.loadingService.show();
     const params: any = {
       pageNumber: this.carPage,
       pageSize: this.carPageSize,
@@ -98,10 +99,12 @@ export class CarRentalDetailsComponent implements OnInit {
         this.cars = data.items || [];
         this.carTotalPages = data.totalPages || 1;
         this.carsLoading = false;
+        this.loadingService.hide();
       },
       error: () => {
         this.cars = [];
         this.carsLoading = false;
+        this.loadingService.hide();
       }
     });
   }
