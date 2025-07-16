@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://elagy.runasp.net/api'
+  apiUrl: 'https://localhost:7078/api'
 };
 
 

@@ -67,12 +67,12 @@ let params = new HttpParams()
     getAppointments(ScheduleId:string,date?:any,status?:string): Observable<HospitalAppointmentRespone> {
 
       let params = new HttpParams()
-      .set('specialtyScheduleId', ScheduleId);
+     
       if (date) params = params.set('Date', date);
       if (status !== undefined) params = params.set('appointmentStatus', status.toString());
-
+       params=params.set('specialtyScheduleId', parseInt(ScheduleId));
       console.log("Fetching appointments with params:", params.toString());
-
+      console.log(`${this.apiUrl}hospital-appointments${params.toString()}`)
         return this.http.get<HospitalAppointmentRespone>(`${this.apiUrl}hospital-appointments`,{params});
     }
 }

@@ -29,6 +29,7 @@ import { DashboardModule } from '../Dash-Layout/dashboard.module';
 
 
 import { ProviderDetailsComponent } from './pages/provider-details/provider-details.component';
+import { TrainingModelComponent } from './pages/aIModel/training-model/training-model.component';
 
 
 @NgModule({
@@ -48,7 +49,8 @@ import { ProviderDetailsComponent } from './pages/provider-details/provider-deta
     HotelsAccountsComponent,
     CarRentalsAccountsComponent,
     AddPatientProviderComponent,
-    ProviderDetailsComponent
+    ProviderDetailsComponent,
+    TrainingModelComponent
 
 
   ],

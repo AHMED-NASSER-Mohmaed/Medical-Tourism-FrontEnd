@@ -677,4 +677,7 @@ private clearProviderCaches(): void {
     }
     return user;
   }
+   TrainModel(): Observable<any> {
+        return this.http.post<any>(`${environment.apiUrl}/ML/train`,{});
+    }
 }

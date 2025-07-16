@@ -16,6 +16,7 @@ import { CarRentalsAccountsComponent } from './pages/manage-accounts/car-rentals
 // EDITED: Import the guards
 import { AuthGuard } from '../../auth/guards/auth.guard';
 import { RoleGuard } from '../../shared/guards/role.guard';
+import { TrainingModelComponent } from './pages/aIModel/training-model/training-model.component';
 
 const routes: Routes = [
   {
@@ -53,7 +54,8 @@ const routes: Routes = [
       { path: 'providers/car-rentals/add', component: AddCarRentalProviderComponent, data: { title: 'Add Car Rental' } },
       { path: 'providers/patients/add', component: AddPatientProviderComponent, data: { title: 'Add Patient' } },
       { path: 'profile', component: SuperAdminProfileComponent, data: { title: 'My Profile' } },
-      { path: '', redirectTo: 'manage-accounts', pathMatch: 'full' }
+      { path: '', redirectTo: 'manage-accounts', pathMatch: 'full' },
+      {path :'aiModels',component:TrainingModelComponent}
     ]
   }
 ];
