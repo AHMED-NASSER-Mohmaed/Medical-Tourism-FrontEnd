@@ -71,3 +71,72 @@
 .card-body {
   padding: 0.8rem 1rem 1rem 1rem;
 }
+
+/* === Enhanced Responsive Breakpoints for Room Card === */
+
+/* Large desktops (≥1400px) */
+@media (min-width: 1400px) {
+  .room-card {
+    max-width: 340px;
+  }
+  .room-img-wrapper, .room-img {
+    height: 180px;
+  }
+}
+
+/* Laptops (1200px–1399px) */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .room-card {
+    max-width: 320px;
+  }
+  .room-img-wrapper, .room-img {
+    height: 160px;
+  }
+}
+
+/* Tablets (992px–1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .room-card {
+    max-width: 300px;
+  }
+  .room-img-wrapper, .room-img {
+    height: 140px;
+  }
+}
+
+/* Small tablets and large phones (768px–991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+  .room-card {
+    max-width: 90vw;
+    min-width: 220px;
+  }
+  .room-img-wrapper, .room-img {
+    height: 120px;
+  }
+}
+
+/* Phones (≤767px) */
+@media (max-width: 767px) {
+  .room-card {
+    max-width: 98vw;
+    min-width: 180px;
+    padding: 0.5rem;
+  }
+  .room-img-wrapper, .room-img {
+    height: 100px;
+  }
+  .card-body {
+    padding: 0.5rem 0.5rem 0.8rem 0.5rem;
+  }
+  .card-title {
+    font-size: 1rem;
+  }
+  .badge {
+    font-size: 0.9rem;
+    padding: 0.3em 0.7em;
+  }
+  .btn-gradient {
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+  }
+}

@@ -1,49 +1,49 @@
 <!-- Banner/Header -->
 <div class="page-banner">
-    <div class="banner-content">
-        <button class="btn-back" (click)="goBack()">
-            <i class="bi bi-arrow-left"></i> Back
-        </button>
-        <div class="banner-text">
-            <h2>Find Car Rentals</h2>
-            <p>Explore our network of accredited car rentals for your medical needs.</p>
-        </div>
-    </div>
+  <div class="banner-content">
+      <button class="btn-back" (click)="goBack()">
+          <i class="bi bi-arrow-left"></i> Back
+      </button>
+      <div class="banner-text">
+          <h2>Find Car Rentals</h2>
+          <p>Explore our network of accredited car rentals for your medical needs.</p>
+      </div>
+  </div>
 </div>
 <div class="container-fluid mt-4 animate__animated animate__fadeIn">
-  <div class="row">
-    <!-- Sidebar Filters -->
-    <div class="col-lg-3 mb-4">
-      <app-car-rental-sidebar-filters (filtersChanged)="onFiltersChanged($event)"></app-car-rental-sidebar-filters>
-    </div>
-    <!-- Car Rentals List -->
+<div class="row">
+  <!-- Sidebar Filters -->
+  <div class="col-lg-3 mb-4">
+    <app-car-rental-sidebar-filters (filtersChanged)="onFiltersChanged($event)"></app-car-rental-sidebar-filters>
+  </div>
+  <!-- Car Rentals List -->
 <div class="col-lg-9">
-    <div *ngIf="loading" class="text-center my-5">
-    </div>
-    <div *ngIf="!loading && carRentals.length === 0" class="alert alert-info animate__animated animate__fadeIn">
-        No car rentals found. Try adjusting your filters.
-    </div>
-    <!-- Changed to g-2 for minimal spacing -->
+  <div *ngIf="loading" class="text-center my-5">
+  </div>
+  <div *ngIf="!loading && carRentals.length === 0" class="alert alert-info animate__animated animate__fadeIn">
+      No car rentals found. Try adjusting your filters.
+  </div>
+  <!-- Changed to g-2 for minimal spacing -->
 <div class="row g-3 cards-grid">
-    <div class="col-md-6 col-lg-4" *ngFor="let carRental of carRentals">
-        <app-car-rental-card [carRental]="carRental"></app-car-rental-card>
-    </div>
+  <div class="col-md-6 col-lg-4" *ngFor="let carRental of carRentals">
+      <app-car-rental-card [carRental]="carRental"></app-car-rental-card>
+  </div>
 </div>
 
-      <!-- Pagination -->
-      <nav *ngIf="!loading && totalPages > 1" class="mt-4">
-        <ul class="pagination justify-content-center">
-          <li class="page-item" [class.disabled]="currentPage === 1">
-            <a class="page-link" (click)="goToPage(currentPage - 1)" tabindex="-1">Previous</a>
-          </li>
-          <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
-            <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
-          </li>
-          <li class="page-item" [class.disabled]="currentPage === totalPages">
-            <a class="page-link" (click)="goToPage(currentPage + 1)">Next</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <!-- Pagination -->
+    <nav *ngIf="!loading && totalPages > 1" class="mt-4">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" [class.disabled]="currentPage === 1">
+          <a class="page-link" (click)="goToPage(currentPage - 1)" tabindex="-1">Previous</a>
+        </li>
+        <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === i + 1">
+          <a class="page-link" (click)="goToPage(i + 1)">{{ i + 1 }}</a>
+        </li>
+        <li class="page-item" [class.disabled]="currentPage === totalPages">
+          <a class="page-link" (click)="goToPage(currentPage + 1)">Next</a>
+        </li>
+      </ul>
+    </nav>
   </div>
+</div>
 </div>

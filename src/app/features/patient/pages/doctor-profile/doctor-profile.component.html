@@ -104,6 +104,7 @@
                              [(ngModel)]="selectedDate"
                              [matDatepickerFilter]="dateFilter"
                              name="date"
+                             [min]="minnDate"
                              readonly
                              (click)="picker.open()"
                              (dateChange)="showDateError = false">

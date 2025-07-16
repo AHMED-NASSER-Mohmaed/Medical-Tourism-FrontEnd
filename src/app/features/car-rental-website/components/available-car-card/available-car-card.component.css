@@ -151,3 +151,72 @@
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(40,97,197,0.13);
 }
+
+/* === Enhanced Responsive Breakpoints for Available Car Card === */
+
+/* Large desktops (≥1400px) */
+@media (min-width: 1400px) {
+  .rental-card {
+    max-width: 370px;
+  }
+  .rental-image-wrapper, .rental-image {
+    height: 190px;
+  }
+}
+
+/* Laptops (1200px–1399px) */
+@media (max-width: 1399px) and (min-width: 1200px) {
+  .rental-card {
+    max-width: 340px;
+  }
+  .rental-image-wrapper, .rental-image {
+    height: 160px;
+  }
+}
+
+/* Tablets (992px–1199px) */
+@media (max-width: 1199px) and (min-width: 992px) {
+  .rental-card {
+    max-width: 320px;
+  }
+  .rental-image-wrapper, .rental-image {
+    height: 130px;
+  }
+}
+
+/* Small tablets and large phones (768px–991px) */
+@media (max-width: 991px) and (min-width: 768px) {
+  .rental-card {
+    max-width: 90vw;
+    min-width: 220px;
+  }
+  .rental-image-wrapper, .rental-image {
+    height: 110px;
+  }
+}
+
+/* Phones (≤767px) */
+@media (max-width: 767px) {
+  .rental-card {
+    max-width: 98vw;
+    min-width: 180px;
+    padding: 0.5rem;
+  }
+  .rental-image-wrapper, .rental-image {
+    height: 90px;
+  }
+  .rental-content {
+    padding: 0.5rem 0.5rem 0.8rem 0.5rem;
+  }
+  .rental-title {
+    font-size: 1rem;
+  }
+  .rating-badge {
+    font-size: 0.9rem;
+    padding: 0.3em 0.7em;
+  }
+  .view-details-btn {
+    font-size: 0.95rem;
+    padding: 0.5rem 0;
+  }
+}

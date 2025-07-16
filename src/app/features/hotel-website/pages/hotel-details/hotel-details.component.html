@@ -21,10 +21,8 @@
       <div *ngIf="!loading && rooms.length === 0" class="alert alert-info animate__animated animate__fadeIn">
         No rooms found. Try adjusting your filters.
       </div>
-<div class="row gx-2 gy-4 mb-5">
-    <div class="col-md-6 col-lg-4" *ngFor="let room of rooms">
-        <app-room-card [room]="room" [hotelId]="hotelId"></app-room-card>
-    </div>
+<div class="room-cards-grid">
+    <app-room-card *ngFor="let room of rooms" [room]="room" [hotelId]="hotelId"></app-room-card>
 </div>
       <!-- Pagination -->
       <nav *ngIf="!loading && totalPages > 1" class="mt-4">

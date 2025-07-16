@@ -24,6 +24,7 @@ export class DoctorProfileComponent implements OnInit {
   workingDays: Set<number> = new Set();
 
   processedSchedule: { dayName: string, slots: any[] }[] = [];
+  minnDate: Date;
 
 
   constructor(
@@ -33,7 +34,9 @@ export class DoctorProfileComponent implements OnInit {
     private location: Location,
     private router: Router,
     private bookingService: BookingService ,
-  ) { }
+  ) {
+    this.minnDate=new Date();
+   }
 
   ngOnInit(): void {
     const doctorId = this.route.snapshot.paramMap.get('doctorId');
