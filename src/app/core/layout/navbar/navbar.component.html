@@ -122,7 +122,7 @@
   </div>
 </nav>
 
-<!-- EDITED: Added the Mobile Sidebar Menu -->
+<!-- Mobile Sidebar Menu -->
 <div class="mobile-sidebar-container" *ngIf="isMobileMenuOpen">
   <div class="sidebar-backdrop" (click)="toggleMobileMenu()"></div>
   <div class="mobile-sidebar">
@@ -138,5 +138,25 @@
       <li><a class="sidebar-link" routerLink="/car-rentals" (click)="toggleMobileMenu()">Car Rentals</a></li>
       <li><a class="sidebar-link" routerLink="/" fragment="faq-section" (click)="toggleMobileMenu()">FAQ</a></li>
     </ul>
+
+    <!-- EDITED: This section now handles both logged-in and logged-out states -->
+    <div class="sidebar-actions">
+        <!-- If user is NOT logged in -->
+        <ng-container *ngIf="!isLoggedIn; else loggedInSidebarActions">
+            <a (click)="login(); toggleMobileMenu()" class="btn btn-primary w-100">Login</a>
+            <a routerLink="/auth/register/patient" (click)="toggleMobileMenu()" class="btn btn-outline-secondary w-100">Register</a>
+        </ng-container>
+
+        <!-- If user IS logged in -->
+        <ng-template #loggedInSidebarActions>
+             <a class="sidebar-link profile-link" (click)="goToDashboard()">
+                <i class="fas fa-user me-2"></i>My Profile
+             </a>
+             <a class="sidebar-link logout-link" (click)="logout()">
+                <i class="fas fa-sign-out-alt me-2"></i>Logout
+             </a>
+        </ng-template>
+    </div>
+
   </div>
 </div>

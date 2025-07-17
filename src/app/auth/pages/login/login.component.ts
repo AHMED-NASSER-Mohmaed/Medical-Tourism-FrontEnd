@@ -64,8 +64,8 @@ goToRecover(): void {
       },
       error: (err) => {
         this.loadingSrv.hide();
-        if (err?.error?.message) {
-          this.errorMessage = err.error.message;
+        if (err?.error?.errors && Array.isArray(err.error.errors) && err.error.errors.length > 0) {
+          this.errorMessage = err.error.errors[0];
         } else {
           this.errorMessage = 'An unexpected error occurred. Please try again.';
         }

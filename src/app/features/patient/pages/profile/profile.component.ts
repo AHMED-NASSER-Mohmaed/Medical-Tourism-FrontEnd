@@ -321,6 +321,9 @@ viewDetails(booking: Booking): void {
       next: () => {
         this.saving = false;
         Object.assign(this.profile, this.profileForm.value);
+
+        this.setupMedicalCards(this.profile);
+
         Swal.fire('Saved!', 'Profile updated successfully.', 'success');
       },
       error: err => {

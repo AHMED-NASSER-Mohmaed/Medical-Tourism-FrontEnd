@@ -30,10 +30,10 @@ export class DoctorsFormComponent {
   image:string = '';
   license:string = '';
   isfailed:boolean=false;
-  isSuccess:boolean=false; 
+  isSuccess:boolean=false;
   messageError:string="";
   successMessage:string="";
-  
+
 
 
   constructor(
@@ -45,35 +45,35 @@ export class DoctorsFormComponent {
     private location: Location,
   ) {
     this.doctorForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required],
-      firstName: ['', [Validators.required, Validators.minLength(2)]],
-      lastName: ['', [Validators.required, Validators.minLength(2)]],
-      phone: ['', Validators.required],
-      gender: ['', Validators.required],
-      address: ['', Validators.required],
-      city: ['', Validators.required],
-      governorateId: [null, Validators.required],
-      countryId: [null, Validators.required],
-      dateOfBirth: ['', Validators.required],
-      medicalLicenseNumber: [''],
-      yearsOfExperience: [0],
-      bio: [''],
-      qualification: [''],
-      hospitalSpecialtyId: [null, Validators.required]
+      Email: ['', [Validators.required, Validators.email]],
+      Password: ['', [Validators.required, Validators.minLength(6)]],
+      ConfirmPassword: ['', Validators.required],
+      FirstName: ['', [Validators.required, Validators.minLength(2)]],
+      LastName: ['', [Validators.required, Validators.minLength(2)]],
+      Phone: ['', Validators.required],
+      Gender: ['', Validators.required],
+      Address: ['', Validators.required],
+      City: ['', Validators.required],
+      GovernorateId: [null, Validators.required],
+      CountryId: [null, Validators.required],
+      DateOfBirth: ['', Validators.required],
+      MedicalLicenseNumber: [''],
+      YearsOfExperience: [0],
+      Bio: [''],
+      Qualification: [''],
+      HospitalSpecialtyId: [null, Validators.required]
     }, { validator: this.passwordMatchValidator });
   }
 
   ngOnInit(): void {
-    
-    if (!this.router.url.includes('add')) 
+
+    if (!this.router.url.includes('add'))
       {
          this.isLoading = true;
          this.loadDoctor()
       }
-          
-   
+
+
 
 
 
@@ -90,42 +90,42 @@ export class DoctorsFormComponent {
     }
 
     passwordMatchValidator(form: FormGroup) {
-    return form.get('password')?.value === form.get('confirmPassword')?.value 
+    return form.get('password')?.value === form.get('confirmPassword')?.value
       ? null : { mismatch: true };
   }
 
   loadDoctor()
   {
-   
-       
+
+
        this.isEditMode = true;
      this.doctorId = this.router.url.split('/').pop()!;
       console.log('Edit mode for doctor ID:', this.doctorId);
-      
+
       this.doctorService.getDoctorById(this.doctorId!).subscribe({
         next: (doctor) => {
-          this.doctorForm.patchValue({ 
-            email: doctor.email,
-            firstName: doctor.firstName,    
-            lastName: doctor.lastName,
-            phone: doctor.phone,
-            gender: doctor.gender,
-            address: doctor.address, 
-            governorateId: doctor.governorateId,
-            countryId: doctor.countryId,
-            dateOfBirth: doctor.dateOfBirth.split('T')[0], // Convert to date string
-            medicalLicenseNumber: doctor.medicalLicenseNumber,
-            yearsOfExperience: doctor.yearsOfExperience,
-            bio: doctor.bio,
-            qualification: doctor.qualification,
-            hospitalSpecialtyId: doctor.specialtyId
+          this.doctorForm.patchValue({
+            Email: doctor.email,
+            FirstName: doctor.firstName,
+            LastName: doctor.lastName,
+            Phone: doctor.phone,
+            Gender: doctor.gender,
+            Address: doctor.address,
+            GovernorateId: doctor.governorateId,
+            CountryId: doctor.countryId,
+            DateOfBirth: doctor.dateOfBirth.split('T')[0], // Convert to date string
+            MedicalLicenseNumber: doctor.medicalLicenseNumber,
+            YearsOfExperience: doctor.yearsOfExperience,
+            Bio: doctor.bio,
+            Qualification: doctor.qualification,
+            HospitalSpecialtyId: doctor.specialtyId
 
           });
           this.image = doctor.imageURL || '';
           this.license = doctor.medicalLicenseNumber || '';
           console.log('Doctor data loaded:', doctor);
         },
-        error: (err) => { 
+        error: (err) => {
           console.error('Error loading doctor data', err);
         }
       });
@@ -139,7 +139,7 @@ export class DoctorsFormComponent {
       // 1. Safely store the original data
       this.countriesData = response?.data || {};
       console.log('Countries data loaded:', this.countriesData);
-      
+
       // 2. Create countries list with null check
       this.countries = Object.keys(this.countriesData)
         .filter(key => this.countriesData[+key] != null)
@@ -152,7 +152,7 @@ export class DoctorsFormComponent {
         });
 
       // 3. Safely flatten all governorates
-      
+
       console.log('Loaded countries:', this.countries);
       console.log('All governorates:', this.governorates);
     },
@@ -164,18 +164,18 @@ export class DoctorsFormComponent {
 }
   getgovernorates() {
   const countryId = this.doctorForm.get('countryId')?.value;
-  
+
   // Clear previous governorates selection
   this.governorates = [];
   this.doctorForm.get('governorateId')?.setValue(null);
-  
+
   if (countryId && this.countriesData && this.countriesData[countryId]) {
     const country = this.countriesData[countryId];
-    
+
     console.log('Selected country:', country);
     console.log('Governorates for selected country:', country.governates);
     this.governorates =  Object.values(country.governates);
-   
+
   }
   console.log('Available governorates:', this.governorates);
 }
@@ -192,13 +192,32 @@ export class DoctorsFormComponent {
   }
   updateDoctor(): void {
     this.isLoading=true
-          const formData = new FormData();
-        
-          Object.entries(this.doctorForm.value).forEach(([key, value]) => {
+    const formValues = { ...this.doctorForm.value };
+
+    delete formValues.Password;
+    delete formValues.ConfirmPassword;
+    delete formValues.MedicalLicenseNumber;
+    if (formValues.Phone) {
+      formValues.PhoneNumber = formValues.Phone;
+      delete formValues.Phone;
+  }
+    console.log("formValues",formValues)
+
+    const formData = new FormData();
+
+    Object.entries(formValues).forEach(([key, value]) => {
+      if (value !== null && value !== undefined) {
         formData.append(key, value as any);
-      });
-          formData.append('licenseDocumentFile', this.LiscenseFile!);
-          formData.append('profileImageFile', this.imageFile!);
+      }
+    });
+
+    if (this.LiscenseFile) {
+      formData.append('licenseDocumentFile', this.LiscenseFile);
+    }
+    if (this.imageFile) {
+      formData.append('profileImageFile', this.imageFile);
+    }
+    console.log("formData",formData);
 
           console.log(this.doctorForm)
           for (let [key, value] of formData.entries()) {
@@ -206,7 +225,7 @@ export class DoctorsFormComponent {
       }
       this.isLoading=true
     this.doctorService.updateDoctor(this.doctorId!,formData).subscribe({
-      next: (response) => { 
+      next: (response) => {
         this.isLoading=false
         this.isSuccess=true;
 
@@ -233,9 +252,9 @@ export class DoctorsFormComponent {
     if (this.doctorForm.invalid || !this.LiscenseFile || !this.imageFile) {
       return;
     }
-    
+
     const formData = new FormData();
-   
+
     Object.entries(this.doctorForm.value).forEach(([key, value]) => {
   formData.append(key, value as any);
 });
@@ -255,9 +274,9 @@ export class DoctorsFormComponent {
 
         console.log(this.isSuccess)
         this.successMessage="doctor Created Succefully"
-        
+
         // Handle success
-        
+
         console.log('Doctor created successfully', response);
       },
       error: (error) => {
@@ -269,7 +288,7 @@ export class DoctorsFormComponent {
         console.error('Error creating doctor', error);
       }
     });
-   
+
   }
 
   }
@@ -285,4 +304,5 @@ export class DoctorsFormComponent {
   goBack(): void {
   this.location.back();
 }
+
 }

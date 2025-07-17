@@ -8,10 +8,35 @@
   padding-top: 50px;
 }
 
+/* Responsive container adjustments */
+@media (max-width: 576px) {
+  .profile-page {
+    padding-top: 20px;
+  }
+
+  .container {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
 .sidebar-card .cover {
   height: 100px;
   background: linear-gradient(120deg, var(--primary) 0%, #66b3ff 100%);
   position: relative;
+}
+
+/* Responsive sidebar adjustments */
+@media (max-width: 991.98px) {
+  .sidebar-card .cover {
+    height: 80px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sidebar-card .cover {
+    height: 60px;
+  }
 }
 
 .avatar-wrapper {
@@ -26,6 +51,23 @@
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
   top: 60%;
   transition: transform 0.2s ease;
+}
+
+/* Responsive avatar adjustments */
+@media (max-width: 991.98px) {
+  .avatar {
+    width: 80px;
+    height: 80px;
+    top: 50%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .avatar {
+    width: 60px;
+    height: 60px;
+    top: 40%;
+  }
 }
 
 .avatar-wrapper:hover .avatar {
@@ -44,6 +86,14 @@
   display: inline-flex;
 }
 
+/* Responsive delete button */
+@media (max-width: 575.98px) {
+  .delete-image-btn {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.3rem;
+  }
+}
+
 .link-item {
   cursor: pointer;
   transition: background-color 0.2s ease, color 0.2s ease;
@@ -53,6 +103,18 @@
 .link-item:hover {
   background-color: rgba(13, 110, 253, 0.1);
   color: var(--primary);
+}
+
+/* Responsive sidebar links */
+@media (max-width: 575.98px) {
+  .link-item {
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .link-item i {
+    font-size: 0.9rem;
+  }
 }
 
 .metric-card {
@@ -69,6 +131,31 @@
 .metric-card .icon-wrapper {
   font-size: 1.8rem;
   color: var(--primary);
+}
+
+/* Responsive metric cards */
+@media (max-width: 767.98px) {
+  .metric-card .icon-wrapper {
+    font-size: 1.5rem;
+  }
+
+  .metric-card h6 {
+    font-size: 0.9rem;
+  }
+
+  .metric-card small {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .metric-card {
+    padding: 1rem 0.5rem !important;
+  }
+
+  .metric-card .icon-wrapper {
+    font-size: 1.3rem;
+  }
 }
 
 .appointments-container {
@@ -92,11 +179,323 @@
     font-size: 0.95rem;
 }
 
+/* Responsive table adjustments */
+@media (max-width: 767.98px) {
+  .table th,
+  .table td {
+    font-size: 0.85rem;
+    padding: 0.75rem 0.5rem;
+    vertical-align: middle;
+    white-space: nowrap; /* Prevent text wrapping */
+  }
+
+  .table-responsive {
+    font-size: 0.8rem;
+    border-radius: 0.5rem;
+    overflow-x: auto; /* Enable horizontal scroll */
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #c1c1c1 #f1f1f1; /* Firefox */
+  }
+
+  /* Custom scrollbar styling for webkit browsers */
+  .table-responsive::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .table-responsive::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+  }
+
+  .table-responsive::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* Ensure table maintains minimum width */
+  .table {
+    min-width: 600px; /* Minimum width to prevent squishing */
+  }
+
+  /* Add more spacing between rows */
+  .table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .table tbody tr:hover {
+    background-color: #f8f9fa;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .table th,
+  .table td {
+    font-size: 0.8rem;
+    padding: 1rem 0.5rem;
+    line-height: 1.4;
+    white-space: nowrap; /* Keep text on single line */
+  }
+
+  /* Enhanced mobile table layout with horizontal scroll */
+  .table-responsive {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Show all columns on mobile with horizontal scroll */
+  .table th:nth-child(1),
+  .table td:nth-child(1) {
+    display: table-cell; /* Show the previously hidden column */
+  }
+
+  /* Ensure table has minimum width for all content */
+  .table {
+    min-width: 700px; /* Increased minimum width for mobile */
+  }
+
+  /* Improve badge spacing in table */
+  .table .badge {
+    margin: 0.1rem;
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  /* Better button spacing in actions column */
+  .table .btn {
+    margin: 0.1rem;
+    padding: 0.4rem 0.6rem;
+    white-space: nowrap;
+  }
+
+  /* Add more breathing room between table elements */
+  .table tbody tr {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Improve table header spacing */
+  .table thead th {
+    padding: 1rem 0.5rem;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+}
+
+/* Additional responsive improvements for very small screens */
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    font-size: 0.75rem;
+    padding: 0.75rem 0.3rem;
+    white-space: nowrap;
+  }
+
+  /* Ensure table scrolls horizontally on very small screens */
+  .table-responsive {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Minimum width for very small screens */
+  .table {
+    min-width: 650px;
+  }
+
+  /* Keep badges horizontal on small screens */
+  .table .d-flex.justify-content-center {
+    flex-direction: row; /* Keep horizontal layout */
+    align-items: center;
+    gap: 0.2rem;
+    flex-wrap: nowrap; /* Prevent wrapping */
+  }
+
+  .table .badge {
+    margin: 0.05rem;
+    font-size: 0.65rem;
+    white-space: nowrap;
+  }
+
+  /* Make buttons smaller on very small screens */
+  .table .btn-sm {
+    padding: 0.3rem 0.4rem;
+    font-size: 0.7rem;
+    white-space: nowrap;
+  }
+
+  /* Improve table container spacing */
+  .table-responsive {
+    margin: 0; /* Remove any margins that could cause overflow */
+    padding: 0; /* Remove padding that could cause overflow */
+  }
+
+  /* Ensure card footer stays within bounds */
+  .card-footer {
+    padding: 0.5rem 0.75rem;
+    margin: 0;
+  }
+
+  /* Compact pagination for very small screens */
+  .pagination {
+    font-size: 0.75rem;
+  }
+
+  .page-link {
+    padding: 0.25rem 0.4rem;
+    margin: 0.05rem;
+  }
+}
+
+/* Enhanced table styling for better readability */
+.table {
+  --bs-table-hover-bg: #f8f9fa;
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.table th {
+  font-weight: 600;
+  color: #495057;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  padding: 1rem 0.75rem;
+  white-space: nowrap; /* Prevent header text wrapping */
+}
+
+.table td {
+  vertical-align: middle;
+  font-size: 0.95rem;
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+  white-space: nowrap; /* Prevent cell text wrapping */
+}
+
+/* Improve table row hover effects */
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  transition: background-color 0.2s ease;
+}
+
+/* Better spacing for table content */
+.table .d-flex.justify-content-center {
+  gap: 0.25rem;
+  flex-wrap: nowrap; /* Prevent wrapping of badges */
+}
+
+/* Enhanced badge styling in tables */
+.table .badge {
+  padding: 0.5em 0.8em;
+  font-weight: 600;
+  font-size: 0.75rem;
+  border-radius: 50px;
+  margin: 0.1rem;
+  white-space: nowrap; /* Prevent badge text wrapping */
+}
+
+/* Improved button styling in tables */
+.table .btn {
+  margin: 0.1rem;
+  transition: all 0.2s ease;
+  white-space: nowrap; /* Prevent button text wrapping */
+}
+
+.table .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Better table container styling */
+.table-responsive {
+  border-radius: 0.5rem;
+  overflow-x: auto; /* Enable horizontal scroll by default */
+  overflow-y: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 0; /* Remove bottom margin to keep pagination inside card */
+}
+
+/* Ensure the card contains everything properly */
+.card {
+  overflow: hidden; /* Prevent content from spilling out */
+}
+
+/* Fix pagination to stay within card */
+.card-footer {
+  background-color: transparent;
+  border-top: 1px solid #dee2e6;
+  padding: 1rem 1.5rem;
+  margin-top: 0;
+}
+
+/* Responsive pagination */
+@media (max-width: 575.98px) {
+  .pagination {
+    font-size: 0.8rem;
+    flex-wrap: wrap; /* Allow pagination to wrap on very small screens */
+    justify-content: center;
+  }
+
+  .page-link {
+    padding: 0.375rem 0.5rem;
+    margin: 0.1rem;
+  }
+
+  /* Ensure pagination stays within card on mobile */
+  .card-footer {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Make pagination more compact on mobile */
+  .pagination .page-item {
+    margin: 0.05rem;
+  }
+}
+
+/* Responsive table header improvements */
+@media (max-width: 767.98px) {
+  .table thead th {
+    font-size: 0.75rem;
+    padding: 0.75rem 0.5rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .table thead th {
+    font-size: 0.7rem;
+    padding: 0.75rem 0.3rem;
+    white-space: nowrap;
+  }
+}
+
 .badge {
     padding: 0.4em 0.8em;
     font-weight: 600;
     font-size: 0.75rem;
     border-radius: 50px;
+}
+
+/* Responsive badges */
+@media (max-width: 575.98px) {
+  .badge {
+    padding: 0.3em 0.6em;
+    font-size: 0.7rem;
+  }
 }
 
 /* Custom soft background colors for badges */
@@ -128,10 +527,32 @@
     font-size: 3rem;
     color: #ced4da;
 }
+
+/* Responsive empty state */
+@media (max-width: 575.98px) {
+  .no-appointments .empty-icon {
+    font-size: 2rem;
+  }
+}
+
 .btn-dimmed {
   opacity: 0.25;
   cursor: not-allowed;
 }
+
+/* Responsive buttons */
+@media (max-width: 575.98px) {
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .btn {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
 @keyframes fadeIn {
   0% {
     opacity: 0;
@@ -142,19 +563,77 @@
     transform: translateY(0);
   }
 }
+
 /* Profile-settings specific */
 .card-footer .btn {
   min-width: 120px;
+}
+
+/* Responsive form adjustments */
+@media (max-width: 767.98px) {
+  .card-footer .btn {
+    min-width: 100px;
+    font-size: 0.9rem;
+  }
+
+  .form-label {
+    font-size: 0.9rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .card-footer .btn {
+    min-width: 80px;
+    font-size: 0.8rem;
+    padding: 0.375rem 0.5rem;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 0.85rem;
+  }
+
+  /* Stack form buttons on mobile */
+  .card-footer {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  .card-footer .btn {
+    width: 100%;
+  }
 }
 
 ng-select.custom-bootstrap-style .ng-select-container {
   box-shadow: none !important;
   transition: border-color .15s ease-in-out;
 }
+
 ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   border-color: var(--primary) !important;
 }
 
+/* Responsive ng-select */
+@media (max-width: 575.98px) {
+  ::ng-deep ng-select.custom-bootstrap-style .ng-select-container {
+    min-height: 36px;
+    font-size: 0.85rem;
+  }
+
+  ::ng-deep ng-select.custom-bootstrap-style .ng-option {
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
 
 ::ng-deep ng-select.custom-bootstrap-style .ng-option {
   padding: 0.375rem 0.75rem;
@@ -183,8 +662,6 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   font-weight: normal !important;
 }
 
-
-
 ::ng-deep ng-select.custom-bootstrap-style .ng-select-container {
   min-height: 38px;
   padding: 0 0.5rem;
@@ -193,6 +670,7 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   border-radius: 0.25rem;
   box-shadow: none;
 }
+
 .spinner-border {
   display: inline-block;
   width: 2rem; /* Or any size you prefer */
@@ -214,10 +692,6 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
     transform: rotate(360deg);
   }
 }
-/* Add these styles to the bottom of your profile.component.css */
-
-/* Modal Backdrop: The dark, semi-transparent background behind the modal. */
-/* Add these styles to the bottom of your profile.component.css */
 
 /* Modal Backdrop: The dark, semi-transparent background behind the modal. */
 .modal-backdrop {
@@ -247,6 +721,35 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   border-radius: 0.75rem;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
   animation: slideIn 0.4s ease-out;
+}
+
+/* Responsive modal adjustments */
+@media (max-width: 767.98px) {
+  .modal-content {
+    width: 95%;
+    max-width: none;
+    max-height: 95vh;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .modal-content {
+    width: 98%;
+    max-height: 98vh;
+    border-radius: 0.5rem;
+  }
+
+  .modal-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .modal-body {
+    padding: 1rem;
+  }
+
+  .modal-title {
+    font-size: 1.1rem;
+  }
 }
 
 /* Modal Header: Contains the title and close button. */
@@ -298,7 +801,6 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
     transform: rotate(-45deg);
 }
 
-
 /* Modal Body: The main scrollable content area. */
 .modal-body {
   padding: 1.5rem;
@@ -311,6 +813,37 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   margin-bottom: 1.5rem;
+}
+
+/* Responsive booking summary */
+@media (max-width: 767.98px) {
+  .booking-summary {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .booking-summary {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .summary-item {
+    padding: 0.75rem;
+  }
+
+  .summary-icon {
+    font-size: 1.2rem;
+  }
+
+  .summary-label {
+    font-size: 0.75rem;
+  }
+
+  .summary-value {
+    font-size: 0.85rem;
+  }
 }
 
 .summary-item {
@@ -351,13 +884,24 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
     font-size: 0.8rem;
 }
 
-/* EDITED: Added styles for the custom tooltip */
-
 /* Service Section: Container for each service (Doctor, Hotel, etc.). */
 .service-section {
   margin-top: 1.5rem;
   padding-top: 1.5rem;
   border-top: 1px solid #e9ecef;
+}
+
+/* Responsive service sections */
+@media (max-width: 575.98px) {
+  .service-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+  }
+
+  .section-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
 }
 
 .section-title {
@@ -371,6 +915,45 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
   display: flex;
   align-items: center;
   gap: 1rem;
+}
+
+/* Responsive service details */
+@media (max-width: 767.98px) {
+  .service-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .service-img {
+    width: 80px;
+    height: 80px;
+  }
+
+  .service-price {
+    align-self: flex-end;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .service-details {
+    gap: 0.5rem;
+  }
+
+  .service-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .service-info p {
+    font-size: 0.85rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .service-price {
+    font-size: 0.9rem;
+  }
 }
 
 .service-img {
@@ -429,6 +1012,88 @@ ng-select.custom-bootstrap-style.ng-select-focused .ng-select-container {
 .bg-secondary-soft {
     background-color: rgba(108, 117, 125, 0.1);
     color: #6c757d;
+}
+
+/* Responsive pagination */
+@media (max-width: 575.98px) {
+  .pagination {
+    font-size: 0.8rem;
+  }
+
+  .page-link {
+    padding: 0.375rem 0.5rem;
+  }
+}
+
+/* Responsive sidebar layout adjustments */
+@media (max-width: 991.98px) {
+  /* On tablets and mobile, sidebar takes full width */
+  .col-lg-3 {
+    margin-bottom: 1.5rem;
+  }
+
+  .sidebar-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sidebar-card {
+    max-width: 100%;
+  }
+
+  /* Adjust text sizes in sidebar */
+  .sidebar-card h5 {
+    font-size: 1.1rem;
+  }
+
+  .sidebar-card .text-muted {
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive form grid adjustments */
+@media (max-width: 767.98px) {
+  /* On tablets, make some fields full width */
+  .col-md-4 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* On mobile, make all fields full width */
+  .col-md-6,
+  .col-md-4,
+  .col-md-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+
+  /* Reduce form spacing on mobile */
+  .row.g-3 {
+    --bs-gutter-y: 0.75rem;
+  }
+}
+
+/* Responsive card adjustments */
+@media (max-width: 575.98px) {
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  .card-header {
+    padding: 0.75rem 1rem;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .card-footer {
+    padding: 0.75rem 1rem;
+  }
 }
 
 /* Keyframe Animations */

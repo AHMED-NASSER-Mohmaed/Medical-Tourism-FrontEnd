@@ -107,11 +107,13 @@ export class NavbarComponent implements OnInit, OnDestroy {
     this.authService.setLoggedIn(false);
     this.router.navigate(['/auth/login']);
     this.profileDropdownOpen = false; // Close dropdown on logout
+    this.isMobileMenuOpen = false;
   }
 
   goToDashboard() {
     this.router.navigate(['/profile'], { queryParams: { tab: 'dashboard' } });
     this.profileDropdownOpen = false; // Close dropdown after navigation
+    this.isMobileMenuOpen = false;
   }
 
   goToProfileSettings() {
