@@ -2,10 +2,12 @@ import { Component, Inject } from '@angular/core';
 import { 
   faShieldAlt, faUsersCog, faUserInjured, 
   faHospital, faHotel, faCar, faListAlt, 
-  faEdit, faHeadset, faPlus, faUser, faKey, faEnvelope 
+  faEdit, faHeadset, faPlus, faUser, faKey, faEnvelope, 
+  faBrain
 } from '@fortawesome/free-solid-svg-icons';
 import { AuthService } from '../../../auth/services/auth.service';
 import { Router } from '@angular/router';
+import { icon } from 'leaflet';
 
 @Component({
   selector: 'app-dashboard-shell',
@@ -59,6 +61,12 @@ export class DashboardShellComponent {
        
       ]
     },
+    {
+      label:'Ai Models',
+      icon: faBrain,
+      link: '/super-admin/aiModels',
+
+    }
     // {
     //   label: 'Profile',
     //   icon: faUser,

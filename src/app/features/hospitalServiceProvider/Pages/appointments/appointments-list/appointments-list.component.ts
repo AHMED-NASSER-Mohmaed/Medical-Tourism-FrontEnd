@@ -62,6 +62,7 @@ export class AppointmentsListComponent {
         this.appointments.totalCount = this.filteredItems.length;
         this.paginateAppointments();
         this.loading = false;
+        console.log(this.filteredItems)
       },
       error: (err) => {
         console.error('Failed to load appointments', err);

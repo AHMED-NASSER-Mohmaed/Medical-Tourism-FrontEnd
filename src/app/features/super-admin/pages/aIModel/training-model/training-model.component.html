@@ -1,0 +1,12 @@
+<div class="container text-center mt-5">
+  <h2>Train Your Model</h2>
+  <button class="btn btn-success mt-3" (click)="startTraining()" [disabled]="loading">
+    {{ loading ? 'Training...' : 'Start Training' }}
+  </button>
+
+  <div class="mt-3">
+    <p *ngIf="statusMessage" [ngClass]="{ 'text-success': success, 'text-danger': !success }">
+      {{ statusMessage }}
+    </p>
+  </div>
+</div>
